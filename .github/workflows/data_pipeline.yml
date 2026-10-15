@@ -1,0 +1,49 @@
+name: AbroadPath Live Data Pipeline
+
+on:
+  schedule:
+    # Run weekly every Monday at 04:00 UTC
+    - cron: '0 4 * * 1'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Run in dry-run mode without committing to Firestore'
+        required: false
+        type: boolean
+        default: false
+      source_id:
+        description: 'Optional single source ID to process (e.g., tum_informatics)'
+        required: false
+        type: string
+        default: ''
+
+jobs:
+  sync_pipeline:
+    name: Sync University Requirements
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: 'pipeline/requirements.txt'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r pipeline/requirements.txt
+
+      - name: Run sync pipeline
+        env:
+          FIREBASE_SERVICE_ACCOUNT_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+          TARGET_SOURCE_ID: ${{ github.event.inputs.source_id || '' }}
+        run: |
+          python -m pipeline.sync_pipeline
