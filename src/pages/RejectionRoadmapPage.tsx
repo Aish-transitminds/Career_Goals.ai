@@ -521,23 +521,53 @@ ${user?.email || 'email@example.com'}`;
             <tbody className="divide-y divide-slate-100">
               <tr className="hover:bg-slate-50/70 transition-colors">
                 <td className="py-4 px-4 font-bold text-slate-900">Germany (Public Universities)</td>
-                <td className="py-4 px-4 text-emerald-700 font-bold">€0 – €3,000 / yr</td>
-                <td className="py-4 px-4 font-medium">€11,208 / yr (€934/mo blocked account)</td>
+                <td className="py-4 px-4">
+                  <span className="text-emerald-700 font-bold block">€0 – €3,000 / yr</span>
+                  <span className="text-[10px] text-emerald-800 font-semibold bg-emerald-50 px-1.5 py-0.5 rounded inline-block mt-0.5">
+                    🇮🇳 ~₹0 – ₹2.7 Lakhs
+                  </span>
+                </td>
+                <td className="py-4 px-4 font-medium">
+                  <span className="block">€11,208 / yr (€934/mo blocked)</span>
+                  <span className="text-[10px] text-slate-600 font-semibold bg-slate-100 px-1.5 py-0.5 rounded inline-block mt-0.5">
+                    🇮🇳 ~₹10.2 Lakhs blocked
+                  </span>
+                </td>
                 <td className="py-4 px-4">Living & travel expenses (~€12,000–€15,000)</td>
                 <td className="py-4 px-4">Course duration + 6–12 months</td>
               </tr>
               <tr className="hover:bg-slate-50/70 transition-colors">
                 <td className="py-4 px-4 font-bold text-slate-900">Ireland (Universities)</td>
-                <td className="py-4 px-4 font-medium">€12,000 – €27,000 / yr</td>
-                <td className="py-4 px-4 font-medium">€10,000 / yr (official INIS proof of funds)</td>
+                <td className="py-4 px-4">
+                  <span className="font-bold text-slate-800 block">€12,000 – €27,000 / yr</span>
+                  <span className="text-[10px] text-indigo-800 font-semibold bg-indigo-50 px-1.5 py-0.5 rounded inline-block mt-0.5">
+                    🇮🇳 ~₹10.9L – ₹24.6 Lakhs
+                  </span>
+                </td>
+                <td className="py-4 px-4 font-medium">
+                  <span className="block">€10,000 / yr (INIS proof of funds)</span>
+                  <span className="text-[10px] text-slate-600 font-semibold bg-slate-100 px-1.5 py-0.5 rounded inline-block mt-0.5">
+                    🇮🇳 ~₹9.1 Lakhs required
+                  </span>
+                </td>
                 <td className="py-4 px-4">Up to 100% of I-20 / invoice tuition + living</td>
                 <td className="py-4 px-4">Course duration + 6 months</td>
               </tr>
               <tr className="hover:bg-slate-50/70 transition-colors">
                 <td className="py-4 px-4 font-bold text-slate-900">United Kingdom (Master's)</td>
-                <td className="py-4 px-4 font-medium">£18,000 – £35,000 / yr</td>
-                <td className="py-4 px-4 font-medium">£12,000 – £15,000 / yr (UKVI maintenance)</td>
-                <td className="py-4 px-4">Secured & unsecured education loans</td>
+                <td className="py-4 px-4">
+                  <span className="font-bold text-slate-800 block">£18,000 – £35,000 / yr</span>
+                  <span className="text-[10px] text-indigo-800 font-semibold bg-indigo-50 px-1.5 py-0.5 rounded inline-block mt-0.5">
+                    🇮🇳 ~₹19.7L – ₹38.3 Lakhs
+                  </span>
+                </td>
+                <td className="py-4 px-4 font-medium">
+                  <span className="block">£12,000 – £15,000 / yr (maintenance)</span>
+                  <span className="text-[10px] text-slate-600 font-semibold bg-slate-100 px-1.5 py-0.5 rounded inline-block mt-0.5">
+                    🇮🇳 ~₹13.1L – ₹16.4 Lakhs
+                  </span>
+                </td>
+                <td className="py-4 px-4">Secured & unsecured education loans (SBI, HDFC Credila)</td>
                 <td className="py-4 px-4">Course duration + 6 months</td>
               </tr>
             </tbody>

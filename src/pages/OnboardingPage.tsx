@@ -18,6 +18,7 @@ import {
   Euro,
   Info,
 } from 'lucide-react';
+import { convertEurToInr } from '../utils/currencyUtils';
 
 const AVAILABLE_COUNTRIES = [
   { id: 'germany', name: 'Germany', desc: 'Tuition-free options, uni-assist, DAAD' },
@@ -406,6 +407,24 @@ export const OnboardingPage: React.FC = () => {
               placeholder="15000"
               className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-300 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
             />
+          </div>
+
+          {/* Real-time Indian Rupee (INR) Side-by-Side Display */}
+          <div className="p-3 bg-gradient-to-r from-emerald-50 to-teal-50/50 border border-emerald-200/80 rounded-xl text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 shadow-2xs">
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-emerald-800 flex items-center gap-1">
+                🇮🇳 Approx. in Indian Rupees:
+              </span>
+              <span className="font-extrabold text-emerald-950 text-sm">
+                {convertEurToInr(budget).inrCompact}
+              </span>
+              <span className="text-emerald-700 text-[11px] font-medium hidden sm:inline">
+                ({convertEurToInr(budget).inrFormatted})
+              </span>
+            </div>
+            <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-100/60 px-2 py-0.5 rounded-md self-start sm:self-auto">
+              1 EUR ≈ ₹91.25
+            </span>
           </div>
 
           {/* Quick Presets */}

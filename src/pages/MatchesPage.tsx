@@ -15,6 +15,7 @@ import { RuleChangedBanner } from '../components/common/RuleChangedBanner';
 import { VerifiedBadge } from '../components/common/VerifiedBadge';
 import { FitTierBadge } from '../components/common/FitTierBadge';
 import { RequirementChip } from '../components/common/RequirementChip';
+import { getTuitionInrEstimate } from '../utils/currencyUtils';
 import {
   Search,
   ExternalLink,
@@ -308,8 +309,15 @@ export const MatchesPage: React.FC = () => {
 
                   {/* Tuition & Deadline Row */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-600 bg-slate-50 p-3 rounded-xl border border-slate-100">
-                    <div>
-                      <span className="font-semibold text-slate-700">Tuition Fee:</span> {u.tuition}
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <span className="font-semibold text-slate-700">Tuition Fee:</span>
+                      <span>{u.tuition}</span>
+                      {getTuitionInrEstimate(u.tuition) && (
+                        <span className="px-2 py-0.5 rounded-md bg-emerald-100/80 text-emerald-900 font-bold text-[11px] tracking-tight inline-flex items-center gap-1 shadow-2xs">
+                          <span>🇮🇳</span>
+                          <span>{getTuitionInrEstimate(u.tuition)}</span>
+                        </span>
+                      )}
                     </div>
                     <div>
                       <span className="font-semibold text-slate-700">Deadline:</span>{' '}

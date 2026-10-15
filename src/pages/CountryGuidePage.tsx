@@ -230,15 +230,20 @@ export const CountryGuidePage: React.FC = () => {
               <p className="text-xs text-slate-700 leading-relaxed font-medium">
                 {activeCountry.costRange}
               </p>
-              <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs text-slate-600 space-y-1">
-                <span className="font-semibold text-slate-800">Financial Proof Requirement:</span>
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs text-slate-600 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="font-semibold text-slate-800">Financial Proof Requirement:</span>
+                  <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                    🇮🇳 Indian Student Reference
+                  </span>
+                </div>
                 <p>
                   {activeCountryId === 'germany' &&
-                    'Requires a Sperrkonto (blocked account) with €11,904/year (€992/month) deposited prior to visa issuance.'}
+                    'Requires a Sperrkonto (blocked account) with €11,904/year (€992/month) [approx. ₹10.86 Lakhs INR] deposited prior to visa issuance.'}
                   {activeCountryId === 'ireland' &&
-                    'Requires evidence of immediate access to at least €10,000 for living expenses in addition to paid course tuition.'}
+                    'Requires evidence of immediate access to at least €10,000 for living expenses [approx. ₹9.12 Lakhs INR] in addition to paid course tuition.'}
                   {activeCountryId === 'uk' &&
-                    'Requires maintenance funds (£1,334/mo for London or £1,023/mo outside) held consecutively for at least 28 days.'}
+                    'Requires maintenance funds (£1,334/mo [approx. ₹1.46L/mo] for London or £1,023/mo [approx. ₹1.12L/mo] outside) held consecutively for at least 28 days.'}
                 </p>
               </div>
             </div>
