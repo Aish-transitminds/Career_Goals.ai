@@ -1,0 +1,110 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // =========================================================================
+    // HELPER FUNCTIONS
+    // =========================================================================
+
+    // Verify caller is authenticated
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Verify caller is the owner of the document path
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // Safely validate a nullable numeric score within bounds [minVal, maxVal]
+    // If the value is null or omitted, it is considered valid.
+    function isValidScore(val, minVal, maxVal) {
+      return val == null || (val is number && val >= minVal && val <= maxVal);
+    }
+
+    // Validate the exams map. Uses .get(key, default) for defensive property access.
+    // Supports null/omitted exams (e.g. for students with examsTaken == false).
+    function isValidExams(exams) {
+      return exams is map
+        && isValidScore(exams.get('ielts', null), 0.0, 9.0)
+        && isValidScore(exams.get('toefl', null), 0, 120)
+        && isValidScore(exams.get('gre', null), 260, 340)
+        && isValidScore(exams.get('gmat', null), 200, 800);
+    }
+
+    // Validate UserProfile document structure and constraints
+    function isValidUser(data, userId) {
+      return data.name is string && data.name.size() > 0 && data.name.size() <= 500
+        && data.examsTaken is bool
+        && isValidExams(data.exams)
+        && data.targetCountries is list
+        && (data.get('budget', null) == null || (data.budget is number && data.budget >= 0))
+        && (data.get('uid', userId) == userId);
+    }
+
+    // Validate Application document structure and status enum
+    function isValidApplication(data) {
+      return data.universityId is string && data.universityId.size() > 0 && data.universityId.size() <= 100
+        && data.status in ['planned', 'applied', 'accepted', 'rejected']
+        && (data.get('notes', null) == null || (data.notes is string && data.notes.size() <= 500))
+        && (data.get('appliedAt', null) == null || data.appliedAt is string || data.appliedAt is timestamp)
+        && (data.get('updatedAt', null) == null || data.updatedAt is string || data.updatedAt is timestamp);
+    }
+
+    // Validate Notification document structure and 500-char message cap
+    function isValidNotification(data) {
+      return data.message is string && data.message.size() > 0 && data.message.size() <= 500
+        && data.read is bool
+        && data.applicationId is string && data.applicationId.size() > 0 && data.applicationId.size() <= 100
+        && (data.get('createdAt', null) == null || data.createdAt is string || data.createdAt is timestamp)
+        && (data.get('dueAt', null) == null || data.dueAt is string || data.dueAt is timestamp);
+    }
+
+    // =========================================================================
+    // CATALOG COLLECTIONS (Reference Data)
+    // Read-only for authenticated users. All client writes forbidden.
+    // Writes are performed solely via Firebase Admin SDK (Live Pipeline / Seeder).
+    // =========================================================================
+
+    match /countries/{countryId} {
+      allow read: if isSignedIn();
+      allow write: if false;
+    }
+
+    match /universities/{universityId} {
+      allow read: if isSignedIn();
+      allow write: if false;
+    }
+
+    // =========================================================================
+    // USER DATA (Private Documents & Subcollections)
+    // Strictly scoped to the authenticated owner (request.auth.uid == userId).
+    // =========================================================================
+
+    match /users/{userId} {
+      allow read, delete: if isOwner(userId);
+      allow create, update: if isOwner(userId) && isValidUser(request.resource.data, userId);
+
+      // Subcollection: Application Tracker
+      match /applications/{applicationId} {
+        allow read, delete: if isOwner(userId);
+        allow create, update: if isOwner(userId) && isValidApplication(request.resource.data);
+      }
+
+      // Subcollection: In-App Notifications / Reminders
+      match /notifications/{notificationId} {
+        allow read, delete: if isOwner(userId);
+        allow create, update: if isOwner(userId) && isValidNotification(request.resource.data);
+      }
+    }
+
+    // =========================================================================
+    // DEFAULT DENY
+    // Any unspecified collection or path is completely closed.
+    // =========================================================================
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

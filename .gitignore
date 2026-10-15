@@ -1,0 +1,88 @@
+# ==============================================================================
+# Dependencies & Package Managers
+# ==============================================================================
+node_modules/
+.pnp
+.pnp.js
+
+# ==============================================================================
+# Production Build Outputs
+# ==============================================================================
+dist/
+dist-ssr/
+build/
+*.local
+*.tsbuildinfo
+
+# ==============================================================================
+# Environment & Configuration Files
+# ==============================================================================
+.env
+.env.*
+!.env.example
+
+# ==============================================================================
+# Firebase & Cloud Service Account Credentials
+# (Strictly block all service account keys, private certificates, and secrets)
+# ==============================================================================
+*service-account*.json
+*firebase-admin*.json
+*google-credentials*.json
+serviceAccountKey.json
+client_secret*.json
+*.pem
+*.key
+*.p12
+
+# ==============================================================================
+# Python Live Data Pipeline & Virtual Environments
+# ==============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+.pytest_cache/
+.mypy_cache/
+
+# ==============================================================================
+# Logging & Debug Output
+# ==============================================================================
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+firebase-debug.log*
+firestore-debug.log*
+ui-debug.log*
+
+# ==============================================================================
+# Testing & Coverage Artifacts
+# ==============================================================================
+coverage/
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# ==============================================================================
+# OS & Editor Artifacts
+# ==============================================================================
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.sublime-project
+*.sublime-workspace
+
+# ==============================================================================
+# Agent Execution Logs & Firebase Cache
+# ==============================================================================
+.agents/
+.firebase/
+

@@ -1,0 +1,72 @@
+[
+  {
+    "id": "germany",
+    "name": "Germany",
+    "languageNote": "Most international Master's programmes are taught in English (IELTS 6.5+ or TOEFL 88+). Basic German (A1/A2) is strongly recommended for daily life and student employment.",
+    "documents": [
+      "Valid Passport (valid for >= 12 months)",
+      "Recognized Bachelor's Degree Certificate and Transcripts",
+      "Certified German or English Translations of all academic records",
+      "Preliminary Review Documentation (VPD) from uni-assist (where required)",
+      "APS Certificate (mandatory for applicants from India, China, Vietnam)",
+      "Proof of English Proficiency (IELTS Academic or TOEFL iBT)",
+      "Curriculum Vitae (Europass tabular format)",
+      "Letter of Motivation / Statement of Purpose (1-2 pages)",
+      "Academic Letters of Recommendation",
+      "Proof of Financial Resources / Blocked Account (€11,904/year in Sperrkonto)",
+      "Statutory or Recognized Private Health Insurance"
+    ],
+    "visaNote": "National Visa for Study Purposes (Type D). Non-EU students must provide proof of financial resources via a blocked account (Sperrkonto) with at least €11,904/year (€992/month). APS certificate required for India/China/Vietnam.",
+    "costRange": "Tuition: €0 - €6,000/sem; Semester Contribution: €100 - €350/sem; Living Costs: €950 - €1,300/month",
+    "portalUrl": "https://www.daad.de/en/study-and-research-in-germany/courses-of-study-in-germany/all-study-programmes-in-germany/",
+    "sourceUrl": "https://www.daad.de/en/study-and-research-in-germany/",
+    "lastChecked": "2026-10-15",
+    "ruleChanged": false,
+    "verificationNote": "Verify on the official site"
+  },
+  {
+    "id": "ireland",
+    "name": "Ireland",
+    "languageNote": "All higher education courses are delivered in English. Standard minimum entry requirement is IELTS 6.5 (no component < 6.0) or TOEFL iBT 88-90.",
+    "documents": [
+      "Valid Passport",
+      "Bachelor's Degree Transcripts and Certificate (NFQ Level 8, minimum 2:1 Honours)",
+      "Official English Language Test Report (IELTS, TOEFL iBT, or PTE)",
+      "Statement of Purpose (explaining course choice and career objectives)",
+      "Two Academic or Professional Letters of Recommendation",
+      "Curriculum Vitae / Resume",
+      "Financial Evidence showing immediate access to €10,000 living funds",
+      "Private Medical Insurance"
+    ],
+    "visaNote": "Irish Study Visa (Stamp 2 permission). Non-EEA students must prove €10,000 living maintenance in addition to paid tuition fees. CAO is for undergraduate admissions only; all postgraduate master's applications are made directly to each university.",
+    "costRange": "Tuition: €14,000 - €31,000/year; Living Costs: €1,200 - €1,800/month (Dublin highest)",
+    "portalUrl": "https://www.educationinireland.com/",
+    "sourceUrl": "https://www.educationinireland.com/en/How-to-Apply/",
+    "lastChecked": "2026-10-15",
+    "ruleChanged": false,
+    "verificationNote": "Verify on the official site"
+  },
+  {
+    "id": "uk",
+    "name": "United Kingdom",
+    "languageNote": "Courses taught in English. Higher tier universities demand IELTS 7.0-7.5 or TOEFL iBT 100-110 for postgraduate computing degrees.",
+    "documents": [
+      "Valid Passport",
+      "Official Academic Transcripts (UK 2:1 Honours or international equivalent)",
+      "Confirmation of Acceptance for Studies (CAS) from sponsoring university",
+      "Proof of English Language Competence (IELTS Academic / UKVI IELTS or TOEFL)",
+      "Statement of Purpose / Personal Statement",
+      "Two Academic References on institutional letterhead",
+      "Curriculum Vitae",
+      "Bank Statements showing required tuition and maintenance held for 28 consecutive days",
+      "Tuberculosis (TB) Test Certificate (if applicable)"
+    ],
+    "visaNote": "Student Visa (Points-based system: 50 pts CAS, 10 pts maintenance, 10 pts English). Maintenance requirement: £1,334/month for London, £1,023/month outside London (up to 9 months). Applications made directly to universities.",
+    "costRange": "Tuition: £24,000 - £46,500/year; Living Costs: £1,023 - £1,500/month",
+    "portalUrl": "https://www.gov.uk/student-visa",
+    "sourceUrl": "https://www.study-uk.britishcouncil.org/",
+    "lastChecked": "2026-10-15",
+    "ruleChanged": false,
+    "verificationNote": "Verify on the official site"
+  }
+]

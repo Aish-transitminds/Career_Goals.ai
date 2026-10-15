@@ -1,0 +1,87 @@
+[
+  {
+    "id": "tum_informatics",
+    "countryId": "germany",
+    "university": "Technical University of Munich (TUM)",
+    "program": "M.Sc. Informatics",
+    "url": "https://www.cit.tum.de/en/cit/studies/degree-programs/master-informatics/",
+    "fieldsToExtract": [
+      "gmat_required",
+      "gre_required",
+      "min_ielts",
+      "min_toefl",
+      "language_requirement",
+      "tuition_fee",
+      "application_deadline",
+      "notes"
+    ]
+  },
+  {
+    "id": "rwth_cs",
+    "countryId": "germany",
+    "university": "RWTH Aachen University",
+    "program": "M.Sc. Computer Science",
+    "url": "https://www.rwth-aachen.de/cms/root/studium/nach-dem-studium/master-stenglaenge/alle-masterstudiengaenge/informatik-m-sc/",
+    "fieldsToExtract": [
+      "gmat_required",
+      "gre_required",
+      "min_ielts",
+      "min_toefl",
+      "language_requirement",
+      "tuition_fee",
+      "application_deadline",
+      "notes"
+    ]
+  },
+  {
+    "id": "tcd_cs",
+    "countryId": "ireland",
+    "university": "Trinity College Dublin",
+    "program": "M.Sc. in Computer Science",
+    "url": "https://www.tcd.ie/courses/postgraduate/courses/computer-science--msc--future-networked-systems-augmented--virtual-reality-intelligent-systems-data-science/",
+    "fieldsToExtract": [
+      "gmat_required",
+      "gre_required",
+      "min_ielts",
+      "min_toefl",
+      "language_requirement",
+      "tuition_fee",
+      "application_deadline",
+      "notes"
+    ]
+  },
+  {
+    "id": "ucd_cs",
+    "countryId": "ireland",
+    "university": "University College Dublin",
+    "program": "MSc Computer Science (Negotiated Learning)",
+    "url": "https://www.ucd.ie/cs/study/postgraduate/mscincpsciencenegotiatedlearning/",
+    "fieldsToExtract": [
+      "gmat_required",
+      "gre_required",
+      "min_ielts",
+      "min_toefl",
+      "language_requirement",
+      "tuition_fee",
+      "application_deadline",
+      "notes"
+    ]
+  },
+  {
+    "id": "lmu_datascience",
+    "countryId": "germany",
+    "university": "Ludwig-Maximilians-Universität München (LMU)",
+    "program": "M.Sc. Statistics and Data Science",
+    "url": "https://www.statistik.uni-muenchen.de/studium/studieninfos/statistik_im_master/bewerbung_master/index.html",
+    "fieldsToExtract": [
+      "gmat_required",
+      "gre_required",
+      "min_ielts",
+      "min_toefl",
+      "language_requirement",
+      "tuition_fee",
+      "application_deadline",
+      "notes"
+    ]
+  }
+]
