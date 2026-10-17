@@ -234,16 +234,21 @@ ${user?.email || 'email@example.com'}`;
       <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-4">
           <div>
-            <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-              <HelpCircle className="w-5 h-5 text-indigo-600" />
-              Step 1: Identify Your Rejection Root Cause
-            </h2>
+            <div className="flex flex-wrap items-center gap-2">
+              <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                <HelpCircle className="w-5 h-5 text-indigo-600" />
+                Step 1: Identify Your Rejection Root Cause
+              </h2>
+              <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-200">
+                Student-Selected / Self-Reported
+              </span>
+            </div>
             <p className="text-xs text-slate-500 mt-1">
-              Select the factor that best matches your situation to unlock tailored recovery steps.
+              <strong>Notice:</strong> The rejection reason below is student-selected and self-reported based on your official decision letter, not an automated AI diagnosis. Select the cause mentioned by the university to unlock actionable next steps.
             </p>
           </div>
           <span className="text-xs font-semibold px-3 py-1 rounded-full bg-slate-100 text-slate-700">
-            Interactive Diagnostic
+            Self-Reported Recovery Guide
           </span>
         </div>
 

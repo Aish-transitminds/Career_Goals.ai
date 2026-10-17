@@ -1,0 +1,47 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 49;
+  border: 0;
+  background: rgba(38, 39, 32, 0.2);
+}
+
+.window {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 50;
+  display: flex;
+  width: min(384px, calc(100vw - 32px));
+  height: 540px;
+  max-height: calc(100vh - 48px);
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  border-radius: 7px;
+  background: var(--surface);
+  box-shadow: var(--shadow-popover);
+  animation: assistant-enter 150ms ease-out;
+}
+
+@keyframes assistant-enter {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 640px) {
+  .backdrop { background: rgba(38, 39, 32, 0.3); }
+  .window {
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+    width: auto;
+    height: min(680px, calc(100vh - 20px));
+    max-height: calc(100vh - 20px);
+    border-radius: 7px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .window { animation: none; }
+}

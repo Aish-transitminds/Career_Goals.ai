@@ -173,7 +173,16 @@ def run_pipeline(
             failure_count += 1
             continue
 
-        # Step 6: Detect rule changes
+        # Step 6: Ensure snippet provenance metadata is populated
+        if validated_reqs.get("source_snippets"):
+            for field_name, s_info in validated_reqs["source_snippets"].items():
+                if isinstance(s_info, dict):
+                    if not s_info.get("source_url"):
+                        s_info["source_url"] = url
+                    if not s_info.get("verified_on"):
+                        s_info["verified_on"] = now_iso[:10]
+
+        # Step 7: Detect rule changes
         rule_changed, changed_fields, previous_values = detect_rule_changes(
             existing_doc=existing_doc,
             new_requirements=validated_reqs,

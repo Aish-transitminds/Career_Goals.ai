@@ -21,11 +21,9 @@ import {
   calculateDueNotifications,
   getNotificationId,
   MS_PER_DAY,
-  MILESTONES,
 } from '../src/utils/reminderEngine';
 import {
   SparkFallbackEngine,
-  sparkFallbackEngine,
 } from '../src/services/SparkFallbackEngine';
 import seedUniversities from '../src/data/universities.json';
 import seedCountries from '../src/data/countries.json';
@@ -253,9 +251,6 @@ for (const u of univs) {
 
   const matchesUnivName = res.content.includes(u.name);
   const hasSourceUrl = Boolean(res.sourceUrl && res.sourceUrl.startsWith('http'));
-  const hasSourceName = Boolean(res.sourceName);
-  const hasLastChecked = Boolean(res.lastChecked);
-  const isFallback = res.isFallback === true;
 
   record(
     'SparkFallbackEngine:Universities',

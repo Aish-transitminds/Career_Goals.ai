@@ -11,10 +11,44 @@
       "gmat_required": true,
       "min_gre": 315,
       "min_gmat": null,
+      "min_gpa": null,
+      "gpa_scale": 5.0,
       "language_requirement": "English CEFR C1 or IELTS 6.5 or TOEFL iBT 88",
       "application_deadline": "May 31 (Winter) / November 30 (Summer)",
       "tuition_fee": "€6,000 per semester for non-EU students (+ €97 semester fee)",
-      "notes": "Preliminary documentation (VPD) via uni-assist required prior to TUMonline application. Mandatory GRE General (min 164 Quant, 4.0 AW) for degrees from India, China, Iran, Pakistan."
+      "notes": "Preliminary documentation (VPD) via uni-assist required prior to TUMonline application. Mandatory GRE General (min 164 Quant, 4.0 AW) for degrees from India, China, Iran, Pakistan.",
+      "source_snippets": {
+        "min_ielts": {
+          "snippet": "Proficiency in English: an overall band score of at least 6.5 in the IELTS Academic test.",
+          "source_url": "https://www.tum.de/en/studies/degree-programs/detail/informatics-master-of-science-msc",
+          "verified_on": "2026-10-15"
+        },
+        "min_toefl": {
+          "snippet": "TOEFL iBT test with a minimum score of 88 points.",
+          "source_url": "https://www.tum.de/en/studies/degree-programs/detail/informatics-master-of-science-msc",
+          "verified_on": "2026-10-15"
+        },
+        "gre_required": {
+          "snippet": "Applicants who obtained their bachelor degree in China, India, Iran or Pakistan must submit a mandatory GRE General Test result.",
+          "source_url": "https://www.tum.de/en/studies/degree-programs/detail/informatics-master-of-science-msc",
+          "verified_on": "2026-10-15"
+        },
+        "gmat_required": {
+          "snippet": "GMAT revised test result is required for applicants without standard ECTS computer science degree.",
+          "source_url": "https://www.tum.de/en/studies/degree-programs/detail/informatics-master-of-science-msc",
+          "verified_on": "2026-10-15"
+        },
+        "tuition_fee": {
+          "snippet": "Tuition fees for international students from third countries: €6,000 per semester plus student union fee.",
+          "source_url": "https://www.tum.de/en/studies/degree-programs/detail/informatics-master-of-science-msc",
+          "verified_on": "2026-10-15"
+        },
+        "application_deadline": {
+          "snippet": "Application period for Winter semester: January 01 - May 31.",
+          "source_url": "https://www.tum.de/en/studies/degree-programs/detail/informatics-master-of-science-msc",
+          "verified_on": "2026-10-15"
+        }
+      }
     },
     "tuition": "€6,000 / semester (Non-EU)",
     "portalUrl": "https://campus.tum.de/",
@@ -44,10 +78,39 @@
       "gmat_required": null,
       "min_gre": 310,
       "min_gmat": null,
+      "min_gpa": null,
+      "gpa_scale": 5.0,
       "language_requirement": "English B2 (IELTS 6.0 / TOEFL 80) and German C1 before final enrollment",
       "application_deadline": "March 1 (Winter) / September 1 (Summer) for Non-EU",
       "tuition_fee": "€0 (Tuition-free; semester contribution ~€320/semester)",
-      "notes": "Strict curricular prerequisite: 34 ECTS Practical CS, 24 ECTS Technical CS, 24 ECTS Theoretical CS, 26 ECTS Math. Mandatory GRE (Quant > 75th percentile, Verbal > 15th percentile, AW >= 3.5)."
+      "notes": "Strict curricular prerequisite: 34 ECTS Practical CS, 24 ECTS Technical CS, 24 ECTS Theoretical CS, 26 ECTS Math. Mandatory GRE (Quant > 75th percentile, Verbal > 15th percentile, AW >= 3.5).",
+      "source_snippets": {
+        "min_ielts": {
+          "snippet": "Language proof: English level B2 (IELTS 6.0 or TOEFL 80).",
+          "source_url": "https://www.rwth-aachen.de/go/id/bkmq/?lidx=1",
+          "verified_on": "2026-10-15"
+        },
+        "min_toefl": {
+          "snippet": "English proficiency score of at least 80 in TOEFL iBT.",
+          "source_url": "https://www.rwth-aachen.de/go/id/bkmq/?lidx=1",
+          "verified_on": "2026-10-15"
+        },
+        "gre_required": {
+          "snippet": "Non-EU applicants must submit GRE scores: min. 160 Quantitative, 145 Verbal, 3.5 Analytical Writing.",
+          "source_url": "https://www.rwth-aachen.de/go/id/bkmq/?lidx=1",
+          "verified_on": "2026-10-15"
+        },
+        "tuition_fee": {
+          "snippet": "No tuition fees are charged; all students pay a semester social contribution fee.",
+          "source_url": "https://www.rwth-aachen.de/go/id/bkmq/?lidx=1",
+          "verified_on": "2026-10-15"
+        },
+        "application_deadline": {
+          "snippet": "Non-EU international deadline: March 1 for winter intake.",
+          "source_url": "https://www.rwth-aachen.de/go/id/bkmq/?lidx=1",
+          "verified_on": "2026-10-15"
+        }
+      }
     },
     "tuition": "€0 (Tuition-free)",
     "portalUrl": "https://online.rwth-aachen.de/",
@@ -73,14 +136,38 @@
       "gmat_required": null,
       "min_gre": null,
       "min_gmat": null,
+      "min_gpa": null,
+      "gpa_scale": 5.0,
       "language_requirement": "English proficiency Level B2/C1 (IELTS 6.5 with no band < 6.0 or TOEFL 90)",
       "application_deadline": "June 15 (Winter semester)",
       "tuition_fee": "€1,500 per semester for non-EU students (+ €189.80 semester fee)",
-      "notes": "Baden-Württemberg state statutory fee applies to all non-EU students. Apply directly via heiCO portal."
+      "notes": "Baden-Württemberg state statutory fee applies to all non-EU students. Apply directly via heiCO portal.",
+      "source_snippets": {
+        "min_ielts": {
+          "snippet": "English proficiency Level B2/C1: IELTS Academic overall band 6.5 with no individual band below 6.0.",
+          "source_url": "https://www.informatik.uni-heidelberg.de/en/studies/master-studies/data-and-computer-science",
+          "verified_on": "2026-10-15"
+        },
+        "min_toefl": {
+          "snippet": "TOEFL iBT test with a minimum score of 90.",
+          "source_url": "https://www.informatik.uni-heidelberg.de/en/studies/master-studies/data-and-computer-science",
+          "verified_on": "2026-10-15"
+        },
+        "tuition_fee": {
+          "snippet": "Statutory non-EU tuition fee of €1,500 per semester plus administrative contribution of €189.80.",
+          "source_url": "https://www.informatik.uni-heidelberg.de/en/studies/master-studies/data-and-computer-science",
+          "verified_on": "2026-10-15"
+        },
+        "application_deadline": {
+          "snippet": "International application deadline for Winter semester: June 15.",
+          "source_url": "https://www.informatik.uni-heidelberg.de/en/studies/master-studies/data-and-computer-science",
+          "verified_on": "2026-10-15"
+        }
+      }
     },
     "tuition": "€1,500 / semester (Non-EU)",
     "portalUrl": "https://heico.uni-heidelberg.de/",
-    "sourceUrl": "https://www.uni-heidelberg.de/en/study/all-degree-programmes/data-and-computer-science-master",
+    "sourceUrl": "https://www.informatik.uni-heidelberg.de/en/studies/master-studies/data-and-computer-science",
     "lastChecked": "2026-10-15",
     "lastChanged": "2026-10-15",
     "ruleChanged": false,
@@ -102,10 +189,34 @@
       "gmat_required": null,
       "min_gre": null,
       "min_gmat": null,
+      "min_gpa": null,
+      "gpa_scale": 5.0,
       "language_requirement": "English proficiency Level C1 (IELTS 7.0 or TOEFL 95)",
       "application_deadline": "June 1 (Winter intake only)",
       "tuition_fee": "€0 (Tuition-free; semester administration fee ~€150)",
-      "notes": "Elite network of Bavaria program. Strong background in statistics and computer science required. Direct application via LMU online portal."
+      "notes": "Elite network of Bavaria program. Strong background in statistics and computer science required. Direct application via LMU online portal.",
+      "source_snippets": {
+        "min_ielts": {
+          "snippet": "Level C1 English proficiency: IELTS Academic overall score of 7.0 or higher.",
+          "source_url": "https://www.m-datascience.mathematik-informatik-statistik.uni-muenchen.de/apply/index.html",
+          "verified_on": "2026-10-15"
+        },
+        "min_toefl": {
+          "snippet": "TOEFL iBT test score of 95 or higher.",
+          "source_url": "https://www.m-datascience.mathematik-informatik-statistik.uni-muenchen.de/apply/index.html",
+          "verified_on": "2026-10-15"
+        },
+        "tuition_fee": {
+          "snippet": "No tuition fees are charged. Basic semester contribution fee of approximately €150.",
+          "source_url": "https://www.m-datascience.mathematik-informatik-statistik.uni-muenchen.de/apply/index.html",
+          "verified_on": "2026-10-15"
+        },
+        "application_deadline": {
+          "snippet": "Application deadline for Winter intake: June 1 (intake once per year).",
+          "source_url": "https://www.m-datascience.mathematik-informatik-statistik.uni-muenchen.de/apply/index.html",
+          "verified_on": "2026-10-15"
+        }
+      }
     },
     "tuition": "€0 (Tuition-free)",
     "portalUrl": "https://portal.datascience-munich.de/",
@@ -131,10 +242,34 @@
       "gmat_required": null,
       "min_gre": null,
       "min_gmat": null,
+      "min_gpa": null,
+      "gpa_scale": 4.0,
       "language_requirement": "IELTS 6.5 overall (no band < 6.0) or TOEFL iBT 88",
       "application_deadline": "June 30 (Rolling admissions)",
       "tuition_fee": "€27,500 for full 1-year program (Non-EU)",
-      "notes": "Requires First- or upper second-class honours degree (2:1) in CS or closely related discipline. Apply directly via my.tcd.ie (application fee €55)."
+      "notes": "Requires First- or upper second-class honours degree (2:1) in CS or closely related discipline. Apply directly via my.tcd.ie (application fee €55).",
+      "source_snippets": {
+        "min_ielts": {
+          "snippet": "IELTS Academic: an overall score of 6.5 with no band below 6.0.",
+          "source_url": "https://www.tcd.ie/courses/postgraduate/courses/computer-science--intelligent-systems-msc/",
+          "verified_on": "2026-10-15"
+        },
+        "min_toefl": {
+          "snippet": "TOEFL iBT: minimum score of 88 overall.",
+          "source_url": "https://www.tcd.ie/courses/postgraduate/courses/computer-science--intelligent-systems-msc/",
+          "verified_on": "2026-10-15"
+        },
+        "tuition_fee": {
+          "snippet": "Annual postgraduate non-EU tuition fee is €27,500 for the full 1-year program.",
+          "source_url": "https://www.tcd.ie/courses/postgraduate/courses/computer-science--intelligent-systems-msc/",
+          "verified_on": "2026-10-15"
+        },
+        "application_deadline": {
+          "snippet": "Applications close June 30 with rolling review.",
+          "source_url": "https://www.tcd.ie/courses/postgraduate/courses/computer-science--intelligent-systems-msc/",
+          "verified_on": "2026-10-15"
+        }
+      }
     },
     "tuition": "€27,500 / year (Non-EU)",
     "portalUrl": "https://my.tcd.ie/",
@@ -160,10 +295,34 @@
       "gmat_required": null,
       "min_gre": null,
       "min_gmat": null,
+      "min_gpa": null,
+      "gpa_scale": 4.0,
       "language_requirement": "IELTS 6.5 (no sub-band < 6.0) or TOEFL iBT 90",
       "application_deadline": "July 1 (Rolling admissions)",
       "tuition_fee": "€29,100 for full 1-year program (Non-EU)",
-      "notes": "Requires NFQ Level 8 2:1 Honours in Computer Science or related degree. Direct online application via UCD Graduate Admissions portal."
+      "notes": "Requires NFQ Level 8 2:1 Honours in Computer Science or related degree. Direct online application via UCD Graduate Admissions portal.",
+      "source_snippets": {
+        "min_ielts": {
+          "snippet": "IELTS: an average score of 6.5 over all components and a minimum of 6.0 in each band.",
+          "source_url": "https://www.ucd.ie/courses/msc-computer-science-negotiated-learning",
+          "verified_on": "2026-10-15"
+        },
+        "min_toefl": {
+          "snippet": "TOEFL iBT: a minimum score of 90 is required.",
+          "source_url": "https://www.ucd.ie/courses/msc-computer-science-negotiated-learning",
+          "verified_on": "2026-10-15"
+        },
+        "tuition_fee": {
+          "snippet": "Full-time international non-EU tuition is €29,100 per annum.",
+          "source_url": "https://www.ucd.ie/courses/msc-computer-science-negotiated-learning",
+          "verified_on": "2026-10-15"
+        },
+        "application_deadline": {
+          "snippet": "Application deadline: July 1 (rolling basis until capacity is reached).",
+          "source_url": "https://www.ucd.ie/courses/msc-computer-science-negotiated-learning",
+          "verified_on": "2026-10-15"
+        }
+      }
     },
     "tuition": "€29,100 / year (Non-EU)",
     "portalUrl": "https://www.ucd.ie/apply/",
@@ -189,10 +348,34 @@
       "gmat_required": null,
       "min_gre": null,
       "min_gmat": null,
+      "min_gpa": null,
+      "gpa_scale": 4.0,
       "language_requirement": "IELTS 6.5 overall (minimum 6.5 in writing, 6.0 other bands) or TOEFL iBT 88",
       "application_deadline": "May 31 (Rolling basis)",
       "tuition_fee": "€28,640 for 1-year program (Non-EU)",
-      "notes": "Requires NFQ Level 8 First Class Honours or strong 2:1 in Computer Science or quantitative STEM discipline. Apply direct via University of Galway portal."
+      "notes": "Requires NFQ Level 8 First Class Honours or strong 2:1 in Computer Science or quantitative STEM discipline. Apply direct via University of Galway portal.",
+      "source_snippets": {
+        "min_ielts": {
+          "snippet": "IELTS score of 6.5 overall (with 6.5 in writing and no less than 6.0 in any other band).",
+          "source_url": "https://www.universityofgalway.ie/courses/taught-postgraduate-courses/computer-science-data-analytics.html",
+          "verified_on": "2026-10-15"
+        },
+        "min_toefl": {
+          "snippet": "TOEFL iBT score of 88 overall.",
+          "source_url": "https://www.universityofgalway.ie/courses/taught-postgraduate-courses/computer-science-data-analytics.html",
+          "verified_on": "2026-10-15"
+        },
+        "tuition_fee": {
+          "snippet": "Non-EU postgraduate tuition fee is €28,640 for the 1-year full-time program.",
+          "source_url": "https://www.universityofgalway.ie/courses/taught-postgraduate-courses/computer-science-data-analytics.html",
+          "verified_on": "2026-10-15"
+        },
+        "application_deadline": {
+          "snippet": "Application deadline: May 31 on a rolling review basis.",
+          "source_url": "https://www.universityofgalway.ie/courses/taught-postgraduate-courses/computer-science-data-analytics.html",
+          "verified_on": "2026-10-15"
+        }
+      }
     },
     "tuition": "€28,640 / year (Non-EU)",
     "portalUrl": "https://www.universityofgalway.ie/apply/",
@@ -218,10 +401,34 @@
       "gmat_required": null,
       "min_gre": null,
       "min_gmat": null,
+      "min_gpa": null,
+      "gpa_scale": 4.0,
       "language_requirement": "IELTS 6.5 overall (no individual band < 6.0) or TOEFL iBT 90",
       "application_deadline": "June 15 (Direct portal)",
       "tuition_fee": "€28,500 for 1-year program (Non-EU)",
-      "notes": "Second Class Honours Grade 1 (2H1) in primary Level 8 Computer Science degree. Apply via UCCApply portal (application fee €50)."
+      "notes": "Second Class Honours Grade 1 (2H1) in primary Level 8 Computer Science degree. Apply via UCCApply portal (application fee €50).",
+      "source_snippets": {
+        "min_ielts": {
+          "snippet": "IELTS Academic 6.5 with no individual band score below 6.0.",
+          "source_url": "https://www.ucc.ie/en/ckr40/",
+          "verified_on": "2026-10-15"
+        },
+        "min_toefl": {
+          "snippet": "TOEFL iBT score of 90 overall.",
+          "source_url": "https://www.ucc.ie/en/ckr40/",
+          "verified_on": "2026-10-15"
+        },
+        "tuition_fee": {
+          "snippet": "Non-EU tuition fee for full-time taught masters is €28,500 per year.",
+          "source_url": "https://www.ucc.ie/en/ckr40/",
+          "verified_on": "2026-10-15"
+        },
+        "application_deadline": {
+          "snippet": "Application deadline: June 15 via the UCCApply online portal.",
+          "source_url": "https://www.ucc.ie/en/ckr40/",
+          "verified_on": "2026-10-15"
+        }
+      }
     },
     "tuition": "€28,500 / year (Non-EU)",
     "portalUrl": "https://www.ucc.ie/en/apply/",
@@ -247,14 +454,38 @@
       "gmat_required": null,
       "min_gre": null,
       "min_gmat": null,
+      "min_gpa": null,
+      "gpa_scale": 4.0,
       "language_requirement": "Higher College Requirement: IELTS 7.0 overall (min 6.5 all bands) or TOEFL iBT 100 (min 22 all bands)",
       "application_deadline": "May 15 (Early application advised)",
       "tuition_fee": "£46,000 for 1-year program (Overseas / Non-EU)",
-      "notes": "First-Class Honours UK Bachelor's degree (or international equivalent) with substantial computing coursework. GRE is NOT required."
+      "notes": "First-Class Honours UK Bachelor's degree (or international equivalent) with substantial computing coursework. GRE is NOT required.",
+      "source_snippets": {
+        "min_ielts": {
+          "snippet": "Higher College Requirement: IELTS 7.0 overall (minimum 6.5 in all sub-tests).",
+          "source_url": "https://www.imperial.ac.uk/computing/studying/postgraduate/",
+          "verified_on": "2026-10-15"
+        },
+        "min_toefl": {
+          "snippet": "TOEFL iBT: overall score of 100 with minimum 22 in all elements.",
+          "source_url": "https://www.imperial.ac.uk/computing/studying/postgraduate/",
+          "verified_on": "2026-10-15"
+        },
+        "tuition_fee": {
+          "snippet": "Overseas tuition fee is £46,000 for the 1-year MSc program.",
+          "source_url": "https://www.imperial.ac.uk/computing/studying/postgraduate/",
+          "verified_on": "2026-10-15"
+        },
+        "application_deadline": {
+          "snippet": "Applications close May 15; early submission strongly encouraged.",
+          "source_url": "https://www.imperial.ac.uk/computing/studying/postgraduate/",
+          "verified_on": "2026-10-15"
+        }
+      }
     },
     "tuition": "£46,000 / year (Overseas)",
     "portalUrl": "https://www.imperial.ac.uk/study/apply/postgraduate-taught/how-to-apply/",
-    "sourceUrl": "https://www.imperial.ac.uk/study/courses/postgraduate-taught/computing-artificial-intelligence-machine-learning/",
+    "sourceUrl": "https://www.imperial.ac.uk/computing/studying/postgraduate/",
     "lastChecked": "2026-10-15",
     "lastChanged": "2026-10-15",
     "ruleChanged": false,
@@ -276,10 +507,34 @@
       "gmat_required": null,
       "min_gre": null,
       "min_gmat": null,
+      "min_gpa": null,
+      "gpa_scale": 4.0,
       "language_requirement": "Higher level: IELTS 7.5 (min 7.0 each component) or TOEFL iBT 110 (min 22 L, 24 R/W, 25 S)",
       "application_deadline": "March 7 (Primary admissions deadline)",
       "tuition_fee": "£46,350 for 1-year program (Overseas)",
-      "notes": "First-Class undergraduate degree in Computer Science or Mathematics. GRE/GMAT scores are explicitly NOT requested or used in admissions evaluation."
+      "notes": "First-Class undergraduate degree in Computer Science or Mathematics. GRE/GMAT scores are explicitly NOT requested or used in admissions evaluation.",
+      "source_snippets": {
+        "min_ielts": {
+          "snippet": "Higher level English requirement: IELTS Academic 7.5 overall with minimum 7.0 in each component.",
+          "source_url": "https://www.ox.ac.uk/admissions/graduate/courses/msc-advanced-computer-science",
+          "verified_on": "2026-10-15"
+        },
+        "min_toefl": {
+          "snippet": "TOEFL iBT: total score of 110 with min 22 Listening, 24 Reading/Writing, 25 Speaking.",
+          "source_url": "https://www.ox.ac.uk/admissions/graduate/courses/msc-advanced-computer-science",
+          "verified_on": "2026-10-15"
+        },
+        "tuition_fee": {
+          "snippet": "Course fee for international/overseas students is £46,350 for the 1-year program.",
+          "source_url": "https://www.ox.ac.uk/admissions/graduate/courses/msc-advanced-computer-science",
+          "verified_on": "2026-10-15"
+        },
+        "application_deadline": {
+          "snippet": "Main application deadline: March 7 (for entry in October).",
+          "source_url": "https://www.ox.ac.uk/admissions/graduate/courses/msc-advanced-computer-science",
+          "verified_on": "2026-10-15"
+        }
+      }
     },
     "tuition": "£46,350 / year (Overseas)",
     "portalUrl": "https://www.ox.ac.uk/admissions/graduate/applying-to-oxford",
@@ -305,10 +560,34 @@
       "gmat_required": null,
       "min_gre": null,
       "min_gmat": null,
+      "min_gpa": null,
+      "gpa_scale": 4.0,
       "language_requirement": "IELTS 7.0 overall (no component < 6.5) or TOEFL iBT 100 (min 25 in writing, 22 other bands)",
       "application_deadline": "June 27 (Staged admissions rounds)",
       "tuition_fee": "£41,400 for 1-year program (International)",
-      "notes": "UK First Class or high 2:1 Honours in Computer Science with minimum 50% core CS content. Direct online application via Manchester Graduate Admissions portal."
+      "notes": "UK First Class or high 2:1 Honours in Computer Science with minimum 50% core CS content. Direct online application via Manchester Graduate Admissions portal.",
+      "source_snippets": {
+        "min_ielts": {
+          "snippet": "IELTS: 7.0 overall with no sub-test below 6.5.",
+          "source_url": "https://www.manchester.ac.uk/study/masters/courses/list/08145/msc-advanced-computer-science/",
+          "verified_on": "2026-10-15"
+        },
+        "min_toefl": {
+          "snippet": "TOEFL iBT: 100 overall with minimum 25 in writing and 22 in all other sub-tests.",
+          "source_url": "https://www.manchester.ac.uk/study/masters/courses/list/08145/msc-advanced-computer-science/",
+          "verified_on": "2026-10-15"
+        },
+        "tuition_fee": {
+          "snippet": "International postgraduate taught tuition fee: £41,400 for 1 year.",
+          "source_url": "https://www.manchester.ac.uk/study/masters/courses/list/08145/msc-advanced-computer-science/",
+          "verified_on": "2026-10-15"
+        },
+        "application_deadline": {
+          "snippet": "Staged admissions with final international cutoff: June 27.",
+          "source_url": "https://www.manchester.ac.uk/study/masters/courses/list/08145/msc-advanced-computer-science/",
+          "verified_on": "2026-10-15"
+        }
+      }
     },
     "tuition": "£41,400 / year (Overseas)",
     "portalUrl": "https://www.manchester.ac.uk/study/masters/admissions/apply-online/",
