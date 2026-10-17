@@ -7,6 +7,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useCatalog } from '../../hooks/useCatalog';
 import { aiAssistantService, ChatMessage } from '../../services/aiAssistantService';
+import { ASSISTANT_UNAVAILABLE_MESSAGE } from '../../config/modelConfig';
 import {
   Bot,
   X,
@@ -108,8 +109,7 @@ export const AIAssistantWidget: React.FC = () => {
         {
           id: `assistant-err-${Date.now()}`,
           role: 'assistant',
-          content:
-            'I encountered an issue retrieving verified records. Please verify requirements directly on the official portal.',
+          content: ASSISTANT_UNAVAILABLE_MESSAGE,
           sourceUrl: 'https://www.daad.de/en/study-and-research-in-germany/',
           sourceName: 'Official Portal',
           lastChecked: '2026-10-15',

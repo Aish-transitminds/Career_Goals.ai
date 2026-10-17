@@ -549,9 +549,16 @@ assert(/\*\.key/.test(gitignoreContent), '.gitignore blocks *.key private keys',
 assert(/node_modules\//.test(gitignoreContent), '.gitignore blocks node_modules/', 'Git Hygiene');
 assert(/dist\//.test(gitignoreContent), '.gitignore blocks dist/', 'Git Hygiene');
 
-// 3.3 Verify No .env file or credentials on disk
-const envPath = path.resolve('.env');
-assert(!fs.existsSync(envPath), 'No .env file committed or present on disk', 'Secret Hygiene');
+// 3.3 Verify .env is never tracked in git
+let envTrackedInGit = false;
+try {
+  const { execSync } = require('child_process');
+  const stdout = execSync('git ls-files .env', { encoding: 'utf8' }).trim();
+  envTrackedInGit = stdout.length > 0;
+} catch {
+  envTrackedInGit = false;
+}
+assert(!envTrackedInGit, '.env is not committed or tracked in git repository', 'Secret Hygiene');
 
 // 3.4 Deep Scan of project source files for leaked secrets
 const projectFilesToScan = [

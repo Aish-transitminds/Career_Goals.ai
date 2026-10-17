@@ -11,16 +11,12 @@ import {
   matchUniversity,
   calculateMatches,
   parseAnnualTuition,
-  hasTakenAnyExam,
-  buildMissingExamsList,
-  DEFAULT_MATCH_CONFIG,
 } from '../src/utils/matchEngine';
 import { University, UserProfile, MatchResult } from '../src/types';
 
 // ANSI terminal colors
 const green = (s: string) => `\x1b[32m${s}\x1b[0m`;
 const red = (s: string) => `\x1b[31m${s}\x1b[0m`;
-const yellow = (s: string) => `\x1b[33m${s}\x1b[0m`;
 const cyan = (s: string) => `\x1b[36m${s}\x1b[0m`;
 const bold = (s: string) => `\x1b[1m${s}\x1b[0m`;
 
@@ -377,6 +373,14 @@ assertTest(
   `Free uni score: ${freeResult.fitScore}`
 );
 
+assertTest(
+  'S3.7b',
+  'Zero Budget',
+  'Paid university receives no budget bonus for zero-budget applicant',
+  paidResult.fitScore <= freeResult.fitScore,
+  `Paid uni score: ${paidResult.fitScore}`
+);
+
 // With baseScore = 1.0 (requirements met), both would be 1.00 due to ceiling capping.
 // Let's test with partial requirement (Near) so baseScore = 0.50 to observe uncapped +0.05 bonus
 const partialScoreProfile: UserProfile = {
@@ -555,6 +559,13 @@ assertTest(
   greBelowBoundary.belowRequirements.some((r) => r.startsWith('GRE (Below'))
 );
 
+assertTest(
+  'S4.12b',
+  'Proximity',
+  'GRE 310 vs 320 requirement earns 0.0 point (Below)',
+  greBelow.belowRequirements.some((r) => r.startsWith('GRE (Below'))
+);
+
 // 4.4 GMAT Margin: 20.0
 // Req 700: Met >= 700, Near >= 680, Below < 680
 const gmatExactMet = matchUniversity({ ...baseProfile, exams: { ...baseProfile.exams, gmat: 700 } }, testUniProximity);
@@ -567,6 +578,13 @@ assertTest(
   'Proximity',
   'GMAT 700 vs 700 requirement earns 1.0 point (Met)',
   gmatExactMet.metRequirements.some((r) => r.startsWith('GMAT (Met'))
+);
+
+assertTest(
+  'S4.13b',
+  'Proximity',
+  'GMAT 670 vs 700 requirement earns 0.0 point (Below)',
+  gmatBelow.belowRequirements.some((r) => r.startsWith('GMAT (Below'))
 );
 
 assertTest(

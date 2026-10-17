@@ -63,6 +63,8 @@ export const MatchesPage: React.FC = () => {
         fitScore: -1,
         missingExams: [],
         metRequirements: [],
+        nearRequirements: [],
+        belowRequirements: [],
         unconfirmedRequirements: [],
         ruleChanged: Boolean(u.ruleChanged),
       }));
@@ -178,11 +180,10 @@ export const MatchesPage: React.FC = () => {
               <button
                 key={tab.id}
                 onClick={() => setSelectedCountry(tab.id)}
-                className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors ${
-                  isActive
+                className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors ${isActive
                     ? 'bg-indigo-600 text-white shadow-sm'
                     : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                }`}
+                  }`}
               >
                 {tab.label} ({count})
               </button>
@@ -276,8 +277,8 @@ export const MatchesPage: React.FC = () => {
                         u.requirements.gre_required
                           ? u.requirements.min_gre || 'Required'
                           : u.requirements.gre_required === false
-                          ? 'Waived'
-                          : null
+                            ? 'Waived'
+                            : null
                       }
                       userVal={profile?.exams?.gre ?? null}
                       isBooleanRequirement={u.requirements.gre_required !== null}
@@ -289,8 +290,8 @@ export const MatchesPage: React.FC = () => {
                         u.requirements.gmat_required
                           ? u.requirements.min_gmat || 'Required'
                           : u.requirements.gmat_required === false
-                          ? 'Waived'
-                          : null
+                            ? 'Waived'
+                            : null
                       }
                       userVal={profile?.exams?.gmat ?? null}
                       isBooleanRequirement={u.requirements.gmat_required !== null}
@@ -345,11 +346,10 @@ export const MatchesPage: React.FC = () => {
                       <button
                         onClick={() => handleMarkApplied(u.id)}
                         disabled={isApplied}
-                        className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
-                          isApplied
+                        className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${isApplied
                             ? 'bg-emerald-100 text-emerald-800 cursor-default'
                             : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm'
-                        }`}
+                          }`}
                       >
                         <CheckCircle className="w-3.5 h-3.5" />
                         <span>{isApplied ? 'Application Tracked' : 'I Have Applied'}</span>

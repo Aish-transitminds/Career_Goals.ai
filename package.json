@@ -11,7 +11,12 @@
     "seed": "tsx scripts/seed.ts",
     "seed:dry": "tsx scripts/seed.ts --dry-run",
     "seed:emulator": "cross-env FIRESTORE_EMULATOR_HOST=localhost:8080 tsx scripts/seed.ts",
-    "test:match": "tsx tests/unit/matchEngine.test.ts"
+    "test:match": "tsx tests/unit/matchEngine.test.ts",
+    "test:rules": "tsx tests/firestore_rules_stress.ts",
+    "test:assistant": "tsx tests/unit/assistant_lockdown.test.ts",
+    "test:spark": "tsx tests/unit/sparkFallbackEngine.test.ts",
+    "test:letter": "tsx tests/unit/writingQualityChecker.test.ts",
+    "test:all": "npm run test:match && npm run test:rules && npm run test:assistant && npm run test:spark && npm run test:letter"
   },
   "dependencies": {
     "firebase": "^10.14.1",
