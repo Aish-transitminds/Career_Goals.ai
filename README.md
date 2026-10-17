@@ -1,7 +1,7 @@
 # CareerGoals.ai 🎓 (AbroadPath)
 
 > **Live Application**: [https://careergoals-296e4.web.app](https://careergoals-296e4.web.app)  
-> **Submissions & Hackathon Edition**: October 2026  
+>  
 > **Target Deadline**: 18 October 2026
 
 An intelligent, ethical, zero-hallucination study-abroad decision platform. Built for students targeting international master's programs, CareerGoals.ai combines deterministic client-side matching, verifiable source provenance, in-app milestone reminders, and an ethical SOP guide with strict privacy invariants.
