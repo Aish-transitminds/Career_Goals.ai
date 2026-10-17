@@ -85,5 +85,20 @@ Thumbs.db
 # ==============================================================================
 .agents/
 .firebase/
-.kombai/
 
+# Additional private credentials
+*.p8
+*.jks
+*.keystore
+.envrc
+
+# Local databases and temporary files (if applicable)
+*.sqlite
+*.sqlite3
+*.db-journal
+
+# Python tooling
+.ruff_cache/
+
+# Markdown documentation files
+*.md

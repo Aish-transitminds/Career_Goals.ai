@@ -5,7 +5,7 @@
  */
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCatalog } from '../hooks/useCatalog';
 import { getUserApplications, setUserApplication } from '../services/firestoreService';
@@ -22,18 +22,33 @@ import {
   CheckCircle,
   AlertCircle,
   BookOpen,
+  FileText,
+  Calendar,
 } from 'lucide-react';
 
 export const MatchesPage: React.FC = () => {
   const { user, profile } = useAuth();
   const { universities, loading: catalogLoading } = useCatalog();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   // Filters state
-  const [selectedCountry, setSelectedCountry] = useState<string>('all');
+  const initialCountry = searchParams.get('country');
+  const [selectedCountry, setSelectedCountry] = useState<string>(
+    initialCountry && ['germany', 'ireland', 'uk'].includes(initialCountry) ? initialCountry : 'all'
+  );
   const [selectedTier, setSelectedTier] = useState<string>('all');
+  const [selectedIntake, setSelectedIntake] = useState<string>('2026');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [appliedUnivIds, setAppliedUnivIds] = useState<Set<string>>(new Set());
+
+  // Sync selectedCountry if query param updates
+  useEffect(() => {
+    const c = searchParams.get('country');
+    if (c && ['germany', 'ireland', 'uk', 'all'].includes(c)) {
+      setSelectedCountry(c);
+    }
+  }, [searchParams]);
 
   // Load existing applied universities for user
   useEffect(() => {
@@ -162,33 +177,57 @@ export const MatchesPage: React.FC = () => {
           </select>
         </div>
 
-        {/* Country Filter Tabs */}
-        <div className="flex flex-wrap items-center gap-2 border-t border-slate-100 pt-3">
-          <span className="text-xs font-semibold text-slate-500 uppercase mr-1">Country:</span>
-          {[
-            { id: 'all', label: 'All Destinations' },
-            { id: 'germany', label: 'Germany' },
-            { id: 'ireland', label: 'Ireland' },
-            { id: 'uk', label: 'United Kingdom' },
-          ].map((tab) => {
-            const isActive = selectedCountry === tab.id;
-            const count =
-              tab.id === 'all'
-                ? matchResults.length
-                : matchResults.filter((m) => m.university.countryId === tab.id).length;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setSelectedCountry(tab.id)}
-                className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors ${isActive
-                    ? 'bg-indigo-600 text-white shadow-sm'
-                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+        {/* Country Filter Tabs & Intake Selector */}
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-3">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs font-semibold text-slate-500 uppercase mr-1">Country:</span>
+            {[
+              { id: 'all', label: 'All Destinations' },
+              { id: 'germany', label: 'Germany' },
+              { id: 'ireland', label: 'Ireland' },
+              { id: 'uk', label: 'United Kingdom' },
+            ].map((tab) => {
+              const isActive = selectedCountry === tab.id;
+              const count =
+                tab.id === 'all'
+                  ? matchResults.length
+                  : matchResults.filter((m) => m.university.countryId === tab.id).length;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setSelectedCountry(tab.id)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors ${
+                    isActive
+                      ? 'bg-indigo-600 text-white shadow-sm'
+                      : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                   }`}
+                >
+                  {tab.label} ({count})
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Intake Year Selection */}
+          <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200 p-1 rounded-xl">
+            <span className="text-xs font-semibold text-slate-600 uppercase px-2 flex items-center gap-1">
+              <Calendar className="w-3.5 h-3.5 text-indigo-600" />
+              <span>Intake:</span>
+            </span>
+            {['2026', '2027', '2028'].map((year) => (
+              <button
+                key={year}
+                onClick={() => setSelectedIntake(year)}
+                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
+                  selectedIntake === year
+                    ? 'bg-indigo-600 text-white shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                }`}
               >
-                {tab.label} ({count})
+                {year}
               </button>
-            );
-          })}
+            ))}
+          </div>
         </div>
       </div>
 
@@ -277,8 +316,8 @@ export const MatchesPage: React.FC = () => {
                         u.requirements.gre_required
                           ? u.requirements.min_gre || 'Required'
                           : u.requirements.gre_required === false
-                            ? 'Waived'
-                            : null
+                          ? 'Waived'
+                          : null
                       }
                       userVal={profile?.exams?.gre ?? null}
                       isBooleanRequirement={u.requirements.gre_required !== null}
@@ -290,8 +329,8 @@ export const MatchesPage: React.FC = () => {
                         u.requirements.gmat_required
                           ? u.requirements.min_gmat || 'Required'
                           : u.requirements.gmat_required === false
-                            ? 'Waived'
-                            : null
+                          ? 'Waived'
+                          : null
                       }
                       userVal={profile?.exams?.gmat ?? null}
                       isBooleanRequirement={u.requirements.gmat_required !== null}
@@ -332,7 +371,24 @@ export const MatchesPage: React.FC = () => {
                     <VerifiedBadge lastChecked={u.lastChecked} sourceUrl={u.sourceUrl} />
 
                     {/* Action Buttons */}
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        onClick={() => {
+                          try {
+                            localStorage.setItem('abroadpath_last_selected_program', u.id);
+                            localStorage.setItem('abroadpath_last_selected_intake', selectedIntake);
+                          } catch {}
+                          navigate(
+                            `/letter-helper?programId=${encodeURIComponent(u.id)}&intake=${encodeURIComponent(selectedIntake)}`
+                          );
+                        }}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-indigo-200 bg-indigo-50/80 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold transition-colors shadow-2xs"
+                        title="Check statement requirements, document limits, and drafting prompts"
+                      >
+                        <FileText className="w-3.5 h-3.5 text-indigo-600" />
+                        <span>Check statement requirements</span>
+                      </button>
+
                       <a
                         href={u.portalUrl}
                         target="_blank"
@@ -346,10 +402,11 @@ export const MatchesPage: React.FC = () => {
                       <button
                         onClick={() => handleMarkApplied(u.id)}
                         disabled={isApplied}
-                        className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${isApplied
+                        className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+                          isApplied
                             ? 'bg-emerald-100 text-emerald-800 cursor-default'
                             : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm'
-                          }`}
+                        }`}
                       >
                         <CheckCircle className="w-3.5 h-3.5" />
                         <span>{isApplied ? 'Application Tracked' : 'I Have Applied'}</span>

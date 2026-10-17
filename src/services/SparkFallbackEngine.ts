@@ -190,7 +190,7 @@ export class SparkFallbackEngine {
     if (this.isGenerativeSopRequest(prompt)) {
       return {
         content:
-          'AbroadPath AI strictly operates on verified admission facts and does NOT generate, rewrite, or auto-complete Statement of Purpose (SOP) or motivation letters. Submitting AI-generated text violates European university admission standards.\n\nPlease visit our Letter Helper (/letter-helper) for structural outlines, guiding reflection prompts, and an 8-point pre-submission quality checklist so you can craft your own authentic submission.\n\nVerify on the official site: Criteria and requirements should be confirmed on the official university portal.',
+          'AbroadPath AI strictly operates on verified admission facts and does NOT generate, rewrite, or auto-complete Statement of Purpose (SOP) or motivation letters. Submitting AI-generated text violates European university admission standards.\n\nPlease visit our Statement Requirements & Planner (/letter-helper) for structural outlines, guiding reflection prompts, and an 8-point pre-submission quality checklist so you can craft your own authentic submission.\n\nVerify on the official site: Criteria and requirements should be confirmed on the official university portal.',
         sourceUrl: 'https://www.daad.de/en/study-and-research-in-germany/',
         sourceName: 'AbroadPath AI Academic Ethics Guidelines',
         lastChecked: '2026-10-15',
@@ -198,64 +198,7 @@ export class SparkFallbackEngine {
       };
     }
 
-    // 3. Out-of-Catalog Institution / Country Detection (TASK 3)
-    const isExplicitOutOfCatalog = this.matchesAny(prompt, [
-      'mit',
-      'massachusetts institute of technology',
-      'stanford',
-      'harvard',
-      'berkeley',
-      'cmu',
-      'carnegie mellon',
-      'toronto',
-      'ucla',
-      'columbia',
-      'princeton',
-      'caltech',
-      'yale',
-      'nyu',
-      'usa',
-      'america',
-      'united states',
-      'canada',
-      'australia',
-    ]);
-
-    if (isExplicitOutOfCatalog) {
-      return {
-        content:
-          'This information is not in our verified catalog. Our verified dataset currently covers institutions and guidelines in Germany, Ireland, and the United Kingdom (such as TUM, RWTH Aachen, Heidelberg, LMU, Trinity College Dublin, UCD, Imperial College, and Oxford).\n\nTo prevent hallucinations, unverified institutions or metrics are not estimated. Please verify directly on the official portal (e.g. https://www.daad.de/ or the institution’s official site).',
-        sourceUrl: 'https://www.daad.de/en/study-and-research-in-germany/',
-        sourceName: 'Official Portal Guidelines',
-        lastChecked: '2026-10-15',
-        isFallback: true,
-      };
-    }
-
-    // 4. Uncataloged Metric Detection (e.g. Acceptance Rates, QS Rankings)
-    const isUncatalogedMetric = this.matchesAny(prompt, [
-      'acceptance rate',
-      'acceptance rates',
-      'acceptance percentage',
-      'acceptance ratio',
-      'chance of admission',
-      'admission probability',
-      'world ranking',
-      'qs rank',
-    ]);
-
-    if (isUncatalogedMetric) {
-      return {
-        content:
-          'This information is not in our verified catalog. Acceptance rates and quota percentages are not recorded in our verified data, as European admissions are deterministic based on fulfilling minimum subject prerequisites and ECTS credits rather than statistical quotas. Please verify admission criteria directly on the official university portal.',
-        sourceUrl: 'https://www.daad.de/en/study-and-research-in-germany/',
-        sourceName: 'Official University Admissions Portal',
-        lastChecked: '2026-10-15',
-        isFallback: true,
-      };
-    }
-
-    // 5. Resolve matched entities (University or Country)
+    // 3. Resolve matched entities (University or Country)
     const entity = this.resolveEntity(prompt);
 
     // 4. Resolve intent
@@ -401,45 +344,7 @@ export class SparkFallbackEngine {
       }
     }
 
-    // 8. Out-of-Catalog Query Detection (TASK 3: Zero-hallucination constraint)
-    // If the query asks about institutions, countries, or metrics not in our verified catalog
-    const isOutOfCatalog =
-      this.matchesAny(prompt, [
-        'mit',
-        'harvard',
-        'stanford',
-        'berkeley',
-        'cmu',
-        'toronto',
-        'ucla',
-        'columbia',
-        'princeton',
-        'caltech',
-        'yale',
-        'nyu',
-        'usa',
-        'america',
-        'united states',
-        'canada',
-        'australia',
-        'acceptance rate',
-        'acceptance rates',
-        'acceptance percentage',
-      ]) ||
-      (prompt.includes('?') && !this.matchesAny(prompt, ['hi', 'hello', 'hey', 'help']));
-
-    if (isOutOfCatalog) {
-      return {
-        content:
-          'This information is not in our verified catalog. Our verified dataset currently covers institutions and guidelines in Germany, Ireland, and the United Kingdom (such as TUM, RWTH Aachen, Heidelberg, LMU, Trinity College Dublin, UCD, Imperial College, and Oxford).\n\nTo prevent hallucinations, unverified institutions or metrics are not estimated. Please verify directly on the official portal (e.g. https://www.daad.de/ or the institution’s official site).',
-        sourceUrl: 'https://www.daad.de/en/study-and-research-in-germany/',
-        sourceName: 'Official Portal Guidelines',
-        lastChecked: '2026-10-15',
-        isFallback: true,
-      };
-    }
-
-    // 9. Default Guidance Response for greetings and introductory inquiries
+    // 8. Default Guidance Response
     return this.getDefaultResponse();
   }
 
@@ -652,7 +557,7 @@ export class SparkFallbackEngine {
   private getDefaultResponse(): AssistantResponse {
     return {
       content:
-        'I am your AbroadPath factual guide for official study-abroad requirements (CareerGoals.ai). I answer verified queries using official university portals and government guidelines across Germany, Ireland, and the United Kingdom.\n\nYou can ask me:\n• "What are the IELTS and GRE cutoffs for TUM?"\n• "Which universities in Germany offer free tuition?"\n• "What are the visa blocked account rules for Germany?"\n• "What are the deadlines and tuition for Trinity College Dublin?"\n• "What documents are required for an Ireland student visa?"\n\nVerify on the official site: Always confirm details directly on official portals.',
+        'I am your CareerGoals factual guide for official study-abroad requirements. I answer verified queries using official university portals and government guidelines across Germany, Ireland, and the United Kingdom.\n\nYou can ask me:\n• "What are the IELTS and GRE cutoffs for TUM?"\n• "Which universities in Germany offer free tuition?"\n• "What are the visa blocked account rules for Germany?"\n• "What are the deadlines and tuition for Trinity College Dublin?"\n• "What documents are required for an Ireland student visa?"\n\nVerify on the official site: Always confirm details directly on official portals.',
       sourceUrl: 'https://www.daad.de/en/study-and-research-in-germany/',
       sourceName: 'Official DAAD & National Portals',
       lastChecked: '2026-10-15',

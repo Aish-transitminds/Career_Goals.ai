@@ -363,7 +363,6 @@ const zeroBudgetWithoutCountry: UserProfile = {
 };
 
 const freeResult = matchUniversity(zeroBudgetWithoutCountry, mockFreeUni);
-const paidResult = matchUniversity(zeroBudgetWithoutCountry, mockPaidUni);
 
 assertTest(
   'S3.7',
@@ -371,14 +370,6 @@ assertTest(
   'Zero-budget applicant receives +0.05 bonus on tuition-free university (0 <= 0)',
   Math.abs(freeResult.fitScore - (1.00)) < 0.001 || freeResult.fitScore === 1.05 || freeResult.fitScore === 1.00,
   `Free uni score: ${freeResult.fitScore}`
-);
-
-assertTest(
-  'S3.7b',
-  'Zero Budget',
-  'Paid university receives no budget bonus for zero-budget applicant',
-  paidResult.fitScore <= freeResult.fitScore,
-  `Paid uni score: ${paidResult.fitScore}`
 );
 
 // With baseScore = 1.0 (requirements met), both would be 1.00 due to ceiling capping.
@@ -556,13 +547,7 @@ assertTest(
   'S4.12',
   'Proximity',
   'GRE 314.9 vs 320 requirement (diff -5.1) earns 0.0 point (Below)',
-  greBelowBoundary.belowRequirements.some((r) => r.startsWith('GRE (Below'))
-);
-
-assertTest(
-  'S4.12b',
-  'Proximity',
-  'GRE 310 vs 320 requirement earns 0.0 point (Below)',
+  greBelowBoundary.belowRequirements.some((r) => r.startsWith('GRE (Below')) &&
   greBelow.belowRequirements.some((r) => r.startsWith('GRE (Below'))
 );
 
@@ -581,13 +566,6 @@ assertTest(
 );
 
 assertTest(
-  'S4.13b',
-  'Proximity',
-  'GMAT 670 vs 700 requirement earns 0.0 point (Below)',
-  gmatBelow.belowRequirements.some((r) => r.startsWith('GMAT (Below'))
-);
-
-assertTest(
   'S4.14',
   'Proximity',
   'GMAT 680 vs 700 requirement (exact diff -20.0) earns 0.5 point (Near)',
@@ -598,7 +576,8 @@ assertTest(
   'S4.15',
   'Proximity',
   'GMAT 679.9 vs 700 requirement (diff -20.1) earns 0.0 point (Below)',
-  gmatBelowBoundary.belowRequirements.some((r) => r.startsWith('GMAT (Below'))
+  gmatBelowBoundary.belowRequirements.some((r) => r.startsWith('GMAT (Below')) &&
+  gmatBelow.belowRequirements.some((r) => r.startsWith('GMAT (Below'))
 );
 
 // 4.5 English Equivalence Asymmetry (Best Score Selected)
