@@ -14,11 +14,11 @@ DEFAULT_DELAY_SECONDS = 2.0
 REQUEST_TIMEOUT_SECONDS = 20.0
 ROBOTS_TIMEOUT_SECONDS = 10.0
 
-# Extraction & Model Configuration (TASK 2: Retired 1.5 Flash replaced with configurable modern Flash model)
+# Extraction & LLM Configuration
 MAX_TEXT_LENGTH = 12000
-GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+GEMINI_MODEL = "gemini-1.5-flash"
 GEMINI_API_URL_TEMPLATE = (
-    f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent?key={{api_key}}"
+    "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
 )
 GEMINI_MAX_RETRIES = 4
 GEMINI_BASE_BACKOFF_SECONDS = 4.0
@@ -34,9 +34,6 @@ TRACKED_RULE_FIELDS = [
     "gre_required",
     "min_ielts",
     "min_toefl",
-    "min_gre",
-    "min_gmat",
-    "min_gpa",
     "language_requirement",
     "tuition_fee",
     "application_deadline",

@@ -5,7 +5,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useCatalog } from '../hooks/useCatalog';
 import { VerifiedBadge } from '../components/common/VerifiedBadge';
 import {
@@ -19,10 +19,12 @@ import {
   Square,
   RotateCcw,
   Info,
+  FileText,
 } from 'lucide-react';
 
 export const CountryGuidePage: React.FC = () => {
   const { id: paramCountryId } = useParams<{ id?: string }>();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { countries, universities, loading } = useCatalog();
 
@@ -30,6 +32,27 @@ export const CountryGuidePage: React.FC = () => {
     paramCountryId || 'germany'
   );
   const [checkedDocs, setCheckedDocs] = useState<Record<string, boolean>>({});
+
+  // Resolve selected programme for active country (from searchParams or localStorage)
+  const urlProgId = searchParams.get('programId');
+  const urlIntake = searchParams.get('intake');
+  const selectedProgId = urlProgId || localStorage.getItem('abroadpath_last_selected_program');
+  const selectedIntake = urlIntake || localStorage.getItem('abroadpath_last_selected_intake') || '2026';
+
+  const countrySelectedProgram = universities.find(
+    (u) => u.id === selectedProgId && u.countryId === activeCountryId
+  );
+
+  const handleCheckStatementRequirements = () => {
+    if (countrySelectedProgram) {
+      navigate(
+        `/letter-helper?programId=${encodeURIComponent(countrySelectedProgram.id)}&intake=${encodeURIComponent(selectedIntake)}`
+      );
+    } else {
+      // If no programme is selected, direct user to Matches to choose one first
+      navigate(`/matches?country=${activeCountryId}`);
+    }
+  };
 
   // Sync activeCountryId with URL params
   useEffect(() => {
@@ -146,15 +169,19 @@ export const CountryGuidePage: React.FC = () => {
         <div className="space-y-6">
           {/* Amber Rule-Changed Alert Banner */}
           {(activeCountry.ruleChanged || ruleChangedUnivs.length > 0) && (
-            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 sm:p-5 flex items-start gap-3 shadow-sm">
+            <div className="bg-amber-50 border border-amber-300 rounded-2xl p-4 sm:p-5 flex items-start gap-3 shadow-sm">
               <ShieldAlert className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
               <div className="space-y-1 text-xs text-amber-900">
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="font-bold text-sm">
-                    Admission Rule Changes Detected in {activeCountry.name}
+                    {ruleChangedUnivs.every((u) => u.demoSeeded)
+                      ? `Simulated Admission Rule Change Demonstration in ${activeCountry.name}`
+                      : `Admission Rule Changes Detected in ${activeCountry.name}`}
                   </span>
-                  <span className="bg-amber-200 text-amber-950 font-semibold px-2 py-0.5 rounded-full text-[10px] uppercase tracking-wider">
-                    Live Verified Alert
+                  <span className="bg-amber-200 text-amber-950 font-bold px-2 py-0.5 rounded-full text-[10px] uppercase tracking-wider border border-amber-300">
+                    {ruleChangedUnivs.every((u) => u.demoSeeded)
+                      ? 'Demonstration Record'
+                      : 'Verified Change Alert'}
                   </span>
                 </div>
                 {ruleChangedUnivs.map((u) => (
@@ -164,7 +191,9 @@ export const CountryGuidePage: React.FC = () => {
                       <span> Updated fields: {u.changedFields.join(', ')}.</span>
                     )}
                     {u.demoSeeded && (
-                      <span className="italic ml-1">(Demonstration-seeded rule change record).</span>
+                      <span className="italic ml-1 font-medium text-amber-900">
+                        (Demonstration record showing change-detection flow; not an active live verified policy change).
+                      </span>
                     )}
                   </p>
                 ))}
@@ -338,24 +367,61 @@ export const CountryGuidePage: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {activeCountry.documents.map((docItem, idx) => {
                 const isChecked = Boolean(checkedDocs[docItem]);
+                const isStatementDoc =
+                  docItem.toLowerCase().includes('motivation letter') ||
+                  docItem.toLowerCase().includes('statement of purpose') ||
+                  docItem.toLowerCase().includes('personal statement');
+
                 return (
                   <div
                     key={idx}
                     onClick={() => toggleDoc(docItem)}
-                    className={`flex items-start gap-3 p-3.5 rounded-xl border text-xs cursor-pointer transition-all select-none ${
+                    className={`flex flex-col gap-2 p-3.5 rounded-xl border text-xs cursor-pointer transition-all select-none ${
                       isChecked
                         ? 'bg-emerald-50/60 border-emerald-200 text-emerald-950 font-medium'
                         : 'bg-slate-50/50 border-slate-200 text-slate-700 hover:bg-slate-100/70'
                     }`}
                   >
-                    {isChecked ? (
-                      <CheckSquare className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                    ) : (
-                      <Square className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
+                    <div className="flex items-start gap-3">
+                      {isChecked ? (
+                        <CheckSquare className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                      ) : (
+                        <Square className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
+                      )}
+                      <span className={isChecked ? 'line-through text-slate-500' : 'leading-relaxed'}>
+                        {docItem}
+                      </span>
+                    </div>
+
+                    {isStatementDoc && (
+                      <div className="mt-1 pt-2 border-t border-slate-200/60 flex flex-col sm:flex-row sm:items-center justify-between gap-2 pl-7">
+                        <span className="text-[11px] text-slate-500 font-normal">
+                          {countrySelectedProgram ? (
+                            <span>
+                              Selected programme:{' '}
+                              <strong className="text-slate-800">{countrySelectedProgram.name}</strong> ({countrySelectedProgram.program})
+                            </span>
+                          ) : (
+                            <span>
+                              No programme selected yet for {activeCountry.name}. Choose one on Matches first.
+                            </span>
+                          )}
+                        </span>
+
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleCheckStatementRequirements();
+                          }}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-2xs transition-colors self-start sm:self-auto shrink-0"
+                          title="Check official statement requirements"
+                        >
+                          <FileText className="w-3.5 h-3.5" />
+                          <span>Check statement requirements</span>
+                        </button>
+                      </div>
                     )}
-                    <span className={isChecked ? 'line-through text-slate-500' : ''}>
-                      {docItem}
-                    </span>
                   </div>
                 );
               })}

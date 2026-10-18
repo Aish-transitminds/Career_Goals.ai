@@ -39,7 +39,7 @@ export const Navbar: React.FC = () => {
     { name: 'Matches', path: '/matches' },
     { name: 'Country Guides', path: '/countries' },
     { name: 'Application Tracker', path: '/tracker' },
-    { name: 'Letter Helper', path: '/letter-helper' },
+    { name: 'Statement Requirements & Planner', path: '/letter-helper' },
   ];
 
   const isActive = (path: string) => {
@@ -118,8 +118,8 @@ export const Navbar: React.FC = () => {
                         setUserDropdownOpen(false);
                       }}
                       className="relative p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-colors focus:outline-none"
-                      title="In-App Milestone Reminders"
-                      aria-label="In-App Milestone Reminders"
+                      title="Milestone Reminders"
+                      aria-label="Milestone Reminders"
                     >
                       <Bell className="w-5 h-5" />
                       {unreadCount > 0 && (
@@ -137,8 +137,7 @@ export const Navbar: React.FC = () => {
                       >
                         <div className="px-4 py-3 flex items-center justify-between bg-slate-50">
                           <div className="flex items-center gap-1.5">
-                            <span className="text-xs font-bold text-slate-900">In-App Milestone Reminders</span>
-                            <span className="text-[10px] text-slate-500 font-normal">(In-app only)</span>
+                            <span className="text-xs font-bold text-slate-900">Milestone Reminders</span>
                             {unreadCount > 0 && (
                               <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800">
                                 {unreadCount} new

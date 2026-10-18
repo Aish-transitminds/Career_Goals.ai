@@ -55,14 +55,25 @@ export const RuleChangedBanner: React.FC<RuleChangedBannerProps> = ({
           <div className="space-y-1">
             <div className="flex flex-wrap items-center gap-2">
               <span className="font-bold text-amber-900 text-sm">
-                Admission Rule Change Detected
+                {demoSeeded
+                  ? 'Simulated Admission Rule Change (Demonstration Record)'
+                  : 'Admission Rule Change Detected'}
               </span>
-              {demoSeeded && (
+              {demoSeeded ? (
+                <span className="bg-amber-200 text-amber-950 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider border border-amber-300">
+                  Demonstration Simulation &bull; Not Live Policy Change
+                </span>
+              ) : (
                 <span className="bg-amber-200/80 text-amber-900 text-[10px] font-semibold px-2 py-0.5 rounded-full uppercase tracking-wider">
-                  Demo-Seeded Change Detection
+                  Verified Alert
                 </span>
               )}
             </div>
+            {demoSeeded && (
+              <p className="text-[11px] text-amber-900/90 leading-tight">
+                This record demonstrates AbroadPath AI's automated change-detection flow using seeded before/after values. It is a demonstration simulation, not an active verified policy change.
+              </p>
+            )}
 
             {/* Changed Fields Diff */}
             <div className="text-xs text-amber-800 space-y-1">

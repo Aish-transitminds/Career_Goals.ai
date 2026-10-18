@@ -326,13 +326,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       localStorage.removeItem(MOCK_STORAGE_KEY);
       localStorage.removeItem(MOCK_PROFILE_STORAGE_KEY);
-      // Cascading purge: clear all Letter Helper / SOP local storage items
-      localStorage.removeItem('abroadpath_sop_draft_notes');
-      localStorage.removeItem('abroadpath_sop_evidence_bank');
-      localStorage.removeItem('abroadpath_sop_versions');
-      localStorage.removeItem('abroadpath_sop_checklist');
-      localStorage.removeItem('abroadpath_sop_app_id');
-
       setUser(null);
       setProfile(null);
     } catch (err: any) {

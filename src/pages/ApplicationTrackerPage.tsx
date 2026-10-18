@@ -23,7 +23,6 @@ import {
   ArrowRight,
   TrendingUp,
   FileText,
-  Bell,
 } from 'lucide-react';
 
 const MOCK_APPS_PREFIX = 'abroadpath_mock_apps_';
@@ -31,7 +30,7 @@ const MOCK_APPS_PREFIX = 'abroadpath_mock_apps_';
 export const ApplicationTrackerPage: React.FC = () => {
   const { user } = useAuth();
   const { universities } = useCatalog();
-  const { refresh: refreshNotifications, simulateTimeAdvance } = useNotifications();
+  const { refresh: refreshNotifications } = useNotifications();
 
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -240,8 +239,11 @@ export const ApplicationTrackerPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
-            Application Tracker &amp; In-App Milestone Reminders
+            Application Tracker & Login Reminders
           </h1>
+          <p className="text-slate-600 text-sm mt-1">
+            Track admission pipelines with automated milestone check-ins (+1, +3, +7 days from submission).
+          </p>
         </div>
 
         <div className="flex items-center gap-2">
@@ -260,34 +262,6 @@ export const ApplicationTrackerPage: React.FC = () => {
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
-      </div>
-
-      {/* In-App Delivery Disclosure & Demonstration Bar (TASK 6) */}
-      <div className="bg-gradient-to-r from-indigo-50/90 to-blue-50/90 border border-indigo-150 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
-        <div className="flex items-start gap-2.5">
-          <Bell className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
-          <div className="space-y-0.5">
-            <div className="font-bold text-indigo-950 flex items-center gap-1.5">
-              <span>In-App Delivery Only (No External Email/SMS)</span>
-              <span className="text-[10px] font-semibold px-2 py-0.5 bg-indigo-200/70 text-indigo-900 rounded-full">
-                Transparent Delivery
-              </span>
-            </div>
-            <p className="text-slate-600">
-              Milestone check-ins trigger deterministically at Day +1 (Credentials), Day +3 (LORs &amp; Reports), and Day +7 (Status Audit) and are delivered directly to your top navbar notification bell.
-            </p>
-          </div>
-        </div>
-        <button
-          type="button"
-          onClick={async () => {
-            await simulateTimeAdvance(1);
-          }}
-          className="shrink-0 px-3 py-1.5 bg-white hover:bg-indigo-50 text-indigo-700 border border-indigo-200 rounded-xl font-bold shadow-2xs transition-colors flex items-center gap-1.5 text-xs"
-        >
-          <Bell className="w-3.5 h-3.5 text-indigo-600" />
-          <span>Demo Day +1 Reminder</span>
-        </button>
       </div>
 
       {/* Filter Tabs */}

@@ -20,10 +20,6 @@ export interface UniversityRequirements {
   min_gre?: number | null;
   /** Minimum GMAT total score threshold if specified, or null */
   min_gmat?: number | null;
-  /** Minimum GPA threshold on scale, or null */
-  min_gpa?: number | null;
-  /** Declared scale for GPA (e.g. 4.0, 5.0, 10.0), or null */
-  gpa_scale?: number | null;
   /** Text description of language requirements or CEFR level (e.g. "CEFR C1", "B2") */
   language_requirement: string | null;
   /** Detailed text description of tuition fee schedule */
@@ -32,8 +28,6 @@ export interface UniversityRequirements {
   application_deadline: string | null;
   /** Detailed admission guidelines, prerequisites, or ECTS distribution */
   notes: string | null;
-  /** Provenance map of verbatim quotes and official URLs for each requirement */
-  source_snippets?: Record<string, { snippet: string; source_url: string; verified_on?: string }> | null;
 }
 
 export interface University {
@@ -69,6 +63,65 @@ export interface University {
   demoSeeded?: boolean;
   /** Verification disclaimer */
   verificationNote?: string;
+  /** Programme-specific Statement of Purpose / Motivation Letter requirements */
+  statementRequirements?: StatementRequirements | null;
+}
+
+export type StatementVerificationStatus =
+  | 'Verified'
+  | 'Needs review'
+  | 'Stale'
+  | 'Unknown'
+  | 'Conflicting';
+
+export type StatementDocumentType =
+  | 'Statement of Purpose'
+  | 'Motivation Letter'
+  | 'Personal Statement'
+  | 'Research Proposal'
+  | 'Academic Essay'
+  | 'Not required'
+  | 'Not confirmed';
+
+export interface ProgrammeQuestion {
+  id: string;
+  question: string;
+  required?: boolean;
+  wordLimit?: string | null;
+  guidance?: string | null;
+}
+
+export interface StatementRequirements {
+  /** Document type requested by the programme */
+  documentType: StatementDocumentType | string | null;
+  /** Whether this document is mandatory, optional, or unconfirmed */
+  required: boolean | null;
+  /** Summary of official statement requirements */
+  summary?: string | null;
+  /** Word, character, or page limits and any conditions */
+  lengthLimit?: string | null;
+  /** Submission method (e.g. portal upload, uni-assist) */
+  submissionMethod?: string | null;
+  /** Formatting and file specifications (e.g. PDF, margins, font) */
+  formattingRequirements?: string | null;
+  /** Programme-specific questions or prompts (if prescribed instead of generic) */
+  specificQuestions?: ProgrammeQuestion[] | null;
+  /** Department assessment criteria */
+  assessmentCriteria?: string[] | null;
+  /** Institutional / department AI-use or disclosure policy */
+  aiPolicy?: string | null;
+  /** General university guidance / writing advice (distinct from programme rules) */
+  generalGuidance?: string | null;
+  /** Verification status of these requirements */
+  status: StatementVerificationStatus;
+  /** Authoritative source link for statement requirements */
+  sourceUrl?: string | null;
+  /** Date when statement requirements were last checked (YYYY-MM-DD) */
+  lastChecked?: string | null;
+  /** Date when requirements were verified by an advisor/source */
+  verifiedDate?: string | null;
+  /** Status notes or disclaimer (e.g. conflicting requirements detected, stale notes) */
+  statusNotes?: string | null;
 }
 
 export interface Country {
@@ -109,7 +162,15 @@ export interface UserExams {
   toefl: number | null;
   /** IELTS academic score between 0.0 and 9.0 (step 0.5), or null if not taken */
   ielts: number | null;
+  /** PTE Academic score between 10 and 90, or null if not taken */
+  pte?: number | null;
 }
+
+export type GradingScale = '10.0' | '4.0' | '100%' | 'other';
+export type DegreeLevel = "Bachelor's" | "Master's" | 'PhD / Doctorate' | 'Diploma / Certificate' | 'Other';
+export type BudgetPeriod = 'annual' | 'total';
+export type BudgetCoverage = 'tuition_only' | 'total_cost';
+export type EnglishTestType = 'IELTS' | 'TOEFL' | 'PTE' | 'None';
 
 export interface UserProfile {
   /** Firebase Auth UID */
@@ -126,16 +187,62 @@ export interface UserProfile {
   targetCountries: string[];
   /** Maximum annual budget in EUR/USD, or null if unstated/no preference */
   budget: number | null;
-  /** Optional undergraduate GPA */
-  gpa?: number | null;
-  /** Declared scale for GPA (e.g. 4.0, 10.0, 5.0) */
-  gpaScale?: number | null;
-  /** Optional German ECTS credits breakdown */
-  ectsCredits?: { math?: number; theoreticalCs?: number; practicalCs?: number } | null;
   /** ISO 8601 creation timestamp */
   createdAt: string;
   /** ISO 8601 last update timestamp */
   updatedAt?: string;
+
+  // --- A. Academic Background (Optional for backward compatibility) ---
+  /** Highest completed or current qualification (e.g. "Bachelor's Degree", "Master's Degree") */
+  qualification?: string | null;
+  /** Degree title (e.g. "B.Tech", "B.A.", "B.Sc.") */
+  degreeTitle?: string | null;
+  /** Major or field of study for prior qualification (e.g. "Computer Science", "Fashion Design") */
+  fieldOfStudy?: string | null;
+  /** Previous academic institution attended */
+  institution?: string | null;
+  /** Academic grade or GPA score without scaling */
+  gpa?: number | null;
+  /** Explicit grading scale applied to the gpa score */
+  gpaScale?: GradingScale | string | null;
+  /** Graduation year or expected graduation year */
+  graduationYear?: number | null;
+
+  // --- B. Intended Studies (Optional for backward compatibility) ---
+  /** Intended degree level (e.g. "Master's", "Bachelor's", "PhD / Doctorate") */
+  intendedDegreeLevel?: DegreeLevel | string | null;
+  /** Intended subject or broad field of study (e.g. "Computer Science & Informatics", "Fashion Design & Textile Arts") */
+  intendedSubject?: string | null;
+  /** Specific sub-specialisation */
+  specialisation?: string | null;
+  /** Target intake year (e.g. "2025", "2026", "2027") */
+  targetIntakeYear?: string | null;
+  /** Target intake semester (e.g. "Fall / Winter", "Spring / Summer") */
+  targetIntakeSemester?: string | null;
+  /** Optional preselected target programme ID from catalogue */
+  targetProgramId?: string | null;
+
+  // --- C. English Proficiency Details ---
+  /** Whether the student has taken a standardized English proficiency test */
+  englishTestTaken?: boolean | null;
+  /** Test type taken: 'IELTS' | 'TOEFL' | 'PTE' | 'None' */
+  englishTestType?: EnglishTestType | string | null;
+  /** Numerical score obtained on the English test */
+  englishTestScore?: number | null;
+  /** Date the English test was taken (YYYY-MM or YYYY-MM-DD) */
+  englishTestDate?: string | null;
+
+  // --- D. Other Admission Tests Details ---
+  /** Whether the student has taken any other standardized admission test (GRE / GMAT) */
+  otherTestsTaken?: boolean | null;
+
+  // --- E. Preferences and Budget Details ---
+  /** Budget timeframe: annual vs total programme duration */
+  budgetPeriod?: BudgetPeriod | null;
+  /** Budget coverage: tuition only vs total study and living costs */
+  budgetCovers?: BudgetCoverage | null;
+  /** Whether student prefers programmes with scholarship/funding opportunities */
+  scholarshipPreference?: boolean | null;
 }
 
 export type ApplicationStatus = 'planned' | 'applied' | 'accepted' | 'rejected';
@@ -183,18 +290,6 @@ export type FitCategory = 'Strong fit' | 'Possible' | 'Reach' | 'Prep needed';
 
 export type RequirementEvaluation = 'MET' | 'NEAR' | 'BELOW' | 'NOT_REQUIRED' | 'UNCONFIRMED';
 
-export interface CriterionEvaluation {
-  id: string;
-  label: string;
-  status: RequirementEvaluation;
-  requiredVal: number | string | boolean | null;
-  actualVal: number | string | boolean | null;
-  displayMessage: string;
-  sourceUrl?: string | null;
-  verifiedOn?: string | null;
-  sourceSnippet?: string | null;
-}
-
 export interface MatchResult {
   /** Matched university entity */
   university: University;
@@ -202,10 +297,6 @@ export interface MatchResult {
   fitCategory: FitCategory;
   /** Calculated composite score between 0.0 and 1.0 (or -1 for 'Prep needed') */
   fitScore: number;
-  /** Secondary deterministic ranking score for sorting within the same tier */
-  tierRankScore?: number;
-  /** Transparent explanation for why this institution ranks higher in its tier */
-  rankReason?: string;
   /** List of standardized tests required by this university but missing in user profile */
   missingExams: string[];
   /** Requirements fully satisfied by the applicant */
@@ -216,8 +307,6 @@ export interface MatchResult {
   belowRequirements: string[];
   /** Requirements where university data is null ("not confirmed") */
   unconfirmedRequirements: string[];
-  /** Granular per-criterion evaluation checklist */
-  criterionBreakdown?: CriterionEvaluation[];
   /** True if university has ruleChanged == true */
   ruleChanged: boolean;
 }
