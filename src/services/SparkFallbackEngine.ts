@@ -1,10 +1,19 @@
 /**
- * AbroadPath AI - Deterministic Spark Retrieval Fallback Engine
+ * CareerGoals.ai / AbroadPath AI - Conversational Study-Abroad Counsellor Engine
  * File: src/services/SparkFallbackEngine.ts
- * Authoritative Reference: ORIGINAL_REQUEST.md (R1 §Screens #8, R5, §Tech Stack) & PROJECT.md
+ *
+ * Counsellor Persona & Invariants:
+ * 1. Warm, empathetic, conversational study-abroad counsellor tone.
+ * 2. Answers the student's question first; explains requirements in clear, accessible language.
+ * 3. Asks relevant follow-up questions when background, GPA, degree, or intake details are missing.
+ * 4. Integrates student profile data (CGPA, degree, exams, budget) when available.
+ * 5. Grounded strictly in verified catalogue data without inventing cutoffs, fees, or deadlines.
+ * 6. Transparent verification statuses (Verified, Needs review, Conflicting, Stale, Unknown).
+ * 7. Out-of-catalog honesty: explicitly states when an entity is not in our verified catalogue and directs to official portals.
+ * 8. Zero external API costs / zero token cost: operates deterministically and locally in client browser.
  */
 
-import { University, Country } from '../types';
+import { University, Country, UserProfile } from '../types';
 import seedUniversities from '../data/universities.json';
 import seedCountries from '../data/countries.json';
 
@@ -145,6 +154,55 @@ const ENTITY_ALIASES: Record<string, string[]> = {
   ],
 };
 
+const OUT_OF_CATALOG_ENTITIES: Record<string, string> = {
+  // Universities outside catalog
+  mit: 'Massachusetts Institute of Technology (MIT)',
+  'massachusetts institute of technology': 'Massachusetts Institute of Technology (MIT)',
+  stanford: 'Stanford University',
+  'stanford university': 'Stanford University',
+  harvard: 'Harvard University',
+  'harvard university': 'Harvard University',
+  berkeley: 'UC Berkeley',
+  'uc berkeley': 'UC Berkeley',
+  cambridge: 'University of Cambridge',
+  'university of cambridge': 'University of Cambridge',
+  cmu: 'Carnegie Mellon University',
+  'carnegie mellon': 'Carnegie Mellon University',
+  princeton: 'Princeton University',
+  yale: 'Yale University',
+  columbia: 'Columbia University',
+  nyu: 'New York University (NYU)',
+  ucla: 'UCLA',
+  caltech: 'California Institute of Technology (Caltech)',
+  'georgia tech': 'Georgia Institute of Technology',
+  'eth zurich': 'ETH Zurich',
+  epfl: 'EPFL',
+  nus: 'National University of Singapore (NUS)',
+  ntu: 'Nanyang Technological University (NTU)',
+  toronto: 'University of Toronto',
+  mcgill: 'McGill University',
+  waterloo: 'University of Waterloo',
+  melbourne: 'University of Melbourne',
+  sydney: 'University of Sydney',
+
+  // Countries outside catalog
+  canada: 'Canada',
+  canadian: 'Canada',
+  australia: 'Australia',
+  australian: 'Australia',
+  usa: 'United States (USA)',
+  'united states': 'United States (USA)',
+  america: 'United States (USA)',
+  'new zealand': 'New Zealand',
+  singapore: 'Singapore',
+  france: 'France',
+  netherlands: 'Netherlands',
+  sweden: 'Sweden',
+  switzerland: 'Switzerland',
+  italy: 'Italy',
+  spain: 'Spain',
+};
+
 export class SparkFallbackEngine {
   private universities: University[];
   private countries: Country[];
@@ -169,16 +227,17 @@ export class SparkFallbackEngine {
   }
 
   /**
-   * Main query execution method with strict priority:
+   * Main query execution method with strict conversational counsellor priority:
    * 1. Empty Guard
-   * 2. Generative SOP / Letter Refusal Filter (R1 §Screens #8)
-   * 3. Entity Resolution & Intent Classification
-   * 4. Specific University Match (Highest specificity)
-   * 5. Multi-University Discovery (Free tuition & GRE queries take precedence over Country match)
-   * 6. Specific Country Match (Visa, blocked account, living costs, checklist)
-   * 7. Default Guidance Response
+   * 2. Generative SOP / Letter Refusal Filter (Anti-Rewrite Academic Ethics Guardrail)
+   * 3. Acceptance rate on in-catalog institution check
+   * 4. Out-of-catalog institution or country detection
+   * 5. In-catalog University Match (highest specificity)
+   * 6. Multi-University Discovery (Free tuition & GRE queries precede Country match)
+   * 7. Country Match (Visa, blocked account, living costs, checklist)
+   * 8. Default Conversational Guidance Response
    */
-  public query(rawPrompt: string): AssistantResponse {
+  public query(rawPrompt: string, profile?: UserProfile | null): AssistantResponse {
     const prompt = (rawPrompt || '').trim().toLowerCase();
 
     // 1. Guard against empty query
@@ -198,97 +257,47 @@ export class SparkFallbackEngine {
       };
     }
 
-    // 3. Resolve matched entities (University or Country)
-    const entity = this.resolveEntity(prompt);
+    // 3. Check for uncataloged metrics on in-catalog universities (e.g. Oxford acceptance rate)
+    const isAcceptanceRateQuery =
+      prompt.includes('acceptance rate') ||
+      prompt.includes('acceptance rates') ||
+      prompt.includes('admit rate') ||
+      prompt.includes('admission rate');
 
-    // 4. Resolve intent
-    const isTestReq = this.matchesAny(prompt, [
-      'gre',
-      'gmat',
-      'ielts',
-      'toefl',
-      'score',
-      'scores',
-      'cutoff',
-      'cutoffs',
-      'exam',
-      'exams',
-      'test',
-      'requirement',
-      'requirements',
-      'language',
-      'english',
-    ]);
+    const inCatalogEntity = this.resolveEntity(prompt);
 
-    const isDeadline = this.matchesAny(prompt, [
-      'deadline',
-      'deadlines',
-      'date',
-      'dates',
-      'when to apply',
-      'due',
-      'intake',
-      'winter',
-      'summer',
-      'spring',
-    ]);
+    if (isAcceptanceRateQuery && inCatalogEntity && inCatalogEntity.type === 'university') {
+      const u = this.universities.find((item) => item.id === inCatalogEntity.id);
+      return {
+        content: `While ${u?.name || 'this institution'} is in our verified catalog, institutional acceptance rates and admit percentage statistics are not in our verified catalog data. Admissions committees evaluate candidates holistically based on individual academic merit (such as Honours degree standing in relevant coursework) rather than published percentage quotas.\n\nPlease verify official admissions cohort statistics directly on the official portal (${u?.sourceUrl || u?.portalUrl || 'official portal'}).\n\nWould you like to review their academic requirements, language score cutoffs, or application deadlines instead?\n\nVerify on the official site: Always confirm admission details directly on official portals.`,
+        sourceUrl: u?.sourceUrl || u?.portalUrl || 'https://www.daad.de',
+        sourceName: `${u?.name || 'University'} Official Admissions Portal`,
+        lastChecked: u?.lastChecked || '2026-10-15',
+        isFallback: true,
+      };
+    }
 
-    const isTuition = this.matchesAny(prompt, [
-      'tuition',
-      'fee',
-      'fees',
-      'cost',
-      'costs',
-      'free',
-      'price',
-      'living',
-      'blocked account',
-      'sperrkonto',
-      'budget',
-    ]);
+    // 4. Out-of-catalog institution or destination detection
+    const outOfCatalogEntity = this.resolveOutOfCatalog(prompt);
+    if (outOfCatalogEntity) {
+      return {
+        content: `${outOfCatalogEntity} is not in our verified catalog. Our verified catalog currently covers selected master's degree programmes across Germany, Ireland, and the United Kingdom.\n\nFor official requirements and admissions criteria regarding ${outOfCatalogEntity}, please verify on the official portal directly.\n\nIf you're exploring verified computer science, data, or engineering programmes in Europe—such as Technical University of Munich (TUM), Trinity College Dublin, or University of Oxford—I'd be glad to walk you through those verified requirements. Would you like to explore European alternatives?\n\nVerify on the official site: Always confirm details on official university portals.`,
+        sourceUrl: 'https://www.daad.de/en/study-and-research-in-germany/',
+        sourceName: `${outOfCatalogEntity} Official Portal`,
+        lastChecked: '2026-10-15',
+        isFallback: true,
+      };
+    }
 
-    const isVisaOrDocs = this.matchesAny(prompt, [
-      'visa',
-      'document',
-      'documents',
-      'checklist',
-      'aps',
-      'vpd',
-      'uni-assist',
-      'cao',
-      'pac',
-      'work permit',
-      'post-study',
-      'stay back',
-      'stamp 1g',
-      'stamp 2',
-    ]);
-
-    const isRuleChange = this.matchesAny(prompt, [
-      'rule change',
-      'rule changed',
-      'rules changed',
-      'update',
-      'changed',
-      'demo',
-    ]);
-
-    // 5. If specific university matched (Highest specificity)
-    if (entity && entity.type === 'university') {
-      const u = this.universities.find((item) => item.id === entity.id);
+    // 5. In-catalog University Match
+    if (inCatalogEntity && inCatalogEntity.type === 'university') {
+      const u = this.universities.find((item) => item.id === inCatalogEntity.id);
       if (u) {
-        return this.formatUniversityResponse(u, {
-          isTestReq,
-          isDeadline,
-          isTuition,
-          isVisaOrDocs,
-          isRuleChange,
-        });
+        return this.formatUniversityResponse(u, rawPrompt, profile);
       }
     }
 
-    // 6. University Discovery Queries (Must precede Country Match so queries like
-    // "Which universities in Germany are free tuition?" return university listings)
+    // 6. University Discovery Queries
     const isFreeTuitionQuery =
       prompt.includes('free') ||
       prompt.includes('zero tuition') ||
@@ -308,7 +317,7 @@ export class SparkFallbackEngine {
         .map((u) => `• ${u.name} (${u.program}) — ${u.tuition}`)
         .join('\n');
       return {
-        content: `Here are verified public universities in Germany offering zero/minimal state tuition:\n\n${list}\n\nNote: Public universities in most German federal states (e.g. North Rhine-Westphalia, Bavaria) do not charge tuition for consecutive master's degrees, though semester administration tickets (~€150–€350/sem) apply. Certain states (e.g. Baden-Württemberg / Heidelberg: €1,500/sem) and specific institutions (e.g. TUM: €6,000/sem) levy non-EU tuition fees.\n\nVerify on the official site: Always confirm current fees on the official university portal.`,
+        content: `Here are verified public universities in Germany offering zero/minimal state tuition:\n\n${list}\n\nNote: Public universities in most German federal states (e.g. North Rhine-Westphalia, Bavaria) do not charge tuition for consecutive master's degrees, though semester administration tickets (~€150–€350/sem) apply. Certain states (e.g. Baden-Württemberg / Heidelberg: €1,500/sem) and specific institutions (e.g. TUM: €6,000/sem) levy non-EU tuition fees.\n\nWhich field of study or German city are you most interested in exploring?\n\nVerify on the official site: Always confirm current fees on the official university portal.`,
         sourceUrl:
           'https://www.daad.de/en/study-and-research-in-germany/plan-your-studies/costs-and-financing/',
         sourceName: 'DAAD Germany Study Portal',
@@ -328,7 +337,7 @@ export class SparkFallbackEngine {
         )
         .join('\n');
       return {
-        content: `Here are verified programs in our catalog requiring the GRE:\n\n${list}\n\nOther institutions (e.g. Heidelberg, Trinity College Dublin, Oxford) waive the GRE or evaluate applicants holistically.\n\nVerify on the official site: Always confirm standardized test requirements directly on the official institution portal.`,
+        content: `Here are verified programs in our catalog requiring the GRE:\n\n${list}\n\nOther institutions (e.g. Heidelberg, Trinity College Dublin, Oxford) waive the GRE or evaluate applicants holistically.\n\nHave you scheduled a GRE test date, or would you prefer exploring programmes that waive standardized testing?\n\nVerify on the official site: Always confirm standardized test requirements directly on the official institution portal.`,
         sourceUrl: 'https://tum.de',
         sourceName: 'University Admission Regulations',
         lastChecked: '2026-10-15',
@@ -336,15 +345,15 @@ export class SparkFallbackEngine {
       };
     }
 
-    // 7. If specific country matched (visa, living costs, blocked account, checklist)
-    if (entity && entity.type === 'country') {
-      const c = this.countries.find((item) => item.id === entity.id);
+    // 7. Specific Country Match (Visa, blocked account, living costs, checklist)
+    if (inCatalogEntity && inCatalogEntity.type === 'country') {
+      const c = this.countries.find((item) => item.id === inCatalogEntity.id);
       if (c) {
         return this.formatCountryResponse(c);
       }
     }
 
-    // 8. Default Guidance Response
+    // 8. Default Conversational Guidance Response
     return this.getDefaultResponse();
   }
 
@@ -398,6 +407,21 @@ export class SparkFallbackEngine {
     );
   }
 
+  private resolveOutOfCatalog(prompt: string): string | null {
+    for (const [alias, canonicalName] of Object.entries(OUT_OF_CATALOG_ENTITIES)) {
+      let isHit = false;
+      if (alias.length <= 4 && /^[a-z0-9]+$/i.test(alias)) {
+        isHit = new RegExp(`\\b${alias}\\b`, 'i').test(prompt);
+      } else {
+        isHit = prompt.includes(alias);
+      }
+      if (isHit) {
+        return canonicalName;
+      }
+    }
+    return null;
+  }
+
   private resolveEntity(prompt: string): EntityMatch | null {
     const isMatch = (text: string, alias: string): boolean => {
       if (alias.length <= 4 && /^[a-z0-9]+$/i.test(alias)) {
@@ -433,22 +457,86 @@ export class SparkFallbackEngine {
     return null;
   }
 
+  /**
+   * Formats a conversational, warm counsellor response for a specific university,
+   * answering the student's question first and leveraging profile data when available.
+   */
   private formatUniversityResponse(
     u: University,
-    intent: {
-      isTestReq: boolean;
-      isDeadline: boolean;
-      isTuition: boolean;
-      isVisaOrDocs: boolean;
-      isRuleChange: boolean;
-    }
+    rawPrompt: string,
+    profile?: UserProfile | null
   ): AssistantResponse {
+    const prompt = (rawPrompt || '').toLowerCase();
     const lines: string[] = [];
 
-    lines.push(`Verified Admission Details for **${u.name}** (${u.program}):`);
+    // Analyze query context
+    const hasEligibilityIntent =
+      prompt.includes('can i apply') ||
+      prompt.includes('eligible') ||
+      prompt.includes('chances') ||
+      prompt.includes('cgpa') ||
+      prompt.includes('gpa') ||
+      prompt.includes('no ielts') ||
+      prompt.includes("haven't taken") ||
+      prompt.includes('havent taken') ||
+      prompt.includes('without ielts');
+
+    const hasNoIeltsInPrompt =
+      prompt.includes('no ielts') ||
+      prompt.includes("haven't taken ielts") ||
+      prompt.includes('havent taken ielts') ||
+      prompt.includes('without ielts') ||
+      prompt.includes('not taken ielts');
+
+    const gpaMatch = prompt.match(/\b(\d+(?:\.\d+)?)\s*(?:cgpa|gpa|\/10|\/4\.0)?\b/);
+    const mentionedGpa = gpaMatch && parseFloat(gpaMatch[1]) >= 2.0 && parseFloat(gpaMatch[1]) <= 10.0
+      ? gpaMatch[1]
+      : profile?.gpa
+      ? String(profile.gpa)
+      : null;
+
+    const isTuitionSpecific =
+      (prompt.includes('fee') || prompt.includes('tuition') || prompt.includes('cost')) &&
+      !hasEligibilityIntent;
+
+    const isDeadlineSpecific =
+      (prompt.includes('deadline') || prompt.includes('when to apply') || prompt.includes('date')) &&
+      !hasEligibilityIntent;
+
+    // 1. Warm Conversational Opening & Answering the Question First
+    if (hasEligibilityIntent || hasNoIeltsInPrompt || mentionedGpa) {
+      if (mentionedGpa) {
+        lines.push(
+          `That's a programme worth exploring! Your ${mentionedGpa} CGPA gives us a starting point, but I'll need to understand your degree and grading scale to assess your academic eligibility.`
+        );
+      } else {
+        lines.push(
+          `That's a programme worth exploring! Your academic background gives us a foundation to evaluate your fit for **${u.name}** (${u.program}).`
+        );
+      }
+
+      if (hasNoIeltsInPrompt || (profile && profile.englishTestTaken === false)) {
+        lines.push(
+          `\nWe should also check ${u.name.split(' ')[0]}'s English-language requirements and the deadline for your intended intake. You don't need to have taken IELTS just to start exploring your options.`
+        );
+      }
+    } else if (isTuitionSpecific) {
+      lines.push(
+        `For international/non-EU students, the tuition for **${u.name}** (${u.program}) is **${u.tuition}**.`
+      );
+    } else if (isDeadlineSpecific) {
+      lines.push(
+        `The application deadline for **${u.name}** (${u.program}) is **${
+          u.requirements.application_deadline || 'specified on the official portal'
+        }**.`
+      );
+    }
+
+    // 2. Structured Verified Admission Details (Preserving exact test invariants)
+    lines.push(`\nVerified Admission Details for **${u.name}** (${u.program}):`);
 
     // Rule change alert
-    if (u.ruleChanged || intent.isRuleChange) {
+    if (u.ruleChanged || prompt.includes('rule change') || prompt.includes('rule changed')) {
       if (u.demoSeeded) {
         lines.push(
           `\n⚠️ **Admission Rule Alert (Live Detected)**: GMAT is now **required** (previously unconfirmed/null). Changed fields: [${(
@@ -464,16 +552,20 @@ export class SparkFallbackEngine {
       }
     }
 
-    // Requirements section
+    // Standardized test & language cutoffs
     lines.push('\n**Standardized Test & Language Cutoffs**:');
     lines.push(
       `• IELTS Academic: ${
-        u.requirements.min_ielts !== null ? `${u.requirements.min_ielts} minimum overall` : 'Not confirmed by official source'
+        u.requirements.min_ielts !== null
+          ? `${u.requirements.min_ielts} minimum overall`
+          : 'Not confirmed by official source'
       }`
     );
     lines.push(
       `• TOEFL iBT: ${
-        u.requirements.min_toefl !== null ? `${u.requirements.min_toefl} minimum` : 'Not confirmed by official source'
+        u.requirements.min_toefl !== null
+          ? `${u.requirements.min_toefl} minimum`
+          : 'Not confirmed by official source'
       }`
     );
     lines.push(
@@ -495,7 +587,7 @@ export class SparkFallbackEngine {
       }`
     );
 
-    // Deadlines & Tuition
+    // Tuition & Deadlines
     lines.push('\n**Tuition & Application Deadlines**:');
     lines.push(`• Tuition Fee: ${u.tuition || 'Not confirmed'}`);
     lines.push(
@@ -508,6 +600,36 @@ export class SparkFallbackEngine {
       lines.push(`• Admission Notes: ${u.requirements.notes}`);
     }
 
+    // Statement of Purpose / Requirement Status (Transparent uncertainty & status)
+    if (u.statementRequirements) {
+      const sr = u.statementRequirements;
+      const statusText = sr.status ? ` (Status: ${sr.status})` : '';
+      lines.push(
+        `• Statement Requirement: ${sr.documentType || 'Personal Statement'} (${
+          sr.required === true ? 'Required' : sr.required === false ? 'Not required' : 'Not confirmed'
+        }${sr.lengthLimit ? `, ${sr.lengthLimit}` : ''})${statusText}`
+      );
+      if (sr.status === 'Needs review') {
+        lines.push(`  ℹ️ Catalogue Note: Institutional guidelines are flagged as "Needs review" pending department cycle confirmation.`);
+      } else if (sr.status === 'Conflicting') {
+        lines.push(`  ℹ️ Catalogue Note: Central admissions portal and faculty pages show conflicting length guidelines; verify before submitting.`);
+      } else if (sr.status === 'Stale') {
+        lines.push(`  ℹ️ Catalogue Note: Catalogue evidence is from an earlier intake cycle and may be stale.`);
+      } else if (sr.status === 'Unknown') {
+        lines.push(`  ℹ️ Catalogue Note: Specific statement prompt requirements are unconfirmed in current records.`);
+      }
+    }
+
+    // 3. Empathetic Next Steps & Follow-up Questions
+    if (profile?.fieldOfStudy || profile?.degreeTitle) {
+      lines.push(
+        `\nLooking at your profile with a background in ${profile.fieldOfStudy || profile.degreeTitle}, are you planning for the upcoming intake?`
+      );
+    } else {
+      lines.push('\nWhat degree are you completing, and are you aiming for the next available intake?');
+    }
+
+    // 4. Universal Verification Footer
     lines.push(
       '\nVerify on the official site: Application deadlines, minimum cutoffs, and tuition fees are subject to direct institution update. Always verify on the official university portal.'
     );
@@ -542,6 +664,10 @@ export class SparkFallbackEngine {
     }
 
     lines.push(
+      `\nAre you looking at an upcoming intake for ${c.name}, or would you like to explore specific university options?`
+    );
+
+    lines.push(
       '\nVerify on the official site: Always confirm immigration and financial requirements directly on the official government/portal site.'
     );
 
@@ -557,16 +683,12 @@ export class SparkFallbackEngine {
   private getDefaultResponse(): AssistantResponse {
     return {
       content:
-        'I am your CareerGoals factual guide for official study-abroad requirements. I answer verified queries using official university portals and government guidelines across Germany, Ireland, and the United Kingdom.\n\nYou can ask me:\n• "What are the IELTS and GRE cutoffs for TUM?"\n• "Which universities in Germany offer free tuition?"\n• "What are the visa blocked account rules for Germany?"\n• "What are the deadlines and tuition for Trinity College Dublin?"\n• "What documents are required for an Ireland student visa?"\n\nVerify on the official site: Always confirm details directly on official portals.',
+        'I am your AbroadPath factual guide and CareerGoals study-abroad counsellor. I provide verified, fact-checked admission requirements, language score cutoffs, tuition fees, and visa regulations across Germany, Ireland, and the UK.\n\nTo help you find the right fit, tell me a bit about yourself:\n• What degree or major are you completing?\n• What is your CGPA and grading scale?\n• Which intake year or country are you targeting?\n\nYou can also ask me specific questions like:\n• "Can I apply to Trinity College Dublin with an 8.2 CGPA and no IELTS?"\n• "What are the IELTS and GRE cutoffs for TUM?"\n• "Which universities in Germany offer free tuition?"\n• "What are the visa and blocked account rules for Germany?"\n• "What are the deadlines and tuition for Trinity College Dublin?"\n\nVerify on the official site: Always confirm details directly on official portals.',
       sourceUrl: 'https://www.daad.de/en/study-and-research-in-germany/',
       sourceName: 'Official DAAD & National Portals',
       lastChecked: '2026-10-15',
       isFallback: true,
     };
-  }
-
-  private matchesAny(text: string, keywords: string[]): boolean {
-    return keywords.some((kw) => text.includes(kw));
   }
 }
 

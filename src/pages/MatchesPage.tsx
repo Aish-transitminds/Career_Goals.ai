@@ -9,8 +9,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCatalog } from '../hooks/useCatalog';
 import { getUserApplications, setUserApplication } from '../services/firestoreService';
-import { MatchResult, FitCategory } from '../types';
-import { calculateMatches } from '../utils/matchEngine';
+import { MatchResult } from '../types';
+import { calculateMatches, checkProfileReadiness } from '../utils/matchEngine';
 import { RuleChangedBanner } from '../components/common/RuleChangedBanner';
 import { VerifiedBadge } from '../components/common/VerifiedBadge';
 import { FitTierBadge } from '../components/common/FitTierBadge';
@@ -69,23 +69,16 @@ export const MatchesPage: React.FC = () => {
     }
   }, [user]);
 
+  // Check profile readiness
+  const readiness = useMemo(() => checkProfileReadiness(profile), [profile]);
+
   // Calculate matches via deterministic matchEngine
   const matchResults: MatchResult[] = useMemo(() => {
-    if (!profile || universities.length === 0) {
-      return universities.map((u) => ({
-        university: u,
-        fitCategory: 'Prep needed' as FitCategory,
-        fitScore: -1,
-        missingExams: [],
-        metRequirements: [],
-        nearRequirements: [],
-        belowRequirements: [],
-        unconfirmedRequirements: [],
-        ruleChanged: Boolean(u.ruleChanged),
-      }));
+    if (!readiness.isReady || universities.length === 0) {
+      return [];
     }
-    return calculateMatches(profile, universities);
-  }, [profile, universities]);
+    return calculateMatches(profile!, universities);
+  }, [profile, universities, readiness.isReady]);
 
   // Filter matches based on user filter selections
   const filteredMatches = useMemo(() => {
@@ -137,13 +130,20 @@ export const MatchesPage: React.FC = () => {
           </p>
         </div>
 
-        {!profile && (
+        {!readiness.isReady ? (
           <button
             onClick={() => navigate('/onboarding')}
             className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold shadow-sm transition-colors"
           >
             <BookOpen className="w-4 h-4" />
             <span>Complete Onboarding Profile</span>
+          </button>
+        ) : (
+          <button
+            onClick={() => navigate('/onboarding')}
+            className="inline-flex items-center gap-2 px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition-colors"
+          >
+            <span>Edit Profile</span>
           </button>
         )}
       </div>
@@ -242,15 +242,77 @@ export const MatchesPage: React.FC = () => {
         <div className="text-center py-12 text-slate-500 text-sm">
           Loading verified universities...
         </div>
+      ) : !readiness.isReady ? (
+        <div className="text-center py-12 bg-white rounded-2xl border border-amber-200 p-8 space-y-4 max-w-2xl mx-auto shadow-sm">
+          <div className="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center mx-auto text-amber-600">
+            <AlertCircle className="w-6 h-6" />
+          </div>
+          <div className="space-y-1">
+            <h3 className="text-lg font-bold text-slate-900">
+              Complete Your Profile for Grounded Recommendations
+            </h3>
+            <p className="text-sm text-slate-600">
+              To prevent misleading recommendations, personalised matching requires essential academic preferences.
+            </p>
+          </div>
+          {readiness.missingFields.length > 0 && (
+            <div className="text-left bg-amber-50/60 rounded-xl p-4 border border-amber-100 text-xs text-amber-900 space-y-1.5 max-w-md mx-auto">
+              <span className="font-semibold block text-amber-950">Missing required information:</span>
+              <ul className="list-disc list-inside space-y-1">
+                {readiness.missingFields.map((f) => (
+                  <li key={f} className="capitalize">
+                    {f === 'targetCountries'
+                      ? 'Target study destination country'
+                      : f === 'intendedDegreeLevel'
+                      ? 'Intended degree level (e.g. Master’s, Bachelor’s)'
+                      : f === 'intendedSubject'
+                      ? 'Intended subject / discipline'
+                      : f}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          <p className="text-xs text-slate-500">
+            Standardised test scores (IELTS, GRE, GMAT) are optional and will not block matching unless required by specific programmes.
+          </p>
+          <div className="pt-2">
+            <button
+              onClick={() => navigate('/onboarding')}
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold shadow-sm transition-colors"
+            >
+              <BookOpen className="w-4 h-4" />
+              <span>Complete Onboarding Profile</span>
+            </button>
+          </div>
+        </div>
       ) : filteredMatches.length === 0 ? (
-        <div className="text-center py-12 bg-white rounded-2xl border border-slate-200 p-8 space-y-2">
+        <div className="text-center py-12 bg-white rounded-2xl border border-slate-200 p-8 space-y-3">
           <AlertCircle className="w-8 h-8 text-slate-400 mx-auto" />
           <h3 className="text-base font-semibold text-slate-800">
-            No universities match your filters
+            No defensible university matches found
           </h3>
-          <p className="text-xs text-slate-500">
-            Try resetting the country or tier filter.
+          <p className="text-xs text-slate-500 max-w-md mx-auto">
+            No programmes in the verified catalogue match your active filters and profile constraints. Try broadening your country or tier filters, or updating your budget and study preferences.
           </p>
+          <div className="flex items-center justify-center gap-3 pt-2">
+            <button
+              onClick={() => {
+                setSelectedCountry('all');
+                setSelectedTier('all');
+                setSearchQuery('');
+              }}
+              className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors"
+            >
+              Reset Filters
+            </button>
+            <button
+              onClick={() => navigate('/onboarding')}
+              className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white transition-colors"
+            >
+              Update Profile
+            </button>
+          </div>
         </div>
       ) : (
         <div className="space-y-4">
@@ -424,3 +486,4 @@ export const MatchesPage: React.FC = () => {
 };
 
 export default MatchesPage;
+

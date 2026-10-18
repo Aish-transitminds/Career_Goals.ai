@@ -6,6 +6,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useCatalog } from '../../hooks/useCatalog';
+import { useAuth } from '../../hooks/useAuth';
 import { aiAssistantService, ChatMessage } from '../../services/aiAssistantService';
 import {
   Bot,
@@ -22,7 +23,7 @@ const INITIAL_WELCOME: ChatMessage = {
   id: 'welcome-0',
   role: 'assistant',
   content:
-    'Hello! I am your CareerGoals Guide. I provide verified, fact-checked admission requirements, language score cutoffs, blocked account policies, and application deadlines across Germany, Ireland, and the UK.\n\nEvery answer is grounded strictly in official university admission portals with zero AI hallucinations.',
+    'Hello! I am your CareerGoals study-abroad counsellor. I provide verified, fact-checked admission requirements, language score cutoffs, tuition fees, and visa guidelines across Germany, Ireland, and the UK.\n\nFeel free to ask about any programme, check your eligibility with your CGPA, or explore tuition-free universities! What degree and destination are you considering?',
   sourceUrl: 'https://www.daad.de/en/study-and-research-in-germany/',
   sourceName: 'Official DAAD & University Admissions',
   lastChecked: '2026-10-15',
@@ -30,14 +31,15 @@ const INITIAL_WELCOME: ChatMessage = {
 };
 
 const SUGGESTED_PROMPTS = [
+  'Can I apply to Trinity with 8.2 CGPA and no IELTS?',
   'TUM GRE & IELTS requirements',
   'Free tuition universities in Germany',
   'Ireland visa funds & Stamp 1G',
-  'Deadlines for Trinity College Dublin',
 ];
 
 export const AIAssistantWidget: React.FC = () => {
   const { universities, countries } = useCatalog();
+  const { profile } = useAuth();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [inputText, setInputText] = useState<string>('');
   const [messages, setMessages] = useState<ChatMessage[]>([INITIAL_WELCOME]);
@@ -85,10 +87,14 @@ export const AIAssistantWidget: React.FC = () => {
     setIsTyping(true);
 
     try {
-      const response = await aiAssistantService.askQuestion(clampedText, {
-        universities,
-        countries,
-      });
+      const response = await aiAssistantService.askQuestion(
+        clampedText,
+        {
+          universities,
+          countries,
+        },
+        profile
+      );
 
       const assistantMsg: ChatMessage = {
         id: `assistant-${Date.now()}`,

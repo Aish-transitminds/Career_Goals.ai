@@ -290,6 +290,15 @@ export type FitCategory = 'Strong fit' | 'Possible' | 'Reach' | 'Prep needed';
 
 export type RequirementEvaluation = 'MET' | 'NEAR' | 'BELOW' | 'NOT_REQUIRED' | 'UNCONFIRMED';
 
+export interface ProfileReadiness {
+  /** True when the profile contains essential information needed to match against the catalogue */
+  isReady: boolean;
+  /** List of essential field keys that are missing */
+  missingFields: string[];
+  /** User-facing explanations of missing information */
+  reasons: string[];
+}
+
 export interface MatchResult {
   /** Matched university entity */
   university: University;
@@ -309,6 +318,8 @@ export interface MatchResult {
   unconfirmedRequirements: string[];
   /** True if university has ruleChanged == true */
   ruleChanged: boolean;
+  /** True if student meets mandatory requirements (belowRequirements is empty and not Prep needed) */
+  isEligible?: boolean;
 }
 
 export interface MatchConfig {

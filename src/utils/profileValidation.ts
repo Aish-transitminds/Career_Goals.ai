@@ -11,7 +11,10 @@ import {
   BudgetPeriod,
   BudgetCoverage,
   EnglishTestType,
+  ProfileReadiness,
 } from '../types';
+
+export type { ProfileReadiness };
 
 export interface ProfileFormData {
   name: string;
@@ -326,3 +329,83 @@ export function buildUserProfileFromForm(
     scholarshipPreference: Boolean(form.scholarshipPreference),
   };
 }
+
+/**
+ * Checks whether a profile is an older legacy or demo profile created before extended fields were added.
+ * Legacy profiles are preserved for backward compatibility if they have valid core fields.
+ */
+export function isLegacyProfile(profile: UserProfile): boolean {
+  const isKnownDemo =
+    Boolean(profile.uid && (profile.uid.startsWith('mock_student_') || profile.uid.includes('legacy'))) ||
+    Boolean(profile.name && (profile.name.includes('Demo Student') || profile.name.includes('(No Exams)') || profile.name.includes('(Low Budget)')));
+
+  const isLegacyData =
+    Boolean(profile.name && profile.name.trim()) &&
+    Boolean(profile.targetCountries && profile.targetCountries.length > 0) &&
+    profile.intendedDegreeLevel === undefined &&
+    profile.intendedSubject === undefined &&
+    profile.examsTaken !== undefined;
+
+  return isKnownDemo || isLegacyData;
+}
+
+/**
+ * Reusable readiness check based on existing profile fields and actual catalogue needs.
+ * Blocks ranked personalised results when essential information (name, target countries,
+ * intended degree level, or intended subject) is missing.
+ *
+ * Keeps optional information optional: missing IELTS/GRE/GMAT scores do NOT block readiness.
+ * Preserves backward compatibility for legacy demo profiles.
+ */
+export function checkProfileReadiness(profile: UserProfile | null | undefined): ProfileReadiness {
+  if (!profile) {
+    return {
+      isReady: false,
+      missingFields: ['profile'],
+      reasons: ['No student profile found. Please complete the onboarding profile to view matches.'],
+    };
+  }
+
+  // Preserve legacy/demo profiles for backward compatibility
+  if (isLegacyProfile(profile)) {
+    return {
+      isReady: true,
+      missingFields: [],
+      reasons: [],
+    };
+  }
+
+  const missingFields: string[] = [];
+  const reasons: string[] = [];
+
+  // 1. Name or Display Handle
+  if (!profile.name || !profile.name.trim()) {
+    missingFields.push('name');
+    reasons.push('Name or preferred display handle is required.');
+  }
+
+  // 2. Target Countries (Catalogue need: programmes are in Germany, Ireland, and UK)
+  if (!profile.targetCountries || profile.targetCountries.length === 0) {
+    missingFields.push('targetCountries');
+    reasons.push('At least one target destination country (Germany, Ireland, or UK) must be selected.');
+  }
+
+  // 3. Intended Degree Level (Catalogue need: all catalogue entries specify degreeLevel)
+  if (!profile.intendedDegreeLevel || !profile.intendedDegreeLevel.trim()) {
+    missingFields.push('intendedDegreeLevel');
+    reasons.push('Intended degree level (e.g. Master\'s) is required to find suitable programmes.');
+  }
+
+  // 4. Intended Subject / Field of Study (Catalogue need: matches curricular area)
+  if (!profile.intendedSubject || !profile.intendedSubject.trim()) {
+    missingFields.push('intendedSubject');
+    reasons.push('Intended subject or field of study is required to recommend relevant courses.');
+  }
+
+  return {
+    isReady: missingFields.length === 0,
+    missingFields,
+    reasons,
+  };
+}
+

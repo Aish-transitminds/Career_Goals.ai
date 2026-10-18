@@ -5,7 +5,7 @@
  */
 
 import { sparkFallbackEngine, AssistantResponse } from './SparkFallbackEngine';
-import { University, Country } from '../types';
+import { University, Country, UserProfile } from '../types';
 
 export interface ChatMessage {
   id: string;
@@ -23,7 +23,7 @@ export class AIAssistantService {
    *
    * Privacy Invariant (R4):
    * Strictly NO student personal data (name, email, exam scores, budget, GPA, application notes)
-   * is transmitted. Only the student's question and verified public Firestore catalog facts are processed.
+   * is transmitted externally. Only the student's question and verified public Firestore catalog facts are processed.
    *
    * Free Spark Plan Fallback (R5):
    * On Firebase Spark free tier (or when Firebase AI Logic is unavailable), seamlessly runs
@@ -31,7 +31,8 @@ export class AIAssistantService {
    */
   public async askQuestion(
     prompt: string,
-    catalog?: { universities: University[]; countries: Country[] }
+    catalog?: { universities: University[]; countries: Country[] },
+    profile?: UserProfile | null
   ): Promise<AssistantResponse> {
     // 1. Enforce strict 500-character input cap (R4)
     const sanitizedPrompt = (prompt || '').slice(0, 500).trim();
@@ -44,7 +45,7 @@ export class AIAssistantService {
     // Firebase AI Logic requires Blaze plan / App Check cloud proxy.
     // On the free Spark plan, we instantly delegate to the deterministic keyword retrieval engine.
     try {
-      const response = sparkFallbackEngine.query(sanitizedPrompt);
+      const response = sparkFallbackEngine.query(sanitizedPrompt, profile);
       return response;
     } catch (err) {
       console.warn('[AIAssistantService] Engine error, falling back to default:', err);

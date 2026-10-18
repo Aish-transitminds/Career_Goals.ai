@@ -10,7 +10,12 @@ import {
   MatchResult,
   FitCategory,
   MatchConfig,
+  ProfileReadiness,
 } from '../types';
+import { checkProfileReadiness } from './profileValidation';
+
+export { checkProfileReadiness };
+export type { ProfileReadiness };
 
 /** Default match thresholds, margins, and bonuses */
 export const DEFAULT_MATCH_CONFIG: MatchConfig = {
@@ -299,14 +304,23 @@ export function matchUniversity(
   const fitScore = Math.round(Math.min(1.00, Math.max(0.00, rawScore)) * 100) / 100;
 
   // 8. Categorize Fit Tier
+  // Known unmet mandatory requirement must not be presented as eligible (strictly capped at Reach)
   let fitCategory: FitCategory = 'Reach';
-  if (fitScore >= config.THRESHOLDS.STRONG_FIT) {
-    fitCategory = 'Strong fit';
-  } else if (fitScore >= config.THRESHOLDS.POSSIBLE) {
-    fitCategory = 'Possible';
+  if (belowRequirements.length === 0) {
+    if (fitScore >= config.THRESHOLDS.STRONG_FIT) {
+      fitCategory = 'Strong fit';
+    } else if (fitScore >= config.THRESHOLDS.POSSIBLE) {
+      fitCategory = 'Possible';
+    } else {
+      fitCategory = 'Reach';
+    }
   } else {
     fitCategory = 'Reach';
   }
+
+  // 9. Separate profile readiness from programme eligibility
+  // (fitCategory cannot be 'Prep needed' here – that path exits early above)
+  const isEligible = belowRequirements.length === 0;
 
   return {
     university,
@@ -318,6 +332,7 @@ export function matchUniversity(
     belowRequirements,
     unconfirmedRequirements,
     ruleChanged,
+    isEligible,
   };
 }
 
@@ -340,4 +355,29 @@ export function calculateMatches(
     }
     return a.university.name.localeCompare(b.university.name);
   });
+}
+
+/**
+ * Calculates matches only after verifying profile readiness.
+ * Prevents incomplete profiles from receiving misleading or arbitrary ranked recommendations.
+ */
+export function calculateGatedMatches(
+  profile: UserProfile | null | undefined,
+  universities: University[],
+  config?: Partial<MatchConfig>
+): {
+  readiness: ProfileReadiness;
+  matches: MatchResult[];
+} {
+  const readiness = checkProfileReadiness(profile);
+  if (!readiness.isReady || !profile) {
+    return {
+      readiness,
+      matches: [],
+    };
+  }
+  return {
+    readiness,
+    matches: calculateMatches(profile, universities, config),
+  };
 }

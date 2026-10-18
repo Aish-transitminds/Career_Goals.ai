@@ -14,7 +14,10 @@
     "test:match": "tsx tests/unit/matchEngine.test.ts",
     "test:letter": "tsx tests/unit/letterHelperRequirements.test.ts",
     "test:profile": "tsx tests/unit/onboardingProfile.test.ts",
-    "test": "npm run test:match && npm run test:letter && npm run test:profile"
+    "test:counsellor": "tsx tests/unit/conversationalCounsellor.test.ts",
+    "test:gating": "tsx tests/unit/profileGatedMatching.test.ts",
+    "test:chatbot": "tsx tests/unit/sparkFallbackEngine.test.ts && tsx tests/unit/sparkFallbackEngine.challenge.test.ts && tsx tests/unit/assistant_lockdown.test.ts && tsx tests/unit/conversationalCounsellor.test.ts",
+    "test": "npm run test:match && npm run test:letter && npm run test:profile && npm run test:gating && npm run test:chatbot"
   },
   "dependencies": {
     "firebase": "^10.14.1",
