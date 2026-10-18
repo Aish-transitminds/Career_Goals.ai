@@ -413,12 +413,12 @@ export const LetterHelperPage: React.FC = () => {
   return (
     <div className="space-y-8 max-w-6xl mx-auto pb-16">
       {/* 0. Top Navigation & Context Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4 font-poppins">
         <Link
           to="/matches"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-indigo-600 transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-[#FF5E00] transition-colors"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-4 h-4 text-[#FF5E00]" />
           <span>Back to Verified Matches</span>
         </Link>
 
@@ -429,7 +429,7 @@ export const LetterHelperPage: React.FC = () => {
             <select
               value={selectedProgramId || 'general'}
               onChange={(e) => handleProgramChange(e.target.value)}
-              className="px-3 py-1.5 rounded-xl border border-slate-300 text-xs font-semibold text-slate-800 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-2xs max-w-xs"
+              className="px-3 py-1.5 rounded-[6px] border border-slate-300 text-xs font-semibold text-slate-800 bg-white focus:outline-none focus:ring-2 focus:ring-[#FF5E00] shadow-2xs max-w-xs"
             >
               <option value="general">Standard Framework (No specific programme)</option>
               <optgroup label="Verified Catalogue Programmes">
@@ -442,16 +442,16 @@ export const LetterHelperPage: React.FC = () => {
             </select>
           </div>
 
-          <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200">
+          <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-[6px] border border-slate-200">
             <Calendar className="w-3.5 h-3.5 text-slate-500 ml-1.5" />
             <span className="text-[11px] font-bold text-slate-500 uppercase px-1">Intake:</span>
             {['2026', '2027', '2028'].map((year) => (
               <button
                 key={year}
                 onClick={() => handleIntakeChange(year)}
-                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all ${
+                className={`px-2.5 py-1 rounded-[4px] text-xs font-bold transition-all ${
                   selectedIntake === year
-                    ? 'bg-indigo-600 text-white shadow-xs'
+                    ? 'bg-[#0B1026] text-[#FF5E00] shadow-xs border border-[#151B3A]'
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200'
                 }`}
               >
@@ -464,20 +464,20 @@ export const LetterHelperPage: React.FC = () => {
 
       {/* 1. Programme-Specific Header Banner */}
       {selectedUniversity ? (
-        <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
+        <div className="bg-white rounded-[8px] border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6 hover:border-[#FF5E00] transition-colors font-poppins">
           {/* Top metadata tags */}
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold uppercase tracking-wider">
-                <Globe className="w-3.5 h-3.5 text-slate-500" />
+              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-[4px] bg-[#0B1026] text-white text-xs font-bold uppercase tracking-wider">
+                <Globe className="w-3.5 h-3.5 text-[#FF5E00]" />
                 <span>{countryName || selectedUniversity.countryId.toUpperCase()}</span>
               </span>
-              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold uppercase tracking-wider border border-indigo-100">
-                <Calendar className="w-3.5 h-3.5 text-indigo-600" />
+              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-[4px] bg-orange-50 text-[#0B1026] text-xs font-bold uppercase tracking-wider border border-orange-200">
+                <Calendar className="w-3.5 h-3.5 text-[#FF5E00]" />
                 <span>Intake: {selectedIntake}</span>
               </span>
               {selectedUniversity.demoSeeded && (
-                <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-950 border border-amber-300">
+                <span className="px-2.5 py-1 rounded-[4px] text-xs font-bold bg-amber-100 text-amber-950 border border-amber-300">
                   Demonstration Record &bull; Change-Detection Simulation
                 </span>
               )}
@@ -489,14 +489,14 @@ export const LetterHelperPage: React.FC = () => {
 
           {/* Institution & Programme Title */}
           <div className="space-y-1">
-            <div className="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-indigo-50 text-indigo-800 text-[11px] font-bold uppercase tracking-wider mb-1">
-              <FileText className="w-3.5 h-3.5 text-indigo-600" />
+            <div className="inline-flex items-center gap-2 px-3 py-0.5 rounded-[4px] bg-orange-50 text-[#0B1026] text-[11px] font-bold uppercase tracking-wider mb-1 border border-orange-200">
+              <FileText className="w-3.5 h-3.5 text-[#FF5E00]" />
               Statement Requirements & Planner
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0B1026] tracking-tight">
               {selectedUniversity.name}
             </h1>
-            <p className="text-base sm:text-lg font-semibold text-indigo-600">
+            <p className="text-base sm:text-lg font-semibold text-[#FF5E00]">
               {selectedUniversity.program}
             </p>
             <p className="text-xs text-slate-600 mt-1">
@@ -506,7 +506,7 @@ export const LetterHelperPage: React.FC = () => {
 
           {/* Demonstration disclaimer if demoSeeded */}
           {selectedUniversity.demoSeeded && (
-            <div className="p-4 bg-amber-50 border border-amber-300 rounded-2xl text-xs text-amber-950 flex items-start gap-3">
+            <div className="p-4 bg-amber-50 border border-amber-300 rounded-[6px] text-xs text-amber-950 flex items-start gap-3">
               <Info className="w-5 h-5 text-amber-700 shrink-0 mt-0.5" />
               <div className="space-y-1">
                 <span className="font-bold text-amber-900 uppercase tracking-wide">
@@ -520,10 +520,10 @@ export const LetterHelperPage: React.FC = () => {
           )}
 
           {/* Official Requirements Summary */}
-          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-700 space-y-2">
+          <div className="p-4 rounded-[6px] bg-slate-50 border border-slate-200 text-xs text-slate-700 space-y-2">
             <div className="flex items-center justify-between">
-              <span className="font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
-                <FileText className="w-4 h-4 text-indigo-600" />
+              <span className="font-bold text-[#0B1026] uppercase tracking-wider flex items-center gap-1.5">
+                <FileText className="w-4 h-4 text-[#FF5E00]" />
                 Official Statement-Requirements Summary
               </span>
               {statementReq?.lastChecked && (
@@ -541,7 +541,7 @@ export const LetterHelperPage: React.FC = () => {
 
           {/* Conflicting / Stale Disclaimers if applicable */}
           {status === 'Conflicting' && statementReq?.statusNotes && (
-            <div className="p-4 bg-rose-50 border-2 border-rose-300 rounded-2xl text-xs text-rose-950 flex items-start gap-3">
+            <div className="p-4 bg-rose-50 border-2 border-rose-300 rounded-[6px] text-xs text-rose-950 flex items-start gap-3">
               <AlertOctagon className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
               <div className="space-y-1">
                 <span className="font-bold text-rose-900 uppercase tracking-wide">
@@ -553,7 +553,7 @@ export const LetterHelperPage: React.FC = () => {
           )}
 
           {status === 'Stale' && statementReq?.statusNotes && (
-            <div className="p-4 bg-amber-50 border border-amber-300 rounded-2xl text-xs text-amber-950 flex items-start gap-3">
+            <div className="p-4 bg-amber-50 border border-amber-300 rounded-[6px] text-xs text-amber-950 flex items-start gap-3">
               <Clock className="w-5 h-5 text-amber-700 shrink-0 mt-0.5" />
               <div className="space-y-1">
                 <span className="font-bold text-amber-900 uppercase tracking-wide">
@@ -565,7 +565,7 @@ export const LetterHelperPage: React.FC = () => {
           )}
 
           {status === 'Unknown' && (
-            <div className="p-4 bg-slate-100 border border-slate-300 rounded-2xl text-xs text-slate-800 flex items-start gap-3">
+            <div className="p-4 bg-slate-100 border border-slate-300 rounded-[6px] text-xs text-slate-800 flex items-start gap-3">
               <HelpCircle className="w-5 h-5 text-slate-500 shrink-0 mt-0.5" />
               <div className="space-y-1">
                 <span className="font-bold text-slate-900 uppercase tracking-wide">
@@ -581,8 +581,8 @@ export const LetterHelperPage: React.FC = () => {
           {/* 7 Core Requirement Fields Grid */}
           <div className="space-y-3 pt-2">
             <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-              <h2 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
-                <Info className="w-4 h-4 text-indigo-600" />
+              <h2 className="text-xs font-bold text-[#0B1026] uppercase tracking-wider flex items-center gap-1.5">
+                <Info className="w-4 h-4 text-[#FF5E00]" />
                 Programme-Specific Requirements Breakdown
               </h2>
               <span className="text-[11px] text-slate-400">Values unconfirmed by source remain 'Not confirmed'</span>
@@ -590,15 +590,15 @@ export const LetterHelperPage: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
               {/* Field 1: Document Type */}
-              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+              <div className="p-3.5 rounded-[6px] bg-slate-50 border border-slate-200 space-y-1">
                 <span className="text-slate-500 font-semibold block text-[11px] uppercase tracking-wide">
                   Document Type
                 </span>
-                <span className="font-bold text-slate-900 block text-sm">
+                <span className="font-bold text-[#0B1026] block text-sm">
                   {statementReq?.documentType || 'Not confirmed'}
                 </span>
                 {statementReq?.documentType && statementReq.documentType !== 'Statement of Purpose' && (
-                  <span className="text-[11px] text-indigo-700 font-medium block">
+                  <span className="text-[11px] text-[#FF5E00] font-semibold block">
                     {statementReq.documentType === 'Not required'
                       ? 'No statement evaluated for admission'
                       : `Programme specifies a ${statementReq.documentType}`}
@@ -607,11 +607,11 @@ export const LetterHelperPage: React.FC = () => {
               </div>
 
               {/* Field 2: Mandatory / Required */}
-              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+              <div className="p-3.5 rounded-[6px] bg-slate-50 border border-slate-200 space-y-1">
                 <span className="text-slate-500 font-semibold block text-[11px] uppercase tracking-wide">
                   Mandatory Status
                 </span>
-                <span className="font-bold text-slate-900 block text-sm">
+                <span className="font-bold text-[#0B1026] block text-sm">
                   {statementReq?.required === true
                     ? 'Required Document'
                     : statementReq?.required === false
@@ -628,11 +628,11 @@ export const LetterHelperPage: React.FC = () => {
               </div>
 
               {/* Field 3: Word, Character or Page Limit */}
-              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+              <div className="p-3.5 rounded-[6px] bg-slate-50 border border-slate-200 space-y-1">
                 <span className="text-slate-500 font-semibold block text-[11px] uppercase tracking-wide">
                   Length / Page Limit
                 </span>
-                <span className="font-bold text-slate-900 block text-sm">
+                <span className="font-bold text-[#0B1026] block text-sm">
                   {statementReq?.lengthLimit || 'Not confirmed'}
                 </span>
                 <span className="text-[11px] text-slate-500 block">
@@ -641,11 +641,11 @@ export const LetterHelperPage: React.FC = () => {
               </div>
 
               {/* Field 4: Submission Method */}
-              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+              <div className="p-3.5 rounded-[6px] bg-slate-50 border border-slate-200 space-y-1">
                 <span className="text-slate-500 font-semibold block text-[11px] uppercase tracking-wide">
                   Submission Method
                 </span>
-                <span className="font-bold text-slate-900 block text-sm">
+                <span className="font-bold text-[#0B1026] block text-sm">
                   {statementReq?.submissionMethod || 'Not confirmed'}
                 </span>
                 <span className="text-[11px] text-slate-500 block">
@@ -654,11 +654,11 @@ export const LetterHelperPage: React.FC = () => {
               </div>
 
               {/* Field 5: Formatting & File Specs */}
-              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+              <div className="p-3.5 rounded-[6px] bg-slate-50 border border-slate-200 space-y-1">
                 <span className="text-slate-500 font-semibold block text-[11px] uppercase tracking-wide">
                   Formatting & File Specs
                 </span>
-                <span className="font-bold text-slate-900 block text-sm">
+                <span className="font-bold text-[#0B1026] block text-sm">
                   {statementReq?.formattingRequirements || 'Not confirmed'}
                 </span>
                 <span className="text-[11px] text-slate-500 block">
@@ -667,11 +667,11 @@ export const LetterHelperPage: React.FC = () => {
               </div>
 
               {/* Field 6: AI-Use / Disclosure Policy */}
-              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+              <div className="p-3.5 rounded-[6px] bg-slate-50 border border-slate-200 space-y-1">
                 <span className="text-slate-500 font-semibold block text-[11px] uppercase tracking-wide">
                   AI-Use & Disclosure Policy
                 </span>
-                <span className="font-bold text-slate-900 block text-sm">
+                <span className="font-bold text-[#0B1026] block text-sm">
                   {statementReq?.aiPolicy ? 'Policy Prescribed' : 'Not confirmed'}
                 </span>
                 <span className="text-[11px] text-slate-600 block leading-tight">
@@ -682,11 +682,11 @@ export const LetterHelperPage: React.FC = () => {
 
             {/* Assessment Criteria (if available) */}
             {statementReq?.assessmentCriteria && statementReq.assessmentCriteria.length > 0 && (
-              <div className="p-4 bg-indigo-50/60 rounded-2xl border border-indigo-100 text-xs text-indigo-950 space-y-1.5">
-                <span className="font-bold text-indigo-900 uppercase tracking-wide block">
+              <div className="p-4 bg-orange-50/60 rounded-[6px] border border-orange-200 text-xs text-[#0B1026] space-y-1.5">
+                <span className="font-bold text-[#0B1026] uppercase tracking-wide block">
                   Department Evaluation & Assessment Criteria
                 </span>
-                <ul className="space-y-1 pl-4 list-disc text-indigo-900">
+                <ul className="space-y-1 pl-4 list-disc text-slate-700">
                   {statementReq.assessmentCriteria.map((crit, idx) => (
                     <li key={idx} className="leading-relaxed">
                       {crit}
@@ -698,7 +698,7 @@ export const LetterHelperPage: React.FC = () => {
 
             {/* General University Guidance (Distinguished from programme rules) */}
             {statementReq?.generalGuidance && (
-              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-xs text-slate-700 space-y-1">
+              <div className="p-4 bg-slate-50 rounded-[6px] border border-slate-200 text-xs text-slate-700 space-y-1">
                 <span className="font-bold text-slate-800 uppercase tracking-wide flex items-center gap-1.5">
                   <Lightbulb className="w-3.5 h-3.5 text-amber-500" />
                   General University Advice (Non-binding recommendation, distinct from programme-specific rules)
@@ -716,10 +716,10 @@ export const LetterHelperPage: React.FC = () => {
                     href={selectedUniversity.sourceUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-indigo-600 hover:text-indigo-800 font-medium underline inline-flex items-center gap-1"
+                    className="text-[#FF5E00] hover:text-[#E65400] font-semibold underline inline-flex items-center gap-1"
                   >
                     <span>{selectedUniversity.name} Official Admission Page</span>
-                    <ExternalLink className="w-3 h-3" />
+                    <ExternalLink className="w-3 h-3 text-[#FF5E00]" />
                   </a>
                 ) : (
                   <span>Official university website</span>
@@ -730,22 +730,22 @@ export const LetterHelperPage: React.FC = () => {
                 href={selectedUniversity.portalUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 text-xs font-semibold transition-colors self-start sm:self-auto"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] border border-slate-300 text-slate-700 hover:text-[#FF5E00] hover:border-[#FF5E00] text-xs font-semibold transition-colors self-start sm:self-auto"
               >
                 <span>Launch Official Application Portal</span>
-                <ExternalLink className="w-3.5 h-3.5" />
+                <ExternalLink className="w-3.5 h-3.5 text-[#0B1026]" />
               </a>
             </div>
           </div>
         </div>
       ) : (
         /* General Header when no specific programme is selected */
-        <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-indigo-100 text-indigo-900 text-xs font-bold uppercase tracking-wider">
-            <FileText className="w-4 h-4 text-indigo-700" />
+        <div className="bg-white rounded-[8px] border border-slate-200 p-6 sm:p-8 shadow-sm space-y-4 hover:border-[#FF5E00] transition-colors font-poppins">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-[4px] bg-[#0B1026] text-white text-xs font-bold uppercase tracking-wider">
+            <FileText className="w-4 h-4 text-[#FF5E00]" />
             General Academic Structural Framework &bull; Authentic Student Voice
           </div>
-          <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+          <h1 className="text-2xl sm:text-4xl font-extrabold text-[#0B1026] tracking-tight">
             Statement Requirements & Planner
           </h1>
           <p className="text-slate-600 text-sm sm:text-base max-w-3xl leading-relaxed">
@@ -755,16 +755,16 @@ export const LetterHelperPage: React.FC = () => {
       )}
 
       {/* 2. STRICT NON-AI COMPLIANCE PLEDGE & LOCAL STORAGE NOTICE */}
-      <div className="p-5 bg-amber-50/90 rounded-3xl border-2 border-amber-300 text-xs text-amber-950 flex flex-col sm:flex-row items-start gap-4 shadow-sm">
-        <div className="p-2.5 rounded-2xl bg-amber-100 text-amber-800 shrink-0">
-          <Lock className="w-6 h-6" />
+      <div className="p-5 bg-amber-50/90 rounded-[8px] border-2 border-amber-300 text-xs text-amber-950 flex flex-col sm:flex-row items-start gap-4 shadow-sm font-poppins">
+        <div className="p-2.5 rounded-[6px] bg-amber-100 text-amber-800 shrink-0">
+          <Lock className="w-6 h-6 text-amber-700" />
         </div>
         <div className="space-y-1.5 flex-1">
           <div className="flex flex-wrap items-center gap-2">
             <span className="font-extrabold text-sm uppercase tracking-wide text-amber-900">
               Strict Policy: Zero AI-Generated Letter Text &bull; Private Local Scratchpad
             </span>
-            <span className="px-2 py-0.5 rounded-md bg-amber-200/90 text-[10px] font-bold text-amber-900">
+            <span className="px-2 py-0.5 rounded-[4px] bg-amber-200/90 text-[10px] font-bold text-amber-900">
               Browser-Only
             </span>
           </div>
@@ -778,13 +778,13 @@ export const LetterHelperPage: React.FC = () => {
 
       {/* 3. NOT REQUIRED NOTIFICATION (e.g. RWTH Aachen) */}
       {selectedUniversity && statementReq?.required === false && (
-        <div className="p-5 bg-blue-50 border border-blue-200 rounded-3xl text-xs text-blue-950 flex items-start gap-3">
-          <Info className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+        <div className="p-5 bg-slate-50 border border-slate-200 rounded-[8px] text-xs text-[#0B1026] flex items-start gap-3 font-poppins">
+          <Info className="w-5 h-5 text-[#FF5E00] shrink-0 mt-0.5" />
           <div className="space-y-1">
-            <span className="font-bold text-blue-900 uppercase tracking-wide">
+            <span className="font-bold text-[#0B1026] uppercase tracking-wide">
               Document Not Evaluated for This Programme
             </span>
-            <p className="leading-relaxed">
+            <p className="leading-relaxed text-slate-600">
               <strong>{selectedUniversity.name}</strong> ({selectedUniversity.program}) does not require or evaluate a Statement of Purpose or Motivation Letter. Admissions decisions are decided strictly on transcript ECTS distribution and GRE score.
               You may still use the general planning framework below for other applications.
             </p>
@@ -793,12 +793,12 @@ export const LetterHelperPage: React.FC = () => {
       )}
 
       {/* 4. PLANNING WORKSPACE */}
-      <div className="space-y-6">
+      <div className="space-y-6 font-poppins">
         {/* Workspace Toolbar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-3">
           <div>
-            <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-indigo-600" />
+            <h2 className="text-xl font-bold text-[#0B1026] flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-[#FF5E00]" />
               <span>
                 {hasSpecificQuestions
                   ? 'Programme-Prescribed Questions (Primary Focus)'
@@ -813,9 +813,9 @@ export const LetterHelperPage: React.FC = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={copyAllDrafts}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition-colors"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-[6px] bg-[#0B1026] hover:bg-[#151B3A] text-white text-xs font-semibold transition-colors"
             >
-              {copiedAll ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
+              {copiedAll ? <Check className="w-4 h-4 text-[#FF5E00]" /> : <Copy className="w-4 h-4 text-[#FF5E00]" />}
               <span>{copiedAll ? 'All Drafts Copied' : 'Export All Drafts'}</span>
             </button>
           </div>
@@ -824,11 +824,11 @@ export const LetterHelperPage: React.FC = () => {
         {/* 4A. Programme-Specific Questions (Prioritised if prescribed) */}
         {hasSpecificQuestions && statementReq?.specificQuestions && (
           <div className="space-y-4">
-            <div className="p-3 bg-indigo-50 border border-indigo-200 rounded-2xl text-xs text-indigo-950 flex items-center justify-between">
+            <div className="p-3 bg-orange-50 border border-orange-200 rounded-[6px] text-xs text-[#0B1026] flex items-center justify-between">
               <span className="font-semibold">
                 This programme prescribes <strong>{statementReq.specificQuestions.length} specific questions</strong>. Prioritise these prompts before general sections.
               </span>
-              <span className="text-[11px] font-bold text-indigo-700 uppercase">Programme Priority</span>
+              <span className="text-[11px] font-bold text-[#FF5E00] uppercase">Programme Priority</span>
             </div>
 
             <div className="space-y-4">
@@ -841,9 +841,9 @@ export const LetterHelperPage: React.FC = () => {
                 return (
                   <div
                     key={q.id}
-                    className={`bg-white rounded-3xl border transition-all ${
+                    className={`bg-white rounded-[6px] border transition-all ${
                       isExpanded
-                        ? 'border-indigo-300 shadow-md ring-1 ring-indigo-200'
+                        ? 'border-[#FF5E00] shadow-md ring-1 ring-[#FF5E00]/20'
                         : 'border-slate-200 hover:border-slate-300'
                     }`}
                   >
@@ -853,7 +853,7 @@ export const LetterHelperPage: React.FC = () => {
                     >
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
-                          <span className="px-2 py-0.5 rounded-md bg-indigo-100 text-indigo-800 text-[11px] font-bold">
+                          <span className="px-2 py-0.5 rounded-[4px] bg-[#0B1026] text-[#FF5E00] text-[11px] font-bold">
                             Question {idx + 1}
                           </span>
                           {q.required !== false && (
@@ -865,7 +865,7 @@ export const LetterHelperPage: React.FC = () => {
                             </span>
                           )}
                         </div>
-                        <h3 className="font-extrabold text-slate-900 text-base sm:text-lg pt-1">
+                        <h3 className="font-extrabold text-[#0B1026] text-base sm:text-lg pt-1">
                           {q.question}
                         </h3>
                         {q.guidance && (
@@ -905,12 +905,12 @@ export const LetterHelperPage: React.FC = () => {
                               <button
                                 type="button"
                                 onClick={() => copySectionDraft(draftKey)}
-                                className="inline-flex items-center gap-1 text-[11px] font-bold text-indigo-600 hover:text-indigo-800"
+                                className="inline-flex items-center gap-1 text-[11px] font-bold text-[#FF5E00] hover:text-[#E65400]"
                               >
                                 {copiedDraftId === draftKey ? (
                                   <Check className="w-3 h-3 text-emerald-600" />
                                 ) : (
-                                  <Copy className="w-3 h-3" />
+                                  <Copy className="w-3 h-3 text-[#FF5E00]" />
                                 )}
                                 <span>{copiedDraftId === draftKey ? 'Copied' : 'Copy'}</span>
                               </button>
@@ -923,7 +923,7 @@ export const LetterHelperPage: React.FC = () => {
                             placeholder={`Draft your key points for Question ${idx + 1} here...`}
                             maxLength={500}
                             rows={4}
-                            className="w-full p-4 rounded-2xl border border-slate-300 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all font-sans"
+                            className="w-full p-4 rounded-[6px] border border-slate-300 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#FF5E00] focus:border-transparent transition-all font-sans"
                           />
                           <p className="text-[11px] text-slate-500">
                             Saved locally in your browser for this programme. Strictly private.
@@ -940,7 +940,7 @@ export const LetterHelperPage: React.FC = () => {
             <div className="pt-2">
               <button
                 onClick={() => setShowFrameworkWhenQuestionsExist(!showFrameworkWhenQuestionsExist)}
-                className="inline-flex items-center gap-2 text-xs font-bold text-indigo-700 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100 px-4 py-2.5 rounded-2xl transition-all"
+                className="inline-flex items-center gap-2 text-xs font-semibold text-[#0B1026] bg-[#FF5E00] hover:bg-[#E65400] px-4 py-2.5 rounded-[6px] transition-all shadow-sm"
               >
                 <span>
                   {showFrameworkWhenQuestionsExist
@@ -948,9 +948,9 @@ export const LetterHelperPage: React.FC = () => {
                     : 'Show Standard 6-Section Framework (Optional Reference Guidance)'}
                 </span>
                 {showFrameworkWhenQuestionsExist ? (
-                  <ChevronUp className="w-4 h-4" />
+                  <ChevronUp className="w-4 h-4 text-[#0B1026]" />
                 ) : (
-                  <ChevronDown className="w-4 h-4" />
+                  <ChevronDown className="w-4 h-4 text-[#0B1026]" />
                 )}
               </button>
             </div>
@@ -975,9 +975,9 @@ export const LetterHelperPage: React.FC = () => {
                 return (
                   <div
                     key={sec.id}
-                    className={`bg-white rounded-3xl border transition-all ${
+                    className={`bg-white rounded-[6px] border transition-all ${
                       isExpanded
-                        ? 'border-indigo-300 shadow-md ring-1 ring-indigo-200'
+                        ? 'border-[#FF5E00] shadow-md ring-1 ring-[#FF5E00]/20'
                         : 'border-slate-200 hover:border-slate-300'
                     }`}
                   >
@@ -986,7 +986,7 @@ export const LetterHelperPage: React.FC = () => {
                       className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4"
                     >
                       <div className="space-y-1">
-                        <h3 className="font-extrabold text-slate-900 text-base sm:text-lg">
+                        <h3 className="font-extrabold text-[#0B1026] text-base sm:text-lg">
                           {sec.title}
                         </h3>
                         <p className="text-xs text-slate-500 font-medium leading-relaxed">
@@ -1009,14 +1009,14 @@ export const LetterHelperPage: React.FC = () => {
                       <div className="px-5 pb-6 sm:px-6 sm:pb-8 pt-2 border-t border-slate-100 space-y-6">
                         {/* Guiding Reflection Prompts */}
                         <div className="space-y-2">
-                          <span className="text-xs font-bold text-indigo-700 uppercase tracking-wider flex items-center gap-1.5">
-                            <HelpCircle className="w-4 h-4" />
+                          <span className="text-xs font-bold text-[#0B1026] uppercase tracking-wider flex items-center gap-1.5">
+                            <HelpCircle className="w-4 h-4 text-[#FF5E00]" />
                             Guiding Reflection Questions
                           </span>
-                          <ul className="space-y-2 text-xs text-slate-700 bg-indigo-50/50 p-4 rounded-2xl border border-indigo-100">
+                          <ul className="space-y-2 text-xs text-slate-700 bg-slate-50 p-4 rounded-[6px] border border-slate-200">
                             {sec.prompts.map((p, idx) => (
                               <li key={idx} className="flex items-start gap-2.5">
-                                <span className="text-indigo-600 font-extrabold mt-0.5">&bull;</span>
+                                <span className="text-[#FF5E00] font-extrabold mt-0.5">&bull;</span>
                                 <span className="leading-relaxed font-medium">{p}</span>
                               </li>
                             ))}
@@ -1025,7 +1025,7 @@ export const LetterHelperPage: React.FC = () => {
 
                         {/* What to Include vs What to Avoid */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div className="bg-emerald-50/60 p-4 rounded-2xl border border-emerald-200 space-y-2">
+                          <div className="bg-emerald-50/60 p-4 rounded-[6px] border border-emerald-200 space-y-2">
                             <span className="text-xs font-bold text-emerald-900 uppercase tracking-wider flex items-center gap-1.5">
                               <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                               Key Elements to Include
@@ -1040,7 +1040,7 @@ export const LetterHelperPage: React.FC = () => {
                             </ul>
                           </div>
 
-                          <div className="bg-rose-50/60 p-4 rounded-2xl border border-rose-200 space-y-2">
+                          <div className="bg-rose-50/60 p-4 rounded-[6px] border border-rose-200 space-y-2">
                             <span className="text-xs font-bold text-rose-900 uppercase tracking-wider flex items-center gap-1.5">
                               <AlertTriangle className="w-4 h-4 text-rose-600" />
                               Clichés to Strictly Avoid
@@ -1057,7 +1057,7 @@ export const LetterHelperPage: React.FC = () => {
                         </div>
 
                         {/* Review Tip */}
-                        <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-700 flex items-start gap-2">
+                        <div className="p-3.5 bg-slate-50 rounded-[6px] border border-slate-200 text-xs text-slate-700 flex items-start gap-2">
                           <Lightbulb className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
                           <div>
                             <strong>Pro Tip: </strong>
@@ -1082,12 +1082,12 @@ export const LetterHelperPage: React.FC = () => {
                               <button
                                 type="button"
                                 onClick={() => copySectionDraft(sec.id)}
-                                className="inline-flex items-center gap-1 text-[11px] font-bold text-indigo-600 hover:text-indigo-800"
+                                className="inline-flex items-center gap-1 text-[11px] font-bold text-[#FF5E00] hover:text-[#E65400]"
                               >
                                 {copiedDraftId === sec.id ? (
                                   <Check className="w-3 h-3 text-emerald-600" />
                                 ) : (
-                                  <Copy className="w-3 h-3" />
+                                  <Copy className="w-3 h-3 text-[#FF5E00]" />
                                 )}
                                 <span>{copiedDraftId === sec.id ? 'Copied' : 'Copy'}</span>
                               </button>
@@ -1100,7 +1100,7 @@ export const LetterHelperPage: React.FC = () => {
                             placeholder={`Draft your key points for ${sec.title.toLowerCase()} here...`}
                             maxLength={500}
                             rows={4}
-                            className="w-full p-4 rounded-2xl border border-slate-300 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all font-sans"
+                            className="w-full p-4 rounded-[6px] border border-slate-300 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#FF5E00] focus:border-transparent transition-all font-sans"
                           />
                           <p className="text-[11px] text-slate-500">
                             Saved locally in your browser. Strictly confidential; never sent to any LLM or external server.
@@ -1117,11 +1117,11 @@ export const LetterHelperPage: React.FC = () => {
       </div>
 
       {/* 5. Pre-Submission Quality Checklist (8-Point) */}
-      <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
+      <div className="bg-white rounded-[8px] border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6 hover:border-[#FF5E00] transition-colors font-poppins">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
           <div>
-            <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-              <ShieldCheck className="w-5 h-5 text-indigo-600" />
+            <h2 className="text-xl font-bold text-[#0B1026] flex items-center gap-2">
+              <ShieldCheck className="w-5 h-5 text-[#FF5E00]" />
               Pre-Submission Quality Checklist
             </h2>
             <p className="text-xs text-slate-500 mt-0.5">
@@ -1131,14 +1131,14 @@ export const LetterHelperPage: React.FC = () => {
 
           <div className="flex items-center gap-3 self-start sm:self-center">
             <div className="text-right">
-              <span className="text-xs font-bold text-slate-900">
+              <span className="text-xs font-bold text-[#0B1026]">
                 {completedCount} of {totalCount}
               </span>
               <span className="text-xs text-slate-500"> checks passed</span>
             </div>
             <div className="w-20 bg-slate-100 h-2.5 rounded-full overflow-hidden border border-slate-200">
               <div
-                className="bg-indigo-600 h-full transition-all duration-300"
+                className="bg-[#FF5E00] h-full transition-all duration-300"
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
@@ -1196,7 +1196,7 @@ export const LetterHelperPage: React.FC = () => {
           ].map((item) => (
             <label
               key={item.key}
-              className={`flex items-start gap-3.5 p-4 rounded-2xl border cursor-pointer transition-all ${
+              className={`flex items-start gap-3.5 p-4 rounded-[6px] border cursor-pointer transition-all ${
                 checklist[item.key]
                   ? 'border-emerald-300 bg-emerald-50/50 text-emerald-950 font-medium shadow-xs'
                   : 'border-slate-200 hover:bg-slate-50 text-slate-700'
@@ -1206,10 +1206,10 @@ export const LetterHelperPage: React.FC = () => {
                 type="checkbox"
                 checked={checklist[item.key]}
                 onChange={() => toggleChecklistItem(item.key)}
-                className="mt-0.5 rounded text-indigo-600 focus:ring-indigo-500 h-4 w-4"
+                className="mt-0.5 rounded text-[#FF5E00] focus:ring-[#FF5E00] h-4 w-4"
               />
               <div className="space-y-0.5">
-                <span className="font-bold text-slate-900 block">{item.title}</span>
+                <span className="font-bold text-[#0B1026] block">{item.title}</span>
                 <span className="text-slate-500 text-[11px] leading-relaxed block">
                   {item.desc}
                 </span>
@@ -1220,28 +1220,28 @@ export const LetterHelperPage: React.FC = () => {
       </div>
 
       {/* 6. Submission & Portal Formatting Guidelines */}
-      <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-4">
-        <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-          <FileCheck className="w-5 h-5 text-indigo-600" />
+      <div className="bg-white rounded-[8px] border border-slate-200 p-6 sm:p-8 shadow-sm space-y-4 hover:border-[#FF5E00] transition-colors font-poppins">
+        <h2 className="text-lg font-bold text-[#0B1026] flex items-center gap-2">
+          <FileCheck className="w-5 h-5 text-[#FF5E00]" />
           Submission & Portal Formatting Guidelines
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-slate-600 pt-2">
-          <div className="space-y-2 p-4 rounded-2xl bg-slate-50 border border-slate-100">
-            <span className="font-bold text-slate-900 block">PDF Export Hygiene</span>
+          <div className="space-y-2 p-4 rounded-[6px] bg-slate-50 border border-slate-100">
+            <span className="font-bold text-[#0B1026] block">PDF Export Hygiene</span>
             <p className="leading-relaxed">
               Always export directly to PDF from Microsoft Word or LaTeX. Ensure PDF text remains selectable (never submit scanned images of text). File size must stay under 5 MB for uni-assist and direct portals.
             </p>
           </div>
 
-          <div className="space-y-2 p-4 rounded-2xl bg-slate-50 border border-slate-100">
-            <span className="font-bold text-slate-900 block">Referee Timeline Coordination</span>
+          <div className="space-y-2 p-4 rounded-[6px] bg-slate-50 border border-slate-100">
+            <span className="font-bold text-[#0B1026] block">Referee Timeline Coordination</span>
             <p className="leading-relaxed">
               Share your completed SOP outline with your academic and professional referees at least 3 weeks before application deadlines so their recommendation letters corroborate your stated trajectory.
             </p>
           </div>
 
-          <div className="space-y-2 p-4 rounded-2xl bg-slate-50 border border-slate-100">
-            <span className="font-bold text-slate-900 block">Submission Timing</span>
+          <div className="space-y-2 p-4 rounded-[6px] bg-slate-50 border border-slate-100">
+            <span className="font-bold text-[#0B1026] block">Submission Timing</span>
             <p className="leading-relaxed">
               Submit at least 7–10 days before the official deadline. European portals (e.g. uni-assist, PAC, TUMonline) experience heavy traffic surges in the final 48 hours, which can delay document verification.
             </p>

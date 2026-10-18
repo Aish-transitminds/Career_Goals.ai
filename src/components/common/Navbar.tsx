@@ -10,17 +10,17 @@ import { useAuth } from '../../context/AuthContext';
 import { useNotifications } from '../../hooks/useNotifications';
 import { DeleteDataModal } from './DeleteDataModal';
 import {
-  Compass,
   Menu,
   X,
   User as UserIcon,
   LogOut,
   Trash2,
-  ShieldCheck,
   Bell,
   CheckCheck,
   Clock,
   ArrowRight,
+  Search,
+  GraduationCap,
 } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
@@ -34,7 +34,9 @@ export const Navbar: React.FC = () => {
   const [notifDropdownOpen, setNotifDropdownOpen] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
+  // Exact 4 navigation tabs requested: Matches, Country Guides, Application Tracker, Statement Requirements & Planner
   const navLinks = [
     { name: 'Matches', path: '/matches' },
     { name: 'Country Guides', path: '/countries' },
@@ -44,7 +46,19 @@ export const Navbar: React.FC = () => {
 
   const isActive = (path: string) => {
     if (path === '/matches') return location.pathname === '/matches';
-    return location.pathname.startsWith(path);
+    if (path === '/countries') return location.pathname.startsWith('/countries');
+    if (path === '/tracker') return location.pathname.startsWith('/tracker');
+    if (path === '/letter-helper') return location.pathname.startsWith('/letter-helper');
+    return location.pathname === path;
+  };
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/matches?q=${encodeURIComponent(searchQuery.trim())}`);
+    } else {
+      navigate('/matches');
+    }
   };
 
   const handleDeleteData = async () => {
@@ -62,52 +76,59 @@ export const Navbar: React.FC = () => {
 
   return (
     <>
-      <nav className="bg-white border-b border-slate-200 sticky top-0 z-40">
+      {/* Unified Sticky Forest Nav (#0B1E17): Logo, Exact 4 Tabs, Search, Notifications, Profile */}
+      <nav className="bg-[#0b1e17]/95 backdrop-blur-md text-white sticky top-0 z-40 shadow-md font-sans border-b border-[#164e3b]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            {/* Left: Brand / Logo */}
-            <div className="flex items-center">
-              <Link to={user ? '/matches' : '/'} className="flex items-center space-x-3">
-                <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-sm">
-                  <Compass className="w-6 h-6" />
-                </div>
-                <div>
-                  <span className="text-lg font-bold text-slate-900 tracking-tight flex items-center gap-1.5">
-                    Career<span className="text-indigo-600">Goals</span>
-                  </span>
-                  <span className="block text-xs font-medium text-slate-500 -mt-1">
-                    Study Abroad Guide
-                  </span>
-                </div>
-              </Link>
-
-              {/* Verified Badge */}
-              <div className="hidden lg:flex items-center ml-4 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
-                <ShieldCheck className="w-3.5 h-3.5 mr-1" />
-                Verified Data Only
+          <div className="flex justify-between items-center h-16 gap-4">
+            {/* Logo on Left */}
+            <Link to="/" className="flex items-center space-x-2.5 shrink-0 group mr-2 lg:mr-4">
+              <div className="w-9 h-9 rounded-[6px] bg-[#deb062] flex items-center justify-center text-[#0b1e17] font-bold shadow-xs group-hover:scale-105 transition-transform">
+                <GraduationCap className="w-5 h-5 text-[#0b1e17]" />
               </div>
-            </div>
+              <div className="hidden sm:flex flex-col">
+                <span className="text-base font-bold text-white tracking-tight leading-tight flex items-center">
+                  Career<span className="text-[#deb062]">Goals</span>
+                </span>
+                <span className="text-[10px] text-slate-300 font-medium leading-none -mt-0.5">
+                  Study Abroad Guide
+                </span>
+              </div>
+            </Link>
 
-            {/* Desktop Navigation Links */}
-            <div className="hidden md:flex md:items-center md:space-x-1 lg:space-x-4">
-              {user &&
-                navLinks.map((link) => (
+            {/* Desktop Navigation Links (Gold text + 2px gold underline for active state) */}
+            <div className="hidden xl:flex items-center space-x-1 shrink-0">
+              {navLinks.map((link) => {
+                const active = isActive(link.path);
+                return (
                   <Link
-                    key={link.path}
+                    key={link.name}
                     to={link.path}
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                      isActive(link.path)
-                        ? 'text-indigo-600 bg-indigo-50 font-semibold'
-                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                    className={`px-2 2xl:px-3 py-2 text-xs 2xl:text-sm font-medium tracking-normal transition-all duration-150 flex items-center whitespace-nowrap border-b-2 shrink-0 ${
+                      active
+                        ? 'text-[#deb062] font-semibold border-[#deb062]'
+                        : 'text-slate-200 hover:text-white border-transparent hover:border-white/20'
                     }`}
                   >
                     {link.name}
                   </Link>
-                ))}
+                );
+              })}
             </div>
 
-            {/* Right: Notifications, Auth & Profile */}
-            <div className="hidden md:flex md:items-center md:space-x-3">
+            {/* Right: Rounded Search Pill + Auth & Notifications */}
+            <div className="hidden xl:flex items-center space-x-2 2xl:space-x-3 shrink-0">
+              {/* Rounded search pill */}
+              <form onSubmit={handleSearchSubmit} className="relative">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search universities..."
+                  className="w-28 2xl:w-40 bg-white/10 text-white placeholder-slate-300 text-xs rounded-full pl-8 pr-3 py-1.5 border border-white/20 focus:outline-none focus:border-[#deb062] transition-all"
+                />
+                <Search className="w-3.5 h-3.5 text-slate-300 absolute left-2.5 top-2.5 pointer-events-none" />
+              </form>
+
               {user ? (
                 <>
                   {/* Notification Bell & Dropdown */}
@@ -117,13 +138,13 @@ export const Navbar: React.FC = () => {
                         setNotifDropdownOpen(!notifDropdownOpen);
                         setUserDropdownOpen(false);
                       }}
-                      className="relative p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-colors focus:outline-none"
+                      className="relative p-2 text-slate-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors focus:outline-none"
                       title="Milestone Reminders"
                       aria-label="Milestone Reminders"
                     >
-                      <Bell className="w-5 h-5" />
+                      <Bell className="w-4 h-4" />
                       {unreadCount > 0 && (
-                        <span className="absolute top-1 right-1 flex items-center justify-center min-w-[18px] h-[18px] px-1 text-[10px] font-bold text-white bg-rose-500 rounded-full border-2 border-white">
+                        <span className="absolute top-1 right-1 flex items-center justify-center min-w-[16px] h-[16px] px-0.5 text-[9px] font-bold text-[#0b1e17] bg-[#deb062] rounded-full border border-[#0b1e17]">
                           {unreadCount > 9 ? '9+' : unreadCount}
                         </span>
                       )}
@@ -139,7 +160,7 @@ export const Navbar: React.FC = () => {
                           <div className="flex items-center gap-1.5">
                             <span className="text-xs font-bold text-slate-900">Milestone Reminders</span>
                             {unreadCount > 0 && (
-                              <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800">
+                              <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-[#ecfdf3] text-[#027a48]">
                                 {unreadCount} new
                               </span>
                             )}
@@ -147,7 +168,7 @@ export const Navbar: React.FC = () => {
                           {unreadCount > 0 && (
                             <button
                               onClick={markAllAsRead}
-                              className="text-[11px] font-semibold text-indigo-600 hover:text-indigo-800 flex items-center gap-1"
+                              className="text-[11px] font-semibold text-[#deb062] hover:text-[#c99b4d] flex items-center gap-1"
                             >
                               <CheckCheck className="w-3.5 h-3.5" />
                               <span>Mark all read</span>
@@ -168,13 +189,13 @@ export const Navbar: React.FC = () => {
                                 key={n.id}
                                 onClick={() => markAsRead(n.id)}
                                 className={`p-3.5 text-xs transition-colors cursor-pointer ${
-                                  !n.read ? 'bg-indigo-50/50 hover:bg-indigo-50' : 'hover:bg-slate-50'
+                                  !n.read ? 'bg-amber-50/50 hover:bg-amber-50' : 'hover:bg-slate-50'
                                 }`}
                               >
                                 <div className="flex items-start justify-between gap-2">
                                   <div className="flex items-center gap-1.5">
                                     {!n.read && (
-                                      <span className="w-2 h-2 rounded-full bg-indigo-600 shrink-0" />
+                                      <span className="w-2 h-2 rounded-full bg-[#deb062] shrink-0" />
                                     )}
                                     <span className="font-bold text-slate-900">
                                       Day +{n.dayInterval || 1} Follow-Up
@@ -194,7 +215,7 @@ export const Navbar: React.FC = () => {
                           <Link
                             to="/tracker"
                             onClick={() => setNotifDropdownOpen(false)}
-                            className="text-xs font-bold text-indigo-600 hover:text-indigo-800 inline-flex items-center gap-1"
+                            className="text-xs font-bold text-[#0b1e17] hover:text-[#164e3b] inline-flex items-center gap-1"
                           >
                             <span>Open Application Tracker</span>
                             <ArrowRight className="w-3 h-3" />
@@ -211,23 +232,24 @@ export const Navbar: React.FC = () => {
                         setUserDropdownOpen(!userDropdownOpen);
                         setNotifDropdownOpen(false);
                       }}
-                      className="flex items-center space-x-2 text-sm focus:outline-none p-1.5 rounded-lg hover:bg-slate-100 transition-colors"
+                      className="flex items-center space-x-2 text-sm focus:outline-none p-1.5 rounded-lg hover:bg-white/10 transition-colors"
                     >
                       {user.photoURL ? (
                         <img
                           src={user.photoURL}
                           alt={user.displayName || 'User'}
-                          className="w-8 h-8 rounded-full border border-slate-200"
+                          className="w-8 h-8 rounded-full border border-white/20 object-cover shrink-0"
                         />
                       ) : (
-                        <div className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-xs">
+                        <div className="w-8 h-8 rounded-full bg-[#deb062] text-[#0b1e17] flex items-center justify-center font-bold text-xs shrink-0">
                           {(user.displayName || 'U').charAt(0).toUpperCase()}
                         </div>
                       )}
-                      <span className="font-medium text-slate-700 max-w-[140px] truncate">
+                      <span className="font-medium text-white max-w-[100px] 2xl:max-w-none truncate">
                         {user.displayName || 'Student'}
                       </span>
                     </button>
+
 
                     {/* Profile Dropdown Menu */}
                     {userDropdownOpen && (
@@ -294,13 +316,13 @@ export const Navbar: React.FC = () => {
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={() => signInWithMock('standard')}
-                    className="text-xs font-medium text-slate-600 hover:text-indigo-600 px-3 py-2 rounded-md hover:bg-slate-50 transition-colors"
+                    className="text-xs font-semibold text-slate-200 hover:text-[#deb062] px-3 py-2 rounded-[6px] hover:bg-white/10 transition-colors"
                   >
                     Demo Student Login
                   </button>
                   <button
                     onClick={signInWithGoogle}
-                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    className="inline-flex items-center px-4 py-2 border border-white/20 text-xs font-semibold rounded-[6px] shadow-sm text-white bg-white/10 hover:bg-white/15 transition-colors focus:ring-2 focus:ring-[#deb062]"
                   >
                     Sign In with Google
                   </button>
@@ -309,16 +331,16 @@ export const Navbar: React.FC = () => {
             </div>
 
             {/* Mobile Hamburger Toggle */}
-            <div className="flex items-center md:hidden">
+            <div className="flex items-center xl:hidden">
               {user && (
                 <Link
                   to="/tracker"
-                  className="relative p-2 text-slate-600 mr-1"
+                  className="relative p-2 text-slate-300 hover:text-white mr-1"
                   aria-label="View notifications in Tracker"
                 >
                   <Bell className="w-5 h-5" />
                   {unreadCount > 0 && (
-                    <span className="absolute top-1 right-1 flex items-center justify-center min-w-[16px] h-[16px] px-0.5 text-[9px] font-bold text-white bg-rose-500 rounded-full">
+                    <span className="absolute top-1 right-1 flex items-center justify-center min-w-[16px] h-[16px] px-0.5 text-[9px] font-bold text-[#0b1e17] bg-[#deb062] rounded-full">
                       {unreadCount}
                     </span>
                   )}
@@ -326,7 +348,8 @@ export const Navbar: React.FC = () => {
               )}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="inline-flex items-center justify-center p-2 rounded-md text-slate-600 hover:text-slate-900 hover:bg-slate-100 focus:outline-none"
+                className="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-[#deb062] hover:bg-white/10 focus:outline-none"
+                aria-label="Toggle navigation menu"
               >
                 {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </button>
@@ -336,14 +359,26 @@ export const Navbar: React.FC = () => {
 
         {/* Mobile Navigation Drawer */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-slate-200 bg-white px-2 pt-2 pb-3 space-y-1">
+          <div className="xl:hidden border-t border-[#164e3b] bg-[#0b1e17] px-3 pt-3 pb-4 space-y-1">
+            {/* Search bar in mobile drawer */}
+            <form onSubmit={handleSearchSubmit} className="relative mb-3">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search universities..."
+                className="w-full bg-white/10 text-white placeholder-slate-300 text-xs rounded-full pl-8 pr-3 py-2 border border-white/20 focus:outline-none focus:border-[#deb062]"
+              />
+              <Search className="w-3.5 h-3.5 text-slate-300 absolute left-2.5 top-2.5 pointer-events-none" />
+            </form>
+
             {user ? (
               <>
-                <div className="px-3 py-2 border-b border-slate-100 mb-2">
-                  <p className="text-sm font-semibold text-slate-800">{user.displayName || 'Student'}</p>
-                  <p className="text-xs text-slate-500 truncate">{user.email}</p>
+                <div className="px-3 py-2 border-b border-[#164e3b] mb-2">
+                  <p className="text-sm font-semibold text-white">{user.displayName || 'Student'}</p>
+                  <p className="text-xs text-slate-300 truncate">{user.email}</p>
                   {isMockAuth && (
-                    <span className="inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] bg-amber-100 text-amber-800 font-semibold">
+                    <span className="inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] bg-amber-500/20 text-amber-300 font-semibold border border-amber-500/30">
                       Mock Mode
                     </span>
                   )}
@@ -353,10 +388,10 @@ export const Navbar: React.FC = () => {
                     key={link.path}
                     to={link.path}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`block px-3 py-2 rounded-md text-base font-medium ${
+                    className={`block px-3 py-2 rounded-md text-sm font-semibold ${
                       isActive(link.path)
-                        ? 'text-indigo-600 bg-indigo-50 font-bold'
-                        : 'text-slate-700 hover:bg-slate-50'
+                        ? 'text-[#deb062] bg-[#164e3b] font-bold'
+                        : 'text-slate-200 hover:text-[#deb062] hover:bg-white/10'
                     }`}
                   >
                     {link.name}
@@ -365,16 +400,16 @@ export const Navbar: React.FC = () => {
                 <Link
                   to="/onboarding"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-50"
+                  className="block px-3 py-2 rounded-md text-sm font-semibold text-slate-200 hover:bg-white/10"
                 >
-                  Edit Profile & Scores
+                  Edit Profile &amp; Scores
                 </Link>
                 <button
                   onClick={() => {
                     setMobileMenuOpen(false);
                     setShowDeleteModal(true);
                   }}
-                  className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-rose-600 hover:bg-rose-50"
+                  className="block w-full text-left px-3 py-2 rounded-md text-sm font-semibold text-rose-400 hover:bg-white/10"
                 >
                   Delete My Data
                 </button>
@@ -383,19 +418,33 @@ export const Navbar: React.FC = () => {
                     setMobileMenuOpen(false);
                     signOutUser();
                   }}
-                  className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-50"
+                  className="block w-full text-left px-3 py-2 rounded-md text-sm font-semibold text-slate-300 hover:bg-white/10"
                 >
                   Sign Out
                 </button>
               </>
             ) : (
               <div className="p-2 space-y-2">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.path}
+                    to={link.path}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`block px-3 py-2 rounded-md text-sm font-semibold ${
+                      isActive(link.path)
+                        ? 'text-[#deb062] bg-[#164e3b] font-bold'
+                        : 'text-slate-200 hover:text-[#deb062] hover:bg-white/10'
+                    }`}
+                  >
+                    {link.name}
+                  </Link>
+                ))}
                 <button
                   onClick={() => {
                     setMobileMenuOpen(false);
                     signInWithGoogle();
                   }}
-                  className="w-full flex justify-center items-center px-4 py-2.5 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+                  className="w-full flex justify-center items-center px-4 py-2.5 rounded-[6px] text-xs font-semibold text-white bg-white/10 hover:bg-white/15 border border-white/20"
                 >
                   Sign In with Google
                 </button>
@@ -404,14 +453,15 @@ export const Navbar: React.FC = () => {
                     setMobileMenuOpen(false);
                     signInWithMock('standard');
                   }}
-                  className="w-full flex justify-center items-center px-4 py-2 rounded-lg text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200"
+                  className="w-full flex justify-center items-center px-4 py-2 rounded-[6px] text-xs font-semibold text-[#0b1e17] bg-[#deb062] hover:bg-[#c99b4d]"
                 >
-                  Demo Student Mock Sign-In
+                  Get started (Demo)
                 </button>
               </div>
             )}
           </div>
         )}
+
       </nav>
 
       {/* R4 "Delete My Data" Confirmation Modal */}

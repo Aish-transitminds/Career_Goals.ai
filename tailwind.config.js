@@ -7,6 +7,12 @@ export default {
   theme: {
     extend: {
       colors: {
+        fox: {
+          orange: '#FF5E00',
+          'orange-hover': '#E65400',
+          navy: '#0B1026',
+          'navy-2': '#151B3A',
+        },
         brand: {
           50: '#f0fdf4',
           100: '#dcfce7',
@@ -20,9 +26,10 @@ export default {
           900: '#052e16',
         },
         navy: {
-          800: '#1e293b',
-          900: '#0f172a',
-          950: '#020617',
+          DEFAULT: '#0B1026',
+          800: '#151B3A',
+          900: '#0B1026',
+          950: '#050814',
         },
         fit: {
           strong: '#059669',    // Emerald-600
@@ -37,16 +44,15 @@ export default {
       },
       fontFamily: {
         sans: [
+          'Poppins',
           'Inter',
           '-apple-system',
           'BlinkMacSystemFont',
           'Segoe UI',
           'Roboto',
-          'Oxygen',
-          'Ubuntu',
-          'Cantarell',
           'sans-serif',
         ],
+        poppins: ['Poppins', 'sans-serif'],
       },
       boxShadow: {
         'subtle': '0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03)',

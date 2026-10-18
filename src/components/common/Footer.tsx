@@ -9,38 +9,51 @@ import { ShieldCheck, Lock } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="bg-white border-t border-slate-200 mt-auto py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-500">
+    <footer id="contact" className="bg-[#050505] text-white border-t border-[#164e3b]/50 mt-auto py-10 font-sans">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-xs text-slate-300">
           <div>
-            <p className="font-semibold text-slate-700 flex items-center gap-1.5 mb-1.5">
-              <ShieldCheck className="w-4 h-4 text-emerald-600" />
-              Data Integrity & Official Verification Policy
-            </p>
-            <p className="leading-relaxed">
-              CareerGoals provides structured guidance derived exclusively from official
-              university websites and government education portals. Criteria not explicitly stated by official
-              sources are recorded as <em>not confirmed</em> and excluded from scoring. Always verify
-              deadlines, fees, and requirements directly on the official university portal before submitting.
+            <div className="flex items-center space-x-2.5 mb-3">
+              <div className="w-8 h-8 rounded-lg bg-[#deb062] flex items-center justify-center text-[#0b1e17] font-bold">
+                CG
+              </div>
+              <span className="text-base font-bold text-white tracking-tight">
+                Career<span className="text-[#deb062]">Goals</span>
+              </span>
+            </div>
+            <p className="leading-relaxed text-slate-400">
+              Verified study abroad admissions guidance derived exclusively from official university admissions portals in Germany, Ireland, and the United Kingdom.
             </p>
           </div>
+
           <div>
-            <p className="font-semibold text-slate-700 flex items-center gap-1.5 mb-1.5">
-              <Lock className="w-4 h-4 text-indigo-600" />
-              Privacy & Zero-Data-Leak Pledge (R4 Compliant)
+            <p className="font-semibold text-white flex items-center gap-1.5 mb-2 text-sm">
+              <ShieldCheck className="w-4 h-4 text-[#deb062]" />
+              Data Integrity Policy
             </p>
-            <p className="leading-relaxed">
-              No student personal data (names, contact details, or exact test scores) is ever transmitted to any
-              third-party LLM. Only public catalog facts and anonymous queries are analyzed. Built with 100% free
-              and open verification pipelines.
+            <p className="leading-relaxed text-slate-400">
+              Criteria not explicitly confirmed by university authorities are excluded from fit scoring. Always verify deadlines, fees, and requirements directly on the institution's official portal.
+            </p>
+          </div>
+
+          <div>
+            <p className="font-semibold text-white flex items-center gap-1.5 mb-2 text-sm">
+              <Lock className="w-4 h-4 text-[#deb062]" />
+              Admissions Support &amp; Privacy
+            </p>
+            <p className="leading-relaxed text-slate-400 mb-2">
+              Official admissions guidance powered by verified institution requirements. Direct portal verification for all deadlines and criteria.
+            </p>
+            <p className="text-[11px] text-slate-400">
+              Your profile data is kept strictly private and never shared.
             </p>
           </div>
         </div>
 
-        <div className="border-t border-slate-100 pt-4 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-400 gap-2">
-          <p>© 2026 CareerGoals — Study Abroad Guide</p>
-          <p className="flex items-center gap-1">
-            Engineered with verified official data for global students
+        <div className="border-t border-[#151B3A] pt-4 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-400 gap-2">
+          <p>© 2026 CareerGoals | Study Abroad Guide. All rights reserved.</p>
+          <p className="flex items-center gap-1 text-slate-400">
+            Official admissions criteria &bull; Live change detection
           </p>
         </div>
       </div>

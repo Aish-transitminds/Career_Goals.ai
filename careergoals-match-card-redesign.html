@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CareerGoals | Study Abroad Guide - University Matches</title>
+  
+  <!-- Google Font: Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ==========================================================================
+       DESIGN SYSTEM - FOX UNIVERSITY PALETTE & TYPOGRAPHY
+       ========================================================================== */
+    :root {
+      --color-navy: #0B1026;
+      --color-navy-2: #151B3A;
+      --color-orange: #FF5E00;
+      --color-orange-hover: #E65400;
+      --color-bg: #F8FAFC;
+      --color-card-bg: #FFFFFF;
+      --color-hairline: #E6E8F0;
+      --color-text-main: #0B1026;
+      --color-text-muted: #64748B;
+      --color-text-subtle: #94A3B8;
+      --color-green-met: #047857;
+      --color-green-bg: #ECFDF5;
+      --color-amber-gap: #B45309;
+      --radius-card: 12px;
+      --radius-btn: 6px;
+      --font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: var(--color-bg);
+      color: var(--color-text-main);
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--color-orange) !important;
+      outline-offset: 2px !important;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* ==========================================================================
+       STICKY NAVBAR WITH UNIFIED LOGO & 4 EXACT TABS
+       ========================================================================== */
+    .nav-bar {
+      background: var(--color-navy);
+      border-bottom: 1px solid var(--color-navy-2);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(11, 16, 38, 0.08);
+    }
+
+    .nav-bar-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 64px;
+      padding: 0 24px;
+      gap: 16px;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--color-orange);
+      color: var(--color-navy);
+      border-radius: var(--radius-btn);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .logo-text-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #FFFFFF;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+
+    .logo-text-title span {
+      color: var(--color-orange);
+    }
+
+    .logo-text-sub {
+      font-size: 10px;
+      color: var(--color-text-subtle);
+      font-weight: 500;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 8px;
+      flex: 1;
+      margin-left: 12px;
+    }
+
+    .nav-link {
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #CBD5E1;
+      text-decoration: none;
+      border-radius: var(--radius-btn);
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .nav-link:hover {
+      color: #FFFFFF;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-link.active {
+      background: var(--color-navy-2);
+      color: var(--color-orange);
+      font-weight: 600;
+      border: 1px solid rgba(255, 94, 0, 0.3);
+    }
+
+    .nav-right-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-search-input {
+      background: var(--color-navy-2);
+      border: 1px solid #334155;
+      color: #FFFFFF;
+      font-size: 12px;
+      padding: 6px 14px;
+      border-radius: var(--radius-btn);
+      outline: none;
+      width: 200px;
+    }
+
+    .nav-search-input:focus {
+      border-color: var(--color-orange);
+    }
+
+    /* ==========================================================================
+       MAIN CONTAINER & TOOLBAR
+       ========================================================================== */
+    .main-container {
+      max-width: 1200px;
+      margin: 28px auto;
+      padding: 0 24px;
+    }
+
+    .page-header {
+      margin-bottom: 20px;
+    }
+
+    .page-title {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--color-navy);
+      letter-spacing: -0.01em;
+    }
+
+    .page-subtext {
+      font-size: 14px;
+      color: var(--color-text-muted);
+      margin-top: 4px;
+    }
+
+    .toolbar-container {
+      background: #FFFFFF;
+      border: 1px solid var(--color-hairline);
+      border-radius: var(--radius-btn);
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .toolbar-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--color-text-muted);
+    }
+
+    .btn-toggle-group {
+      display: inline-flex;
+      border: 1px solid var(--color-hairline);
+      border-radius: var(--radius-btn);
+      background: #FFFFFF;
+      overflow: hidden;
+    }
+
+    .btn-toggle {
+      border: none;
+      background: transparent;
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      cursor: pointer;
+      font-family: var(--font-family);
+      transition: all 0.15s ease;
+    }
+
+    .btn-toggle:hover {
+      color: var(--color-navy);
+      background: #F1F5F9;
+    }
+
+    .btn-toggle.active {
+      background: var(--color-navy);
+      color: #FFFFFF;
+      font-weight: 600;
+    }
+
+    /* ==========================================================================
+       REDESIGNED MATCH CARD (3-COLUMN FIXED GRID)
+       ========================================================================== */
+    .cards-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .match-card {
+      background: var(--color-card-bg);
+      border: 1px solid var(--color-hairline);
+      border-radius: var(--radius-card);
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .match-card:hover {
+      border-color: #CBD5E1;
+      box-shadow: 0 4px 12px rgba(11, 16, 38, 0.05);
+    }
+
+    .match-card.is-applied {
+      border-color: #A7F3D0;
+      background: #FAFCFB;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: 30% 44% 26%;
+      gap: 24px;
+      align-items: center;
+    }
+
+    /* Column 1: Identity */
+    .col-identity {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .univ-name {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--color-navy);
+      line-height: 1.3;
+    }
+
+    .univ-program {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--color-text-muted);
+    }
+
+    .univ-verified {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--color-text-subtle);
+      font-weight: 400;
+      margin-top: 6px;
+    }
+
+    .univ-verified svg {
+      width: 14px;
+      height: 14px;
+      stroke: var(--color-text-subtle);
+      flex-shrink: 0;
+    }
+
+    /* Column 2: Facts */
+    .col-facts {
+      border-left: 1px solid var(--color-hairline);
+      padding-left: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .facts-subgrid {
+      display: grid;
+      grid-template-columns: 1.3fr 1.1fr 1fr 0.8fr;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .fact-item {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .fact-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-text-subtle);
+    }
+
+    .fact-value-bold {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-navy);
+      margin-top: 2px;
+      white-space: nowrap;
+    }
+
+    .fact-value-sub {
+      font-size: 12px;
+      color: var(--color-text-muted);
+      font-weight: 400;
+      line-height: 1.25;
+      margin-top: 2px;
+    }
+
+    .status-met {
+      color: var(--color-green-met);
+      font-weight: 600;
+    }
+
+    .status-gap {
+      color: var(--color-amber-gap);
+      font-weight: 600;
+    }
+
+    .fact-extra-line {
+      font-size: 12px;
+      color: var(--color-text-muted);
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .fact-extra-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--color-text-subtle);
+    }
+
+    /* Column 3: Actions (Balanced & Right-Aligned) */
+    .col-actions {
+      border-left: 1px solid var(--color-hairline);
+      padding-left: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 12px;
+      text-align: right;
+    }
+
+    .fit-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--color-navy);
+      background: transparent;
+      border: none;
+      padding: 0;
+    }
+
+    .fit-badge-strong {
+      font-weight: 600;
+    }
+
+    .fit-reason-text {
+      color: var(--color-text-muted);
+    }
+
+    .btn-primary-action {
+      background: var(--color-orange);
+      color: var(--color-navy);
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: var(--radius-btn);
+      padding: 10px 18px;
+      border: none;
+      cursor: pointer;
+      font-family: var(--font-family);
+      text-align: center;
+      transition: background 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .btn-primary-action:hover {
+      background: var(--color-orange-hover);
+    }
+
+    .actions-subrow {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 16px;
+      width: 100%;
+    }
+
+    .link-official-site {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.15s ease;
+    }
+
+    .link-official-site:hover {
+      color: var(--color-navy);
+    }
+
+    .applied-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      font-family: var(--font-family);
+      color: var(--color-text-muted);
+    }
+
+    .applied-toggle.is-active {
+      color: var(--color-green-met);
+      font-weight: 600;
+      cursor: default;
+    }
+
+    .custom-check-box {
+      width: 14px;
+      height: 14px;
+      border: 1px solid #CBD5E1;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #FFFFFF;
+      transition: all 0.15s ease;
+    }
+
+    .applied-toggle.is-active .custom-check-box {
+      background: var(--color-green-met);
+      border-color: var(--color-green-met);
+      color: #FFFFFF;
+    }
+
+    /* ==========================================================================
+       RESPONSIVE BREAKPOINTS
+       ========================================================================== */
+    @media (max-width: 900px) {
+      .card-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .col-actions {
+        grid-column: span 2;
+        border-left: none;
+        border-top: 1px solid var(--color-hairline);
+        padding-left: 0;
+        padding-top: 16px;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .actions-subrow {
+        width: auto;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+      .col-facts {
+        border-left: none;
+        padding-left: 0;
+        border-top: 1px solid var(--color-hairline);
+        padding-top: 16px;
+      }
+      .facts-subgrid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .col-actions {
+        grid-column: span 1;
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .btn-primary-action {
+        width: 100%;
+      }
+      .actions-subrow {
+        justify-content: space-between;
+        width: 100%;
+      }
+      .nav-links {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sticky Navy Navigation Bar with Integrated Logo & Exact 4 Tabs -->
+  <nav class="nav-bar">
+    <div class="nav-bar-inner">
+      <a href="#" class="logo-container">
+        <div class="logo-icon">🎓</div>
+        <div>
+          <div class="logo-text-title">Career<span>Goals</span></div>
+          <div class="logo-text-sub">Study Abroad Guide</div>
+        </div>
+      </a>
+
+      <div class="nav-links">
+        <a href="#matches" class="nav-link active">Matches</a>
+        <a href="#countries" class="nav-link">Country Guides</a>
+        <a href="#tracker" class="nav-link">Application Tracker</a>
+        <a href="#planner" class="nav-link">Statement Requirements &amp; Planner</a>
+      </div>
+
+      <div class="nav-right-area">
+        <input type="text" class="nav-search-input" placeholder="Search universities..." oninput="handleSearch(this.value)" />
+        <div style="display: flex; align-items: center; gap: 8px; margin-left: 8px;">
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: #FF5E00; color: #0B1026; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; flex-shrink: 0;">A</div>
+          <span style="color: #FFFFFF; font-size: 13px; font-weight: 500; white-space: nowrap;">Anirudh M</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <main class="main-container">
+    <div class="page-header">
+      <h1 class="page-title">Verified University Matches</h1>
+      <p class="page-subtext">Ranked by deterministic score calculation against verified admission criteria.</p>
+    </div>
+
+    <!-- Toolbar: Sort Controls & View Mode Toggle -->
+    <div class="toolbar-container">
+      <div class="toolbar-group">
+        <span>Sort by:</span>
+        <div class="btn-toggle-group">
+          <button class="btn-toggle active" id="sort-fit" onclick="setSort('fit')">Fit</button>
+          <button class="btn-toggle" id="sort-deadline" onclick="setSort('deadline')">Deadline</button>
+          <button class="btn-toggle" id="sort-tuition" onclick="setSort('tuition')">Tuition</button>
+        </div>
+      </div>
+
+      <div class="toolbar-group">
+        <span id="counter-text">Showing 5 institutions</span>
+        <div class="btn-toggle-group">
+          <button class="btn-toggle active" id="view-cards" onclick="setView('cards')">⊞ Cards</button>
+          <button class="btn-toggle" id="view-table" onclick="setView('table')">☰ Table</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Container for Cards View -->
+    <div id="cardsViewContainer" class="cards-stack"></div>
+
+    <!-- Container for Table View -->
+    <div id="tableViewContainer" style="display: none; background: #fff; border: 1px solid var(--color-hairline); border-radius: 12px; overflow-x: auto;">
+      <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 13px;">
+        <thead>
+          <tr style="background: #F8FAFC; border-bottom: 1px solid var(--color-hairline); font-size: 11px; text-transform: uppercase; color: var(--color-text-subtle);">
+            <th style="padding: 12px 16px;">University &amp; Program</th>
+            <th style="padding: 12px 16px;">Tuition</th>
+            <th style="padding: 12px 16px;">Deadline</th>
+            <th style="padding: 12px 16px;">IELTS</th>
+            <th style="padding: 12px 16px;">Fit Reason</th>
+            <th style="padding: 12px 16px; text-align: right;">Action</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <script>
+    const studentProfile = {
+      name: "Student",
+      exams: { ielts: 7.0 }
+    };
+
+    let universities = [
+      {
+        id: "ucd_cs",
+        name: "University College Dublin (UCD)",
+        country: "Ireland",
+        program: "M.Sc. Computer Science (Negotiated Learning)",
+        verifiedDate: "15 Oct 2026",
+        tuitionMain: "\u20B926.55 L/yr",
+        tuitionSub: "€29,100 non-EU",
+        tuitionNumeric: 29100,
+        deadlineMain: "Jul 1",
+        deadlineSub: "Rolling",
+        ieltsReq: 6.5,
+        toeflReq: "Min 90",
+        greGmatLine: "GRE/GMAT: not required or unconfirmed",
+        fitCategory: "Strong fit",
+        fitReason: "Meets IELTS, within budget",
+        portalUrl: "https://www.ucd.ie/apply/",
+        isApplied: false
+      },
+      {
+        id: "tcd_cs",
+        name: "Trinity College Dublin (TCD)",
+        country: "Ireland",
+        program: "M.Sc. Computer Science (Intelligent Systems)",
+        verifiedDate: "15 Oct 2026",
+        tuitionMain: "\u20B925.09 L/yr",
+        tuitionSub: "€27,500 non-EU",
+        tuitionNumeric: 27500,
+        deadlineMain: "Jun 30",
+        deadlineSub: "Rolling",
+        ieltsReq: 6.5,
+        toeflReq: "Min 88",
+        greGmatLine: "GRE/GMAT: not required or unconfirmed",
+        fitCategory: "Strong fit",
+        fitReason: "Meets IELTS, within budget",
+        portalUrl: "https://my.tcd.ie/",
+        isApplied: false
+      },
+      {
+        id: "tum_informatics",
+        name: "Technical University of Munich (TUM)",
+        country: "Germany",
+        program: "M.Sc. Informatics",
+        verifiedDate: "15 Oct 2026",
+        tuitionMain: "\u20B910.95 L/yr",
+        tuitionSub: "€6,000 / sem non-EU",
+        tuitionNumeric: 12000,
+        deadlineMain: "May 31",
+        deadlineSub: "Winter intake",
+        ieltsReq: 6.5,
+        toeflReq: "Min 88",
+        greGmatLine: "GRE required (min 315) & GMAT evaluated",
+        fitCategory: "Possible",
+        fitReason: "Pending GRE score",
+        portalUrl: "https://campus.tum.de/",
+        isApplied: false
+      },
+      {
+        id: "rwth_cs",
+        name: "RWTH Aachen University",
+        country: "Germany",
+        program: "M.Sc. Computer Science",
+        verifiedDate: "15 Oct 2026",
+        tuitionMain: "\u20B90 / yr (Free)",
+        tuitionSub: "Tuition-free public",
+        tuitionNumeric: 0,
+        deadlineMain: "Mar 1",
+        deadlineSub: "Winter (Non-EU)",
+        ieltsReq: 6.0,
+        toeflReq: "Min 80",
+        greGmatLine: "GRE required (Quant > 75th percentile)",
+        fitCategory: "Possible",
+        fitReason: "Tuition-free, academic fit",
+        portalUrl: "https://online.rwth-aachen.de/",
+        isApplied: false
+      },
+      {
+        id: "heidelberg_dcs",
+        name: "Heidelberg University",
+        country: "Germany",
+        program: "M.Sc. Data and Computer Science",
+        verifiedDate: "15 Oct 2026",
+        tuitionMain: "\u20B92.74 L/yr",
+        tuitionSub: "€1,500 / sem non-EU",
+        tuitionNumeric: 3000,
+        deadlineMain: "Jun 15",
+        deadlineSub: "Winter intake",
+        ieltsReq: 6.5,
+        toeflReq: "Min 90",
+        greGmatLine: "GRE/GMAT: Waived or not required",
+        fitCategory: "Strong fit",
+        fitReason: "Meets IELTS, within budget",
+        portalUrl: "https://heico.uni-heidelberg.de/",
+        isApplied: false
+      }
+    ];
+
+    let currentSort = 'fit';
+    let currentView = 'cards';
+    let searchQuery = '';
+
+    function render() {
+      let filtered = universities.filter(u => {
+        if (!searchQuery) return true;
+        const q = searchQuery.toLowerCase();
+        return u.name.toLowerCase().includes(q) || u.program.toLowerCase().includes(q);
+      });
+
+      if (currentSort === 'tuition') {
+        filtered.sort((a, b) => a.tuitionNumeric - b.tuitionNumeric);
+      } else if (currentSort === 'deadline') {
+        filtered.sort((a, b) => a.deadlineMain.localeCompare(b.deadlineMain));
+      } else {
+        const rank = { "Strong fit": 3, "Possible": 2, "Reach": 1, "Prep needed": 0 };
+        filtered.sort((a, b) => (rank[b.fitCategory] || 0) - (rank[a.fitCategory] || 0));
+      }
+
+      document.getElementById('counter-text').innerText = `Showing ${filtered.length} institutions`;
+
+      const cardsContainer = document.getElementById('cardsViewContainer');
+      cardsContainer.innerHTML = filtered.map(u => {
+        let ieltsHtml = studentProfile.exams.ielts >= u.ieltsReq
+          ? `<span class="status-met">✓ You meet ${u.ieltsReq}</span>`
+          : `<span class="status-gap">Needs ${u.ieltsReq}</span>`;
+
+        let fitHtml = u.fitCategory === 'Strong fit' || u.fitCategory === 'Possible'
+          ? `<div class="fit-badge"><span class="fit-badge-strong">${u.fitCategory}</span><span style="color: #94A3B8;">·</span><span class="fit-reason-text">${u.fitReason}</span></div>`
+          : `<span style="font-size: 12px; color: var(--color-text-muted);">${u.fitReason}</span>`;
+
+        return `
+          <div class="match-card ${u.isApplied ? 'is-applied' : ''}" id="card-${u.id}">
+            <div class="card-grid">
+              
+              <!-- Column 1: Identity (30%) -->
+              <div class="col-identity">
+                <h2 class="univ-name">${u.name}</h2>
+                <p class="univ-program">${u.country} · ${u.program}</p>
+                <div class="univ-verified">
+                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  </svg>
+                  <span>Verified ${u.verifiedDate}</span>
+                </div>
+              </div>
+
+              <!-- Column 2: Facts (44%) -->
+              <div class="col-facts">
+                <div class="facts-subgrid">
+                  <div class="fact-item">
+                    <span class="fact-label">Tuition</span>
+                    <span class="fact-value-bold">${u.tuitionMain}</span>
+                    <span class="fact-value-sub">${u.tuitionSub}</span>
+                  </div>
+
+                  <div class="fact-item">
+                    <span class="fact-label">Deadline</span>
+                    <span class="fact-value-bold">${u.deadlineMain}</span>
+                    <span class="fact-value-sub">${u.deadlineSub}</span>
+                  </div>
+
+                  <div class="fact-item">
+                    <span class="fact-label">IELTS</span>
+                    <span style="margin-top: 2px;">${ieltsHtml}</span>
+                  </div>
+
+                  <div class="fact-item">
+                    <span class="fact-label">TOEFL</span>
+                    <span class="fact-value-bold" style="font-weight: 500; font-size: 13px; margin-top: 2px;">${u.toeflReq}</span>
+                  </div>
+                </div>
+
+                <div class="fact-extra-line">
+                  <span class="fact-extra-dot"></span>
+                  <span>${u.greGmatLine}</span>
+                </div>
+              </div>
+
+              <!-- Column 3: Actions (26%) -->
+              <div class="col-actions">
+                <div>${fitHtml}</div>
+
+                <button class="btn-primary-action" onclick="alert('Opening Statement Requirements for ${u.name}')">
+                  Check statement requirements
+                </button>
+
+                <div class="actions-subrow">
+                  <a href="${u.portalUrl}" target="_blank" rel="noopener noreferrer" class="link-official-site">
+                    <span>Official site</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                      <polyline points="15 3 21 3 21 9"></polyline>
+                      <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                  </a>
+
+                  <button class="applied-toggle ${u.isApplied ? 'is-active' : ''}" onclick="toggleApplied('${u.id}')">
+                    <span class="custom-check-box">${u.isApplied ? '✓' : ''}</span>
+                    <span>${u.isApplied ? 'Applied ✓' : 'I have applied'}</span>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const tableBody = document.getElementById('tableBody');
+      tableBody.innerHTML = filtered.map(u => `
+        <tr style="border-bottom: 1px solid var(--color-hairline);">
+          <td style="padding: 12px 16px;">
+            <div style="font-weight: 600; color: var(--color-navy);">${u.name}</div>
+            <div style="color: var(--color-text-muted); font-size: 12px;">${u.country} · ${u.program}</div>
+          </td>
+          <td style="padding: 12px 16px;">
+            <div style="font-weight: 600; color: var(--color-navy);">${u.tuitionMain}</div>
+            <div style="font-size: 11px; color: var(--color-text-subtle);">${u.tuitionSub}</div>
+          </td>
+          <td style="padding: 12px 16px;">
+            <div style="font-weight: 600; color: var(--color-navy);">${u.deadlineMain}</div>
+            <div style="font-size: 11px; color: var(--color-text-subtle);">${u.deadlineSub}</div>
+          </td>
+          <td style="padding: 12px 16px;">
+            ${studentProfile.exams.ielts >= u.ieltsReq ? '<span class="status-met">✓ Met ' + u.ieltsReq + '</span>' : '<span class="status-gap">Needs ' + u.ieltsReq + '</span>'}
+          </td>
+          <td style="padding: 12px 16px; color: var(--color-text-muted);">${u.fitReason}</td>
+          <td style="padding: 12px 16px; text-align: right;">
+            <button class="btn-primary-action" onclick="alert('Opening Statement Requirements for ${u.name}')">
+              Check requirements
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function setSort(sortKey) {
+      currentSort = sortKey;
+      ['fit', 'deadline', 'tuition'].forEach(k => {
+        document.getElementById(`sort-${k}`).classList.toggle('active', k === sortKey);
+      });
+      render();
+    }
+
+    function setView(viewMode) {
+      currentView = viewMode;
+      document.getElementById('cardsViewContainer').style.display = viewMode === 'cards' ? 'flex' : 'none';
+      document.getElementById('tableViewContainer').style.display = viewMode === 'table' ? 'block' : 'none';
+      document.getElementById('view-cards').classList.toggle('active', viewMode === 'cards');
+      document.getElementById('view-table').classList.toggle('active', viewMode === 'table');
+    }
+
+    function handleSearch(val) {
+      searchQuery = val;
+      render();
+    }
+
+    function toggleApplied(univId) {
+      const u = universities.find(item => item.id === univId);
+      if (u) {
+        u.isApplied = !u.isApplied;
+        render();
+      }
+    }
+
+    render();
+  </script>
+</body>
+</html>

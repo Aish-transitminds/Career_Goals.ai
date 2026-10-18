@@ -1,0 +1,1905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CareerGoals | Study Abroad Guide - Fox University Design</title>
+  <meta
+    name="description"
+    content="CareerGoals guides global education with verified admission requirements, live rule-change alerts, application tracking, and rejection roadmaps."
+  />
+  <meta name="theme-color" content="#0B1026" />
+
+  <!-- Google Fonts: Poppins (400, 500, 600, 700) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    /* ==========================================================================
+       DESIGN SYSTEM: FOX UNIVERSITY THEME
+       ========================================================================== */
+    :root {
+      --fox-orange: #FF5E00;
+      --fox-orange-hover: #E65400;
+      --fox-navy: #0B1026;
+      --fox-navy-2: #151B3A;
+      --fox-white: #FFFFFF;
+      --fox-radius: 6px;
+      --fox-slate-50: #f8fafc;
+      --fox-slate-100: #f1f5f9;
+      --fox-slate-200: #e2e8f0;
+      --fox-slate-400: #94a3b8;
+      --fox-slate-600: #475569;
+      --fox-slate-800: #1e293b;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 400;
+      color: var(--fox-slate-800);
+      background-color: var(--fox-slate-50);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.6;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      line-height: 1.25;
+      color: var(--fox-navy);
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    /* Visible Focus States */
+    :focus-visible {
+      outline: 2px solid var(--fox-orange) !important;
+      outline-offset: 2px !important;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      width: 100%;
+    }
+
+    /* Orange Buttons (use navy text, 6px radius) */
+    .btn-orange {
+      background-color: var(--fox-orange);
+      color: var(--fox-navy);
+      font-weight: 600;
+      font-size: 13.5px;
+      padding: 10px 20px;
+      border-radius: var(--fox-radius);
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+      cursor: pointer;
+    }
+    .btn-orange:hover {
+      background-color: var(--fox-orange-hover);
+      box-shadow: 0 4px 12px rgba(255, 94, 0, 0.25);
+    }
+
+    /* Ghost CTA Button (Navy/Hero Context) */
+    .btn-ghost {
+      background-color: transparent;
+      color: var(--fox-white);
+      font-weight: 600;
+      font-size: 13.5px;
+      padding: 9px 20px;
+      border-radius: var(--fox-radius);
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+      cursor: pointer;
+    }
+    .btn-ghost:hover {
+      border-color: var(--fox-white);
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    /* ==========================================================================
+       1. TOP BAR
+       ========================================================================== */
+    .top-bar {
+      background-color: var(--fox-white);
+      border-bottom: 1px solid var(--fox-slate-200);
+      padding: 12px 0;
+    }
+    .top-bar-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      background-color: var(--fox-navy);
+      border-radius: var(--fox-radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--fox-orange);
+      flex-shrink: 0;
+    }
+    .brand-text h1 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--fox-navy);
+      letter-spacing: -0.5px;
+    }
+    .brand-text h1 span {
+      color: var(--fox-orange);
+    }
+    .brand-text p {
+      font-size: 11px;
+      color: var(--fox-slate-600);
+      font-weight: 500;
+      margin-top: -2px;
+    }
+
+    .top-bar-contact {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--fox-slate-600);
+    }
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.15s ease;
+    }
+    .contact-item:hover {
+      color: var(--fox-orange);
+    }
+    .contact-icon {
+      color: var(--fox-orange);
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    /* ==========================================================================
+       2. STICKY NAVY NAV
+       ========================================================================== */
+    .sticky-nav {
+      background-color: var(--fox-navy);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 4px 14px rgba(11, 16, 38, 0.35);
+      border-bottom: 1px solid var(--fox-navy-2);
+    }
+    .nav-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+      list-style: none;
+    }
+    .nav-link {
+      color: #e2e8f0;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 6px 0;
+      transition: color 0.15s ease;
+      position: relative;
+    }
+    .nav-link:hover {
+      color: var(--fox-orange);
+    }
+    .nav-link.active {
+      color: var(--fox-orange);
+    }
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 100%;
+      height: 2.5px;
+      background-color: var(--fox-orange);
+      border-radius: 2px;
+    }
+
+    /* Rounded Search Pill */
+    .search-pill-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .search-pill {
+      background-color: var(--fox-navy-2);
+      border: 1px solid #2a345e;
+      border-radius: 999px;
+      padding: 7px 14px 7px 34px;
+      font-size: 12px;
+      color: var(--fox-white);
+      outline: none;
+      width: 220px;
+      font-family: inherit;
+      transition: width 0.2s ease, border-color 0.2s ease;
+    }
+    .search-pill::placeholder {
+      color: var(--fox-slate-400);
+    }
+    .search-pill:focus {
+      border-color: var(--fox-orange);
+      width: 260px;
+    }
+    .search-pill-icon {
+      position: absolute;
+      left: 12px;
+      width: 14px;
+      height: 14px;
+      color: var(--fox-slate-400);
+      pointer-events-none;
+    }
+
+    /* Mobile Hamburger Menu */
+    .hamburger-btn {
+      display: none;
+      background: transparent;
+      border: none;
+      color: var(--fox-white);
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    .mobile-drawer {
+      display: none;
+      background-color: var(--fox-navy);
+      border-top: 1px solid var(--fox-navy-2);
+      padding: 16px 20px 20px;
+    }
+    .mobile-drawer.open {
+      display: block;
+    }
+    .mobile-nav-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .mobile-nav-link {
+      color: #e2e8f0;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 8px 12px;
+      border-radius: var(--fox-radius);
+      display: block;
+    }
+    .mobile-nav-link.active, .mobile-nav-link:hover {
+      color: var(--fox-orange);
+      background-color: var(--fox-navy-2);
+    }
+
+    /* ==========================================================================
+       3. HERO SECTION
+       ========================================================================== */
+    .hero-section {
+      background: linear-gradient(135deg, #0B1026 0%, #151B3A 55%, #1c244b 100%);
+      color: var(--fox-white);
+      padding: 64px 0 72px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 450px;
+      height: 450px;
+      background: radial-gradient(circle, rgba(255, 94, 0, 0.12) 0%, rgba(11, 16, 38, 0) 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background-color: rgba(255, 94, 0, 0.15);
+      color: var(--fox-orange);
+      border: 1px solid rgba(255, 94, 0, 0.35);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+    .hero-headline {
+      font-size: 42px;
+      font-weight: 600;
+      color: var(--fox-white);
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .hero-headline span {
+      color: var(--fox-orange);
+    }
+    .hero-subtext {
+      font-size: 15px;
+      color: #cbd5e1;
+      line-height: 1.6;
+      margin-bottom: 28px;
+      max-width: 540px;
+    }
+    .hero-ctas {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    /* Hero Right Card: "Your applications" */
+    .apps-card {
+      background-color: var(--fox-white);
+      color: var(--fox-navy);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .apps-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--fox-slate-100);
+      margin-bottom: 14px;
+    }
+    .apps-card-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--fox-navy);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--fox-orange);
+      border-radius: 50%;
+      box-shadow: 0 0 0 3px rgba(255, 94, 0, 0.2);
+    }
+    .apps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .app-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      background-color: var(--fox-slate-50);
+      border: 1px solid var(--fox-slate-200);
+      border-radius: 8px;
+      transition: transform 0.15s ease;
+    }
+    .app-item:hover {
+      transform: translateY(-1px);
+    }
+    .app-univ {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--fox-navy);
+    }
+    .app-program {
+      font-size: 11px;
+      color: var(--fox-slate-600);
+      margin-top: 1px;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    .badge-verified {
+      background-color: #dcfce7;
+      color: #15803d;
+      border: 1px solid #86efac;
+    }
+    .badge-changed {
+      background-color: #fef3c7;
+      color: #b45309;
+      border: 1px solid #fcd34d;
+    }
+    .badge-inprogress {
+      background-color: #e0e7ff;
+      color: #4338ca;
+      border: 1px solid #c7d2fe;
+    }
+
+    .apps-card-footer {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--fox-slate-100);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--fox-slate-600);
+    }
+    .apps-card-footer strong {
+      color: var(--fox-orange);
+    }
+
+    /* ==========================================================================
+       4. FOUR-BLOCK FEATURE STRIP (Alternating Orange and Navy)
+       ========================================================================== */
+    .feature-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      width: 100%;
+    }
+    .feature-block {
+      padding: 34px 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      transition: transform 0.15s ease;
+    }
+    .feature-block:hover {
+      filter: brightness(1.03);
+    }
+    .block-orange {
+      background-color: var(--fox-orange);
+      color: var(--fox-navy);
+    }
+    .block-navy {
+      background-color: var(--fox-navy);
+      color: var(--fox-white);
+    }
+    .block-navy-2 {
+      background-color: var(--fox-navy-2);
+      color: var(--fox-white);
+    }
+    .feature-icon-wrapper {
+      width: 42px;
+      height: 42px;
+      border-radius: var(--fox-radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+    .block-orange .feature-icon-wrapper {
+      background-color: rgba(11, 16, 38, 0.12);
+      color: var(--fox-navy);
+    }
+    .block-navy .feature-icon-wrapper, .block-navy-2 .feature-icon-wrapper {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: var(--fox-orange);
+    }
+    .feature-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .block-orange .feature-title {
+      color: var(--fox-navy);
+    }
+    .block-navy .feature-title, .block-navy-2 .feature-title {
+      color: var(--fox-white);
+    }
+    .feature-desc {
+      font-size: 12.5px;
+      line-height: 1.55;
+    }
+    .block-orange .feature-desc {
+      color: rgba(11, 16, 38, 0.9);
+    }
+    .block-navy .feature-desc, .block-navy-2 .feature-desc {
+      color: #cbd5e1;
+    }
+
+    /* ==========================================================================
+       5. THREE-STEP "SHORTLIST TO SUBMISSION" SECTION
+       ========================================================================== */
+    .steps-section {
+      padding: 72px 0;
+      background-color: var(--fox-white);
+    }
+    .section-header {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 48px;
+    }
+    .section-subtitle {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--fox-orange);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+      display: block;
+    }
+    .section-title {
+      font-size: 32px;
+      font-weight: 600;
+      color: var(--fox-navy);
+      margin-bottom: 12px;
+    }
+    .section-intro {
+      font-size: 14.5px;
+      color: var(--fox-slate-600);
+      line-height: 1.6;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+    .step-card {
+      background-color: var(--fox-slate-50);
+      border: 1px solid var(--fox-slate-200);
+      border-radius: 12px;
+      padding: 32px 24px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .step-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--fox-orange);
+      box-shadow: 0 10px 25px -5px rgba(255, 94, 0, 0.1);
+    }
+    .step-number-watermark {
+      position: absolute;
+      top: 12px;
+      right: 18px;
+      font-size: 64px;
+      font-weight: 800;
+      color: rgba(255, 94, 0, 0.12);
+      line-height: 1;
+      pointer-events: none;
+    }
+    .step-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--fox-radius);
+      background-color: var(--fox-navy);
+      color: var(--fox-orange);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    .step-title {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--fox-navy);
+      margin-bottom: 10px;
+    }
+    .step-text {
+      font-size: 13px;
+      color: var(--fox-slate-600);
+      line-height: 1.65;
+      margin-bottom: 18px;
+    }
+    .step-features {
+      margin-top: auto;
+      padding-top: 14px;
+      border-top: 1px solid var(--fox-slate-200);
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 11.5px;
+      color: var(--fox-slate-800);
+    }
+    .step-features li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .step-features svg {
+      color: var(--fox-orange);
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    /* ==========================================================================
+       INTERACTIVE UNIVERSITY EXPLORER & CATALOG PREVIEW
+       ========================================================================== */
+    .catalog-section {
+      padding: 60px 0;
+      background-color: var(--fox-slate-100);
+      border-top: 1px solid var(--fox-slate-200);
+    }
+    .univ-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 20px;
+      margin-top: 28px;
+    }
+    .univ-card {
+      background: var(--fox-white);
+      border: 1px solid var(--fox-slate-200);
+      border-radius: 10px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+    }
+    .univ-card:hover {
+      border-color: var(--fox-orange);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06);
+    }
+    .univ-card-top {
+      margin-bottom: 12px;
+    }
+    .univ-badge-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .univ-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--fox-navy);
+      margin-bottom: 2px;
+    }
+    .univ-prog {
+      font-size: 12px;
+      color: var(--fox-slate-600);
+    }
+    .univ-meta {
+      font-size: 11.5px;
+      color: var(--fox-slate-800);
+      margin: 12px 0;
+      padding: 10px 0;
+      border-top: 1px solid var(--fox-slate-100);
+      border-bottom: 1px solid var(--fox-slate-100);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .univ-btn {
+      width: 100%;
+      text-align: center;
+      font-size: 12px;
+      padding: 8px 12px;
+      background-color: var(--fox-navy-2);
+      color: var(--fox-white);
+      border-radius: var(--fox-radius);
+      border: none;
+      font-weight: 600;
+      transition: background-color 0.15s ease;
+    }
+    .univ-btn:hover {
+      background-color: var(--fox-orange);
+      color: var(--fox-navy);
+    }
+
+    /* ==========================================================================
+       6. NAVY FOOTER
+       ========================================================================== */
+    .navy-footer {
+      background-color: var(--fox-navy);
+      color: #cbd5e1;
+      padding: 60px 0 24px;
+      border-top: 1px solid var(--fox-navy-2);
+      margin-top: auto;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+      gap: 36px;
+      margin-bottom: 40px;
+    }
+    .footer-col h4 {
+      color: var(--fox-white);
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      position: relative;
+    }
+    .footer-col h4::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 24px;
+      height: 2px;
+      background-color: var(--fox-orange);
+    }
+    .footer-about {
+      font-size: 12.5px;
+      line-height: 1.65;
+      color: #94a3b8;
+    }
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 12.5px;
+    }
+    .footer-links a {
+      color: #94a3b8;
+      transition: color 0.15s ease;
+    }
+    .footer-links a:hover {
+      color: var(--fox-orange);
+      padding-left: 3px;
+    }
+    .footer-contact-info {
+      font-size: 12.5px;
+      color: #94a3b8;
+      line-height: 1.65;
+    }
+    .footer-contact-info a {
+      color: var(--fox-orange);
+    }
+    .footer-bottom {
+      border-top: 1px solid var(--fox-navy-2);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11.5px;
+      color: #64748b;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    /* ==========================================================================
+       ATLAS AI ASSISTANT WIDGET (Fox University Styling)
+       ========================================================================== */
+    .widget-fixed-fab {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 100;
+    }
+    .atlas-fab {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--fox-orange) 0%, #E65400 100%);
+      color: var(--fox-navy);
+      border: none;
+      box-shadow: 0 10px 25px -4px rgba(255, 94, 0, 0.45);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+    }
+    .atlas-fab:hover {
+      transform: scale(1.06);
+      box-shadow: 0 14px 28px -4px rgba(255, 94, 0, 0.6);
+    }
+    .atlas-fab .fab-ping {
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      width: 13px;
+      height: 13px;
+      background-color: #10b981;
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+    }
+
+    /* Expanded Chat Dialog */
+    .atlas-dialog {
+      width: 375px;
+      max-width: calc(100vw - 32px);
+      height: 530px;
+      max-height: calc(100vh - 80px);
+      background: var(--fox-white);
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(11, 16, 38, 0.35);
+      border: 1px solid var(--fox-slate-200);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: dialogSlide 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes dialogSlide {
+      from { opacity: 0; transform: translateY(12px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .atlas-header {
+      background-color: var(--fox-navy);
+      color: var(--fox-white);
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid var(--fox-orange);
+    }
+    .atlas-header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .atlas-header-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--fox-radius);
+      background-color: var(--fox-navy-2);
+      color: var(--fox-orange);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .atlas-header-title {
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .atlas-header-title span {
+      font-size: 11px;
+      color: #94a3b8;
+      font-weight: 400;
+    }
+    .atlas-header-badge {
+      font-size: 10px;
+      color: #86efac;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-weight: 500;
+    }
+    .atlas-header-badge.demo {
+      color: #fde68a;
+    }
+    .atlas-btn-close {
+      background: transparent;
+      border: none;
+      color: #cbd5e1;
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+    }
+    .atlas-btn-close:hover {
+      color: var(--fox-white);
+    }
+
+    .atlas-body {
+      flex: 1;
+      background-color: var(--fox-slate-50);
+      padding: 14px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 12px;
+    }
+    .chat-bubble {
+      max-width: 88%;
+      border-radius: 12px;
+      padding: 10px 12px;
+      line-height: 1.5;
+    }
+    .user-bubble {
+      background-color: var(--fox-navy);
+      color: var(--fox-white);
+      align-self: flex-end;
+      border-bottom-right-radius: 2px;
+      white-space: pre-wrap;
+    }
+    .bot-bubble {
+      background-color: var(--fox-white);
+      color: var(--fox-slate-800);
+      border: 1px solid var(--fox-slate-200);
+      align-self: flex-start;
+      border-bottom-left-radius: 2px;
+    }
+    .chat-bullet {
+      position: relative;
+      padding-left: 14px;
+      margin: 2px 0;
+    }
+    .chat-bullet::before {
+      content: "•";
+      position: absolute;
+      left: 2px;
+      color: var(--fox-orange);
+    }
+    .chat-gap {
+      height: 6px;
+    }
+    .chat-footnote {
+      margin-top: 8px;
+      font-size: 11px;
+      color: #64748b;
+      font-style: italic;
+    }
+    .demo-badge {
+      display: inline-block;
+      padding: 1px 5px;
+      margin-left: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      background-color: #fef3c7;
+      color: #92400e;
+      border-radius: 4px;
+      border: 1px solid #fcd34d;
+    }
+    .suspicious-badge {
+      display: inline-block;
+      padding: 1px 5px;
+      margin-left: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      background-color: #ffe4e6;
+      color: #9f1239;
+      border-radius: 4px;
+      border: 1px solid #fecdd3;
+    }
+
+    .atlas-input-area {
+      padding: 10px 14px;
+      background-color: var(--fox-white);
+      border-top: 1px solid var(--fox-slate-200);
+      display: flex;
+      gap: 8px;
+    }
+    .atlas-input {
+      flex: 1;
+      height: 40px;
+      border: 1px solid var(--fox-slate-200);
+      border-radius: var(--fox-radius);
+      padding: 8px 12px;
+      font-size: 12px;
+      outline: none;
+      font-family: inherit;
+    }
+    .atlas-input:focus {
+      border-color: var(--fox-orange);
+    }
+    .atlas-send-btn {
+      width: 40px;
+      height: 40px;
+      background-color: var(--fox-orange);
+      color: var(--fox-navy);
+      border: none;
+      border-radius: var(--fox-radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* ==========================================================================
+       RESPONSIVE BREAKPOINTS: 960px, 720px, 520px
+       ========================================================================== */
+    @media (max-width: 960px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+      .feature-strip {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .steps-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 28px;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .top-bar-contact {
+        display: none;
+      }
+      .nav-links, .search-pill-wrapper {
+        display: none;
+      }
+      .hamburger-btn {
+        display: flex;
+      }
+      .hero-headline {
+        font-size: 32px;
+      }
+      .hero-section {
+        padding: 44px 0 52px;
+      }
+      .section-title {
+        font-size: 26px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .feature-strip {
+        grid-template-columns: 1fr;
+      }
+      .hero-ctas {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .btn-orange, .btn-ghost {
+        justify-content: center;
+        width: 100%;
+      }
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+      .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       1. TOP BAR
+       ========================================================================== -->
+  <header class="top-bar">
+    <div class="container top-bar-content">
+      <!-- Logo Left -->
+      <a href="#" class="brand-logo" aria-label="CareerGoals Homepage">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+            <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>Career<span>Goals</span></h1>
+          <p>Study Abroad Guide</p>
+        </div>
+      </a>
+
+      <!-- Email and Phone with Orange Line Icons in the Middle -->
+      <div class="top-bar-contact">
+        <a href="mailto:admissions@careergoals.ai" class="contact-item" title="Admissions Email">
+          <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+          </svg>
+          <span>admissions@careergoals.ai</span>
+        </a>
+        <span style="color: #cbd5e1;">|</span>
+        <a href="tel:+498928901" class="contact-item" title="Official Admissions Helpline">
+          <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+          </svg>
+          <span>+49 (0) 89 289-01</span>
+        </a>
+      </div>
+
+      <!-- Orange "Get started" button right (navy text, 6px radius) -->
+      <div>
+        <button class="btn-orange" onclick="scrollToSteps()">
+          <span>Get started</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"></path>
+            <path d="m12 5 7 7-7 7"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       2. STICKY NAVY NAV
+       ========================================================================== -->
+  <nav class="sticky-nav">
+    <div class="container nav-container">
+      <!-- Links: Home, Universities, Requirements, Tracker, Roadmap, Contact (active link orange) -->
+      <ul class="nav-links">
+        <li><a href="#home" class="nav-link active" onclick="setActiveLink(this)">Home</a></li>
+        <li><a href="#universities" class="nav-link" onclick="setActiveLink(this)">Universities</a></li>
+        <li><a href="#requirements" class="nav-link" onclick="setActiveLink(this)">Requirements</a></li>
+        <li><a href="#tracker" class="nav-link" onclick="setActiveLink(this)">Tracker</a></li>
+        <li><a href="#roadmap" class="nav-link" onclick="setActiveLink(this)">Roadmap</a></li>
+        <li><a href="#contact" class="nav-link" onclick="setActiveLink(this)">Contact</a></li>
+      </ul>
+
+      <!-- Rounded search pill on the right -->
+      <div class="search-pill-wrapper">
+        <svg class="search-pill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input
+          type="text"
+          id="univSearchInput"
+          class="search-pill"
+          placeholder="Search university or test..."
+          oninput="handleSearch(this.value)"
+        />
+      </div>
+
+      <!-- Hamburger toggle under 720px -->
+      <button class="hamburger-btn" onclick="toggleMobileMenu()" aria-label="Toggle Navigation Menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobileDrawer" class="mobile-drawer">
+      <ul class="mobile-nav-links">
+        <li><a href="#home" class="mobile-nav-link active" onclick="toggleMobileMenu()">Home</a></li>
+        <li><a href="#universities" class="mobile-nav-link" onclick="toggleMobileMenu()">Universities</a></li>
+        <li><a href="#requirements" class="mobile-nav-link" onclick="toggleMobileMenu()">Requirements</a></li>
+        <li><a href="#tracker" class="mobile-nav-link" onclick="toggleMobileMenu()">Tracker</a></li>
+        <li><a href="#roadmap" class="mobile-nav-link" onclick="toggleMobileMenu()">Roadmap</a></li>
+        <li><a href="#contact" class="mobile-nav-link" onclick="toggleMobileMenu()">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ==========================================================================
+       3. HERO SECTION
+       ========================================================================== -->
+  <section id="home" class="hero-section">
+    <div class="container">
+      <div class="hero-grid">
+        <!-- Hero Left Column -->
+        <div>
+          <div class="hero-tag">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            <span>Verified Official Admissions</span>
+          </div>
+
+          <h2 class="hero-headline">
+            Navigate Global Admissions<br />
+            <span>With Verified Facts</span>, Not Guesses.
+          </h2>
+
+          <p class="hero-subtext">
+            Official entry requirements derived exclusively from institutional portals in Germany, Ireland, and the United Kingdom. Live verification, automated change alerts, and zero AI hallucinations.
+          </p>
+
+          <div class="hero-ctas">
+            <!-- Orange CTA -->
+            <button class="btn-orange" onclick="scrollToCatalog()">
+              <span>Explore Universities</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14"></path>
+                <path d="m12 5 7 7-7 7"></path>
+              </svg>
+            </button>
+
+            <!-- Ghost CTA -->
+            <button class="btn-ghost" onclick="openChatWithProgram('heidelberg_dcs')">
+              <span>Ask Atlas AI</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Hero Right Column: White "Your applications" card -->
+        <div>
+          <div class="apps-card">
+            <div class="apps-card-header">
+              <div class="apps-card-title">
+                <span class="live-dot"></span>
+                <span>Your Applications</span>
+              </div>
+              <span class="badge" style="background:#f1f5f9; color:#475569; font-size:10px;">CYCLE 2026</span>
+            </div>
+
+            <div class="apps-list">
+              <!-- Item 1: Changed -->
+              <div class="app-item">
+                <div>
+                  <div class="app-univ">Technical University of Munich</div>
+                  <div class="app-program">M.Sc. Informatics</div>
+                </div>
+                <span class="badge badge-changed">Changed</span>
+              </div>
+
+              <!-- Item 2: Verified -->
+              <div class="app-item">
+                <div>
+                  <div class="app-univ">Heidelberg University</div>
+                  <div class="app-program">M.Sc. Data and Computer Science</div>
+                </div>
+                <span class="badge badge-verified">Verified</span>
+              </div>
+
+              <!-- Item 3: In progress -->
+              <div class="app-item">
+                <div>
+                  <div class="app-univ">University of Oxford</div>
+                  <div class="app-program">M.Sc. Advanced Computer Science</div>
+                </div>
+                <span class="badge badge-inprogress">In progress</span>
+              </div>
+            </div>
+
+            <div class="apps-card-footer">
+              <span>Automatic Change Auditor: <strong>Active</strong></span>
+              <span style="color:#059669; font-weight:600;">100% Provenance</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       4. FOUR-BLOCK FEATURE STRIP (Alternating Orange and Navy)
+       ========================================================================== -->
+  <section class="feature-strip">
+    <!-- Block 1: Orange -->
+    <div class="feature-block block-orange">
+      <div class="feature-icon-wrapper">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+      </div>
+      <h3 class="feature-title">Verified requirements</h3>
+      <p class="feature-desc">
+        Direct from official university portals. No crowdsourced guesses or obsolete cutoffs.
+      </p>
+    </div>
+
+    <!-- Block 2: Navy -->
+    <div class="feature-block block-navy">
+      <div class="feature-icon-wrapper">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+          <line x1="12" y1="9" x2="12" y2="13"></line>
+          <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+      </div>
+      <h3 class="feature-title">Live change detection</h3>
+      <p class="feature-desc">
+        Automated crawlers audit portal rule changes daily. Instant alerts for revised criteria.
+      </p>
+    </div>
+
+    <!-- Block 3: Orange -->
+    <div class="feature-block block-orange">
+      <div class="feature-icon-wrapper">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+      </div>
+      <h3 class="feature-title">Application tracking</h3>
+      <p class="feature-desc">
+        Milestone timeline and automated follow-ups. +1, +3, and +7 days check-ins post-submission.
+      </p>
+    </div>
+
+    <!-- Block 4: Navy-2 -->
+    <div class="feature-block block-navy-2">
+      <div class="feature-icon-wrapper">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+          <polyline points="2 17 12 22 22 17"></polyline>
+          <polyline points="2 12 12 17 22 12"></polyline>
+        </svg>
+      </div>
+      <h3 class="feature-title">Rejection roadmaps</h3>
+      <p class="feature-desc">
+        Turn admission setbacks into actionable strategies. Peer-tier alternatives and score plans.
+      </p>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       5. THREE-STEP "SHORTLIST TO SUBMISSION" SECTION
+       ========================================================================== -->
+  <section id="requirements" class="steps-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-subtitle">A Structured Admissions Workflow</span>
+        <h2 class="section-title">From Shortlist to Submission in Three Steps</h2>
+        <p class="section-intro">
+          Our methodology guarantees zero hallucinations, transparent fit calculations, and ethical application guidance.
+        </p>
+      </div>
+
+      <div class="steps-grid">
+        <!-- Step 1 -->
+        <div class="step-card">
+          <div class="step-number-watermark">01</div>
+          <div class="step-badge">1</div>
+          <h3 class="step-title">Deterministic Matching</h3>
+          <p class="step-text">
+            Input your undergraduate GPA, standardized test scores (IELTS/GRE), and budget. The engine computes exact fit classifications without stochastic variance.
+          </p>
+          <ul class="step-features">
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>Strong Fit, Possible, Reach tiers</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>Unconfirmed requirements never penalize</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-card">
+          <div class="step-number-watermark">02</div>
+          <div class="step-badge">2</div>
+          <h3 class="step-title">Statement &amp; SOP Planner</h3>
+          <p class="step-text">
+            Review university-specific prompts, strict word limits, and academic AI policies. Run an 8-point writing quality audit with an absolute anti-rewrite guarantee.
+          </p>
+          <ul class="step-features">
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>Institution-specific essay questions</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>Concrete metric &amp; anchor detection</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-card">
+          <div class="step-number-watermark">03</div>
+          <div class="step-badge">3</div>
+          <h3 class="step-title">Track &amp; Submit Confidently</h3>
+          <p class="step-text">
+            Track five application milestones, receive automated +1, +3, +7 day check-ins, confirm German Sperrkonto / Irish funds, and execute peer-tier roadmaps if needed.
+          </p>
+          <ul class="step-features">
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>Automated milestone check-in alerts</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>Blocked accounts &amp; visa guidance</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       INTERACTIVE UNIVERSITY DIRECTORY & PROVENANCE EXPLORER
+       ========================================================================== -->
+  <section id="universities" class="catalog-section">
+    <div class="container">
+      <div class="section-header" style="margin-bottom: 24px;">
+        <span class="section-subtitle">Verified University Catalog</span>
+        <h2 class="section-title">Explore Institutional Entry Cutoffs</h2>
+        <p class="section-intro">
+          Click on any university to view verified requirements, conflicting rule guards, and trigger context-synced queries in Atlas AI.
+        </p>
+      </div>
+
+      <div id="univGrid" class="univ-grid">
+        <!-- Rendered dynamically via JS below -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       6. NAVY FOOTER
+       ========================================================================== -->
+  <footer id="contact" class="navy-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <!-- Col 1 -->
+        <div class="footer-col">
+          <div class="brand-logo" style="margin-bottom: 14px;">
+            <div class="brand-icon" style="background-color: var(--fox-orange); color: var(--fox-navy);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+              </svg>
+            </div>
+            <div class="brand-text">
+              <h1 style="color: #ffffff;">Career<span style="color: var(--fox-orange);">Goals</span></h1>
+              <p style="color: #94a3b8;">Study Abroad Guide</p>
+            </div>
+          </div>
+          <p class="footer-about">
+            Restyled under the Fox University Design System. CareerGoals delivers zero-hallucination admission criteria, live change detection, and deterministic matching for students worldwide.
+          </p>
+        </div>
+
+        <!-- Col 2 -->
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <ul class="footer-links">
+            <li><a href="#home">Home Overview</a></li>
+            <li><a href="#universities">University Explorer</a></li>
+            <li><a href="#requirements">Statement Planner</a></li>
+            <li><a href="#tracker">Application Tracker</a></li>
+            <li><a href="#roadmap">Rejection Recovery</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3 -->
+        <div class="footer-col">
+          <h4>Country Guides</h4>
+          <ul class="footer-links">
+            <li><a href="#universities">Germany (Sperrkonto €11,904)</a></li>
+            <li><a href="#universities">Ireland (Stamp 1G &amp; Funds)</a></li>
+            <li><a href="#universities">United Kingdom (Graduate Route)</a></li>
+            <li><a href="#requirements">Academic Ethics Policy</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4 -->
+        <div class="footer-col">
+          <h4>Helpline &amp; Support</h4>
+          <div class="footer-contact-info">
+            <p><strong>Official Admissions Helpdesk:</strong></p>
+            <p>Email: <a href="mailto:admissions@careergoals.ai">admissions@careergoals.ai</a></p>
+            <p>Hotline: <a href="tel:+498928901">+49 (0) 89 289-01</a></p>
+            <p style="margin-top: 10px; font-size: 11px; color: #64748b;">
+              R4 Privacy Commitment: Zero student personal records are sent to external LLMs.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 CareerGoals | Study Abroad Guide. Restyled with Fox University Design System.</p>
+        <p>Verified admissions facts &bull; Automated rule change auditor</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       ATLAS AI ASSISTANT WIDGET (FLOATING BOTTOM RIGHT)
+       ========================================================================== -->
+  <div class="widget-fixed-fab">
+    <!-- FAB Button -->
+    <button id="atlasFab" class="atlas-fab" onclick="toggleAtlas(true)" aria-label="Open Atlas Study Abroad Assistant">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="rgba(11, 16, 38, 0.2)"></polygon>
+      </svg>
+      <span class="fab-ping"></span>
+    </button>
+
+    <!-- Chat Window Dialog -->
+    <div id="atlasDialog" class="atlas-dialog" style="display: none;" role="dialog" aria-label="Atlas AI Assistant">
+      <div class="atlas-header">
+        <div class="atlas-header-left">
+          <div class="atlas-header-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+            </svg>
+          </div>
+          <div>
+            <div class="atlas-header-title">
+              Atlas <span>· Study Guide</span>
+            </div>
+            <div id="atlasHeaderBadge" class="atlas-header-badge">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              Verified Catalog Data
+            </div>
+          </div>
+        </div>
+
+        <button class="atlas-btn-close" onclick="toggleAtlas(false)" aria-label="Close Assistant">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <!-- Chat Body -->
+      <div id="atlasBody" class="atlas-body" role="log">
+        <!-- Initial Welcome Message -->
+      </div>
+
+      <!-- Chat Input Area -->
+      <div class="atlas-input-area">
+        <input
+          type="text"
+          id="atlasInput"
+          class="atlas-input"
+          placeholder="Ask Atlas about cutoffs, fees, deadlines..."
+          maxlength="500"
+          onkeydown="handleAtlasKeyDown(event)"
+        />
+        <button class="atlas-send-btn" onclick="sendAtlasMessage()" aria-label="Send message">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       INTERACTIVE SCRIPT & DATA LOGIC (SYNTAX VALIDATED)
+       ========================================================================== */ -->
+  <script>
+    /* Catalog Data Layer */
+    const catalog = [
+      {
+        id: "tum_informatics",
+        name: "Technical University of Munich",
+        program: "M.Sc. Informatics",
+        country: "Germany",
+        tuition: "€6,000/semester",
+        status: "Changed",
+        statusClass: "badge-changed",
+        greGeneral: "Min 315",
+        greRegion: "Min 164 Quant / 4.0 AW (India/China/Iran/Pakistan)",
+        gmat: "Required [Suspicious seed data: verify on official sources]",
+        demo: true,
+        source: "https://www.tum.de"
+      },
+      {
+        id: "heidelberg_dcs",
+        name: "Heidelberg University",
+        program: "M.Sc. Data and Computer Science",
+        country: "Germany",
+        tuition: "€1,500/semester",
+        status: "Verified",
+        statusClass: "badge-verified",
+        greGeneral: "Not confirmed (Quantitative courses assessed from transcript)",
+        greRegion: "Not required",
+        gmat: "Not required",
+        demo: false,
+        source: "https://www.uni-heidelberg.de"
+      },
+      {
+        id: "oxford_acs",
+        name: "University of Oxford",
+        program: "M.Sc. Advanced Computer Science",
+        country: "United Kingdom",
+        tuition: "£36,000/year",
+        status: "In progress",
+        statusClass: "badge-inprogress",
+        greGeneral: "Not considered in assessment",
+        greRegion: "Not required",
+        gmat: "Not required",
+        demo: false,
+        source: "https://www.ox.ac.uk"
+      },
+      {
+        id: "rwth_cs",
+        name: "RWTH Aachen University",
+        program: "M.Sc. Computer Science",
+        country: "Germany",
+        tuition: "€0 tuition (€320/sem contribution)",
+        status: "Verified",
+        statusClass: "badge-verified",
+        greGeneral: "160 Quant / 145 Verbal / 3.0 AW",
+        greRegion: "Mandatory for Non-EU",
+        gmat: "Not accepted as alternative",
+        demo: false,
+        source: "https://www.rwth-aachen.de"
+      }
+    ];
+
+    let currentProgram = catalog[1]; // Heidelberg default
+
+    /* Render Universities into Directory */
+    function renderUniversities(items) {
+      const grid = document.getElementById("univGrid");
+      if (!grid) return;
+      grid.innerHTML = "";
+
+      if (items.length === 0) {
+        grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 30px; color: #64748b;">No institutions match your search query.</div>';
+        return;
+      }
+
+      items.forEach(u => {
+        const card = document.createElement("div");
+        card.className = "univ-card";
+        card.innerHTML = `
+          <div class="univ-card-top">
+            <div class="univ-badge-row">
+              <span class="badge ${u.statusClass}">${u.status}</span>
+              <span style="font-size:11px; color:#64748b; font-weight:600;">${u.country}</span>
+            </div>
+            <h3 class="univ-name">${u.name}</h3>
+            <p class="univ-prog">${u.program}</p>
+          </div>
+          <div class="univ-meta">
+            <div><strong>Tuition:</strong> ${u.tuition}</div>
+            <div><strong>GRE Cutoff:</strong> ${u.greGeneral}</div>
+          </div>
+          <button class="univ-btn" onclick="openChatWithProgram('${u.id}')">
+            Discuss with Atlas AI &rarr;
+          </button>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    /* Search Handler */
+    function handleSearch(query) {
+      const q = (query || "").toLowerCase().trim();
+      const filtered = catalog.filter(u =>
+        u.name.toLowerCase().includes(q) ||
+        u.program.toLowerCase().includes(q) ||
+        u.country.toLowerCase().includes(q)
+      );
+      renderUniversities(filtered);
+    }
+
+    /* Smooth Scrolls */
+    function scrollToSteps() {
+      const el = document.getElementById("requirements");
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    }
+
+    function scrollToCatalog() {
+      const el = document.getElementById("universities");
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    }
+
+    /* Active Link Highlighter */
+    function setActiveLink(clicked) {
+      document.querySelectorAll(".nav-link").forEach(l => l.classList.remove("active"));
+      clicked.classList.add("active");
+    }
+
+    /* Hamburger Drawer Toggle */
+    function toggleMobileMenu() {
+      const drawer = document.getElementById("mobileDrawer");
+      if (drawer) {
+        drawer.classList.toggle("open");
+      }
+    }
+
+    /* ==========================================================================
+       ATLAS CHATBOT IMPLEMENTATION (WITH THE EXACT MANDATORY RULES)
+       ========================================================================== */
+    function renderChatText(raw) {
+      const esc = String(raw ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+
+      return esc
+        .split("\n")
+        .filter(line => !/demonstration-seeded|live change detection record/i.test(line))
+        .map(line => {
+          const t = line.trim();
+          let bold = t.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+          bold = bold.replace(/\[Demo data\]/gi, '<span class="demo-badge">Demo data</span>');
+          bold = bold.replace(/\[Suspicious seed data.*?\]/gi, '<span class="suspicious-badge">Suspicious seed data – verify</span>');
+          if (/^(•|-\s)/.test(t)) {
+            return `<div class="chat-bullet">${bold.replace(/^(•|-)\s*/, "")}</div>`;
+          }
+          if (/^verify on the official site/i.test(t)) {
+            return `<div class="chat-footnote">${bold}</div>`;
+          }
+          return t ? `<div>${bold}</div>` : `<div class="chat-gap"></div>`;
+        })
+        .join("");
+    }
+
+    function buildChatPayload(userMsg) {
+      return {
+        message: userMsg.slice(0, 500),
+        context: {
+          university: currentProgram.name,
+          programme: currentProgram.program,
+          intake: "2026",
+          isDemo: Boolean(currentProgram.demo)
+        }
+      };
+    }
+
+    function appendSystemNote(text) {
+      const body = document.getElementById("atlasBody");
+      if (!body) return;
+      const note = document.createElement("div");
+      note.style.textAlign = "center";
+      note.style.margin = "6px 0";
+      note.innerHTML = `<span style="display:inline-block; padding:2px 10px; background:#e2e8f0; color:#334155; font-size:11px; font-weight:600; border-radius:999px;">${text}</span>`;
+      body.appendChild(note);
+      body.scrollTop = body.scrollHeight;
+    }
+
+    function onProgrammeChange(sel) {
+      currentProgram = sel;
+      const body = document.getElementById("atlasBody");
+      if (body) {
+        body.innerHTML = "";
+      }
+      appendSystemNote(`Now discussing: ${sel.name} – ${sel.program}`);
+
+      // Header badge sync
+      const badge = document.getElementById("atlasHeaderBadge");
+      if (badge) {
+        if (sel.demo) {
+          badge.className = "atlas-header-badge demo";
+          badge.textContent = "Demo Data Record";
+        } else {
+          badge.className = "atlas-header-badge";
+          badge.textContent = "Verified Catalog Data";
+        }
+      }
+    }
+
+    function appendUserBubble(text) {
+      const body = document.getElementById("atlasBody");
+      if (!body) return;
+      const bubble = document.createElement("div");
+      bubble.className = "chat-bubble user-bubble";
+      bubble.textContent = text; // Never unescaped
+      body.appendChild(bubble);
+      body.scrollTop = body.scrollHeight;
+    }
+
+    function appendBotBubble(replyText) {
+      const body = document.getElementById("atlasBody");
+      if (!body) return;
+      const bubble = document.createElement("div");
+      bubble.className = "chat-bubble bot-bubble";
+      bubble.innerHTML = renderChatText(replyText);
+      body.appendChild(bubble);
+      body.scrollTop = body.scrollHeight;
+    }
+
+    function sendAtlasMessage() {
+      const input = document.getElementById("atlasInput");
+      if (!input) return;
+      const text = input.value.trim();
+      if (!text) return;
+
+      const payload = buildChatPayload(text);
+      appendUserBubble(payload.message);
+      input.value = "";
+
+      // Deterministic bot answers with consistency guards
+      setTimeout(() => {
+        const q = payload.message.toLowerCase();
+        const p = currentProgram;
+        let response = "";
+
+        if (q.includes("gre") || q.includes("test") || q.includes("gmat")) {
+          if (p.id === "tum_informatics") {
+            response = `Requirements for **${p.program}** at **${p.name}** [Demo data]:\n\n• **General cutoff:** ${p.greGeneral}\n• **India/China/Iran/Pakistan applicants:** ${p.greRegion}\n• **GMAT:** ${p.gmat}\n\nVerify on the official site: Standardized cutoffs are subject to annual revisions.`;
+          } else if (p.id === "heidelberg_dcs") {
+            response = `Requirements for **${p.program}** at **${p.name}**:\n\n• **GRE / GMAT:** Not confirmed (verify on official portal)\n• **Admissions Criteria:** The committee evaluates theoretical and practical informatics coursework directly from transcripts.`;
+          } else {
+            response = `Requirements for **${p.program}** at **${p.name}**:\n\n• **GRE Cutoff:** ${p.greGeneral}\n• **Regional Rules:** ${p.greRegion}`;
+          }
+        } else if (q.includes("tuition") || q.includes("fee") || q.includes("cost")) {
+          response = `Tuition fee policy for **${p.program}** at **${p.name}**:\n\n• **Tuition:** ${p.tuition}\n\nVerify on the official site: Tuition amounts and semester contributions are confirmed via ministerial gazette.`;
+        } else {
+          response = `Verified catalog records for **${p.name}** (${p.program}):\n\n• **Tuition:** ${p.tuition}\n• **GRE:** ${p.greGeneral}\n• **Language:** IELTS 6.5 minimum\n\nVerify on the official site: Criteria must be confirmed on official portals prior to application.`;
+        }
+
+        appendBotBubble(response);
+      }, 300);
+    }
+
+    function handleAtlasKeyDown(e) {
+      if (e.key === "Enter") {
+        sendAtlasMessage();
+      }
+    }
+
+    function toggleAtlas(show) {
+      const dialog = document.getElementById("atlasDialog");
+      const fab = document.getElementById("atlasFab");
+      if (show) {
+        dialog.style.display = "flex";
+        fab.style.display = "none";
+        document.getElementById("atlasInput")?.focus();
+      } else {
+        dialog.style.display = "none";
+        fab.style.display = "flex";
+      }
+    }
+
+    function openChatWithProgram(progId) {
+      const found = catalog.find(u => u.id === progId);
+      if (found) {
+        onProgrammeChange(found);
+      }
+      toggleAtlas(true);
+    }
+
+    /* Initialize upon load */
+    window.addEventListener("DOMContentLoaded", () => {
+      renderUniversities(catalog);
+      onProgrammeChange(currentProgram);
+    });
+  </script>
+</body>
+</html>

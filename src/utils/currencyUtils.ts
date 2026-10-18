@@ -18,23 +18,23 @@ export const EXCHANGE_RATES = {
  */
 export function formatInr(amountInr: number, compact: boolean = true): string {
   if (isNaN(amountInr) || amountInr <= 0) {
-    return '₹0';
+    return '\u20B90';
   }
 
   if (compact) {
     if (amountInr >= 10000000) {
       // Crores
       const cr = amountInr / 10000000;
-      return `₹${cr.toFixed(2)} Cr`;
+      return `\u20B9${cr.toFixed(2)} Cr`;
     }
     if (amountInr >= 100000) {
       // Lakhs
       const lakhs = amountInr / 100000;
-      return `₹${lakhs.toFixed(2)} Lakhs`;
+      return `\u20B9${lakhs.toFixed(2)} Lakhs`;
     }
     if (amountInr >= 1000) {
       const k = amountInr / 1000;
-      return `₹${k.toFixed(1)}k`;
+      return `\u20B9${k.toFixed(1)}k`;
     }
   }
 
@@ -56,7 +56,7 @@ export function convertEurToInr(eur: number | string | null | undefined): {
 } {
   const num = typeof eur === 'string' ? parseFloat(eur) : Number(eur || 0);
   if (isNaN(num) || num <= 0) {
-    return { inrRaw: 0, inrFormatted: '₹0', inrCompact: '₹0' };
+    return { inrRaw: 0, inrFormatted: '\u20B90', inrCompact: '\u20B90' };
   }
 
   const inrRaw = num * EXCHANGE_RATES.EUR;
@@ -77,7 +77,7 @@ export function convertGbpToInr(gbp: number | string | null | undefined): {
 } {
   const num = typeof gbp === 'string' ? parseFloat(gbp) : Number(gbp || 0);
   if (isNaN(num) || num <= 0) {
-    return { inrRaw: 0, inrFormatted: '₹0', inrCompact: '₹0' };
+    return { inrRaw: 0, inrFormatted: '\u20B90', inrCompact: '\u20B90' };
   }
 
   const inrRaw = num * EXCHANGE_RATES.GBP;
@@ -99,7 +99,7 @@ export function getTuitionInrEstimate(tuitionStr: string | null | undefined): st
 
   // If free / 0
   if (lower.includes('€0') || lower.includes('free') || lower.includes('tuition-free')) {
-    return '₹0 Tuition (Free Public Edu)';
+    return '\u20B90 Tuition (Free Public Edu)';
   }
 
   // Check for EUR: e.g. €6,000 or €12,500
