@@ -795,17 +795,17 @@ export const LetterHelperPage: React.FC = () => {
       {/* 4. PLANNING WORKSPACE */}
       <div className="space-y-6 font-poppins">
         {/* Workspace Toolbar */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/15 pb-3">
           <div>
-            <h2 className="text-xl font-bold text-[#0B1026] flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-[#FF5E00]" />
+            <h2 className="text-xl font-bold text-white flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-[#deb062]" />
               <span>
                 {hasSpecificQuestions
                   ? 'Programme-Prescribed Questions (Primary Focus)'
                   : 'SOP Structural Framework (6 Core Sections)'}
               </span>
             </h2>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs text-slate-300 mt-0.5">
               Draft your outline notes in the local scratchpad (max 500 chars per block). Saved in your browser.
             </p>
           </div>
@@ -813,9 +813,9 @@ export const LetterHelperPage: React.FC = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={copyAllDrafts}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-[6px] bg-[#0B1026] hover:bg-[#151B3A] text-white text-xs font-semibold transition-colors"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-[6px] bg-white/10 hover:bg-white/20 text-white border border-white/20 text-xs font-semibold transition-colors"
             >
-              {copiedAll ? <Check className="w-4 h-4 text-[#FF5E00]" /> : <Copy className="w-4 h-4 text-[#FF5E00]" />}
+              {copiedAll ? <Check className="w-4 h-4 text-[#deb062]" /> : <Copy className="w-4 h-4 text-[#deb062]" />}
               <span>{copiedAll ? 'All Drafts Copied' : 'Export All Drafts'}</span>
             </button>
           </div>

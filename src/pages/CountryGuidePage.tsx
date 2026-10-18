@@ -125,16 +125,16 @@ export const CountryGuidePage: React.FC = () => {
     <div className="space-y-6 font-poppins">
       {/* Header */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0B1026]">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-white">
           Country Admission & Visa Guides
         </h1>
-        <p className="text-slate-600 text-sm mt-1">
+        <p className="text-slate-300 text-sm mt-1">
           Verified admission criteria, language rules, blocked accounts, and official application portals.
         </p>
       </div>
 
       {/* Country Selector Tabs */}
-      <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 pb-3">
+      <div className="flex flex-wrap items-center gap-2 border-b border-white/15 pb-3">
         {[
           { id: 'germany', name: 'Germany', flag: '🇩🇪' },
           { id: 'ireland', name: 'Ireland', flag: '🇮🇪' },
@@ -150,8 +150,8 @@ export const CountryGuidePage: React.FC = () => {
               }}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-[6px] text-sm font-bold transition-all ${
                 isActive
-                  ? 'bg-[#0B1026] text-white shadow-sm border border-[#151B3A]'
-                  : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
+                  ? 'bg-[#deb062] text-[#0b1e17] shadow-sm'
+                  : 'bg-white/10 text-slate-200 hover:bg-white/20 border border-white/15'
               }`}
             >
               <span>{tab.flag}</span>
