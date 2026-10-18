@@ -42,7 +42,7 @@ const ROOT_CAUSES: RootCauseOption[] = [
     id: 'ects_deficiency',
     title: 'ECTS / Subject Prerequisite Deficiency',
     shortDesc: 'Undergraduate syllabus did not match the university\'s strict mathematical or theoretical subject credit requirements.',
-    icon: <BookOpen className="w-5 h-5 text-indigo-600" />,
+    icon: <BookOpen className="w-5 h-5 text-[#FF5E00]" />,
     diagnosticSymptoms: [
       'Rejection letter mentions "curricular prerequisites not met" or "insufficient credits in theoretical CS / higher math".',
       'Common at German research universities (e.g. TUM, RWTH Aachen) requiring 20+ ECTS in pure math.',
@@ -191,11 +191,11 @@ ${user?.email || 'email@example.com'}`;
   };
 
   return (
-    <div className="space-y-8 max-w-6xl mx-auto pb-12">
+    <div className="space-y-8 max-w-6xl mx-auto pb-12 font-poppins">
       {/* 1. Contextual Empathetic Header */}
-      <div className="bg-gradient-to-r from-slate-900 to-indigo-950 rounded-3xl p-6 sm:p-10 text-white shadow-xl space-y-4">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-indigo-500/20 text-indigo-200 border border-indigo-400/30 text-xs font-bold uppercase tracking-wider">
-          <TrendingUp className="w-4 h-4 text-indigo-400" />
+      <div className="bg-[#0B1026] border border-[#151B3A] rounded-[8px] p-6 sm:p-10 text-white shadow-xl space-y-4">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-[4px] bg-[#FF5E00]/10 text-[#FF5E00] border border-[#FF5E00]/30 text-xs font-bold uppercase tracking-wider">
+          <TrendingUp className="w-4 h-4 text-[#FF5E00]" />
           Strategic Recovery & Pivot Roadmap
         </div>
 
@@ -203,7 +203,7 @@ ${user?.email || 'email@example.com'}`;
           <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
             {rejectedUniv ? (
               <>
-                Post-Rejection Pivot for <span className="text-indigo-300">{rejectedUniv.name}</span>
+                Post-Rejection Pivot for <span className="text-[#FF5E00]">{rejectedUniv.name}</span>
               </>
             ) : (
               'Post-Rejection Strategic Pivot & Recovery'
@@ -217,13 +217,13 @@ ${user?.email || 'email@example.com'}`;
 
         {rejectedUniv && (
           <div className="pt-2 flex flex-wrap items-center gap-3 text-xs text-slate-300">
-            <span className="px-2.5 py-1 rounded-lg bg-white/10 font-medium">
+            <span className="px-2.5 py-1 rounded-[4px] bg-white/10 font-medium">
               Program: {rejectedUniv.program}
             </span>
-            <span className="px-2.5 py-1 rounded-lg bg-white/10 font-medium">
+            <span className="px-2.5 py-1 rounded-[4px] bg-white/10 font-medium">
               Country: {rejectedUniv.countryId.toUpperCase()}
             </span>
-            <span className="px-2.5 py-1 rounded-lg bg-white/10 font-medium">
+            <span className="px-2.5 py-1 rounded-[4px] bg-white/10 font-medium">
               Tuition: {rejectedUniv.tuition}
             </span>
           </div>
@@ -231,18 +231,18 @@ ${user?.email || 'email@example.com'}`;
       </div>
 
       {/* 2. Interactive Root-Cause Diagnostic Tool */}
-      <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
+      <div className="bg-white rounded-[8px] border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-4">
           <div>
-            <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-              <HelpCircle className="w-5 h-5 text-indigo-600" />
+            <h2 className="text-xl font-bold text-[#0B1026] flex items-center gap-2">
+              <HelpCircle className="w-5 h-5 text-[#FF5E00]" />
               Step 1: Identify Your Rejection Root Cause
             </h2>
             <p className="text-xs text-slate-500 mt-1">
               Select the factor that best matches your situation to unlock tailored recovery steps.
             </p>
           </div>
-          <span className="text-xs font-semibold px-3 py-1 rounded-full bg-slate-100 text-slate-700">
+          <span className="text-xs font-semibold px-3 py-1 rounded-[4px] bg-slate-100 text-[#0B1026] border border-slate-200">
             Interactive Diagnostic
           </span>
         </div>
@@ -255,24 +255,24 @@ ${user?.email || 'email@example.com'}`;
               <button
                 key={cause.id}
                 onClick={() => setSelectedCauseId(cause.id)}
-                className={`p-4 rounded-2xl text-left border transition-all flex flex-col justify-between ${
+                className={`p-4 rounded-[6px] text-left border transition-all flex flex-col justify-between ${
                   isSelected
-                    ? 'border-indigo-600 bg-indigo-50/50 shadow-sm ring-2 ring-indigo-500/20'
-                    : 'border-slate-200 hover:border-slate-300 bg-white'
+                    ? 'border-[#FF5E00] bg-orange-50/30 shadow-sm ring-2 ring-[#FF5E00]/20'
+                    : 'border-slate-200 hover:border-[#FF5E00]/50 bg-white'
                 }`}
               >
                 <div className="space-y-2">
-                  <div className="p-2 rounded-xl bg-slate-50 w-fit">{cause.icon}</div>
-                  <h3 className={`font-bold text-sm ${isSelected ? 'text-indigo-900' : 'text-slate-800'}`}>
+                  <div className="p-2 rounded-[6px] bg-slate-50 w-fit">{cause.icon}</div>
+                  <h3 className={`font-bold text-sm ${isSelected ? 'text-[#0B1026]' : 'text-slate-800'}`}>
                     {cause.title}
                   </h3>
                   <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
                     {cause.shortDesc}
                   </p>
                 </div>
-                <div className="pt-3 flex items-center gap-1 text-[11px] font-semibold text-indigo-600">
+                <div className="pt-3 flex items-center gap-1 text-[11px] font-semibold text-[#FF5E00]">
                   <span>{isSelected ? 'Active Analysis' : 'Analyze'}</span>
-                  <ChevronRight className="w-3.5 h-3.5" />
+                  <ChevronRight className="w-3.5 h-3.5 text-[#FF5E00]" />
                 </div>
               </button>
             );
@@ -280,13 +280,13 @@ ${user?.email || 'email@example.com'}`;
         </div>
 
         {/* Selected Cause Tailored Action Plan */}
-        <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6 space-y-5">
+        <div className="bg-slate-50 rounded-[6px] border border-slate-200 p-6 space-y-5">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-white border border-slate-200 shadow-xs">
+            <div className="p-2.5 rounded-[6px] bg-white border border-slate-200 shadow-xs">
               {activeCause.icon}
             </div>
             <div>
-              <h3 className="font-extrabold text-slate-900 text-base">
+              <h3 className="font-extrabold text-[#0B1026] text-base">
                 Recovery Playbook: {activeCause.title}
               </h3>
               <p className="text-xs text-slate-600">{activeCause.strategicPivot}</p>
@@ -294,7 +294,7 @@ ${user?.email || 'email@example.com'}`;
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2 bg-white p-4 rounded-xl border border-slate-200">
+            <div className="space-y-2 bg-white p-4 rounded-[6px] border border-slate-200">
               <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
                 Common Symptoms
               </span>
@@ -308,8 +308,8 @@ ${user?.email || 'email@example.com'}`;
               </ul>
             </div>
 
-            <div className="space-y-2 bg-white p-4 rounded-xl border border-slate-200">
-              <span className="text-xs font-bold text-indigo-700 uppercase tracking-wider">
+            <div className="space-y-2 bg-white p-4 rounded-[6px] border border-slate-200">
+              <span className="text-xs font-bold text-[#0B1026] uppercase tracking-wider">
                 Targeted Action Steps
               </span>
               <ul className="space-y-2 text-xs text-slate-700">
@@ -327,10 +327,10 @@ ${user?.email || 'email@example.com'}`;
             <div className="pt-2">
               <Link
                 to={activeCause.recommendedActionLink.url}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-colors shadow-sm"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-[6px] bg-[#FF5E00] hover:bg-[#E65400] text-[#0B1026] text-xs font-semibold transition-colors shadow-sm"
               >
                 <span>{activeCause.recommendedActionLink.label}</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-3.5 h-3.5 text-[#0B1026]" />
               </Link>
             </div>
           )}
@@ -340,18 +340,18 @@ ${user?.email || 'email@example.com'}`;
       {/* 3. Reapplication Strategy: Feedback Email & Timeline */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Email Inquiry Generator */}
-        <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-4 flex flex-col justify-between">
+        <div className="bg-white rounded-[8px] border border-slate-200 p-6 sm:p-8 shadow-sm space-y-4 flex flex-col justify-between hover:border-[#FF5E00] transition-colors">
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                <BookOpen className="w-5 h-5 text-indigo-600" />
+              <h2 className="text-lg font-bold text-[#0B1026] flex items-center gap-2">
+                <BookOpen className="w-5 h-5 text-[#FF5E00]" />
                 Step 2: Request Official Feedback
               </h2>
               <button
                 onClick={copyEmailToClipboard}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] border border-slate-300 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:border-[#FF5E00] transition-colors"
               >
-                {copiedEmail ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                {copiedEmail ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5 text-[#FF5E00]" />}
                 <span>{copiedEmail ? 'Copied' : 'Copy Template'}</span>
               </button>
             </div>
@@ -360,15 +360,15 @@ ${user?.email || 'email@example.com'}`;
             </p>
           </div>
 
-          <div className="p-4 bg-slate-900 rounded-2xl text-slate-300 font-mono text-[11px] overflow-x-auto whitespace-pre-wrap leading-relaxed border border-slate-800">
+          <div className="p-4 bg-[#0B1026] rounded-[6px] text-slate-300 font-mono text-[11px] overflow-x-auto whitespace-pre-wrap leading-relaxed border border-[#151B3A]">
             {sampleEmailTemplate}
           </div>
         </div>
 
         {/* Reapplication Intake Mapping */}
-        <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-4">
-          <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-indigo-600" />
+        <div className="bg-white rounded-[8px] border border-slate-200 p-6 sm:p-8 shadow-sm space-y-4 hover:border-[#FF5E00] transition-colors">
+          <h2 className="text-lg font-bold text-[#0B1026] flex items-center gap-2">
+            <Calendar className="w-5 h-5 text-[#FF5E00]" />
             Step 3: Target the Next Intake Cycle
           </h2>
           <p className="text-xs text-slate-500">
@@ -376,18 +376,18 @@ ${user?.email || 'email@example.com'}`;
           </p>
 
           <div className="space-y-3 pt-2">
-            <div className="p-3.5 rounded-xl border border-indigo-100 bg-indigo-50/50 space-y-1">
-              <div className="flex items-center justify-between text-xs font-bold text-indigo-950">
+            <div className="p-3.5 rounded-[6px] border border-[#FF5E00]/30 bg-orange-50/40 space-y-1">
+              <div className="flex items-center justify-between text-xs font-bold text-[#0B1026]">
                 <span>Summer / Spring Intake (Recommended)</span>
-                <span className="text-[11px] text-indigo-700 font-medium">Nov – Jan Deadlines</span>
+                <span className="text-[11px] text-[#FF5E00] font-bold">Nov – Jan Deadlines</span>
               </div>
               <p className="text-xs text-slate-600">
                 40–50% fewer international applicants compared to Winter. Higher acceptance rates for qualified candidates.
               </p>
             </div>
 
-            <div className="p-3.5 rounded-xl border border-slate-200 bg-white space-y-1">
-              <div className="flex items-center justify-between text-xs font-bold text-slate-900">
+            <div className="p-3.5 rounded-[6px] border border-slate-200 bg-white space-y-1">
+              <div className="flex items-center justify-between text-xs font-bold text-[#0B1026]">
                 <span>Next Winter Intake</span>
                 <span className="text-[11px] text-slate-500">Mar – May Deadlines</span>
               </div>
@@ -396,8 +396,8 @@ ${user?.email || 'email@example.com'}`;
               </p>
             </div>
 
-            <div className="p-3.5 rounded-xl border border-slate-200 bg-white space-y-1">
-              <div className="flex items-center justify-between text-xs font-bold text-slate-900">
+            <div className="p-3.5 rounded-[6px] border border-slate-200 bg-white space-y-1">
+              <div className="flex items-center justify-between text-xs font-bold text-[#0B1026]">
                 <span>Rolling Admissions (Ireland / UK)</span>
                 <span className="text-[11px] text-slate-500">Continuous Assessment</span>
               </div>
@@ -410,11 +410,11 @@ ${user?.email || 'email@example.com'}`;
       </div>
 
       {/* 4. Alternative University Matches Filtered by Profile & Budget */}
-      <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
+      <div className="bg-white rounded-[8px] border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
           <div>
-            <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-              <Building2 className="w-5 h-5 text-indigo-600" />
+            <h2 className="text-xl font-bold text-[#0B1026] flex items-center gap-2">
+              <Building2 className="w-5 h-5 text-[#FF5E00]" />
               Recommended Alternative Programs
             </h2>
             <p className="text-xs text-slate-500 mt-0.5">
@@ -424,10 +424,10 @@ ${user?.email || 'email@example.com'}`;
 
           <Link
             to="/matches"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 hover:text-indigo-800 transition-colors self-start sm:self-center"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#FF5E00] hover:text-[#E65400] transition-colors self-start sm:self-center"
           >
             <span>Explore All Matches</span>
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-4 h-4 text-[#FF5E00]" />
           </Link>
         </div>
 
@@ -437,7 +437,7 @@ ${user?.email || 'email@example.com'}`;
             return (
               <div
                 key={u.id}
-                className="bg-white rounded-2xl border border-slate-200 p-5 space-y-4 hover:border-indigo-300 hover:shadow-md transition-all flex flex-col justify-between"
+                className="bg-white rounded-[8px] border border-slate-200 p-5 space-y-4 hover:border-[#FF5E00] hover:shadow-md transition-all flex flex-col justify-between"
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
@@ -448,14 +448,14 @@ ${user?.email || 'email@example.com'}`;
                   </div>
 
                   <div>
-                    <h3 className="font-bold text-slate-900 text-base leading-snug">{u.name}</h3>
+                    <h3 className="font-bold text-[#0B1026] text-base leading-snug">{u.name}</h3>
                     <p className="text-xs text-slate-600 mt-0.5 font-medium">{u.program}</p>
                   </div>
 
-                  <div className="space-y-1.5 text-xs text-slate-600 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                  <div className="space-y-1.5 text-xs text-slate-600 bg-slate-50 p-3 rounded-[6px] border border-slate-100">
                     <div className="flex items-center justify-between">
                       <span className="text-slate-500">Tuition:</span>
-                      <span className="font-bold text-slate-800">{u.tuition}</span>
+                      <span className="font-bold text-[#0B1026]">{u.tuition}</span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-slate-500">Deadline:</span>
@@ -467,16 +467,16 @@ ${user?.email || 'email@example.com'}`;
                 <div className="pt-2 space-y-2">
                   <Link
                     to="/matches"
-                    className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold transition-colors"
+                    className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-[6px] bg-[#FF5E00] hover:bg-[#E65400] text-[#0B1026] text-xs font-semibold transition-colors"
                   >
                     <span>Evaluate Fit Profile</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <ArrowRight className="w-3.5 h-3.5 text-[#0B1026]" />
                   </Link>
                   <a
                     href={u.portalUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-1.5 rounded-xl text-slate-500 hover:text-slate-800 text-[11px] font-medium transition-colors"
+                    className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-1.5 rounded-[6px] text-slate-600 hover:text-[#FF5E00] text-[11px] font-medium transition-colors"
                   >
                     <span>Official Portal</span>
                     <ExternalLink className="w-3 h-3" />
@@ -489,11 +489,11 @@ ${user?.email || 'email@example.com'}`;
       </div>
 
       {/* 5. Static Cost & Loan Estimate Table (R1, Acceptance Criteria) */}
-      <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
+      <div className="bg-white rounded-[8px] border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
           <div>
-            <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-              <DollarSign className="w-5 h-5 text-indigo-600" />
+            <h2 className="text-xl font-bold text-[#0B1026] flex items-center gap-2">
+              <DollarSign className="w-5 h-5 text-[#FF5E00]" />
               Comparative Financial Planning & Educational Loan Estimates
             </h2>
             <p className="text-xs text-slate-500 mt-0.5">
@@ -502,14 +502,14 @@ ${user?.email || 'email@example.com'}`;
           </div>
 
           {/* Mandatory Label */}
-          <span className="px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-amber-100 text-amber-900 border border-amber-300 uppercase tracking-wider self-start sm:self-center shadow-xs">
+          <span className="px-3.5 py-1.5 rounded-[4px] text-xs font-extrabold bg-amber-100 text-amber-900 border border-amber-300 uppercase tracking-wider self-start sm:self-center shadow-xs">
             estimate, not financial advice
           </span>
         </div>
 
-        <div className="overflow-x-auto rounded-2xl border border-slate-200">
+        <div className="overflow-x-auto rounded-[6px] border border-slate-200">
           <table className="w-full text-left text-xs text-slate-700">
-            <thead className="bg-slate-50 text-slate-900 uppercase font-bold text-[11px] border-b border-slate-200">
+            <thead className="bg-slate-50 text-[#0B1026] uppercase font-bold text-[11px] border-b border-slate-200">
               <tr>
                 <th className="py-3.5 px-4">Destination</th>
                 <th className="py-3.5 px-4">Avg Annual Tuition</th>
@@ -520,16 +520,16 @@ ${user?.email || 'email@example.com'}`;
             </thead>
             <tbody className="divide-y divide-slate-100">
               <tr className="hover:bg-slate-50/70 transition-colors">
-                <td className="py-4 px-4 font-bold text-slate-900">Germany (Public Universities)</td>
+                <td className="py-4 px-4 font-bold text-[#0B1026]">Germany (Public Universities)</td>
                 <td className="py-4 px-4">
                   <span className="text-emerald-700 font-bold block">€0 – €3,000 / yr</span>
-                  <span className="text-[10px] text-emerald-800 font-semibold bg-emerald-50 px-1.5 py-0.5 rounded inline-block mt-0.5">
+                  <span className="text-[10px] text-emerald-800 font-semibold bg-emerald-50 px-1.5 py-0.5 rounded-[4px] inline-block mt-0.5">
                     🇮🇳 ~₹0 – ₹2.7 Lakhs
                   </span>
                 </td>
                 <td className="py-4 px-4 font-medium">
                   <span className="block">€11,208 / yr (€934/mo blocked)</span>
-                  <span className="text-[10px] text-slate-600 font-semibold bg-slate-100 px-1.5 py-0.5 rounded inline-block mt-0.5">
+                  <span className="text-[10px] text-slate-600 font-semibold bg-slate-100 px-1.5 py-0.5 rounded-[4px] inline-block mt-0.5">
                     🇮🇳 ~₹10.2 Lakhs blocked
                   </span>
                 </td>
@@ -537,16 +537,16 @@ ${user?.email || 'email@example.com'}`;
                 <td className="py-4 px-4">Course duration + 6–12 months</td>
               </tr>
               <tr className="hover:bg-slate-50/70 transition-colors">
-                <td className="py-4 px-4 font-bold text-slate-900">Ireland (Universities)</td>
+                <td className="py-4 px-4 font-bold text-[#0B1026]">Ireland (Universities)</td>
                 <td className="py-4 px-4">
                   <span className="font-bold text-slate-800 block">€12,000 – €27,000 / yr</span>
-                  <span className="text-[10px] text-indigo-800 font-semibold bg-indigo-50 px-1.5 py-0.5 rounded inline-block mt-0.5">
+                  <span className="text-[10px] text-slate-800 font-semibold bg-slate-100 px-1.5 py-0.5 rounded-[4px] inline-block mt-0.5">
                     🇮🇳 ~₹10.9L – ₹24.6 Lakhs
                   </span>
                 </td>
                 <td className="py-4 px-4 font-medium">
                   <span className="block">€10,000 / yr (INIS proof of funds)</span>
-                  <span className="text-[10px] text-slate-600 font-semibold bg-slate-100 px-1.5 py-0.5 rounded inline-block mt-0.5">
+                  <span className="text-[10px] text-slate-600 font-semibold bg-slate-100 px-1.5 py-0.5 rounded-[4px] inline-block mt-0.5">
                     🇮🇳 ~₹9.1 Lakhs required
                   </span>
                 </td>
@@ -554,16 +554,16 @@ ${user?.email || 'email@example.com'}`;
                 <td className="py-4 px-4">Course duration + 6 months</td>
               </tr>
               <tr className="hover:bg-slate-50/70 transition-colors">
-                <td className="py-4 px-4 font-bold text-slate-900">United Kingdom (Master's)</td>
+                <td className="py-4 px-4 font-bold text-[#0B1026]">United Kingdom (Master's)</td>
                 <td className="py-4 px-4">
                   <span className="font-bold text-slate-800 block">£18,000 – £35,000 / yr</span>
-                  <span className="text-[10px] text-indigo-800 font-semibold bg-indigo-50 px-1.5 py-0.5 rounded inline-block mt-0.5">
+                  <span className="text-[10px] text-slate-800 font-semibold bg-slate-100 px-1.5 py-0.5 rounded-[4px] inline-block mt-0.5">
                     🇮🇳 ~₹19.7L – ₹38.3 Lakhs
                   </span>
                 </td>
                 <td className="py-4 px-4 font-medium">
                   <span className="block">£12,000 – £15,000 / yr (maintenance)</span>
-                  <span className="text-[10px] text-slate-600 font-semibold bg-slate-100 px-1.5 py-0.5 rounded inline-block mt-0.5">
+                  <span className="text-[10px] text-slate-600 font-semibold bg-slate-100 px-1.5 py-0.5 rounded-[4px] inline-block mt-0.5">
                     🇮🇳 ~₹13.1L – ₹16.4 Lakhs
                   </span>
                 </td>
@@ -575,7 +575,7 @@ ${user?.email || 'email@example.com'}`;
         </div>
 
         {/* Mandatory Prominent Disclaimer Banner */}
-        <div className="p-4 bg-amber-50/80 rounded-2xl border border-amber-200 text-xs text-amber-950 flex items-start gap-3">
+        <div className="p-4 bg-amber-50/80 rounded-[8px] border border-amber-200 text-xs text-amber-950 flex items-start gap-3">
           <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
           <div className="space-y-1">
             <p className="font-extrabold uppercase tracking-wide text-amber-900">

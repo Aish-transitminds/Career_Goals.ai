@@ -263,19 +263,19 @@ export const AIAssistantWidget: React.FC = () => {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-tr from-indigo-600 to-indigo-700 text-white shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-indigo-300"
+          className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-[#FF5E00] hover:bg-[#E65400] text-[#0B1026] shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-[#FF5E00]/30"
           aria-label="Open Atlas, your Study Abroad Guide"
           aria-expanded={false}
           aria-haspopup="dialog"
         >
-          <Compass className="w-7 h-7 text-white" />
+          <Compass className="w-7 h-7 text-[#0B1026]" />
           <span className="absolute -top-1 -right-1 flex h-4 w-4">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-4 w-4 bg-emerald-500 border-2 border-white" />
           </span>
 
           {/* Hover Tooltip */}
-          <span className="absolute right-16 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-lg pointer-events-none">
+          <span className="absolute right-16 px-3 py-1.5 bg-[#0B1026] text-white text-xs font-semibold rounded-[6px] opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-lg pointer-events-none">
             Ask Atlas – Study Guide
           </span>
         </button>
@@ -286,23 +286,23 @@ export const AIAssistantWidget: React.FC = () => {
         <div
           role="dialog"
           aria-label="Atlas - Study Abroad Guide"
-          className="w-[calc(100vw-2rem)] sm:w-96 h-[540px] max-h-[calc(100vh-5rem)] bg-white rounded-3xl shadow-2xl border border-slate-200 flex flex-col overflow-hidden animate-fadeIn"
+          className="w-[calc(100vw-2rem)] sm:w-96 h-[540px] max-h-[calc(100vh-5rem)] bg-white rounded-2xl shadow-2xl border border-slate-200 flex flex-col overflow-hidden animate-fadeIn font-poppins"
         >
           {/* Header */}
-          <div className="bg-gradient-to-r from-indigo-600 to-indigo-700 text-white p-4 flex items-center justify-between shadow-sm">
+          <div className="bg-[#0B1026] text-white p-4 flex items-center justify-between shadow-sm border-b border-[#151B3A]">
             <div className="flex items-center space-x-2.5">
-              <div className="p-2 bg-white/10 rounded-xl">
-                <Compass className="w-5 h-5 text-indigo-100" />
+              <div className="p-2 bg-white/10 rounded-[6px]">
+                <Compass className="w-5 h-5 text-[#FF5E00]" />
               </div>
               <div>
                 <h3 className="font-bold text-sm tracking-tight flex items-center gap-1.5">
                   Atlas
-                  <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                  <span className="text-[11px] font-normal text-indigo-200">· Guide</span>
+                  <Sparkles className="w-3.5 h-3.5 text-[#FF5E00]" />
+                  <span className="text-[11px] font-normal text-slate-300">· Guide</span>
                 </h3>
                 {/* 3. Demo Data Labelling: Header badge only shows Verified Catalog Data when non-demo */}
                 {isDemoActive ? (
-                  <span className="inline-flex items-center gap-1 text-[10px] text-amber-200 font-medium bg-amber-500/20 px-1.5 py-0.5 rounded border border-amber-300/30">
+                  <span className="inline-flex items-center gap-1 text-[10px] text-amber-200 font-medium bg-amber-500/20 px-1.5 py-0.5 rounded-[4px] border border-amber-300/30">
                     <AlertCircle className="w-3 h-3 text-amber-300" />
                     Demo Data Record
                   </span>
@@ -319,7 +319,7 @@ export const AIAssistantWidget: React.FC = () => {
               <button
                 onClick={handleReset}
                 title="Reset conversation"
-                className="p-1.5 text-indigo-200 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                className="p-1.5 text-slate-300 hover:text-white hover:bg-white/10 rounded-[6px] transition-colors"
                 aria-label="Reset conversation"
               >
                 <RotateCcw className="w-4 h-4" />
@@ -327,7 +327,7 @@ export const AIAssistantWidget: React.FC = () => {
               <button
                 onClick={() => setIsOpen(false)}
                 title="Close assistant"
-                className="p-1.5 text-indigo-200 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                className="p-1.5 text-slate-300 hover:text-white hover:bg-white/10 rounded-[6px] transition-colors"
                 aria-label="Close assistant"
               >
                 <X className="w-5 h-5" />
@@ -359,10 +359,10 @@ export const AIAssistantWidget: React.FC = () => {
                   className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`max-w-[90%] rounded-2xl p-3.5 shadow-xs space-y-2.5 ${
+                    className={`max-w-[90%] rounded-[6px] p-3.5 shadow-xs space-y-2.5 ${
                       isUser
-                        ? 'bg-indigo-600 text-white rounded-br-xs'
-                        : 'bg-white border border-slate-200 text-slate-800 rounded-bl-xs'
+                        ? 'bg-[#0B1026] text-white border border-[#151B3A]'
+                        : 'bg-white border border-slate-200 text-slate-800'
                     }`}
                   >
                     {/* Message Body (1. Markdown Rendering via renderChatText for bot, textContent for user) */}
@@ -390,7 +390,7 @@ export const AIAssistantWidget: React.FC = () => {
                               href={msg.sourceUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-indigo-600 hover:text-indigo-800 font-bold inline-flex items-center gap-1 underline decoration-indigo-200"
+                              className="text-[#FF5E00] hover:text-[#E65400] font-bold inline-flex items-center gap-1 underline decoration-orange-200"
                             >
                               <span>{msg.sourceName || 'Official Source'}</span>
                               <ExternalLink className="w-3 h-3" />
@@ -399,7 +399,7 @@ export const AIAssistantWidget: React.FC = () => {
                         )}
 
                         {/* Mandatory Universal Footer */}
-                        <div className="bg-amber-50 rounded-lg p-2 text-[10px] text-amber-900 flex items-start gap-1.5 border border-amber-200/80">
+                        <div className="bg-amber-50 rounded-[6px] p-2 text-[10px] text-amber-900 flex items-start gap-1.5 border border-amber-200/80">
                           <AlertCircle className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
                           <span>
                             <strong>Verify on official site:</strong> Always confirm application deadlines, test score cutoffs, and fees directly on the official institution portal.
@@ -414,10 +414,10 @@ export const AIAssistantWidget: React.FC = () => {
 
             {isTyping && (
               <div className="flex justify-start">
-                <div className="bg-white border border-slate-200 rounded-2xl rounded-bl-xs p-3 text-slate-500 text-xs flex items-center space-x-2">
-                  <span className="w-2 h-2 rounded-full bg-indigo-600 animate-pulse" />
-                  <span className="w-2 h-2 rounded-full bg-indigo-600 animate-pulse delay-150" />
-                  <span className="w-2 h-2 rounded-full bg-indigo-600 animate-pulse delay-300" />
+                <div className="bg-white border border-slate-200 rounded-[6px] p-3 text-slate-500 text-xs flex items-center space-x-2">
+                  <span className="w-2 h-2 rounded-full bg-[#FF5E00] animate-pulse" />
+                  <span className="w-2 h-2 rounded-full bg-[#FF5E00] animate-pulse delay-150" />
+                  <span className="w-2 h-2 rounded-full bg-[#FF5E00] animate-pulse delay-300" />
                   <span className="text-[11px] font-medium text-slate-500 ml-1">
                     Querying verified catalog...
                   </span>
@@ -435,7 +435,7 @@ export const AIAssistantWidget: React.FC = () => {
                 <button
                   key={idx}
                   onClick={() => handleSendMessage(prompt)}
-                  className="px-2.5 py-1 rounded-full text-[11px] font-medium bg-slate-100 hover:bg-indigo-50 text-slate-700 hover:text-indigo-700 border border-slate-200 transition-colors text-left"
+                  className="px-2.5 py-1 rounded-[6px] text-[11px] font-medium bg-slate-100 hover:bg-orange-50 text-slate-700 hover:text-[#FF5E00] border border-slate-200 transition-colors text-left"
                 >
                   {prompt}
                 </button>
@@ -454,13 +454,13 @@ export const AIAssistantWidget: React.FC = () => {
                 placeholder="Ask about cutoffs, fees, deadlines (max 500 chars)..."
                 maxLength={500}
                 rows={2}
-                className="w-full resize-none p-2.5 pr-10 text-xs text-slate-800 placeholder-slate-400 bg-slate-50 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all"
+                className="w-full resize-none p-2.5 pr-10 text-xs text-slate-800 placeholder-slate-400 bg-slate-50 rounded-[6px] border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#FF5E00] focus:bg-white transition-all"
               />
               <button
                 type="button"
                 disabled={!inputText.trim() || isTyping}
                 onClick={() => handleSendMessage()}
-                className="absolute right-2 bottom-2.5 p-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 text-white transition-colors"
+                className="absolute right-2 bottom-2.5 p-1.5 rounded-[6px] bg-[#FF5E00] hover:bg-[#E65400] text-[#0B1026] disabled:opacity-40 transition-colors"
                 aria-label="Send query"
               >
                 <Send className="w-3.5 h-3.5" />

@@ -310,13 +310,13 @@ export const OnboardingPage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto py-6 sm:py-10 space-y-8">
+    <div className="max-w-3xl mx-auto py-6 sm:py-10 space-y-8 font-poppins">
       {/* Header */}
       <div className="text-center space-y-2">
-        <span className="text-xs font-bold text-indigo-600 uppercase tracking-wider">
+        <span className="text-xs font-bold text-[#FF5E00] uppercase tracking-wider">
           Student Profile Setup
         </span>
-        <h1 className="text-3xl font-extrabold text-slate-900">
+        <h1 className="text-3xl font-extrabold text-[#0B1026]">
           Academic Profile & Study Preferences
         </h1>
         <p className="text-slate-600 text-sm max-w-xl mx-auto">
@@ -324,20 +324,20 @@ export const OnboardingPage: React.FC = () => {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 sm:p-8 space-y-8">
+      <form onSubmit={handleSubmit} className="bg-white rounded-[8px] shadow-sm border border-slate-200 p-6 sm:p-8 space-y-8 hover:border-[#FF5E00]/60 transition-colors">
         
         {/* ========================================================= */}
         {/* SECTION 1: Personal Details                               */}
         {/* ========================================================= */}
         <div className="space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
-            <GraduationCap className="w-5 h-5 text-indigo-600" />
-            <h2 className="text-base font-bold text-slate-900">1. Student Information</h2>
+            <GraduationCap className="w-5 h-5 text-[#FF5E00]" />
+            <h2 className="text-base font-bold text-[#0B1026]">1. Student Information</h2>
           </div>
 
           <div className="space-y-1">
             <div className="flex justify-between items-center">
-              <label className="block text-sm font-semibold text-slate-900">
+              <label className="block text-sm font-semibold text-[#0B1026]">
                 Full Name or Display Handle <span className="text-rose-500">*</span>
               </label>
               <span className="text-xs text-slate-400">{name.length} / 500</span>
@@ -348,7 +348,7 @@ export const OnboardingPage: React.FC = () => {
               value={name}
               onChange={(e) => setName(e.target.value.slice(0, 500))}
               placeholder="e.g. Alex Chen"
-              className={`w-full px-4 py-2.5 rounded-xl border text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm ${
+              className={`w-full px-4 py-2.5 rounded-[6px] border text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#FF5E00] text-sm ${
                 errors.name ? 'border-rose-300 bg-rose-50' : 'border-slate-300'
               }`}
             />
@@ -362,8 +362,8 @@ export const OnboardingPage: React.FC = () => {
         <div className="space-y-4 pt-2 border-t border-slate-100">
           <div className="flex items-center justify-between pb-2 border-b border-slate-100">
             <div className="flex items-center gap-2">
-              <Building2 className="w-5 h-5 text-indigo-600" />
-              <h2 className="text-base font-bold text-slate-900">2. Academic Background</h2>
+              <Building2 className="w-5 h-5 text-[#FF5E00]" />
+              <h2 className="text-base font-bold text-[#0B1026]">2. Academic Background</h2>
             </div>
             <span className="text-xs text-slate-400">Score & scale stored separately</span>
           </div>
@@ -377,7 +377,7 @@ export const OnboardingPage: React.FC = () => {
               <select
                 value={qualification}
                 onChange={(e) => setQualification(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-white rounded-lg border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3.5 py-2.5 bg-white rounded-[6px] border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#FF5E00]"
               >
                 {QUALIFICATION_OPTIONS.map((opt) => (
                   <option key={opt} value={opt}>{opt}</option>
@@ -396,7 +396,7 @@ export const OnboardingPage: React.FC = () => {
                 placeholder="e.g. B.Tech, B.A., B.Sc."
                 value={degreeTitle}
                 onChange={(e) => setDegreeTitle(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-white rounded-lg border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3.5 py-2.5 bg-white rounded-[6px] border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#FF5E00]"
               />
             </div>
 
@@ -411,7 +411,7 @@ export const OnboardingPage: React.FC = () => {
                 placeholder="e.g. Computer Science, Fashion Design, Drama"
                 value={fieldOfStudy}
                 onChange={(e) => setFieldOfStudy(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-white rounded-lg border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3.5 py-2.5 bg-white rounded-[6px] border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#FF5E00]"
               />
             </div>
 
@@ -426,15 +426,15 @@ export const OnboardingPage: React.FC = () => {
                 placeholder="e.g. University of Delhi, TU Berlin"
                 value={institution}
                 onChange={(e) => setInstitution(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-white rounded-lg border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3.5 py-2.5 bg-white rounded-[6px] border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#FF5E00]"
               />
             </div>
           </div>
 
           {/* Academic Score & Explicit Grading Scale */}
-          <div className="p-4 bg-slate-50/70 rounded-xl border border-slate-200 space-y-3">
+          <div className="p-4 bg-slate-50/70 rounded-[6px] border border-slate-200 space-y-3">
             <div className="flex items-center justify-between">
-              <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider">
+              <label className="block text-xs font-bold text-[#0B1026] uppercase tracking-wider">
                 Academic Score & Grading Scale
               </label>
               <span className="text-xs text-slate-400">Leave score blank if unstated</span>
@@ -449,7 +449,7 @@ export const OnboardingPage: React.FC = () => {
                 <select
                   value={gpaScale}
                   onChange={(e) => setGpaScale(e.target.value as GradingScale)}
-                  className="w-full px-3 py-2 bg-white rounded-lg border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2 bg-white rounded-[6px] border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#FF5E00]"
                 >
                   {GRADING_SCALE_OPTIONS.map((scale) => (
                     <option key={scale.id} value={scale.id}>
@@ -473,7 +473,7 @@ export const OnboardingPage: React.FC = () => {
                   }
                   value={gpa}
                   onChange={(e) => setGpa(e.target.value)}
-                  className={`w-full px-3 py-2 bg-white rounded-lg border text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                  className={`w-full px-3 py-2 bg-white rounded-[6px] border text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#FF5E00] ${
                     errors.gpa ? 'border-rose-400 bg-rose-50' : 'border-slate-300'
                   }`}
                 />
@@ -492,7 +492,7 @@ export const OnboardingPage: React.FC = () => {
                   placeholder="e.g. 2024"
                   value={graduationYear}
                   onChange={(e) => setGraduationYear(e.target.value)}
-                  className={`w-full px-3 py-2 bg-white rounded-lg border text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                  className={`w-full px-3 py-2 bg-white rounded-[6px] border text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#FF5E00] ${
                     errors.graduationYear ? 'border-rose-400 bg-rose-50' : 'border-slate-300'
                   }`}
                 />
@@ -514,8 +514,8 @@ export const OnboardingPage: React.FC = () => {
         <div className="space-y-4 pt-2 border-t border-slate-100">
           <div className="flex items-center justify-between pb-2 border-b border-slate-100">
             <div className="flex items-center gap-2">
-              <Compass className="w-5 h-5 text-indigo-600" />
-              <h2 className="text-base font-bold text-slate-900">3. Intended Studies</h2>
+              <Compass className="w-5 h-5 text-[#FF5E00]" />
+              <h2 className="text-base font-bold text-[#0B1026]">3. Intended Studies</h2>
             </div>
             <span className="text-xs text-slate-400">Not hardcoded to CS</span>
           </div>
@@ -529,7 +529,7 @@ export const OnboardingPage: React.FC = () => {
               <select
                 value={intendedDegreeLevel}
                 onChange={(e) => setIntendedDegreeLevel(e.target.value as DegreeLevel)}
-                className="w-full px-3.5 py-2.5 bg-white rounded-lg border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3.5 py-2.5 bg-white rounded-[6px] border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#FF5E00]"
               >
                 {DEGREE_LEVEL_OPTIONS.map((lvl) => (
                   <option key={lvl} value={lvl}>{lvl}</option>
@@ -545,7 +545,7 @@ export const OnboardingPage: React.FC = () => {
               <select
                 value={intendedSubject}
                 onChange={(e) => setIntendedSubject(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-white rounded-lg border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3.5 py-2.5 bg-white rounded-[6px] border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#FF5E00]"
               >
                 {INTENDED_SUBJECT_OPTIONS.map((subj) => (
                   <option key={subj.id} value={subj.label}>
@@ -566,7 +566,7 @@ export const OnboardingPage: React.FC = () => {
                 placeholder="e.g. Distributed Systems, Apparel Merchandising, Dramaturgy"
                 value={specialisation}
                 onChange={(e) => setSpecialisation(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-white rounded-lg border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3.5 py-2.5 bg-white rounded-[6px] border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#FF5E00]"
               />
             </div>
 
@@ -579,7 +579,7 @@ export const OnboardingPage: React.FC = () => {
                 <select
                   value={targetIntakeYear}
                   onChange={(e) => setTargetIntakeYear(e.target.value)}
-                  className="w-full px-3 py-2.5 bg-white rounded-lg border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2.5 bg-white rounded-[6px] border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#FF5E00]"
                 >
                   <option value="2025">2025</option>
                   <option value="2026">2026</option>
@@ -595,7 +595,7 @@ export const OnboardingPage: React.FC = () => {
                 <select
                   value={targetIntakeSemester}
                   onChange={(e) => setTargetIntakeSemester(e.target.value)}
-                  className="w-full px-3 py-2.5 bg-white rounded-lg border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full px-3 py-2.5 bg-white rounded-[6px] border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#FF5E00]"
                 >
                   <option value="Fall / Winter">Fall / Winter</option>
                   <option value="Spring / Summer">Spring / Summer</option>
@@ -612,7 +612,7 @@ export const OnboardingPage: React.FC = () => {
             <select
               value={targetProgramId}
               onChange={(e) => setTargetProgramId(e.target.value)}
-              className="w-full px-3.5 py-2.5 bg-white rounded-lg border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-3.5 py-2.5 bg-white rounded-[6px] border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#FF5E00]"
             >
               <option value="">General search / Not yet decided on a specific university</option>
               {universities.map((u) => (
@@ -625,7 +625,7 @@ export const OnboardingPage: React.FC = () => {
 
           {/* ADAPTIVE PROGRAMME & SUBJECT REQUIREMENTS BANNER (§3) */}
           {intendedSubject.includes('Fashion Design') && (
-            <div className="p-4 bg-amber-50/80 rounded-xl border border-amber-200 text-xs text-amber-900 space-y-2">
+            <div className="p-4 bg-amber-50/80 rounded-[6px] border border-amber-200 text-xs text-amber-900 space-y-2">
               <div className="flex items-center gap-2 font-bold text-amber-950">
                 <Sparkles className="w-4 h-4 text-amber-600" />
                 <span>Creative Admissions Notice: Portfolio & Design Concept Preparation</span>
@@ -643,7 +643,7 @@ export const OnboardingPage: React.FC = () => {
           )}
 
           {intendedSubject.includes('Theatre') && (
-            <div className="p-4 bg-purple-50/80 rounded-xl border border-purple-200 text-xs text-purple-900 space-y-2">
+            <div className="p-4 bg-purple-50/80 rounded-[6px] border border-purple-200 text-xs text-purple-900 space-y-2">
               <div className="flex items-center gap-2 font-bold text-purple-950">
                 <Sparkles className="w-4 h-4 text-purple-600" />
                 <span>Performing Arts Notice: Audition & Practical Assessment</span>
@@ -662,13 +662,13 @@ export const OnboardingPage: React.FC = () => {
 
           {/* Specific Programme Adaptation if selected */}
           {selectedProgram && (
-            <div className="p-4 bg-indigo-50/70 rounded-xl border border-indigo-200 text-xs text-indigo-950 space-y-2">
+            <div className="p-4 bg-orange-50/50 rounded-[6px] border border-orange-200 text-xs text-[#0B1026] space-y-2">
               <div className="flex items-center justify-between">
-                <span className="font-bold text-indigo-900 flex items-center gap-1.5">
-                  <FileCheck className="w-4 h-4 text-indigo-600" />
+                <span className="font-bold text-[#0B1026] flex items-center gap-1.5">
+                  <FileCheck className="w-4 h-4 text-[#FF5E00]" />
                   <span>Selected Programme Requirements: {selectedProgram.name}</span>
                 </span>
-                <span className={`px-2 py-0.5 rounded text-[10px] font-semibold ${
+                <span className={`px-2 py-0.5 rounded-[4px] text-[10px] font-semibold ${
                   selectedProgram.statementRequirements?.status === 'Verified'
                     ? 'bg-emerald-100 text-emerald-800'
                     : 'bg-amber-100 text-amber-800'
@@ -692,7 +692,7 @@ export const OnboardingPage: React.FC = () => {
                     : 'Unconfirmed / Programme-specific'}
                 </div>
                 {selectedProgram.statementRequirements?.summary && (
-                  <div className="italic text-indigo-900 pt-1">
+                  <div className="italic text-[#0B1026] pt-1">
                     "{selectedProgram.statementRequirements.summary}"
                   </div>
                 )}
@@ -706,11 +706,11 @@ export const OnboardingPage: React.FC = () => {
         {/* ========================================================= */}
         <div className="space-y-4 pt-2 border-t border-slate-100">
           <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-            <h2 className="text-base font-bold text-slate-900">4. English Proficiency</h2>
+            <h2 className="text-base font-bold text-[#0B1026]">4. English Proficiency</h2>
             <span className="text-xs text-slate-400">IELTS, TOEFL, PTE supported</span>
           </div>
 
-          <label className="block text-sm font-semibold text-slate-900">
+          <label className="block text-sm font-semibold text-[#0B1026]">
             Have you taken an English proficiency test?
           </label>
 
@@ -718,13 +718,13 @@ export const OnboardingPage: React.FC = () => {
             <button
               type="button"
               onClick={() => setEnglishTestTaken(true)}
-              className={`flex items-center justify-center gap-2 p-4 rounded-xl border-2 font-medium text-sm transition-all ${
+              className={`flex items-center justify-center gap-2 p-4 rounded-[6px] border font-medium text-sm transition-all ${
                 englishTestTaken
-                  ? 'border-indigo-600 bg-indigo-50/50 text-indigo-900 shadow-sm'
+                  ? 'border-[#FF5E00] bg-orange-50/50 text-[#0B1026] shadow-sm font-semibold ring-1 ring-[#FF5E00]/30'
                   : 'border-slate-200 hover:border-slate-300 text-slate-700 bg-white'
               }`}
             >
-              <CheckCircle2 className={`w-5 h-5 ${englishTestTaken ? 'text-indigo-600' : 'text-slate-400'}`} />
+              <CheckCircle2 className={`w-5 h-5 ${englishTestTaken ? 'text-[#FF5E00]' : 'text-slate-400'}`} />
               <span>Yes, I have taken a test</span>
             </button>
 
@@ -734,22 +734,22 @@ export const OnboardingPage: React.FC = () => {
                 setEnglishTestTaken(false);
                 setEnglishTestScore('');
               }}
-              className={`flex items-center justify-center gap-2 p-4 rounded-xl border-2 font-medium text-sm transition-all ${
+              className={`flex items-center justify-center gap-2 p-4 rounded-[6px] border font-medium text-sm transition-all ${
                 !englishTestTaken
-                  ? 'border-indigo-600 bg-indigo-50/50 text-indigo-900 shadow-sm'
+                  ? 'border-[#FF5E00] bg-orange-50/50 text-[#0B1026] shadow-sm font-semibold ring-1 ring-[#FF5E00]/30'
                   : 'border-slate-200 hover:border-slate-300 text-slate-700 bg-white'
               }`}
             >
-              <HelpCircle className={`w-5 h-5 ${!englishTestTaken ? 'text-indigo-600' : 'text-slate-400'}`} />
+              <HelpCircle className={`w-5 h-5 ${!englishTestTaken ? 'text-[#FF5E00]' : 'text-slate-400'}`} />
               <span>No, not yet / MOI eligible</span>
             </button>
           </div>
 
           {/* Conditional English Test Fields */}
           {englishTestTaken ? (
-            <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
+            <div className="p-4 bg-slate-50/80 rounded-[6px] border border-slate-200 space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                <span className="text-xs font-bold text-[#0B1026] uppercase tracking-wider">
                   Test Details & Score
                 </span>
                 <span className="text-xs text-slate-400">Score is optional if pending</span>
@@ -764,7 +764,7 @@ export const OnboardingPage: React.FC = () => {
                   <select
                     value={englishTestType}
                     onChange={(e) => setEnglishTestType(e.target.value as EnglishTestType)}
-                    className="w-full px-3 py-2 bg-white rounded-lg border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 bg-white rounded-[6px] border border-slate-300 text-sm text-[#0B1026] focus:outline-none focus:ring-2 focus:ring-[#FF5E00]"
                   >
                     <option value="IELTS">IELTS Academic (0.0 – 9.0)</option>
                     <option value="TOEFL">TOEFL iBT (0 – 120)</option>
@@ -791,7 +791,7 @@ export const OnboardingPage: React.FC = () => {
                     }
                     value={englishTestScore}
                     onChange={(e) => setEnglishTestScore(e.target.value)}
-                    className={`w-full px-3 py-2 bg-white rounded-lg border text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                    className={`w-full px-3 py-2 bg-white rounded-[6px] border text-sm text-[#0B1026] focus:outline-none focus:ring-2 focus:ring-[#FF5E00] ${
                       errors.englishScore ? 'border-rose-400 bg-rose-50' : 'border-slate-300'
                     }`}
                   />
@@ -809,14 +809,14 @@ export const OnboardingPage: React.FC = () => {
                     type="date"
                     value={englishTestDate}
                     onChange={(e) => setEnglishTestDate(e.target.value)}
-                    className="w-full px-3 py-2 bg-white rounded-lg border border-slate-300 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 bg-white rounded-[6px] border border-slate-300 text-sm text-[#0B1026] focus:outline-none focus:ring-2 focus:ring-[#FF5E00]"
                   />
                 </div>
               </div>
             </div>
           ) : (
-            <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-600 flex items-start gap-2.5">
-              <Info className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
+            <div className="p-4 bg-slate-50 rounded-[6px] border border-slate-200 text-xs text-slate-600 flex items-start gap-2.5">
+              <Info className="w-4 h-4 text-[#FF5E00] shrink-0 mt-0.5" />
               <span>
                 No English test score yet? You can continue without one. Many European universities admit students with English Medium of Instruction (MOI) certificates or offer conditional admission. Missing scores are never recorded as zero.
               </span>
@@ -829,11 +829,11 @@ export const OnboardingPage: React.FC = () => {
         {/* ========================================================= */}
         <div className="space-y-4 pt-2 border-t border-slate-100">
           <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-            <h2 className="text-base font-bold text-slate-900">5. Other Admission Tests</h2>
+            <h2 className="text-base font-bold text-[#0B1026]">5. Other Admission Tests</h2>
             <span className="text-xs text-slate-400">GRE / GMAT (Conditional)</span>
           </div>
 
-          <label className="block text-sm font-semibold text-slate-900">
+          <label className="block text-sm font-semibold text-[#0B1026]">
             Have you taken any other standardized admission test (e.g. GRE or GMAT)?
           </label>
 
@@ -841,13 +841,13 @@ export const OnboardingPage: React.FC = () => {
             <button
               type="button"
               onClick={() => setOtherTestsTaken(true)}
-              className={`flex items-center justify-center gap-2 p-4 rounded-xl border-2 font-medium text-sm transition-all ${
+              className={`flex items-center justify-center gap-2 p-4 rounded-[6px] border font-medium text-sm transition-all ${
                 otherTestsTaken
-                  ? 'border-indigo-600 bg-indigo-50/50 text-indigo-900 shadow-sm'
+                  ? 'border-[#FF5E00] bg-orange-50/50 text-[#0B1026] shadow-sm font-semibold ring-1 ring-[#FF5E00]/30'
                   : 'border-slate-200 hover:border-slate-300 text-slate-700 bg-white'
               }`}
             >
-              <CheckCircle2 className={`w-5 h-5 ${otherTestsTaken ? 'text-indigo-600' : 'text-slate-400'}`} />
+              <CheckCircle2 className={`w-5 h-5 ${otherTestsTaken ? 'text-[#FF5E00]' : 'text-slate-400'}`} />
               <span>Yes, I have taken GRE / GMAT</span>
             </button>
 
@@ -858,22 +858,22 @@ export const OnboardingPage: React.FC = () => {
                 setGre('');
                 setGmat('');
               }}
-              className={`flex items-center justify-center gap-2 p-4 rounded-xl border-2 font-medium text-sm transition-all ${
+              className={`flex items-center justify-center gap-2 p-4 rounded-[6px] border font-medium text-sm transition-all ${
                 !otherTestsTaken
-                  ? 'border-indigo-600 bg-indigo-50/50 text-indigo-900 shadow-sm'
+                  ? 'border-[#FF5E00] bg-orange-50/50 text-[#0B1026] shadow-sm font-semibold ring-1 ring-[#FF5E00]/30'
                   : 'border-slate-200 hover:border-slate-300 text-slate-700 bg-white'
               }`}
             >
-              <HelpCircle className={`w-5 h-5 ${!otherTestsTaken ? 'text-indigo-600' : 'text-slate-400'}`} />
+              <HelpCircle className={`w-5 h-5 ${!otherTestsTaken ? 'text-[#FF5E00]' : 'text-slate-400'}`} />
               <span>No / Not required for my programmes</span>
             </button>
           </div>
 
           {/* Conditional GRE / GMAT Inputs */}
           {otherTestsTaken ? (
-            <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
+            <div className="p-4 bg-slate-50/80 rounded-[6px] border border-slate-200 space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                <span className="text-xs font-bold text-[#0B1026] uppercase tracking-wider">
                   Aptitude Test Scores
                 </span>
                 <span className="text-xs text-slate-400">Leave blank if not taken</span>
@@ -892,7 +892,7 @@ export const OnboardingPage: React.FC = () => {
                     placeholder="e.g. 320"
                     value={gre}
                     onChange={(e) => setGre(e.target.value)}
-                    className={`w-full px-3.5 py-2.5 bg-white rounded-lg border text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                    className={`w-full px-3.5 py-2.5 bg-white rounded-[6px] border text-sm text-[#0B1026] focus:outline-none focus:ring-2 focus:ring-[#FF5E00] ${
                       errors.gre ? 'border-rose-400 bg-rose-50' : 'border-slate-300'
                     }`}
                   />
@@ -912,7 +912,7 @@ export const OnboardingPage: React.FC = () => {
                     placeholder="e.g. 680"
                     value={gmat}
                     onChange={(e) => setGmat(e.target.value)}
-                    className={`w-full px-3.5 py-2.5 bg-white rounded-lg border text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                    className={`w-full px-3.5 py-2.5 bg-white rounded-[6px] border text-sm text-[#0B1026] focus:outline-none focus:ring-2 focus:ring-[#FF5E00] ${
                       errors.gmat ? 'border-rose-400 bg-rose-50' : 'border-slate-300'
                     }`}
                   />
@@ -921,8 +921,8 @@ export const OnboardingPage: React.FC = () => {
               </div>
             </div>
           ) : (
-            <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-600 flex items-start gap-2.5">
-              <Info className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
+            <div className="p-4 bg-slate-50 rounded-[6px] border border-slate-200 text-xs text-slate-600 flex items-start gap-2.5">
+              <Info className="w-4 h-4 text-[#FF5E00] shrink-0 mt-0.5" />
               <span>
                 GRE and GMAT are generally only required for specific competitive programmes (e.g. TUM Informatics for certain international degrees). Most European Master's and humanities programmes waive them.
               </span>
@@ -935,14 +935,14 @@ export const OnboardingPage: React.FC = () => {
         {/* ========================================================= */}
         <div className="space-y-4 pt-2 border-t border-slate-100">
           <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-            <h2 className="text-base font-bold text-slate-900">6. Preferences & Budget</h2>
+            <h2 className="text-base font-bold text-[#0B1026]">6. Preferences & Budget</h2>
             <span className="text-xs text-slate-400">Target countries & finances</span>
           </div>
 
           {/* Preferred Countries Selection */}
           <div className="space-y-2">
             <div className="flex justify-between items-center">
-              <label className="block text-sm font-semibold text-slate-900">
+              <label className="block text-sm font-semibold text-[#0B1026]">
                 Target Study Destinations <span className="text-rose-500">*</span>
               </label>
               <span className="text-xs text-slate-400">Select at least one</span>
@@ -956,15 +956,15 @@ export const OnboardingPage: React.FC = () => {
                     key={c.id}
                     type="button"
                     onClick={() => handleCountryToggle(c.id)}
-                    className={`p-3.5 rounded-xl border text-left transition-all ${
+                    className={`p-3.5 rounded-[6px] border text-left transition-all ${
                       isSelected
-                        ? 'border-indigo-600 bg-indigo-50/40 text-indigo-900 shadow-sm'
+                        ? 'border-[#FF5E00] bg-orange-50/50 text-[#0B1026] shadow-sm ring-1 ring-[#FF5E00]/30'
                         : 'border-slate-200 hover:border-slate-300 text-slate-700 bg-white'
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-semibold text-sm">{c.name}</span>
-                      {isSelected && <CheckCircle2 className="w-4 h-4 text-indigo-600" />}
+                      {isSelected && <CheckCircle2 className="w-4 h-4 text-[#FF5E00]" />}
                     </div>
                     <p className="text-xs text-slate-500 mt-1 line-clamp-2">{c.desc}</p>
                   </button>
@@ -977,7 +977,7 @@ export const OnboardingPage: React.FC = () => {
           {/* Budget Input & Details */}
           <div className="space-y-3 pt-2">
             <div className="flex justify-between items-center">
-              <label className="block text-sm font-semibold text-slate-900">
+              <label className="block text-sm font-semibold text-[#0B1026]">
                 Budget Amount (in EUR €) <span className="text-rose-500">*</span>
               </label>
               <span className="text-xs text-slate-400">Use 0 for tuition-free search</span>
@@ -994,12 +994,12 @@ export const OnboardingPage: React.FC = () => {
                 value={budget}
                 onChange={(e) => setBudget(e.target.value)}
                 placeholder="15000"
-                className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-300 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+                className="w-full pl-9 pr-4 py-2.5 rounded-[6px] border border-slate-300 text-[#0B1026] focus:outline-none focus:ring-2 focus:ring-[#FF5E00] text-sm"
               />
             </div>
 
             {/* Real-time Indian Rupee (INR) Side-by-Side Display */}
-            <div className="p-3 bg-gradient-to-r from-emerald-50 to-teal-50/50 border border-emerald-200/80 rounded-xl text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 shadow-2xs">
+            <div className="p-3 bg-gradient-to-r from-emerald-50 to-teal-50/50 border border-emerald-200/80 rounded-[6px] text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 shadow-2xs">
               <div className="flex items-center gap-2">
                 <span className="font-bold text-emerald-800 flex items-center gap-1">
                   🇮🇳 Approx. in Indian Rupees:
@@ -1011,7 +1011,7 @@ export const OnboardingPage: React.FC = () => {
                   ({convertEurToInr(budget).inrFormatted})
                 </span>
               </div>
-              <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-100/60 px-2 py-0.5 rounded-md self-start sm:self-auto">
+              <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-100/60 px-2 py-0.5 rounded-[4px] self-start sm:self-auto">
                 1 EUR ≈ ₹91.25
               </span>
             </div>
@@ -1026,9 +1026,9 @@ export const OnboardingPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setBudgetPeriod('annual')}
-                    className={`py-2 px-3 text-xs rounded-lg border font-medium transition-all ${
+                    className={`py-2 px-3 text-xs rounded-[6px] border font-medium transition-all ${
                       budgetPeriod === 'annual'
-                        ? 'border-indigo-600 bg-indigo-50 text-indigo-900 font-semibold'
+                        ? 'border-[#FF5E00] bg-orange-50/50 text-[#0B1026] font-semibold ring-1 ring-[#FF5E00]/30'
                         : 'border-slate-200 text-slate-600 hover:bg-slate-50'
                     }`}
                   >
@@ -1037,9 +1037,9 @@ export const OnboardingPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setBudgetPeriod('total')}
-                    className={`py-2 px-3 text-xs rounded-lg border font-medium transition-all ${
+                    className={`py-2 px-3 text-xs rounded-[6px] border font-medium transition-all ${
                       budgetPeriod === 'total'
-                        ? 'border-indigo-600 bg-indigo-50 text-indigo-900 font-semibold'
+                        ? 'border-[#FF5E00] bg-orange-50/50 text-[#0B1026] font-semibold ring-1 ring-[#FF5E00]/30'
                         : 'border-slate-200 text-slate-600 hover:bg-slate-50'
                     }`}
                   >
@@ -1056,9 +1056,9 @@ export const OnboardingPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setBudgetCovers('total_cost')}
-                    className={`py-2 px-3 text-xs rounded-lg border font-medium transition-all ${
+                    className={`py-2 px-3 text-xs rounded-[6px] border font-medium transition-all ${
                       budgetCovers === 'total_cost'
-                        ? 'border-indigo-600 bg-indigo-50 text-indigo-900 font-semibold'
+                        ? 'border-[#FF5E00] bg-orange-50/50 text-[#0B1026] font-semibold ring-1 ring-[#FF5E00]/30'
                         : 'border-slate-200 text-slate-600 hover:bg-slate-50'
                     }`}
                   >
@@ -1067,9 +1067,9 @@ export const OnboardingPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setBudgetCovers('tuition_only')}
-                    className={`py-2 px-3 text-xs rounded-lg border font-medium transition-all ${
+                    className={`py-2 px-3 text-xs rounded-[6px] border font-medium transition-all ${
                       budgetCovers === 'tuition_only'
-                        ? 'border-indigo-600 bg-indigo-50 text-indigo-900 font-semibold'
+                        ? 'border-[#FF5E00] bg-orange-50/50 text-[#0B1026] font-semibold ring-1 ring-[#FF5E00]/30'
                         : 'border-slate-200 text-slate-600 hover:bg-slate-50'
                     }`}
                   >
@@ -1086,7 +1086,7 @@ export const OnboardingPage: React.FC = () => {
                   type="checkbox"
                   checked={scholarshipPreference}
                   onChange={(e) => setScholarshipPreference(e.target.checked)}
-                  className="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-4 h-4"
+                  className="rounded border-slate-300 text-[#FF5E00] focus:ring-[#FF5E00] w-4 h-4"
                 />
                 <span>Actively seeking university scholarship or DAAD/government funding opportunities</span>
               </label>
@@ -1103,9 +1103,9 @@ export const OnboardingPage: React.FC = () => {
                   key={preset.val}
                   type="button"
                   onClick={() => setBudget(preset.val)}
-                  className={`text-xs px-3 py-1.5 rounded-full border transition-colors ${
+                  className={`text-xs px-3 py-1.5 rounded-[6px] border transition-colors ${
                     budget === preset.val
-                      ? 'bg-indigo-100 border-indigo-400 text-indigo-800 font-semibold'
+                      ? 'bg-[#0B1026] border-[#0B1026] text-white font-semibold'
                       : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
                   }`}
                 >
@@ -1119,7 +1119,7 @@ export const OnboardingPage: React.FC = () => {
 
         {/* Global Error Banner */}
         {submitError && (
-          <div className="p-3 bg-rose-50 border border-rose-200 rounded-lg text-rose-700 text-xs flex items-center gap-2">
+          <div className="p-3 bg-rose-50 border border-rose-200 rounded-[6px] text-rose-700 text-xs flex items-center gap-2">
             <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{submitError}</span>
           </div>
@@ -1130,10 +1130,10 @@ export const OnboardingPage: React.FC = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-base shadow-md transition-all disabled:opacity-50"
+            className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-[6px] bg-[#FF5E00] hover:bg-[#E65400] text-[#0B1026] font-semibold text-base shadow-md transition-all disabled:opacity-50"
           >
             <span>{isSubmitting ? 'Saving Profile...' : 'Save & View University Matches'}</span>
-            <ArrowRight className="w-5 h-5" />
+            <ArrowRight className="w-5 h-5 text-[#0B1026]" />
           </button>
         </div>
       </form>

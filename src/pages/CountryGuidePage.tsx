@@ -122,10 +122,10 @@ export const CountryGuidePage: React.FC = () => {
   const progressPercent = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 font-poppins">
       {/* Header */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0B1026]">
           Country Admission & Visa Guides
         </h1>
         <p className="text-slate-600 text-sm mt-1">
@@ -148,9 +148,9 @@ export const CountryGuidePage: React.FC = () => {
                 setActiveCountryId(tab.id);
                 navigate(`/countries/${tab.id}`);
               }}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all ${
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-[6px] text-sm font-bold transition-all ${
                 isActive
-                  ? 'bg-indigo-600 text-white shadow-sm'
+                  ? 'bg-[#0B1026] text-white shadow-sm border border-[#151B3A]'
                   : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
               }`}
             >
@@ -169,7 +169,7 @@ export const CountryGuidePage: React.FC = () => {
         <div className="space-y-6">
           {/* Amber Rule-Changed Alert Banner */}
           {(activeCountry.ruleChanged || ruleChangedUnivs.length > 0) && (
-            <div className="bg-amber-50 border border-amber-300 rounded-2xl p-4 sm:p-5 flex items-start gap-3 shadow-sm">
+            <div className="bg-amber-50 border border-amber-300 rounded-[8px] p-4 sm:p-5 flex items-start gap-3 shadow-sm">
               <ShieldAlert className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
               <div className="space-y-1 text-xs text-amber-900">
                 <div className="flex items-center gap-2 flex-wrap">
@@ -178,7 +178,7 @@ export const CountryGuidePage: React.FC = () => {
                       ? `Simulated Admission Rule Change Demonstration in ${activeCountry.name}`
                       : `Admission Rule Changes Detected in ${activeCountry.name}`}
                   </span>
-                  <span className="bg-amber-200 text-amber-950 font-bold px-2 py-0.5 rounded-full text-[10px] uppercase tracking-wider border border-amber-300">
+                  <span className="bg-amber-200 text-amber-950 font-bold px-2 py-0.5 rounded-[4px] text-[10px] uppercase tracking-wider border border-amber-300">
                     {ruleChangedUnivs.every((u) => u.demoSeeded)
                       ? 'Demonstration Record'
                       : 'Verified Change Alert'}
@@ -202,10 +202,10 @@ export const CountryGuidePage: React.FC = () => {
           )}
 
           {/* Top Country Hero Card */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="bg-white rounded-[8px] border border-slate-200 p-6 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-[#FF5E00] transition-colors">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <span className="text-xs uppercase font-bold tracking-wider text-indigo-600">
+                <span className="text-xs uppercase font-bold tracking-wider text-[#FF5E00]">
                   National Admissions Dossier
                 </span>
                 <span className="text-slate-300">&bull;</span>
@@ -214,7 +214,7 @@ export const CountryGuidePage: React.FC = () => {
                   sourceUrl={activeCountry.sourceUrl}
                 />
               </div>
-              <h2 className="text-2xl font-black text-slate-900">{activeCountry.name}</h2>
+              <h2 className="text-2xl font-black text-[#0B1026]">{activeCountry.name}</h2>
               <p className="text-xs text-slate-500">
                 Official destination guidelines for international degree-seeking students.
               </p>
@@ -224,26 +224,26 @@ export const CountryGuidePage: React.FC = () => {
               href={activeCountry.portalUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-sm transition-colors self-start md:self-center"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-[6px] bg-[#FF5E00] hover:bg-[#E65400] text-[#0B1026] text-xs font-semibold shadow-sm transition-colors self-start md:self-center"
             >
               <span>Visit Official National Portal</span>
-              <ExternalLink className="w-4 h-4" />
+              <ExternalLink className="w-4 h-4 text-[#0B1026]" />
             </a>
           </div>
 
           {/* Grid of Key Information */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Language & Admission Standards */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 space-y-3 shadow-sm">
-              <div className="flex items-center gap-2 text-indigo-600">
-                <GraduationCap className="w-5 h-5" />
-                <h3 className="font-bold text-slate-900 text-base">Language Requirements</h3>
+            <div className="bg-white rounded-[8px] border border-slate-200 p-6 space-y-3 shadow-sm hover:border-[#FF5E00] transition-colors">
+              <div className="flex items-center gap-2 text-[#FF5E00]">
+                <GraduationCap className="w-5 h-5 text-[#FF5E00]" />
+                <h3 className="font-bold text-[#0B1026] text-base">Language Requirements</h3>
               </div>
               <p className="text-xs text-slate-700 leading-relaxed">
                 {activeCountry.languageNote}
               </p>
-              <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs text-slate-600 space-y-1">
-                <span className="font-semibold text-slate-800">Key Takeaway:</span>
+              <div className="p-3 bg-slate-50 rounded-[6px] border border-slate-200 text-xs text-slate-600 space-y-1">
+                <span className="font-semibold text-[#0B1026]">Key Takeaway:</span>
                 <p>
                   Always verify whether individual departments require English C1 (IELTS 7.0+) or B2 (IELTS 6.0/6.5). Scores must be sent directly via ETS or British Council.
                 </p>
@@ -251,18 +251,18 @@ export const CountryGuidePage: React.FC = () => {
             </div>
 
             {/* Living Costs & Blocked Account */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 space-y-3 shadow-sm">
-              <div className="flex items-center gap-2 text-indigo-600">
-                <Euro className="w-5 h-5" />
-                <h3 className="font-bold text-slate-900 text-base">Cost & Financial Proof</h3>
+            <div className="bg-white rounded-[8px] border border-slate-200 p-6 space-y-3 shadow-sm hover:border-[#FF5E00] transition-colors">
+              <div className="flex items-center gap-2 text-[#FF5E00]">
+                <Euro className="w-5 h-5 text-[#FF5E00]" />
+                <h3 className="font-bold text-[#0B1026] text-base">Cost & Financial Proof</h3>
               </div>
               <p className="text-xs text-slate-700 leading-relaxed font-medium">
                 {activeCountry.costRange}
               </p>
-              <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs text-slate-600 space-y-2">
+              <div className="p-3 bg-slate-50 rounded-[6px] border border-slate-200 text-xs text-slate-600 space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-slate-800">Financial Proof Requirement:</span>
-                  <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                  <span className="font-semibold text-[#0B1026]">Financial Proof Requirement:</span>
+                  <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-[4px] border border-emerald-200">
                     🇮🇳 Indian Student Reference
                   </span>
                 </div>
@@ -278,10 +278,10 @@ export const CountryGuidePage: React.FC = () => {
             </div>
 
             {/* Visa & Post-Study Work Regulations */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 space-y-3 shadow-sm lg:col-span-2">
-              <div className="flex items-center gap-2 text-indigo-600">
-                <Briefcase className="w-5 h-5" />
-                <h3 className="font-bold text-slate-900 text-base">
+            <div className="bg-white rounded-[8px] border border-slate-200 p-6 space-y-3 shadow-sm lg:col-span-2 hover:border-[#FF5E00] transition-colors">
+              <div className="flex items-center gap-2 text-[#FF5E00]">
+                <Briefcase className="w-5 h-5 text-[#FF5E00]" />
+                <h3 className="font-bold text-[#0B1026] text-base">
                   Visa Regulations & Post-Study Work Rights
                 </h3>
               </div>
@@ -289,25 +289,25 @@ export const CountryGuidePage: React.FC = () => {
                 {activeCountry.visaNote}
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-                <div className="p-3 bg-indigo-50/50 rounded-xl border border-indigo-100 text-xs">
-                  <span className="block font-bold text-indigo-900">Visa Type</span>
-                  <span className="text-indigo-700">
+                <div className="p-3 bg-slate-50 rounded-[6px] border border-slate-200 text-xs">
+                  <span className="block font-bold text-[#0B1026]">Visa Type</span>
+                  <span className="text-slate-700 font-semibold">
                     {activeCountryId === 'germany' && 'National Visa (Type D)'}
                     {activeCountryId === 'ireland' && 'Study Visa (Stamp 2)'}
                     {activeCountryId === 'uk' && 'Student Visa (Points-based)'}
                   </span>
                 </div>
-                <div className="p-3 bg-indigo-50/50 rounded-xl border border-indigo-100 text-xs">
-                  <span className="block font-bold text-indigo-900">Post-Study Work</span>
-                  <span className="text-indigo-700">
+                <div className="p-3 bg-slate-50 rounded-[6px] border border-slate-200 text-xs">
+                  <span className="block font-bold text-[#0B1026]">Post-Study Work</span>
+                  <span className="text-slate-700 font-semibold">
                     {activeCountryId === 'germany' && '18 months (Job Seeker)'}
                     {activeCountryId === 'ireland' && '24 months (Master’s Stamp 1G)'}
                     {activeCountryId === 'uk' && '2 years (Graduate Route)'}
                   </span>
                 </div>
-                <div className="p-3 bg-indigo-50/50 rounded-xl border border-indigo-100 text-xs">
-                  <span className="block font-bold text-indigo-900">Portal Architecture</span>
-                  <span className="text-indigo-700">
+                <div className="p-3 bg-slate-50 rounded-[6px] border border-slate-200 text-xs">
+                  <span className="block font-bold text-[#0B1026]">Portal Architecture</span>
+                  <span className="text-slate-700 font-semibold">
                     {activeCountryId === 'germany' && 'uni-assist VPD / Direct Portal'}
                     {activeCountryId === 'ireland' && 'CAO (UG) / Direct University (PG)'}
                     {activeCountryId === 'uk' && 'UCAS (UG) / Direct University (PG)'}
@@ -318,12 +318,12 @@ export const CountryGuidePage: React.FC = () => {
           </div>
 
           {/* Interactive Document Checklist */}
-          <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-7 space-y-5 shadow-sm">
+          <div className="bg-white rounded-[8px] border border-slate-200 p-6 sm:p-7 space-y-5 shadow-sm">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
               <div className="space-y-1">
                 <div className="flex items-center gap-2 text-emerald-600">
-                  <FileCheck2 className="w-5 h-5" />
-                  <h3 className="font-bold text-slate-900 text-lg">
+                  <FileCheck2 className="w-5 h-5 text-emerald-600" />
+                  <h3 className="font-bold text-[#0B1026] text-lg">
                     Pre-Flight Document Checklist: {activeCountry.name}
                   </h3>
                 </div>
@@ -335,12 +335,12 @@ export const CountryGuidePage: React.FC = () => {
               {/* Progress Pill & Actions */}
               <div className="flex items-center gap-3">
                 <div className="text-right">
-                  <span className="text-xs font-bold text-slate-900">
+                  <span className="text-xs font-bold text-[#0B1026]">
                     {completedCount} of {totalCount} ready
                   </span>
                   <div className="w-28 bg-slate-100 rounded-full h-2 mt-1 overflow-hidden">
                     <div
-                      className="bg-emerald-500 h-2 rounded-full transition-all duration-300"
+                      className="bg-[#FF5E00] h-2 rounded-full transition-all duration-300"
                       style={{ width: `${progressPercent}%` }}
                     />
                   </div>
@@ -348,14 +348,14 @@ export const CountryGuidePage: React.FC = () => {
 
                 <button
                   onClick={selectAllDocs}
-                  className="px-2.5 py-1.5 text-xs font-semibold text-slate-600 hover:text-indigo-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors"
+                  className="px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:text-[#FF5E00] bg-slate-100 hover:bg-slate-200 rounded-[6px] transition-colors"
                   title="Select All"
                 >
                   All
                 </button>
                 <button
                   onClick={resetDocs}
-                  className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
+                  className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-[6px] transition-colors"
                   title="Reset Checklist"
                 >
                   <RotateCcw className="w-4 h-4" />
@@ -376,7 +376,7 @@ export const CountryGuidePage: React.FC = () => {
                   <div
                     key={idx}
                     onClick={() => toggleDoc(docItem)}
-                    className={`flex flex-col gap-2 p-3.5 rounded-xl border text-xs cursor-pointer transition-all select-none ${
+                    className={`flex flex-col gap-2 p-3.5 rounded-[6px] border text-xs cursor-pointer transition-all select-none ${
                       isChecked
                         ? 'bg-emerald-50/60 border-emerald-200 text-emerald-950 font-medium'
                         : 'bg-slate-50/50 border-slate-200 text-slate-700 hover:bg-slate-100/70'
@@ -414,10 +414,10 @@ export const CountryGuidePage: React.FC = () => {
                             e.stopPropagation();
                             handleCheckStatementRequirements();
                           }}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-2xs transition-colors self-start sm:self-auto shrink-0"
+                          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-[6px] bg-[#FF5E00] hover:bg-[#E65400] text-[#0B1026] text-xs font-semibold shadow-2xs transition-colors self-start sm:self-auto shrink-0"
                           title="Check official statement requirements"
                         >
-                          <FileText className="w-3.5 h-3.5" />
+                          <FileText className="w-3.5 h-3.5 text-[#0B1026]" />
                           <span>Check statement requirements</span>
                         </button>
                       </div>
@@ -427,7 +427,7 @@ export const CountryGuidePage: React.FC = () => {
               })}
             </div>
 
-            <div className="flex items-center gap-2 p-3 bg-slate-50 rounded-xl text-xs text-slate-500">
+            <div className="flex items-center gap-2 p-3 bg-slate-50 rounded-[6px] text-xs text-slate-500">
               <Info className="w-4 h-4 text-slate-400 shrink-0" />
               <span>
                 Note: Translations must be notarized or issued by recognized sworn translators. Always confirm specific apostille / legalisation rules for your home country.

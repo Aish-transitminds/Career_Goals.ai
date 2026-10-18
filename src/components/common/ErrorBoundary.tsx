@@ -68,19 +68,19 @@ export class ErrorBoundary extends Component<Props, State> {
               </pre>
             )}
 
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center font-poppins">
               <button
                 onClick={this.handleReload}
-                className="inline-flex items-center justify-center px-4 py-2.5 rounded-lg text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm transition-colors"
+                className="inline-flex items-center justify-center px-4 py-2.5 rounded-[6px] text-sm font-semibold text-[#0B1026] bg-[#FF5E00] hover:bg-[#E65400] shadow-sm transition-colors"
               >
-                <RefreshCw className="w-4 h-4 mr-2" />
+                <RefreshCw className="w-4 h-4 mr-2 text-[#0B1026]" />
                 Reload Application
               </button>
               <button
                 onClick={this.handleReset}
-                className="inline-flex items-center justify-center px-4 py-2.5 rounded-lg text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors"
+                className="inline-flex items-center justify-center px-4 py-2.5 rounded-[6px] text-sm font-semibold text-white bg-[#0B1026] hover:bg-[#151B3A] transition-colors"
               >
-                <Home className="w-4 h-4 mr-2" />
+                <Home className="w-4 h-4 mr-2 text-[#FF5E00]" />
                 Return Home
               </button>
             </div>

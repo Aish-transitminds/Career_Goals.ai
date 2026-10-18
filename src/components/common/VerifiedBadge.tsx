@@ -25,7 +25,7 @@ export const VerifiedBadge: React.FC<VerifiedBadgeProps> = ({ lastChecked, sourc
         target="_blank"
         rel="noopener noreferrer"
         title="Verify directly on official university site"
-        className="inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-800 hover:underline font-medium"
+        className="inline-flex items-center gap-1 text-[#FF5E00] hover:text-[#E65400] hover:underline font-medium"
       >
         <span>Official Source</span>
         <ExternalLink className="w-3 h-3 shrink-0" />

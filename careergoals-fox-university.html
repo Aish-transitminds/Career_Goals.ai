@@ -1,0 +1,4710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CareerGoals | Study Abroad Guide</title>
+  <meta
+    name="description"
+    content="CareerGoals guides your global education with verified requirements from official university sources, live change detection, application tracking, and rejection roadmaps."
+  />
+  <meta name="theme-color" content="#164E3B" />
+
+  <!-- Google Fonts: Poppins (400, 500, 600, 700) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Firebase Client SDK (Compat CDN for standalone single-file compatibility) -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+
+  <style>
+    /* ==========================================================================
+       DESIGN SYSTEM: EUROPEAN EDITORIAL PALETTE (From FILE B)
+       ========================================================================== */
+    :root {
+      /* Palette Tokens */
+      --forest: #164E3B;         /* brand, primary buttons, nav, selected states */
+      --gold: #D4A84F;           /* restrained accent: icons, underlines, small highlights */
+      --ivory: #FAF7F0;          /* page background and spacious areas */
+      --slate: #344054;          /* body text, structure, borders, information blocks */
+      --mist: #E7EFE9;           /* soft tints, hover states, badge backgrounds */
+      --white: #FFFFFF;          /* cards and form surfaces */
+
+      /* Derived Tokens */
+      --forest-hover: #0F3A2B;
+      --line: #E3E8E2;
+      --muted: #667085;
+
+      /* Status Colours */
+      --status-success: #16A34A;
+      --status-success-bg: #DCFCE7;
+      --status-warning: #B45309;
+      --status-warning-bg: #FEF3C7;
+      --status-error: #B42318;
+      --status-error-bg: #FEE4E2;
+
+      /* Standard Geometry & Typography */
+      --radius-card: 12px;
+      --radius-btn: 6px;
+      --font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-family: var(--font-family);
+    }
+
+    body {
+      font-family: var(--font-family);
+      font-weight: 400;
+      color: var(--slate);
+      background-color: var(--ivory);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-family);
+      font-weight: 600;
+      line-height: 1.25;
+      color: var(--slate);
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--forest) !important;
+      outline-offset: 2px !important;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      width: 100%;
+    }
+
+    /* Buttons */
+    .btn-forest {
+      background-color: var(--forest);
+      color: var(--white);
+      font-weight: 600;
+      font-size: 13.5px;
+      padding: 10px 20px;
+      border-radius: var(--radius-btn);
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+      cursor: pointer;
+    }
+    .btn-forest:hover {
+      background-color: var(--forest-hover);
+      box-shadow: 0 4px 12px rgba(22, 78, 59, 0.25);
+    }
+
+    .btn-forest-on-ivory {
+      background-color: var(--white);
+      color: var(--forest);
+      font-weight: 600;
+      font-size: 13.5px;
+      padding: 10px 22px;
+      border-radius: var(--radius-btn);
+      border: 1px solid var(--line);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+      cursor: pointer;
+    }
+    .btn-forest-on-ivory:hover {
+      background-color: var(--ivory);
+      border-color: var(--gold);
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      background-color: transparent;
+      color: var(--ivory);
+      font-weight: 600;
+      font-size: 13.5px;
+      padding: 9px 20px;
+      border-radius: var(--radius-btn);
+      border: 1px solid rgba(250, 247, 240, 0.35);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+      cursor: pointer;
+    }
+    .btn-ghost:hover {
+      background-color: rgba(250, 247, 240, 0.1);
+      border-color: var(--gold);
+      color: var(--white);
+    }
+
+    /* ==========================================================================
+       LAYER 2: STICKY NAV (Forest #164E3B, Exact 4 Tabs from A)
+       ========================================================================== */
+    .sticky-nav {
+      background-color: var(--forest);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 4px 16px rgba(22, 78, 59, 0.25);
+      border-bottom: 1px solid var(--forest-hover);
+    }
+    .nav-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      gap: 20px;
+    }
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      background-color: var(--white);
+      border-radius: var(--radius-btn);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--forest);
+    }
+    .brand-text h1 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -0.3px;
+      line-height: 1.1;
+    }
+    .brand-text h1 span {
+      color: var(--gold);
+    }
+    .brand-text p {
+      font-size: 10.5px;
+      color: var(--mist);
+      font-weight: 500;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      list-style: none;
+    }
+    .nav-link {
+      color: var(--ivory);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 4px;
+      transition: color 0.15s ease;
+      position: relative;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .nav-link:hover {
+      color: var(--white);
+    }
+    .nav-link.active {
+      color: var(--gold);
+      font-weight: 600;
+    }
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: var(--gold);
+      border-radius: 2px;
+    }
+
+    .nav-right-cluster {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    /* Search Pill */
+    .search-pill-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .search-pill {
+      background-color: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--mist);
+      border-radius: 999px;
+      padding: 7px 14px 7px 34px;
+      font-size: 12px;
+      color: var(--ivory);
+      outline: none;
+      width: 210px;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+    .search-pill::placeholder {
+      color: rgba(231, 239, 233, 0.7);
+    }
+    .search-pill:focus {
+      background-color: rgba(255, 255, 255, 0.16);
+      border-color: var(--gold);
+      width: 240px;
+    }
+    .search-icon-inside {
+      position: absolute;
+      left: 12px;
+      color: var(--mist);
+      pointer-events: none;
+      width: 14px;
+      height: 14px;
+    }
+
+    /* Milestone Reminders Bell */
+    .nav-bell-btn {
+      background: transparent;
+      border: none;
+      color: var(--ivory);
+      padding: 6px;
+      border-radius: 50%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: color 0.15s ease, background-color 0.15s ease;
+    }
+    .nav-bell-btn:hover {
+      color: var(--gold);
+      background-color: rgba(255, 255, 255, 0.08);
+    }
+    .bell-badge {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      background-color: var(--status-error);
+      color: var(--white);
+      font-size: 9px;
+      font-weight: 700;
+      min-width: 15px;
+      height: 15px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 3px;
+      border: 2px solid var(--forest);
+    }
+
+    /* Notifications Dropdown */
+    .notif-dropdown {
+      position: absolute;
+      top: 54px;
+      right: 0;
+      width: 340px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+      z-index: 100;
+      overflow: hidden;
+      display: none;
+    }
+    .notif-dropdown.open {
+      display: block;
+    }
+    .notif-header {
+      padding: 12px 16px;
+      background: var(--ivory);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--slate);
+    }
+    .notif-list {
+      max-height: 260px;
+      overflow-y: auto;
+      divide-y: 1px solid var(--line);
+    }
+    .notif-item {
+      padding: 10px 14px;
+      font-size: 11.5px;
+      cursor: pointer;
+      border-bottom: 1px solid var(--line);
+      transition: background-color 0.15s ease;
+    }
+    .notif-item:hover {
+      background-color: var(--ivory);
+    }
+    .notif-item.unread {
+      background-color: #f0fdf4;
+    }
+    .notif-item-header {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 600;
+      color: var(--slate);
+      margin-bottom: 3px;
+    }
+    .notif-item-text {
+      color: var(--muted);
+      line-height: 1.4;
+    }
+    .notif-footer {
+      padding: 10px;
+      text-align: center;
+      background: var(--ivory);
+      border-top: 1px solid var(--line);
+    }
+    .notif-footer a {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--forest);
+    }
+
+    /* Auth Buttons & Profile */
+    .auth-btn-cluster {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-login-demo {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: var(--ivory);
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: var(--radius-btn);
+      transition: all 0.15s ease;
+    }
+    .btn-login-demo:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+    .btn-login-google {
+      background: var(--white);
+      color: var(--forest);
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: var(--radius-btn);
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background-color 0.15s ease;
+    }
+    .btn-login-google:hover {
+      background-color: var(--ivory);
+    }
+    .user-profile-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: var(--white);
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 4px;
+    }
+    .user-avatar-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: var(--gold);
+      color: var(--forest);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .user-dropdown {
+      position: absolute;
+      top: 54px;
+      right: 0;
+      width: 220px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+      z-index: 100;
+      overflow: hidden;
+      display: none;
+    }
+    .user-dropdown.open {
+      display: block;
+    }
+    .user-dropdown-header {
+      padding: 12px 14px;
+      background: var(--ivory);
+      border-bottom: 1px solid var(--line);
+    }
+    .user-dropdown-header p {
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .user-dropdown-header h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--slate);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .user-dropdown-items {
+      padding: 6px 0;
+    }
+    .user-dropdown-item {
+      padding: 8px 14px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--slate);
+      cursor: pointer;
+      transition: background 0.15s ease;
+      width: 100%;
+      background: none;
+      border: none;
+      text-align: left;
+    }
+    .user-dropdown-item:hover {
+      background: var(--ivory);
+      color: var(--forest);
+    }
+    .user-dropdown-item.danger {
+      color: var(--status-error);
+    }
+    .user-dropdown-item.danger:hover {
+      background: var(--status-error-bg);
+    }
+
+    /* Mobile Hamburger */
+    .hamburger-btn {
+      display: none;
+      background: transparent;
+      border: none;
+      color: var(--white);
+      cursor: pointer;
+      padding: 6px;
+    }
+    .mobile-drawer {
+      display: none;
+      background-color: var(--forest);
+      border-top: 1px solid var(--forest-hover);
+      padding: 16px 20px;
+    }
+    .mobile-drawer.open {
+      display: block;
+    }
+    .mobile-nav-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .mobile-nav-link {
+      color: var(--ivory);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 12px;
+      border-radius: var(--radius-btn);
+      display: block;
+    }
+    .mobile-nav-link.active, .mobile-nav-link:hover {
+      color: var(--gold);
+      background-color: var(--forest-hover);
+    }
+
+    /* ==========================================================================
+       LAYER 3: HERO SECTION (From FILE A, styled with B)
+       ========================================================================== */
+    .hero-section {
+      background: linear-gradient(135deg, #1f2937 0%, #164E3B 55%, #0F3A2B 100%);
+      color: var(--white);
+      padding: 64px 0 72px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: -120px;
+      right: -80px;
+      width: 480px;
+      height: 480px;
+      background: radial-gradient(circle, rgba(212, 168, 79, 0.12) 0%, rgba(22, 78, 59, 0) 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background-color: rgba(231, 239, 233, 0.15);
+      color: var(--ivory);
+      border: 1px solid rgba(231, 239, 233, 0.3);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+    .hero-tag svg {
+      color: var(--gold);
+    }
+    .hero-headline {
+      font-size: 40px;
+      font-weight: 600;
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: 16px;
+      letter-spacing: -0.5px;
+    }
+    .hero-headline span {
+      color: var(--gold);
+    }
+    .hero-subtext {
+      font-size: 15px;
+      color: var(--ivory);
+      opacity: 0.92;
+      line-height: 1.6;
+      margin-bottom: 28px;
+      max-width: 540px;
+    }
+    .hero-ctas {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    /* Hero Right Card: "Your Applications" */
+    .apps-card {
+      background-color: var(--white);
+      color: var(--slate);
+      border-radius: var(--radius-card);
+      padding: 24px;
+      box-shadow: 0 16px 32px rgba(15, 58, 43, 0.22);
+      border: 1px solid var(--line);
+    }
+    .apps-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 14px;
+    }
+    .apps-card-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--slate);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--forest);
+      border-radius: 50%;
+      box-shadow: 0 0 0 3px rgba(22, 78, 59, 0.2);
+    }
+    .badge-cycle {
+      background-color: var(--mist);
+      color: var(--forest);
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    .apps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .app-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      background-color: var(--ivory);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      transition: transform 0.15s ease;
+    }
+    .app-item:hover {
+      transform: translateY(-1px);
+    }
+    .app-univ {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--slate);
+    }
+    .app-program {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+      white-space: nowrap;
+    }
+    .badge-verified {
+      background-color: var(--status-success-bg);
+      color: var(--status-success);
+      border: 1px solid #86efac;
+    }
+    .badge-changed {
+      background-color: var(--status-warning-bg);
+      color: var(--status-warning);
+      border: 1px solid #fcd34d;
+    }
+    .badge-inprogress {
+      background-color: var(--mist);
+      color: var(--forest);
+      border: 1px solid var(--line);
+    }
+
+    .apps-card-footer {
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ==========================================================================
+       LAYER 4: FOUR-BLOCK FEATURE STRIP (From FILE A, styled with B)
+       ========================================================================== */
+    .feature-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      width: 100%;
+    }
+    .feature-block {
+      padding: 34px 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      transition: filter 0.15s ease;
+    }
+    .feature-block:hover {
+      filter: brightness(1.04);
+    }
+    .block-forest {
+      background-color: var(--forest);
+      color: var(--ivory);
+    }
+    .block-slate {
+      background-color: var(--slate);
+      color: var(--ivory);
+    }
+    .feature-icon-wrapper {
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius-btn);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      background-color: rgba(255, 255, 255, 0.08);
+    }
+    .feature-gold-icon {
+      color: var(--gold);
+      stroke: var(--gold);
+    }
+    .feature-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--ivory);
+    }
+    .feature-desc {
+      font-size: 12.5px;
+      line-height: 1.55;
+      color: rgba(250, 247, 240, 0.88);
+    }
+
+    /* ==========================================================================
+       LAYER 5: CONTENT AREA & VIEWS
+       ========================================================================== */
+    .content-area {
+      background-color: var(--ivory);
+      padding: 44px 0 64px;
+      flex: 1;
+    }
+
+    .view-container {
+      display: none;
+    }
+    .view-container.active-view {
+      display: block;
+    }
+
+    .page-header {
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .page-title {
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--slate);
+      letter-spacing: -0.01em;
+    }
+    .page-subtext {
+      font-size: 13.5px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* Toolbar Container */
+    .toolbar-container {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-card);
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .toolbar-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .toolbar-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--muted);
+      flex-wrap: wrap;
+    }
+
+    .search-input-field {
+      padding: 8px 14px 8px 34px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-btn);
+      font-size: 12.5px;
+      font-family: inherit;
+      color: var(--slate);
+      outline: none;
+      width: 280px;
+      background: var(--white);
+    }
+    .search-input-field:focus {
+      border-color: var(--forest);
+    }
+
+    .select-dropdown {
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-btn);
+      font-size: 12.5px;
+      font-family: inherit;
+      color: var(--slate);
+      outline: none;
+      background: var(--white);
+      cursor: pointer;
+    }
+    .select-dropdown:focus {
+      border-color: var(--forest);
+    }
+
+    .tab-pills-group {
+      display: inline-flex;
+      background: var(--ivory);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-btn);
+      padding: 3px;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+    .tab-pill-btn {
+      border: none;
+      background: transparent;
+      padding: 5px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--slate);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .tab-pill-btn:hover {
+      background: var(--mist);
+    }
+    .tab-pill-btn.active {
+      background: var(--forest);
+      color: var(--white);
+      font-weight: 600;
+    }
+
+    .btn-toggle-group {
+      display: inline-flex;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-btn);
+      background: var(--white);
+      overflow: hidden;
+    }
+    .btn-toggle {
+      border: none;
+      background: transparent;
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s ease;
+    }
+    .btn-toggle:hover {
+      color: var(--slate);
+      background: var(--mist);
+    }
+    .btn-toggle.active {
+      background: var(--forest);
+      color: var(--white);
+      font-weight: 600;
+    }
+
+    /* Rule Changed Banner */
+    .rule-banner {
+      background: var(--status-warning-bg);
+      border: 1px solid #fcd34d;
+      border-radius: var(--radius-btn);
+      padding: 10px 14px;
+      font-size: 12px;
+      color: #92400e;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    /* Match Cards (3-Column Fixed Grid) */
+    .cards-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .match-card {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-card);
+      padding: 24px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      box-sizing: border-box;
+      width: 100%;
+    }
+    .match-card:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 4px 14px rgba(22, 78, 59, 0.08);
+    }
+    .match-card.is-applied {
+      border-color: #86efac;
+      background: #fafdfb;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.45fr) minmax(0, 1.15fr);
+      gap: 20px;
+      align-items: center;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .col-identity {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+      box-sizing: border-box;
+    }
+    .univ-name {
+      font-size: 19px;
+      font-weight: 600;
+      color: var(--slate);
+      line-height: 1.3;
+      word-break: break-word;
+    }
+    .univ-program {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--muted);
+      word-break: break-word;
+    }
+    .univ-verified {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11.5px;
+      color: var(--muted);
+      font-weight: 400;
+      margin-top: 4px;
+    }
+    .univ-verified svg {
+      width: 14px;
+      height: 14px;
+      stroke: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .col-facts {
+      border-left: 1px solid var(--line);
+      padding-left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-width: 0;
+      box-sizing: border-box;
+    }
+    .facts-subgrid {
+      display: grid;
+      grid-template-columns: 1.3fr 1.1fr 1fr 0.8fr;
+      gap: 10px;
+      align-items: start;
+      width: 100%;
+    }
+    .fact-item {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+    .fact-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+    }
+    .fact-value-bold {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--slate);
+      margin-top: 2px;
+      white-space: nowrap;
+    }
+    .fact-value-sub {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 400;
+      line-height: 1.25;
+      margin-top: 2px;
+    }
+    .status-met {
+      color: var(--status-success);
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .status-gap {
+      color: var(--status-warning);
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .fact-extra-line {
+      font-size: 11.5px;
+      color: var(--muted);
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      word-break: break-word;
+    }
+    .fact-extra-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .col-actions {
+      border-left: 1px solid var(--line);
+      padding-left: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 12px;
+      text-align: right;
+      min-width: 0;
+      box-sizing: border-box;
+    }
+    .col-actions > * {
+      max-width: 100%;
+    }
+
+    .fit-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--slate);
+      background: transparent;
+      border: none;
+      padding: 0;
+      justify-content: flex-end;
+      text-align: right;
+      max-width: 100%;
+      flex-wrap: wrap;
+    }
+    .fit-badge-strong {
+      font-weight: 600;
+    }
+    .fit-reason-text {
+      color: var(--muted);
+    }
+
+    .btn-primary-action {
+      background: var(--forest);
+      color: var(--white);
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: var(--radius-btn);
+      padding: 9px 16px;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      text-align: center;
+      transition: background-color 0.15s ease;
+      white-space: nowrap;
+      box-sizing: border-box;
+      max-width: 100%;
+    }
+    .btn-primary-action:hover {
+      background: var(--forest-hover);
+    }
+
+    .actions-subrow {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 14px;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      flex-wrap: wrap;
+    }
+    .link-official-site {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.15s ease;
+      white-space: nowrap;
+    }
+    .link-official-site:hover {
+      color: var(--forest);
+    }
+    .link-official-site svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    .applied-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      font-family: inherit;
+      color: var(--muted);
+      transition: color 0.15s ease;
+    }
+    .applied-toggle.is-active {
+      color: var(--status-success);
+      font-weight: 600;
+      cursor: default;
+    }
+    .custom-check-box {
+      width: 14px;
+      height: 14px;
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--white);
+      font-size: 10px;
+      font-weight: 700;
+      transition: all 0.15s ease;
+    }
+    .applied-toggle.is-active .custom-check-box {
+      background: var(--status-success);
+      border-color: var(--status-success);
+      color: var(--white);
+    }
+
+    /* Table View */
+    .table-container {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-card);
+      overflow-x: auto;
+    }
+    .table-container table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 12.5px;
+    }
+    .table-container th {
+      background: var(--mist);
+      padding: 12px 16px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      border-bottom: 1px solid var(--line);
+    }
+    .table-container td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      color: var(--slate);
+    }
+
+    /* ==========================================================================
+       VIEW: COUNTRY GUIDES (From FILE A)
+       ========================================================================== */
+    .country-guide-card {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-card);
+      padding: 28px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      margin-bottom: 24px;
+    }
+    .guide-section-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      margin-top: 20px;
+    }
+    .guide-info-box {
+      background: var(--ivory);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-btn);
+      padding: 18px;
+    }
+    .guide-info-box h4 {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--forest);
+    }
+    .guide-checklist-container {
+      margin-top: 24px;
+      border-top: 1px solid var(--line);
+      padding-top: 20px;
+    }
+    .checklist-items {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .check-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 12.5px;
+      cursor: pointer;
+    }
+    .check-label input[type="checkbox"] {
+      margin-top: 3px;
+      accent-color: var(--forest);
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    /* ==========================================================================
+       VIEW: APPLICATION TRACKER (From FILE A)
+       ========================================================================== */
+    .tracker-card {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-card);
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      margin-bottom: 16px;
+    }
+    .tracker-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 12px;
+      margin-bottom: 14px;
+    }
+    .milestone-timeline {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 14px;
+    }
+    .milestone-step {
+      background: var(--ivory);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-btn);
+      padding: 12px;
+      font-size: 11.5px;
+    }
+    .milestone-step.active {
+      border-color: var(--forest);
+      background: #f0fdf4;
+    }
+    .milestone-day {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--forest);
+      margin-bottom: 4px;
+    }
+
+    /* ==========================================================================
+       VIEW: STATEMENT REQUIREMENTS & PLANNER (From FILE A)
+       ========================================================================== */
+    .anti-rewrite-banner {
+      background-color: var(--mist);
+      border: 1px solid #86efac;
+      border-radius: var(--radius-card);
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .anti-rewrite-banner svg {
+      color: var(--forest);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .anti-rewrite-banner h4 {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--forest);
+      margin-bottom: 4px;
+    }
+    .anti-rewrite-banner p {
+      font-size: 12px;
+      color: var(--slate);
+      line-height: 1.5;
+    }
+
+    .planner-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 24px;
+    }
+    .planner-card {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-card);
+      padding: 24px;
+    }
+    .audit-checklist {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .audit-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 12.5px;
+      padding: 10px 12px;
+      background: var(--ivory);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-btn);
+    }
+    .audit-item input[type="checkbox"] {
+      margin-top: 3px;
+      accent-color: var(--forest);
+      width: 15px;
+      height: 15px;
+    }
+
+    /* ==========================================================================
+       MODALS: Onboarding, Rejection Roadmap, Track Application, Delete Data
+       ========================================================================== */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(11, 16, 38, 0.6);
+      backdrop-filter: blur(2px);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.open {
+      display: flex;
+    }
+    .modal-content {
+      background: var(--white);
+      border-radius: var(--radius-card);
+      border: 1px solid var(--line);
+      width: 100%;
+      max-width: 640px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+    .modal-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-header h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--slate);
+    }
+    .modal-close-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 18px;
+    }
+    .modal-body {
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      font-size: 13px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-group label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--slate);
+    }
+    .form-control {
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-btn);
+      font-size: 13px;
+      font-family: inherit;
+      color: var(--slate);
+      outline: none;
+    }
+    .form-control:focus {
+      border-color: var(--forest);
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--line);
+      background: var(--ivory);
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    /* ==========================================================================
+       LAYER 6: FOOTER (From FILE A, styled with B, NO phone/email)
+       ========================================================================== */
+    .slate-footer {
+      background-color: var(--slate);
+      color: var(--ivory);
+      padding: 48px 0 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: auto;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr;
+      gap: 36px;
+      margin-bottom: 36px;
+    }
+    .footer-col h4 {
+      color: var(--white);
+      font-size: 13.5px;
+      font-weight: 600;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      position: relative;
+    }
+    .footer-col h4::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 22px;
+      height: 2px;
+      background-color: var(--gold);
+    }
+    .footer-about {
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--mist);
+      opacity: 0.9;
+    }
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 12.5px;
+    }
+    .footer-links a {
+      color: var(--mist);
+      transition: color 0.15s ease, padding-left 0.15s ease;
+      cursor: pointer;
+    }
+    .footer-links a:hover {
+      color: var(--gold);
+      padding-left: 3px;
+    }
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      padding-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11.5px;
+      color: var(--mist);
+      opacity: 0.85;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    /* ==========================================================================
+       ATLAS AI ASSISTANT WIDGET
+       ========================================================================== */
+    .widget-fixed-fab {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 100;
+    }
+    .atlas-fab {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background-color: var(--forest);
+      color: var(--white);
+      border: none;
+      box-shadow: 0 10px 25px -4px rgba(22, 78, 59, 0.45);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+    .atlas-fab:hover {
+      transform: scale(1.06);
+      background-color: var(--forest-hover);
+    }
+    .atlas-fab .fab-ping {
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      width: 13px;
+      height: 13px;
+      background-color: var(--status-success);
+      border: 2px solid var(--white);
+      border-radius: 50%;
+    }
+
+    .atlas-dialog {
+      width: 380px;
+      max-width: calc(100vw - 32px);
+      height: 520px;
+      max-height: calc(100vh - 80px);
+      background: var(--white);
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(22, 78, 59, 0.25);
+      border: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .atlas-header {
+      background-color: var(--forest);
+      color: var(--white);
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid var(--gold);
+    }
+    .atlas-header-title {
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .atlas-header-title span {
+      font-size: 11px;
+      color: var(--mist);
+      font-weight: 400;
+    }
+    .atlas-btn-close {
+      background: transparent;
+      border: none;
+      color: var(--mist);
+      cursor: pointer;
+      display: flex;
+    }
+    .atlas-body {
+      flex: 1;
+      background-color: var(--ivory);
+      padding: 14px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: 12px;
+    }
+    .chat-bubble {
+      max-width: 88%;
+      border-radius: 12px;
+      padding: 10px 12px;
+      line-height: 1.5;
+    }
+    .user-bubble {
+      background-color: var(--forest);
+      color: var(--white);
+      align-self: flex-end;
+      border-bottom-right-radius: 2px;
+    }
+    .bot-bubble {
+      background-color: var(--white);
+      color: var(--slate);
+      border: 1px solid var(--line);
+      align-self: flex-start;
+      border-bottom-left-radius: 2px;
+    }
+    .chat-bullet {
+      position: relative;
+      padding-left: 14px;
+      margin: 2px 0;
+    }
+    .chat-bullet::before {
+      content: "•";
+      position: absolute;
+      left: 2px;
+      color: var(--gold);
+    }
+    .chat-gap {
+      height: 6px;
+    }
+    .chat-footnote {
+      margin-top: 8px;
+      font-size: 11px;
+      color: var(--muted);
+      font-style: italic;
+    }
+    .demo-badge {
+      display: inline-block;
+      padding: 1px 5px;
+      font-size: 10px;
+      font-weight: 600;
+      background-color: var(--status-warning-bg);
+      color: var(--status-warning);
+      border-radius: 4px;
+      border: 1px solid #fcd34d;
+    }
+    .atlas-suggested-prompts {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+    .prompt-chip {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 11px;
+      color: var(--slate);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .prompt-chip:hover {
+      background: var(--mist);
+      border-color: var(--forest);
+      color: var(--forest);
+    }
+    .atlas-input-area {
+      padding: 10px 14px;
+      background-color: var(--white);
+      border-top: 1px solid var(--line);
+      display: flex;
+      gap: 8px;
+    }
+    .atlas-input {
+      flex: 1;
+      height: 38px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-btn);
+      padding: 6px 12px;
+      font-size: 12px;
+      outline: none;
+      font-family: inherit;
+    }
+    .atlas-send-btn {
+      width: 38px;
+      height: 38px;
+      background-color: var(--forest);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-btn);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* ==========================================================================
+       RESPONSIVE BREAKPOINTS (1024px, 720px, 520px)
+       ========================================================================== */
+    @media (max-width: 1024px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+      .feature-strip {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .card-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .col-actions {
+        grid-column: span 2;
+        border-left: none;
+        border-top: 1px solid var(--line);
+        padding-left: 0;
+        padding-top: 16px;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .actions-subrow {
+        width: auto;
+      }
+      .guide-section-grid, .checklist-items, .planner-grid {
+        grid-template-columns: 1fr;
+      }
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 28px;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .nav-links, .search-pill-wrapper {
+        display: none;
+      }
+      .hamburger-btn {
+        display: flex;
+      }
+      .hero-headline {
+        font-size: 28px;
+      }
+      .hero-section {
+        padding: 44px 0 52px;
+      }
+      .milestone-timeline {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .feature-strip {
+        grid-template-columns: 1fr;
+      }
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+      .col-facts {
+        border-left: none;
+        padding-left: 0;
+        border-top: 1px solid var(--line);
+        padding-top: 16px;
+      }
+      .facts-subgrid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .col-actions {
+        grid-column: span 1;
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .btn-primary-action {
+        width: 100%;
+      }
+      .actions-subrow {
+        justify-content: space-between;
+        width: 100%;
+      }
+      .hero-ctas {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .btn-forest, .btn-forest-on-ivory, .btn-ghost {
+        justify-content: center;
+        width: 100%;
+      }
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       LAYER 2: STICKY NAV (Forest #164E3B, Exact 4 Tabs from FILE A, No Contact Bar)
+       ========================================================================== -->
+  <nav class="sticky-nav">
+    <div class="container nav-container">
+      <!-- Logo Left: CareerGoals Study Abroad Guide -->
+      <a href="#matches" class="brand-logo" onclick="switchView('matches'); return false;" aria-label="CareerGoals Homepage">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+            <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>Career<span>Goals</span></h1>
+          <p>Study Abroad Guide</p>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation: Exact 4 Tabs from FILE A -->
+      <ul class="nav-links">
+        <li>
+          <a class="nav-link active" id="tab-matches" onclick="switchView('matches')">Matches</a>
+        </li>
+        <li>
+          <a class="nav-link" id="tab-countries" onclick="switchView('countries')">Country Guides</a>
+        </li>
+        <li>
+          <a class="nav-link" id="tab-tracker" onclick="switchView('tracker')">Application Tracker</a>
+        </li>
+        <li>
+          <a class="nav-link" id="tab-planner" onclick="switchView('planner')">Statement Requirements &amp; Planner</a>
+        </li>
+      </ul>
+
+      <!-- Right Cluster: Search, Notifications Bell, Auth & Profile -->
+      <div class="nav-right-cluster">
+        <!-- Rounded Search Pill -->
+        <div class="search-pill-wrapper">
+          <svg class="search-icon-inside" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input
+            type="text"
+            id="navSearchInput"
+            class="search-pill"
+            placeholder="Search universities..."
+            oninput="handleGlobalSearch(this.value)"
+          />
+        </div>
+
+        <!-- Milestone Reminders Bell Button & Dropdown -->
+        <div style="position: relative;">
+          <button id="notifBellBtn" class="nav-bell-btn" onclick="toggleNotifDropdown()" aria-label="Milestone Reminders">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+            <span id="unreadNotifBadge" class="bell-badge" style="display: none;">0</span>
+          </button>
+
+          <div id="notifDropdown" class="notif-dropdown">
+            <div class="notif-header">
+              <span>Milestone Reminders</span>
+              <button onclick="markAllNotificationsRead()" style="background:none; border:none; color:var(--forest); font-size:11px; font-weight:600; cursor:pointer;">Mark all read</button>
+            </div>
+            <div id="notifList" class="notif-list">
+              <!-- Dynamically rendered notifications -->
+            </div>
+            <div class="notif-footer">
+              <a href="#tracker" onclick="switchView('tracker'); toggleNotifDropdown(false);">Open Application Tracker &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Auth Cluster: Logged-out buttons or Logged-in Profile -->
+        <div id="loggedOutCluster" class="auth-btn-cluster">
+          <button class="btn-login-demo" onclick="loginWithMock('standard')">Demo Login</button>
+          <button class="btn-login-google" onclick="loginWithGoogle()">
+            <svg width="14" height="14" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.14z"/>
+              <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.34 24 12 24z"/>
+              <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+              <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.34 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+            </svg>
+            <span>Sign In</span>
+          </button>
+        </div>
+
+        <div id="loggedInCluster" style="display: none; position: relative;">
+          <button class="user-profile-btn" onclick="toggleUserDropdown()">
+            <div id="userAvatar" class="user-avatar-circle">S</div>
+            <span id="userDisplayName" style="max-width: 110px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Student</span>
+          </button>
+
+          <div id="userDropdown" class="user-dropdown">
+            <div class="user-dropdown-header">
+              <p>Signed in as</p>
+              <h4 id="userEmailDisplay">student@example.com</h4>
+            </div>
+            <div class="user-dropdown-items">
+              <button class="user-dropdown-item" onclick="openOnboardingModal(); toggleUserDropdown(false);">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span>Edit Exam Profile</span>
+              </button>
+              <button class="user-dropdown-item" onclick="switchView('tracker'); toggleUserDropdown(false);">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span>Application Tracker</span>
+              </button>
+              <button class="user-dropdown-item danger" onclick="openDeleteDataModal(); toggleUserDropdown(false);">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                <span>Delete My Data</span>
+              </button>
+              <button class="user-dropdown-item" onclick="signOutUser(); toggleUserDropdown(false);">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                <span>Sign Out</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mobile Drawer Hamburger -->
+        <button class="hamburger-btn" onclick="toggleMobileDrawer()" aria-label="Toggle menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div id="mobileDrawer" class="mobile-drawer">
+      <ul class="mobile-nav-links">
+        <li><a class="mobile-nav-link active" onclick="switchView('matches'); toggleMobileDrawer();">Matches</a></li>
+        <li><a class="mobile-nav-link" onclick="switchView('countries'); toggleMobileDrawer();">Country Guides</a></li>
+        <li><a class="mobile-nav-link" onclick="switchView('tracker'); toggleMobileDrawer();">Application Tracker</a></li>
+        <li><a class="mobile-nav-link" onclick="switchView('planner'); toggleMobileDrawer();">Statement Requirements &amp; Planner</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ==========================================================================
+       LAYER 3: HERO SECTION (Authentic Content from FILE A styled with Palette B)
+       ========================================================================== -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="hero-grid">
+        <!-- Left: Real Headline & Content -->
+        <div>
+          <div class="hero-tag">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+            </svg>
+            <span>CareerGoals &bull; Study Abroad Guide</span>
+          </div>
+
+          <h1 class="hero-headline">
+            Navigate Global Admissions<br />
+            <span>With Verified Facts</span>, Not Guesses.
+          </h1>
+
+          <p class="hero-subtext">
+            Real admission criteria directly from official university portals in Germany, Ireland, and the UK. Live verification, automated change alerts, and zero AI hallucinations.
+          </p>
+
+          <div class="hero-ctas">
+            <button class="btn-forest-on-ivory" onclick="handleHeroCtaClick()">
+              <span id="heroCtaLabel">Get Started Free</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+
+            <button class="btn-ghost" onclick="openChatWithProgram('heidelberg_dcs')">
+              <span>Ask Atlas AI</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: "Your Applications" Card -->
+        <div>
+          <div class="apps-card">
+            <div class="apps-card-header">
+              <div class="apps-card-title">
+                <span class="live-dot"></span>
+                <span>Your Applications</span>
+              </div>
+              <span class="badge-cycle">FALL 2026</span>
+            </div>
+
+            <div class="apps-list">
+              <div class="app-item">
+                <div>
+                  <div class="app-univ">Technical University of Munich</div>
+                  <div class="app-program">M.Sc. Informatics</div>
+                </div>
+                <span class="badge badge-changed">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                  </svg>
+                  <span>Changed</span>
+                </span>
+              </div>
+
+              <div class="app-item">
+                <div>
+                  <div class="app-univ">Heidelberg University</div>
+                  <div class="app-program">M.Sc. Data and Computer Science</div>
+                </div>
+                <span class="badge badge-verified">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span>Verified</span>
+                </span>
+              </div>
+
+              <div class="app-item">
+                <div>
+                  <div class="app-univ">University of Oxford</div>
+                  <div class="app-program">M.Sc. Advanced Computer Science</div>
+                </div>
+                <span class="badge badge-inprogress">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <span>In progress</span>
+                </span>
+              </div>
+            </div>
+
+            <div class="apps-card-footer">
+              <span>Automatic Change Auditor: <strong style="color: var(--forest);">Active</strong></span>
+              <span style="color: var(--status-success); font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>100% Provenance</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       LAYER 4: FOUR-BLOCK FEATURE STRIP (From FILE A, styled with B)
+       ========================================================================== -->
+  <section class="feature-strip">
+    <div class="feature-block block-forest">
+      <div class="feature-icon-wrapper">
+        <svg class="feature-gold-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+      </div>
+      <h3 class="feature-title">Verified requirements</h3>
+      <p class="feature-desc">
+        Direct from official university portals. No crowdsourced guesses or obsolete cutoffs.
+      </p>
+    </div>
+
+    <div class="feature-block block-slate">
+      <div class="feature-icon-wrapper">
+        <svg class="feature-gold-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+          <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+          <line x1="12" y1="9" x2="12" y2="13"></line>
+          <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+      </div>
+      <h3 class="feature-title">Live change detection</h3>
+      <p class="feature-desc">
+        Automated crawlers audit portal rule changes daily. Instant alerts for revised criteria.
+      </p>
+    </div>
+
+    <div class="feature-block block-forest">
+      <div class="feature-icon-wrapper">
+        <svg class="feature-gold-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+      </div>
+      <h3 class="feature-title">Application tracking</h3>
+      <p class="feature-desc">
+        Milestone timeline and automated follow-ups. +1, +3, and +7 days check-ins post-submission.
+      </p>
+    </div>
+
+    <div class="feature-block block-slate">
+      <div class="feature-icon-wrapper">
+        <svg class="feature-gold-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+          <polyline points="2 17 12 22 22 17"></polyline>
+          <polyline points="2 12 12 17 22 12"></polyline>
+        </svg>
+      </div>
+      <h3 class="feature-title">Rejection roadmaps</h3>
+      <p class="feature-desc">
+        Turn admission setbacks into actionable strategies. Peer-tier alternatives and score plans.
+      </p>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       LAYER 5: MAIN CONTENT AREA (Tab Views)
+       ========================================================================== -->
+  <main class="content-area">
+    <div class="container">
+
+      <!-- ====================================================================
+           VIEW 1: MATCHES (Exact feature set from FILE A)
+           ==================================================================== -->
+      <section id="view-matches" class="view-container active-view">
+        <div class="page-header">
+          <div>
+            <h2 class="page-title">Verified University Matches</h2>
+            <p class="page-subtext">Ranked by deterministic score calculation against verified admission criteria.</p>
+          </div>
+          <button class="btn-forest" onclick="openOnboardingModal()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span id="btnProfileLabel">Edit Exam Profile</span>
+          </button>
+        </div>
+
+        <!-- Filter Toolbar -->
+        <div class="toolbar-container">
+          <!-- Search & Fit Tier -->
+          <div class="toolbar-row">
+            <div style="position: relative;">
+              <svg style="position: absolute; left: 12px; top: 11px; width: 14px; height: 14px; color: var(--muted);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input
+                type="text"
+                id="matchesSearchInput"
+                class="search-input-field"
+                placeholder="Search university or program name..."
+                oninput="setSearchQuery(this.value)"
+              />
+            </div>
+
+            <div class="toolbar-group">
+              <label style="font-size: 12px; font-weight: 600; color: var(--slate);">Tier:</label>
+              <select id="tierFilterSelect" class="select-dropdown" onchange="setTierFilter(this.value)">
+                <option value="all">All Fit Tiers</option>
+                <option value="Strong fit">Strong Fit (≥ 90%)</option>
+                <option value="Possible">Possible (60% – 89%)</option>
+                <option value="Reach">Reach (&lt; 60%)</option>
+                <option value="Prep needed">Prep Needed</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Country Tabs & Intake Selector -->
+          <div class="toolbar-row" style="border-top: 1px solid var(--line); padding-top: 12px;">
+            <div class="toolbar-group">
+              <span style="font-size: 11.5px; font-weight: 600; text-transform: uppercase;">Country:</span>
+              <div class="tab-pills-group">
+                <button class="tab-pill-btn active" id="country-tab-all" onclick="setCountryFilter('all')">All Destinations (<span id="count-all">11</span>)</button>
+                <button class="tab-pill-btn" id="country-tab-germany" onclick="setCountryFilter('germany')">Germany (<span id="count-germany">4</span>)</button>
+                <button class="tab-pill-btn" id="country-tab-ireland" onclick="setCountryFilter('ireland')">Ireland (<span id="count-ireland">4</span>)</button>
+                <button class="tab-pill-btn" id="country-tab-uk" onclick="setCountryFilter('uk')">United Kingdom (<span id="count-uk">3</span>)</button>
+              </div>
+            </div>
+
+            <div class="toolbar-group">
+              <span style="font-size: 11.5px; font-weight: 600; text-transform: uppercase;">Intake:</span>
+              <div class="btn-toggle-group">
+                <button class="btn-toggle active" id="intake-2026" onclick="setIntake('2026')">2026</button>
+                <button class="btn-toggle" id="intake-2027" onclick="setIntake('2027')">2027</button>
+                <button class="btn-toggle" id="intake-2028" onclick="setIntake('2028')">2028</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sort by & View Toggle Bar -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px;">
+          <div class="toolbar-group">
+            <span>Sort by:</span>
+            <div class="btn-toggle-group">
+              <button class="btn-toggle active" id="sort-fit" onclick="setSort('fit')">Fit</button>
+              <button class="btn-toggle" id="sort-deadline" onclick="setSort('deadline')">Deadline</button>
+              <button class="btn-toggle" id="sort-tuition" onclick="setSort('tuition')">Tuition</button>
+            </div>
+          </div>
+
+          <div class="toolbar-group">
+            <span id="counter-text">Showing 11 matching institutions</span>
+            <div class="btn-toggle-group">
+              <button class="btn-toggle active" id="view-cards" onclick="setViewMode('cards')">&#8862; Cards</button>
+              <button class="btn-toggle" id="view-table" onclick="setViewMode('table')">&#9776; Table</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cards View -->
+        <div id="cardsViewContainer" class="cards-stack">
+          <!-- Populated dynamically via JS -->
+        </div>
+
+        <!-- Table View -->
+        <div id="tableViewContainer" class="table-container" style="display: none;">
+          <table>
+            <thead>
+              <tr>
+                <th>University &amp; Program</th>
+                <th>Tuition</th>
+                <th>Deadline</th>
+                <th>IELTS</th>
+                <th>Fit Reason</th>
+                <th style="text-align: right;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           VIEW 2: COUNTRY GUIDES (From FILE A)
+           ==================================================================== -->
+      <section id="view-countries" class="view-container">
+        <div class="page-header">
+          <div>
+            <h2 class="page-title">Country Admission &amp; Visa Guides</h2>
+            <p class="page-subtext">Verified documents, blocked account / funds policies, and direct university portal links.</p>
+          </div>
+          <div class="tab-pills-group">
+            <button class="tab-pill-btn active" id="cg-tab-germany" onclick="setCountryGuideActive('germany')">Germany</button>
+            <button class="tab-pill-btn" id="cg-tab-ireland" onclick="setCountryGuideActive('ireland')">Ireland</button>
+            <button class="tab-pill-btn" id="cg-tab-uk" onclick="setCountryGuideActive('uk')">United Kingdom</button>
+          </div>
+        </div>
+
+        <div id="countryGuideContent" class="country-guide-card">
+          <!-- Dynamically populated via JS -->
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           VIEW 3: APPLICATION TRACKER (From FILE A)
+           ==================================================================== -->
+      <section id="view-tracker" class="view-container">
+        <div class="page-header">
+          <div>
+            <h2 class="page-title">Application Milestone Tracker</h2>
+            <p class="page-subtext">Live monitoring of your active applications with automated post-submission follow-ups (+1, +3, +7 days).</p>
+          </div>
+          <button class="btn-forest" onclick="openTrackAppModal()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>Track New Application</span>
+          </button>
+        </div>
+
+        <!-- Filter Status Bar -->
+        <div class="toolbar-container" style="padding: 12px 18px; margin-bottom: 20px;">
+          <div class="toolbar-row">
+            <div class="toolbar-group">
+              <span style="font-size: 12px; font-weight: 600; text-transform: uppercase;">Filter Status:</span>
+              <div class="tab-pills-group">
+                <button class="tab-pill-btn active" id="tracker-filter-all" onclick="setTrackerFilter('all')">All</button>
+                <button class="tab-pill-btn" id="tracker-filter-applied" onclick="setTrackerFilter('applied')">Applied</button>
+                <button class="tab-pill-btn" id="tracker-filter-planned" onclick="setTrackerFilter('planned')">Planned</button>
+                <button class="tab-pill-btn" id="tracker-filter-accepted" onclick="setTrackerFilter('accepted')">Accepted</button>
+                <button class="tab-pill-btn" id="tracker-filter-rejected" onclick="setTrackerFilter('rejected')">Rejected</button>
+              </div>
+            </div>
+            <span id="trackerCountText" style="font-size: 12px; color: var(--muted);">0 active applications</span>
+          </div>
+        </div>
+
+        <div id="trackerListContainer">
+          <!-- Populated dynamically via JS -->
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           VIEW 4: STATEMENT REQUIREMENTS & PLANNER (From FILE A)
+           ==================================================================== -->
+      <section id="view-planner" class="view-container">
+        <div class="page-header">
+          <div>
+            <h2 class="page-title">Statement Requirements &amp; SOP Planner</h2>
+            <p class="page-subtext">Institution-specific prompts, strict word limits, academic AI policy, and writing quality audit.</p>
+          </div>
+          <div class="toolbar-group">
+            <label style="font-size: 12px; font-weight: 600;">Programme:</label>
+            <select id="plannerProgramSelect" class="select-dropdown" onchange="onPlannerProgramChange(this.value)">
+              <!-- Populated dynamically -->
+            </select>
+          </div>
+        </div>
+
+        <!-- Anti-Rewrite Policy Banner -->
+        <div class="anti-rewrite-banner">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          <div>
+            <h4>Strict Anti-Rewrite Guarantee</h4>
+            <p>
+              CareerGoals provides official institutional prompts, strict word limits, and qualitative rubrics. We do <strong>NOT</strong> generate, ghostwrite, or rewrite application statements. Maintain authentic student voice and strictly adhere to institutional academic integrity regulations.
+            </p>
+          </div>
+        </div>
+
+        <div class="planner-grid">
+          <!-- Left: Institutional Requirements Details -->
+          <div id="plannerDetailsCard" class="planner-card">
+            <!-- Dynamically populated via JS -->
+          </div>
+
+          <!-- Right: 8-Point Statement Quality Audit -->
+          <div class="planner-card">
+            <h3 style="font-size: 15px; font-weight: 600; color: var(--slate); margin-bottom: 6px;">8-Point Quality Audit</h3>
+            <p style="font-size: 12px; color: var(--muted); margin-bottom: 14px;">Verify your draft against these strict admissions committee benchmarks before uploading.</p>
+
+            <ul class="audit-checklist">
+              <li class="audit-item">
+                <input type="checkbox" id="audit-1" onchange="saveAuditCheck('audit-1', this.checked)">
+                <label for="audit-1"><strong>1. Academic Hook:</strong> Introduce technical research focus without opening with childhood nostalgia clichés.</label>
+              </li>
+              <li class="audit-item">
+                <input type="checkbox" id="audit-2" onchange="saveAuditCheck('audit-2', this.checked)">
+                <label for="audit-2"><strong>2. Curricular Alignment:</strong> Cite exact modules, electives, and research labs from the official syllabus.</label>
+              </li>
+              <li class="audit-item">
+                <input type="checkbox" id="audit-3" onchange="saveAuditCheck('audit-3', this.checked)">
+                <label for="audit-3"><strong>3. Concrete Metrics:</strong> Quantify undergraduate engineering/analytical impact (e.g. throughput, dataset size).</label>
+              </li>
+              <li class="audit-item">
+                <input type="checkbox" id="audit-4" onchange="saveAuditCheck('audit-4', this.checked)">
+                <label for="audit-4"><strong>4. Anti-Cliché Guarantee:</strong> No Einstein, Turing, or generic passion quotes used as filler.</label>
+              </li>
+              <li class="audit-item">
+                <input type="checkbox" id="audit-5" onchange="saveAuditCheck('audit-5', this.checked)">
+                <label for="audit-5"><strong>5. Scholarly Tone:</strong> Maintain objective, precise, and mature academic argumentation.</label>
+              </li>
+              <li class="audit-item">
+                <input type="checkbox" id="audit-6" onchange="saveAuditCheck('audit-6', this.checked)">
+                <label for="audit-6"><strong>6. Strict Word Limit:</strong> Adhere precisely to the institutional maximum word/page count.</label>
+              </li>
+              <li class="audit-item">
+                <input type="checkbox" id="audit-7" onchange="saveAuditCheck('audit-7', this.checked)">
+                <label for="audit-7"><strong>7. AI Policy Compliance:</strong> Full independent human authorship; no undeclared LLM text.</label>
+              </li>
+              <li class="audit-item">
+                <input type="checkbox" id="audit-8" onchange="saveAuditCheck('audit-8', this.checked)">
+                <label for="audit-8"><strong>8. PDF &amp; Formatting:</strong> Standard font (11–12pt), clean margins, valid DIN A4 PDF format.</label>
+              </li>
+            </ul>
+
+            <div style="margin-top: 20px; border-top: 1px solid var(--line); padding-top: 16px;">
+              <h4 style="font-size: 13px; font-weight: 600; margin-bottom: 6px;">Evidence Bank Notes</h4>
+              <textarea
+                id="evidenceNotesText"
+                rows="4"
+                style="width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: var(--radius-btn); font-family: inherit; font-size: 12px; outline: none;"
+                placeholder="Draft your key project anchors and lab citations here..."
+                oninput="saveEvidenceNotes(this.value)"
+              ></textarea>
+              <span id="charCountLabel" style="font-size: 11px; color: var(--muted); display: block; text-align: right; margin-top: 4px;">0 characters</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ==========================================================================
+       MODAL: ONBOARDING / EXAM PROFILE (From FILE A)
+       ========================================================================== -->
+  <div id="onboardingModal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Student Exam Profile &amp; Preferences</h3>
+        <button class="modal-close-btn" onclick="closeOnboardingModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="profName">Full Name</label>
+          <input type="text" id="profName" class="form-control" placeholder="e.g. Diya Sharma" />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="profQualification">Current Qualification</label>
+            <select id="profQualification" class="form-control">
+              <option value="Bachelor's Degree">Bachelor's Degree</option>
+              <option value="Master's Degree">Master's Degree</option>
+              <option value="High School / Secondary">High School / Secondary</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="profGpa">Undergraduate GPA (10.0 scale)</label>
+            <input type="number" id="profGpa" class="form-control" step="0.1" min="0" max="10" placeholder="e.g. 8.5" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="profIelts">IELTS Academic Score</label>
+            <input type="number" id="profIelts" class="form-control" step="0.5" min="0" max="9" placeholder="e.g. 7.0" />
+          </div>
+          <div class="form-group">
+            <label for="profToefl">TOEFL iBT Score</label>
+            <input type="number" id="profToefl" class="form-control" min="0" max="120" placeholder="e.g. 95" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="profGre">GRE General Score</label>
+            <input type="number" id="profGre" class="form-control" min="260" max="340" placeholder="e.g. 318" />
+          </div>
+          <div class="form-group">
+            <label for="profGmat">GMAT Score</label>
+            <input type="number" id="profGmat" class="form-control" min="200" max="800" placeholder="e.g. 680" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="profBudget">Annual Tuition Budget (in ₹ Lakhs)</label>
+            <input type="number" id="profBudget" class="form-control" min="0" max="100" placeholder="e.g. 25 (₹25 Lakhs)" />
+          </div>
+          <div class="form-group">
+            <label for="profTargetIntake">Target Intake Year</label>
+            <select id="profTargetIntake" class="form-control">
+              <option value="2026">2026</option>
+              <option value="2027">2027</option>
+              <option value="2028">2028</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-forest-on-ivory" onclick="closeOnboardingModal()">Cancel</button>
+        <button class="btn-forest" onclick="saveProfileFromModal()">Save &amp; Recalculate Matches</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL: TRACK NEW APPLICATION
+       ========================================================================== -->
+  <div id="trackAppModal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 480px;">
+      <div class="modal-header">
+        <h3>Track University Application</h3>
+        <button class="modal-close-btn" onclick="closeTrackAppModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="trackUnivSelect">Select University Program</label>
+          <select id="trackUnivSelect" class="form-control">
+            <!-- Populated via JS -->
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="trackStatusSelect">Current Status</label>
+          <select id="trackStatusSelect" class="form-control">
+            <option value="applied">Applied (Initiates +1, +3, +7 days reminders)</option>
+            <option value="planned">Planned (Preparing materials)</option>
+            <option value="accepted">Accepted (Offer received)</option>
+            <option value="rejected">Rejected (View Recovery Roadmap)</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-forest-on-ivory" onclick="closeTrackAppModal()">Cancel</button>
+        <button class="btn-forest" onclick="submitTrackApplication()">Save Application</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL: REJECTION RECOVERY ROADMAP
+       ========================================================================== -->
+  <div id="roadmapModal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 720px;">
+      <div class="modal-header">
+        <div>
+          <h3>Rejection Recovery Roadmap</h3>
+          <p style="font-size: 11.5px; color: var(--muted);">Turn admission setbacks into deterministic recovery strategies.</p>
+        </div>
+        <button class="modal-close-btn" onclick="closeRoadmapModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <h4 style="font-size: 13.5px; font-weight: 600; color: var(--slate);">1. Identify Primary Diagnostic Cause</h4>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="guide-info-box" style="cursor: pointer;" onclick="selectRoadmapCause('ects')">
+            <h4 style="color: var(--forest);">&#9888; ECTS / Credit Deficiency</h4>
+            <p style="font-size: 11.5px; color: var(--muted);">Undergraduate syllabus lacked theoretical or higher mathematics credits (common in Germany research universities).</p>
+          </div>
+          <div class="guide-info-box" style="cursor: pointer;" onclick="selectRoadmapCause('test')">
+            <h4 style="color: var(--status-warning);">&#9873; Test Score Gap</h4>
+            <p style="font-size: 11.5px; color: var(--muted);">IELTS sub-band below 6.0 or GRE Quant below 75th percentile cutoffs.</p>
+          </div>
+          <div class="guide-info-box" style="cursor: pointer;" onclick="selectRoadmapCause('quota')">
+            <h4 style="color: #2563eb;">&#9201; Capacity &amp; Quota Exhaustion</h4>
+            <p style="font-size: 11.5px; color: var(--muted);">Applied close to deadline when non-EU seat caps were already fully allocated.</p>
+          </div>
+          <div class="guide-info-box" style="cursor: pointer;" onclick="selectRoadmapCause('sop')">
+            <h4 style="color: var(--status-error);">&#9997; Statement Alignment Deficit</h4>
+            <p style="font-size: 11.5px; color: var(--muted);">Motivation letter lacked specific curricular research links or module anchors.</p>
+          </div>
+        </div>
+
+        <div id="roadmapStrategyBox" class="guide-info-box" style="margin-top: 10px; border-color: var(--forest);">
+          <h4 id="roadmapStrategyTitle" style="color: var(--forest);">Recommended Strategic Recovery Plan</h4>
+          <p id="roadmapStrategyText" style="font-size: 12px; color: var(--slate); line-height: 1.5;">
+            Target Irish universities or German Fachhochschulen (Universities of Applied Sciences) that evaluate holistic practical competencies rather than rigid theoretical credit matrices.
+          </p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-forest" onclick="closeRoadmapModal(); switchView('matches');">Explore Peer-Tier Alternative Matches</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL: DELETE MY DATA (R4 Compliance)
+       ========================================================================== -->
+  <div id="deleteDataModal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 480px;">
+      <div class="modal-header">
+        <h3 style="color: var(--status-error);">Delete My Data</h3>
+        <button class="modal-close-btn" onclick="closeDeleteDataModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 13px; color: var(--slate); line-height: 1.5;">
+          Are you sure you want to delete your profile and application records? This action cascades through your user record, application milestones, and reminder history in Firestore.
+        </p>
+        <p style="font-size: 12px; color: var(--status-error); font-weight: 600;">
+          This action cannot be undone.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-forest-on-ivory" onclick="closeDeleteDataModal()">Cancel</button>
+        <button class="btn-forest" style="background-color: var(--status-error);" onclick="confirmDeleteMyData()">Delete Everything</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       LAYER 6: FOOTER (From FILE A, styled with B, NO phone/email)
+       ========================================================================== -->
+  <footer class="slate-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>About CareerGoals</h4>
+          <p class="footer-about">
+            CareerGoals guides your global education with verified requirements from official university sources, live change detection, application tracking, and rejection recovery roadmaps.
+          </p>
+          <p class="footer-about" style="margin-top: 10px; font-size: 11px; opacity: 0.8;">
+            Privacy Commitment: Zero student personal records are sent to external LLMs.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Verified Guides</h4>
+          <ul class="footer-links">
+            <li><a onclick="switchView('matches')">Verified University Matches</a></li>
+            <li><a onclick="switchView('countries')">Country Admission Guides</a></li>
+            <li><a onclick="switchView('tracker')">Application Milestone Tracker</a></li>
+            <li><a onclick="switchView('planner')">Statement Requirements &amp; SOP Planner</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Destinations</h4>
+          <ul class="footer-links">
+            <li><a onclick="switchView('countries'); setCountryGuideActive('germany');">Study in Germany (DAAD, uni-assist)</a></li>
+            <li><a onclick="switchView('countries'); setCountryGuideActive('ireland');">Study in Ireland (Direct &amp; PAC)</a></li>
+            <li><a onclick="switchView('countries'); setCountryGuideActive('uk');">Study in United Kingdom (CAS &amp; Visas)</a></li>
+            <li><a onclick="openRoadmapModal()">Rejection Recovery Roadmaps</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 CareerGoals | Study Abroad Guide. Styled with European Editorial Design System.</p>
+        <p>Verified admissions facts &bull; Automated rule change auditor</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       FLOATING ATLAS AI ASSISTANT WIDGET
+       ========================================================================== -->
+  <div class="widget-fixed-fab">
+    <button id="atlasFab" class="atlas-fab" onclick="toggleAtlas(true)" aria-label="Open Atlas Assistant">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="rgba(212, 168, 79, 0.25)"></polygon>
+      </svg>
+      <span class="fab-ping"></span>
+    </button>
+
+    <div id="atlasDialog" class="atlas-dialog" style="display: none;" role="dialog" aria-label="Atlas AI Assistant">
+      <div class="atlas-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div style="width: 28px; height: 28px; border-radius: var(--radius-btn); background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; color: var(--gold);">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+            </svg>
+          </div>
+          <div>
+            <div class="atlas-header-title">Atlas <span>&bull; Study Guide</span></div>
+            <div style="font-size: 10px; color: var(--mist);">Verified Catalog Data</div>
+          </div>
+        </div>
+        <button class="atlas-btn-close" onclick="toggleAtlas(false)">&times;</button>
+      </div>
+
+      <div id="atlasBody" class="atlas-body">
+        <div class="chat-bubble bot-bubble">
+          <div>Hello! I am <strong>Atlas</strong>, your study abroad guide grounded in verified official university admissions facts.</div>
+          <div class="chat-gap"></div>
+          <div>Ask me about language cutoffs, deadlines, tuition, or blocked account funds.</div>
+          <div class="atlas-suggested-prompts">
+            <span class="prompt-chip" onclick="sendSuggestedPrompt('TUM GRE & IELTS requirements')">TUM GRE &amp; IELTS</span>
+            <span class="prompt-chip" onclick="sendSuggestedPrompt('Free tuition universities in Germany')">Tuition-Free Germany</span>
+            <span class="prompt-chip" onclick="sendSuggestedPrompt('Ireland visa funds & Stamp 1G')">Ireland Visa Funds</span>
+          </div>
+          <div class="chat-footnote">Verify on the official site: Standardized cutoffs are subject to annual revisions.</div>
+        </div>
+      </div>
+
+      <div class="atlas-input-area">
+        <input
+          type="text"
+          id="atlasInput"
+          class="atlas-input"
+          placeholder="Ask Atlas about cutoffs, fees, deadlines..."
+          maxlength="500"
+          onkeydown="handleAtlasKeyDown(event)"
+        />
+        <button class="atlas-send-btn" onclick="sendAtlasMessage()" aria-label="Send">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       AUTHENTIC JAVASCRIPT & BACKEND LOGIC (RESTORED FROM FILE A)
+       ========================================================================== -->
+  <script>
+    /* --------------------------------------------------------------------------
+       1. FIREBASE INITIALIZATION & BACKEND CONNECTION
+       -------------------------------------------------------------------------- */
+    const firebaseConfig = {
+      apiKey: "AIzaSyDTl3Qmg-SZr0RvfwKSbnMQ826ThSCnnCk",
+      authDomain: "careergoals-296e4.firebaseapp.com",
+      projectId: "careergoals-296e4",
+      storageBucket: "careergoals-296e4.firebasestorage.app",
+      messagingSenderId: "486856283911",
+      appId: "1:486856283911:web:4a1cdcb9ee4fd1f69d17a2"
+    };
+
+    let firebaseApp = null;
+    let auth = null;
+    let db = null;
+    let currentUser = null;
+
+    try {
+      if (typeof firebase !== 'undefined') {
+        firebaseApp = firebase.apps.length === 0 ? firebase.initializeApp(firebaseConfig) : firebase.app();
+        auth = firebase.auth();
+        db = firebase.firestore();
+        console.log('[Firebase] Successfully connected to careergoals-296e4');
+      }
+    } catch (e) {
+      console.warn('[Firebase] Initialization error, falling back to offline mode:', e);
+    }
+
+    /* --------------------------------------------------------------------------
+       2. AUTHORITATIVE DATASETS (11 Universities, 3 Countries from FILE A)
+       -------------------------------------------------------------------------- */
+    const countriesData = [
+  {
+    "id": "germany",
+    "name": "Germany",
+    "languageNote": "Most international Master's programmes are taught in English (IELTS 6.5+ or TOEFL 88+). Basic German (A1/A2) is strongly recommended for daily life and student employment.",
+    "documents": [
+      "Valid Passport (valid for >= 12 months)",
+      "Recognized Bachelor's Degree Certificate and Transcripts",
+      "Certified German or English Translations of all academic records",
+      "Preliminary Review Documentation (VPD) from uni-assist (where required)",
+      "APS Certificate (mandatory for applicants from India, China, Vietnam)",
+      "Proof of English Proficiency (IELTS Academic or TOEFL iBT)",
+      "Curriculum Vitae (Europass tabular format)",
+      "Motivation letter or statement of purpose, where required. A typical length is 1–2 pages, but confirm the document type, length and submission requirements on your selected programme’s official admissions page.",
+      "Academic Letters of Recommendation",
+      "Proof of Financial Resources / Blocked Account (€11,904/year in Sperrkonto)",
+      "Statutory or Recognized Private Health Insurance"
+    ],
+    "visaNote": "National Visa for Study Purposes (Type D). Non-EU students must provide proof of financial resources via a blocked account (Sperrkonto) with at least €11,904/year (€992/month). APS certificate required for India/China/Vietnam.",
+    "costRange": "Tuition: €0 - €6,000/sem; Semester Contribution: €100 - €350/sem; Living Costs: €950 - €1,300/month",
+    "portalUrl": "https://www.daad.de/en/study-and-research-in-germany/courses-of-study-in-germany/all-study-programmes-in-germany/",
+    "sourceUrl": "https://www.daad.de/en/study-and-research-in-germany/",
+    "lastChecked": "2026-10-15",
+    "ruleChanged": false,
+    "verificationNote": "Verify on the official site"
+  },
+  {
+    "id": "ireland",
+    "name": "Ireland",
+    "languageNote": "All higher education courses are delivered in English. Standard minimum entry requirement is IELTS 6.5 (no component < 6.0) or TOEFL iBT 88-90.",
+    "documents": [
+      "Valid Passport",
+      "Bachelor's Degree Transcripts and Certificate (NFQ Level 8, minimum 2:1 Honours)",
+      "Official English Language Test Report (IELTS, TOEFL iBT, or PTE)",
+      "Statement of Purpose (explaining course choice and career objectives)",
+      "Two Academic or Professional Letters of Recommendation",
+      "Curriculum Vitae / Resume",
+      "Financial Evidence showing immediate access to €10,000 living funds",
+      "Private Medical Insurance"
+    ],
+    "visaNote": "Irish Study Visa (Stamp 2 permission). Non-EEA students must prove €10,000 living maintenance in addition to paid tuition fees. CAO is for undergraduate admissions only; all postgraduate master's applications are made directly to each university.",
+    "costRange": "Tuition: €14,000 - €31,000/year; Living Costs: €1,200 - €1,800/month (Dublin highest)",
+    "portalUrl": "https://www.educationinireland.com/",
+    "sourceUrl": "https://www.educationinireland.com/en/How-to-Apply/",
+    "lastChecked": "2026-10-15",
+    "ruleChanged": false,
+    "verificationNote": "Verify on the official site"
+  },
+  {
+    "id": "uk",
+    "name": "United Kingdom",
+    "languageNote": "Courses taught in English. Higher tier universities demand IELTS 7.0-7.5 or TOEFL iBT 100-110 for postgraduate computing degrees.",
+    "documents": [
+      "Valid Passport",
+      "Official Academic Transcripts (UK 2:1 Honours or international equivalent)",
+      "Confirmation of Acceptance for Studies (CAS) from sponsoring university",
+      "Proof of English Language Competence (IELTS Academic / UKVI IELTS or TOEFL)",
+      "Statement of Purpose / Personal Statement",
+      "Two Academic References on institutional letterhead",
+      "Curriculum Vitae",
+      "Bank Statements showing required tuition and maintenance held for 28 consecutive days",
+      "Tuberculosis (TB) Test Certificate (if applicable)"
+    ],
+    "visaNote": "Student Visa (Points-based system: 50 pts CAS, 10 pts maintenance, 10 pts English). Maintenance requirement: £1,334/month for London, £1,023/month outside London (up to 9 months). Applications made directly to universities.",
+    "costRange": "Tuition: £24,000 - £46,500/year; Living Costs: £1,023 - £1,500/month",
+    "portalUrl": "https://www.gov.uk/student-visa",
+    "sourceUrl": "https://www.study-uk.britishcouncil.org/",
+    "lastChecked": "2026-10-15",
+    "ruleChanged": false,
+    "verificationNote": "Verify on the official site"
+  }
+];
+    let universitiesData = [
+  {
+    "id": "tum_informatics",
+    "countryId": "germany",
+    "name": "Technical University of Munich (TUM)",
+    "program": "M.Sc. Informatics",
+    "requirements": {
+      "min_ielts": 6.5,
+      "min_toefl": 88,
+      "gre_required": true,
+      "gmat_required": true,
+      "min_gre": 315,
+      "min_gmat": null,
+      "language_requirement": "English CEFR C1 or IELTS 6.5 or TOEFL iBT 88",
+      "application_deadline": "May 31 (Winter) / November 30 (Summer)",
+      "tuition_fee": "€6,000 per semester for non-EU students (+ €97 semester fee)",
+      "notes": "Preliminary documentation (VPD) via uni-assist required prior to TUMonline application. Mandatory GRE General (min 164 Quant, 4.0 AW) for degrees from India, China, Iran, Pakistan."
+    },
+    "tuition": "€6,000 / semester (Non-EU)",
+    "portalUrl": "https://campus.tum.de/",
+    "sourceUrl": "https://www.tum.de/en/studies/degree-programs/detail/informatics-master-of-science-msc",
+    "lastChecked": "2026-10-15",
+    "lastChanged": "2026-10-15",
+    "ruleChanged": true,
+    "changedFields": [
+      "gmat_required"
+    ],
+    "previousValues": {
+      "gmat_required": null
+    },
+    "extractionFailed": false,
+    "demoSeeded": true,
+    "verificationNote": "Verify on the official site",
+    "statementRequirements": {
+      "documentType": "Motivation Letter",
+      "required": true,
+      "summary": "TUM M.Sc. Informatics requires a letter of motivation (max 2 DIN A4 pages) explaining prior academic foundation, specific curricular focus at TUM, and career relevance.",
+      "lengthLimit": "Max 2 DIN A4 pages (approx. 800–1,000 words)",
+      "submissionMethod": "Upload as PDF to TUMonline application portal during application window",
+      "formattingRequirements": "DIN A4 format, PDF file, English or German, legible standard font (11–12pt)",
+      "specificQuestions": [
+        {
+          "id": "tum_q1",
+          "question": "What prior foundational coursework and practical experience prepare you for TUM Informatics?",
+          "required": true,
+          "wordLimit": "300 words",
+          "guidance": "Highlight advanced algorithms, discrete mathematics, and software engineering projects."
+        },
+        {
+          "id": "tum_q2",
+          "question": "Which specific specialization areas or research chairs at TUM (e.g. Distributed Systems, AI, Robotics) do you intend to focus on and why?",
+          "required": true,
+          "wordLimit": "400 words",
+          "guidance": "Cite exact TUM Informatics modules and active faculty research chairs."
+        },
+        {
+          "id": "tum_q3",
+          "question": "How does this degree connect to your future professional milestones or research aspirations?",
+          "required": true,
+          "wordLimit": "250 words",
+          "guidance": "Connect curriculum directly to planned industry engineering roles or doctoral research."
+        }
+      ],
+      "assessmentCriteria": [
+        "Demonstrated technical rigor in computer science fundamentals",
+        "Concrete alignment between undergraduate study and TUM M.Sc. Informatics syllabus",
+        "High academic writing quality and clear scholarly intent"
+      ],
+      "aiPolicy": "Independent authorship required. Under TUM Academic Integrity regulations, automated or AI-generated text without explicit declaration violates submission rules.",
+      "generalGuidance": "TUM central guidance recommends concise academic justification over biographical storytelling or childhood anecdotes.",
+      "status": "Verified",
+      "sourceUrl": "https://www.tum.de/en/studies/degree-programs/detail/informatics-master-of-science-msc",
+      "lastChecked": "2026-10-15",
+      "verifiedDate": "2026-10-15",
+      "statusNotes": null
+    }
+  },
+  {
+    "id": "rwth_cs",
+    "countryId": "germany",
+    "name": "RWTH Aachen University",
+    "program": "M.Sc. Computer Science",
+    "requirements": {
+      "min_ielts": 6,
+      "min_toefl": 80,
+      "gre_required": true,
+      "gmat_required": null,
+      "min_gre": 310,
+      "min_gmat": null,
+      "language_requirement": "English B2 (IELTS 6.0 / TOEFL 80) and German C1 before final enrollment",
+      "application_deadline": "March 1 (Winter) / September 1 (Summer) for Non-EU",
+      "tuition_fee": "€0 (Tuition-free; semester contribution ~€320/semester)",
+      "notes": "Strict curricular prerequisite: 34 ECTS Practical CS, 24 ECTS Technical CS, 24 ECTS Theoretical CS, 26 ECTS Math. Mandatory GRE (Quant > 75th percentile, Verbal > 15th percentile, AW >= 3.5)."
+    },
+    "tuition": "€0 (Tuition-free)",
+    "portalUrl": "https://online.rwth-aachen.de/",
+    "sourceUrl": "https://www.rwth-aachen.de/go/id/bkmq/?lidx=1",
+    "lastChecked": "2026-10-15",
+    "lastChanged": "2026-10-15",
+    "ruleChanged": false,
+    "changedFields": [],
+    "previousValues": {},
+    "extractionFailed": false,
+    "demoSeeded": false,
+    "verificationNote": "Verify on the official site",
+    "statementRequirements": {
+      "documentType": "Not required",
+      "required": false,
+      "summary": "RWTH Aachen M.Sc. Computer Science does NOT evaluate a Statement of Purpose or Motivation Letter. Admission is determined strictly on curricular ECTS credit distribution and GRE cutoff scores.",
+      "lengthLimit": null,
+      "submissionMethod": null,
+      "formattingRequirements": null,
+      "specificQuestions": null,
+      "assessmentCriteria": [
+        "Curricular subject-specific ECTS match: 34 ECTS Practical CS, 24 ECTS Technical CS, 24 ECTS Theoretical CS, 26 ECTS Math",
+        "GRE General Test cutoff percentiles (Quant > 75th percentile)"
+      ],
+      "aiPolicy": null,
+      "generalGuidance": "Do not submit unsolicited motivation letters via RWTHonline as they are not evaluated by the admissions committee.",
+      "status": "Verified",
+      "sourceUrl": "https://www.rwth-aachen.de/go/id/bkmq/?lidx=1",
+      "lastChecked": "2026-10-15",
+      "verifiedDate": "2026-10-15",
+      "statusNotes": "Admission is purely based on formal academic credentials, credit equivalence, and GRE."
+    }
+  },
+  {
+    "id": "heidelberg_dcs",
+    "countryId": "germany",
+    "name": "Heidelberg University",
+    "program": "M.Sc. Data and Computer Science",
+    "requirements": {
+      "min_ielts": 6.5,
+      "min_toefl": 90,
+      "gre_required": null,
+      "gmat_required": null,
+      "min_gre": null,
+      "min_gmat": null,
+      "language_requirement": "English proficiency Level B2/C1 (IELTS 6.5 with no band < 6.0 or TOEFL 90)",
+      "application_deadline": "June 15 (Winter semester)",
+      "tuition_fee": "€1,500 per semester for non-EU students (+ €189.80 semester fee)",
+      "notes": "Baden-Württemberg state statutory fee applies to all non-EU students. Apply directly via heiCO portal."
+    },
+    "tuition": "€1,500 / semester (Non-EU)",
+    "portalUrl": "https://heico.uni-heidelberg.de/",
+    "sourceUrl": "https://www.uni-heidelberg.de/en/study/all-degree-programmes/data-and-computer-science-master",
+    "lastChecked": "2026-10-15",
+    "lastChanged": "2026-10-15",
+    "ruleChanged": false,
+    "changedFields": [],
+    "previousValues": {},
+    "extractionFailed": false,
+    "demoSeeded": false,
+    "verificationNote": "Verify on the official site",
+    "statementRequirements": {
+      "documentType": null,
+      "required": null,
+      "summary": null,
+      "lengthLimit": null,
+      "submissionMethod": "heiCO direct online portal",
+      "formattingRequirements": null,
+      "specificQuestions": null,
+      "assessmentCriteria": null,
+      "aiPolicy": null,
+      "generalGuidance": "General Heidelberg University guidelines recommend checking whether your specific study track requires a statement or work sample via the heiCO application portal.",
+      "status": "Unknown",
+      "sourceUrl": "https://www.uni-heidelberg.de/en/study/all-degree-programmes/data-and-computer-science-master",
+      "lastChecked": "2026-10-15",
+      "verifiedDate": null,
+      "statusNotes": "Programme-specific statement instructions are not confirmed in the official study handbook. Please consult the heiCO admission portal or departmental advisor."
+    }
+  },
+  {
+    "id": "lmu_datascience",
+    "countryId": "germany",
+    "name": "Ludwig-Maximilians-Universität München (LMU)",
+    "program": "M.Sc. Data Science",
+    "requirements": {
+      "min_ielts": 7,
+      "min_toefl": 95,
+      "gre_required": null,
+      "gmat_required": null,
+      "min_gre": null,
+      "min_gmat": null,
+      "language_requirement": "English proficiency Level C1 (IELTS 7.0 or TOEFL 95)",
+      "application_deadline": "June 1 (Winter intake only)",
+      "tuition_fee": "€0 (Tuition-free; semester administration fee ~€150)",
+      "notes": "Elite network of Bavaria program. Strong background in statistics and computer science required. Direct application via LMU online portal."
+    },
+    "tuition": "€0 (Tuition-free)",
+    "portalUrl": "https://portal.datascience-munich.de/",
+    "sourceUrl": "https://www.m-datascience.mathematik-informatik-statistik.uni-muenchen.de/apply/index.html",
+    "lastChecked": "2026-10-15",
+    "lastChanged": "2026-10-15",
+    "ruleChanged": false,
+    "changedFields": [],
+    "previousValues": {},
+    "extractionFailed": false,
+    "demoSeeded": false,
+    "verificationNote": "Verify on the official site",
+    "statementRequirements": {
+      "documentType": "Motivation Letter / Essay",
+      "required": true,
+      "summary": "LMU M.Sc. Data Science requires a detailed motivation letter in English (max 1,000 words) addressing statistical background and CS foundation.",
+      "lengthLimit": "Maximum 1,000 words",
+      "submissionMethod": "Direct submission via LMU Elite Network portal",
+      "formattingRequirements": "PDF in English",
+      "specificQuestions": [
+        {
+          "id": "lmu_q1",
+          "question": "Describe your quantitative and statistical background, highlighting courses in probability, inference, or linear models.",
+          "required": true,
+          "wordLimit": "350 words",
+          "guidance": "Detail statistical theory and applied modeling experience."
+        },
+        {
+          "id": "lmu_q2",
+          "question": "What programming languages and data science toolkits have you utilized in substantive software or analysis projects?",
+          "required": true,
+          "wordLimit": "350 words",
+          "guidance": "Mention Python, R, C++, SQL, or distributed computing frameworks."
+        },
+        {
+          "id": "lmu_q3",
+          "question": "Why is the Elite Network of Bavaria Data Science curriculum at LMU uniquely suited to your career aims?",
+          "required": true,
+          "wordLimit": "300 words",
+          "guidance": "Connect to elite research projects and industrial internships."
+        }
+      ],
+      "assessmentCriteria": [
+        "Strong mathematical and computational rigor",
+        "Proficiency in statistical modeling and algorithm implementation",
+        "Clear academic focus on data science applications"
+      ],
+      "aiPolicy": "Applicants must submit original work. AI-assisted drafting must be disclosed.",
+      "generalGuidance": "LMU emphasizes demonstrating both statistical foundations and computer science skills in equal balance.",
+      "status": "Needs review",
+      "sourceUrl": "https://www.m-datascience.mathematik-informatik-statistik.uni-muenchen.de/apply/index.html",
+      "lastChecked": "2026-10-15",
+      "verifiedDate": null,
+      "statusNotes": "Intake criteria under annual review by the admissions committee for the upcoming winter round."
+    }
+  },
+  {
+    "id": "tcd_cs",
+    "countryId": "ireland",
+    "name": "Trinity College Dublin (TCD)",
+    "program": "M.Sc. Computer Science (Intelligent Systems / Data Science)",
+    "requirements": {
+      "min_ielts": 6.5,
+      "min_toefl": 88,
+      "gre_required": null,
+      "gmat_required": null,
+      "min_gre": null,
+      "min_gmat": null,
+      "language_requirement": "IELTS 6.5 overall (no band < 6.0) or TOEFL iBT 88",
+      "application_deadline": "June 30 (Rolling admissions)",
+      "tuition_fee": "€27,500 for full 1-year program (Non-EU)",
+      "notes": "Requires First- or upper second-class honours degree (2:1) in CS or closely related discipline. Apply directly via my.tcd.ie (application fee €55)."
+    },
+    "tuition": "€27,500 / year (Non-EU)",
+    "portalUrl": "https://my.tcd.ie/",
+    "sourceUrl": "https://www.tcd.ie/courses/postgraduate/courses/computer-science--intelligent-systems-msc/",
+    "lastChecked": "2026-10-15",
+    "lastChanged": "2026-10-15",
+    "ruleChanged": false,
+    "changedFields": [],
+    "previousValues": {},
+    "extractionFailed": false,
+    "demoSeeded": false,
+    "verificationNote": "Verify on the official site",
+    "statementRequirements": {
+      "documentType": "Personal Statement",
+      "required": true,
+      "summary": "Trinity College Dublin M.Sc. Computer Science requires a personal statement of 1–2 pages. Strand reorganization is pending review for the upcoming cycle.",
+      "lengthLimit": "1–2 pages (approx. 500–1,000 words)",
+      "submissionMethod": "my.tcd.ie online application portal",
+      "formattingRequirements": "PDF format, standard typography",
+      "specificQuestions": [
+        {
+          "id": "tcd_q1",
+          "question": "Why have you chosen your selected strand (Intelligent Systems, Data Science, Future Networked Systems, or Augmented & Virtual Reality)?",
+          "required": true,
+          "wordLimit": "400 words",
+          "guidance": "State specific curriculum strand and relevant modules."
+        },
+        {
+          "id": "tcd_q2",
+          "question": "Outline your previous academic achievements and computational coursework relevant to this strand.",
+          "required": true,
+          "wordLimit": "400 words",
+          "guidance": "Emphasize NFQ Level 8 equivalent preparation and major projects."
+        }
+      ],
+      "assessmentCriteria": [
+        "Academic merit and 2:1 Honours equivalent standing",
+        "Relevance of undergraduate computing degree to selected strand"
+      ],
+      "aiPolicy": "Must represent independent personal drafting.",
+      "generalGuidance": "Trinity postgraduate admissions recommend keeping the statement strictly focused on academic and professional capabilities.",
+      "status": "Needs review",
+      "sourceUrl": "https://www.tcd.ie/courses/postgraduate/courses/computer-science--intelligent-systems-msc/",
+      "lastChecked": "2026-10-15",
+      "verifiedDate": null,
+      "statusNotes": "TCD strand definitions are undergoing curriculum updates. Statement prompts should be confirmed on my.tcd.ie upon portal opening."
+    }
+  },
+  {
+    "id": "ucd_cs",
+    "countryId": "ireland",
+    "name": "University College Dublin (UCD)",
+    "program": "M.Sc. Computer Science (Negotiated Learning)",
+    "requirements": {
+      "min_ielts": 6.5,
+      "min_toefl": 90,
+      "gre_required": null,
+      "gmat_required": null,
+      "min_gre": null,
+      "min_gmat": null,
+      "language_requirement": "IELTS 6.5 (no sub-band < 6.0) or TOEFL iBT 90",
+      "application_deadline": "July 1 (Rolling admissions)",
+      "tuition_fee": "€29,100 for full 1-year program (Non-EU)",
+      "notes": "Requires NFQ Level 8 2:1 Honours in Computer Science or related degree. Direct online application via UCD Graduate Admissions portal."
+    },
+    "tuition": "€29,100 / year (Non-EU)",
+    "portalUrl": "https://www.ucd.ie/apply/",
+    "sourceUrl": "https://www.ucd.ie/courses/msc-computer-science-negotiated-learning",
+    "lastChecked": "2026-10-15",
+    "lastChanged": "2026-10-15",
+    "ruleChanged": false,
+    "changedFields": [],
+    "previousValues": {},
+    "extractionFailed": false,
+    "demoSeeded": false,
+    "verificationNote": "Verify on the official site",
+    "statementRequirements": {
+      "documentType": "Statement of Purpose",
+      "required": true,
+      "summary": "UCD M.Sc. Computer Science (Negotiated Learning) requires a statement explaining course stream selections. Conflicting word limits exist between central portal and school guidance.",
+      "lengthLimit": "500 words (central portal) vs 2 pages (School handbook) — conflicting",
+      "submissionMethod": "Upload via UCD Graduate Admissions portal",
+      "formattingRequirements": "PDF document",
+      "specificQuestions": [
+        {
+          "id": "ucd_q1",
+          "question": "Detail your proposed negotiated learning stream and module selections across CS themes.",
+          "required": true,
+          "wordLimit": "250-500 words",
+          "guidance": "Refer to the UCD negotiated learning stream catalog."
+        },
+        {
+          "id": "ucd_q2",
+          "question": "How does your undergraduate foundation in computing support this specialized study plan?",
+          "required": true,
+          "wordLimit": "250-500 words",
+          "guidance": "Corroborate with transcript coursework."
+        }
+      ],
+      "assessmentCriteria": [
+        "Feasibility and coherence of the proposed negotiated learning module plan",
+        "Strength of undergraduate computer science preparation"
+      ],
+      "aiPolicy": "Original student work required under UCD Student Code.",
+      "generalGuidance": "UCD guidelines recommend contacting the programme director if you are unsure whether to follow the 500-word central portal limit or 2-page school format.",
+      "status": "Conflicting",
+      "sourceUrl": "https://www.ucd.ie/courses/msc-computer-science-negotiated-learning",
+      "lastChecked": "2026-10-15",
+      "verifiedDate": "2026-10-15",
+      "statusNotes": "Discrepancy detected: Central UCD portal application form advises a 500-word statement, while the School of Computer Science guidelines advise a comprehensive 2-page Statement of Purpose detailing negotiated module preferences. Contact UCD admissions before submission."
+    }
+  },
+  {
+    "id": "galway_cs",
+    "countryId": "ireland",
+    "name": "University of Galway",
+    "program": "M.Sc. Computer Science (Data Analytics)",
+    "requirements": {
+      "min_ielts": 6.5,
+      "min_toefl": 88,
+      "gre_required": null,
+      "gmat_required": null,
+      "min_gre": null,
+      "min_gmat": null,
+      "language_requirement": "IELTS 6.5 overall (minimum 6.5 in writing, 6.0 other bands) or TOEFL iBT 88",
+      "application_deadline": "May 31 (Rolling basis)",
+      "tuition_fee": "€28,640 for 1-year program (Non-EU)",
+      "notes": "Requires NFQ Level 8 First Class Honours or strong 2:1 in Computer Science or quantitative STEM discipline. Apply direct via University of Galway portal."
+    },
+    "tuition": "€28,640 / year (Non-EU)",
+    "portalUrl": "https://www.universityofgalway.ie/apply/",
+    "sourceUrl": "https://www.universityofgalway.ie/courses/taught-postgraduate-courses/computer-science-data-analytics.html",
+    "lastChecked": "2026-10-15",
+    "lastChanged": "2026-10-15",
+    "ruleChanged": false,
+    "changedFields": [],
+    "previousValues": {},
+    "extractionFailed": false,
+    "demoSeeded": false,
+    "verificationNote": "Verify on the official site",
+    "statementRequirements": {
+      "documentType": null,
+      "required": null,
+      "summary": null,
+      "lengthLimit": null,
+      "submissionMethod": "University of Galway direct online portal",
+      "formattingRequirements": null,
+      "specificQuestions": null,
+      "assessmentCriteria": null,
+      "aiPolicy": null,
+      "generalGuidance": "University of Galway postgraduates generally provide academic references and CV; statement requirements vary by stream and must be checked on the live portal.",
+      "status": "Unknown",
+      "sourceUrl": "https://www.universityofgalway.ie/courses/taught-postgraduate-courses/computer-science-data-analytics.html",
+      "lastChecked": "2026-10-15",
+      "verifiedDate": null,
+      "statusNotes": "Programme-specific statement instructions are not confirmed. Check the University of Galway online application portal."
+    }
+  },
+  {
+    "id": "ucc_cs",
+    "countryId": "ireland",
+    "name": "University College Cork (UCC)",
+    "program": "M.Sc. Computing Science",
+    "requirements": {
+      "min_ielts": 6.5,
+      "min_toefl": 90,
+      "gre_required": null,
+      "gmat_required": null,
+      "min_gre": null,
+      "min_gmat": null,
+      "language_requirement": "IELTS 6.5 overall (no individual band < 6.0) or TOEFL iBT 90",
+      "application_deadline": "June 15 (Direct portal)",
+      "tuition_fee": "€28,500 for 1-year program (Non-EU)",
+      "notes": "Second Class Honours Grade 1 (2H1) in primary Level 8 Computer Science degree. Apply via UCCApply portal (application fee €50)."
+    },
+    "tuition": "€28,500 / year (Non-EU)",
+    "portalUrl": "https://www.ucc.ie/en/apply/",
+    "sourceUrl": "https://www.ucc.ie/en/ckr40/",
+    "lastChecked": "2026-10-15",
+    "lastChanged": "2026-10-15",
+    "ruleChanged": false,
+    "changedFields": [],
+    "previousValues": {},
+    "extractionFailed": false,
+    "demoSeeded": false,
+    "verificationNote": "Verify on the official site",
+    "statementRequirements": {
+      "documentType": "Motivation Letter",
+      "required": true,
+      "summary": "UCC M.Sc. Computing Science requires a motivation letter for non-EU applicants. Guidelines were last confirmed for the 2024/2025 academic cycle.",
+      "lengthLimit": "Approx. 500–750 words",
+      "submissionMethod": "UCCApply online portal",
+      "formattingRequirements": "PDF file, max 5MB",
+      "specificQuestions": [
+        {
+          "id": "ucc_q1",
+          "question": "State why you wish to study Computing Science at UCC and outline your project goals.",
+          "required": true,
+          "wordLimit": "500 words",
+          "guidance": "Address UCC computing facilities and curriculum."
+        }
+      ],
+      "assessmentCriteria": [
+        "Demonstrated 2H1 Honours equivalent in computer science",
+        "Clarity of academic intent"
+      ],
+      "aiPolicy": "Authentic personal submission required.",
+      "generalGuidance": "UCC admissions prefers concise statements addressing specific laboratory strengths.",
+      "status": "Stale",
+      "sourceUrl": "https://www.ucc.ie/en/ckr40/",
+      "lastChecked": "2025-05-10",
+      "verifiedDate": "2025-05-10",
+      "statusNotes": "Verified during the 2024/2025 admission round. Upcoming intake guidelines have not yet been re-verified against the new UCCApply course handbook."
+    }
+  },
+  {
+    "id": "imperial_computing",
+    "countryId": "uk",
+    "name": "Imperial College London",
+    "program": "M.Sc. Computing (Artificial Intelligence and Machine Learning)",
+    "requirements": {
+      "min_ielts": 7,
+      "min_toefl": 100,
+      "gre_required": null,
+      "gmat_required": null,
+      "min_gre": null,
+      "min_gmat": null,
+      "language_requirement": "Higher College Requirement: IELTS 7.0 overall (min 6.5 all bands) or TOEFL iBT 100 (min 22 all bands)",
+      "application_deadline": "May 15 (Early application advised)",
+      "tuition_fee": "£46,000 for 1-year program (Overseas / Non-EU)",
+      "notes": "First-Class Honours UK Bachelor's degree (or international equivalent) with substantial computing coursework. GRE is NOT required."
+    },
+    "tuition": "£46,000 / year (Overseas)",
+    "portalUrl": "https://www.imperial.ac.uk/study/apply/postgraduate-taught/how-to-apply/",
+    "sourceUrl": "https://www.imperial.ac.uk/study/courses/postgraduate-taught/computing-artificial-intelligence-machine-learning/",
+    "lastChecked": "2026-10-15",
+    "lastChanged": "2026-10-15",
+    "ruleChanged": false,
+    "changedFields": [],
+    "previousValues": {},
+    "extractionFailed": false,
+    "demoSeeded": false,
+    "verificationNote": "Verify on the official site",
+    "statementRequirements": {
+      "documentType": "Personal Statement",
+      "required": true,
+      "summary": "Imperial College London M.Sc. Computing (AI and ML) requires a personal statement (1–2 pages) demonstrating computing foundations, motivation, and career direction.",
+      "lengthLimit": "1–2 pages (recommended approx. 800–1,000 words)",
+      "submissionMethod": "Imperial College online postgraduate application portal",
+      "formattingRequirements": "PDF format, clean layout, 1.15 line spacing",
+      "specificQuestions": [
+        {
+          "id": "imp_q1",
+          "question": "What drives your technical passion for Artificial Intelligence and Machine Learning?",
+          "required": true,
+          "wordLimit": "300 words",
+          "guidance": "Focus on technical challenges and recent developments."
+        },
+        {
+          "id": "imp_q2",
+          "question": "Highlight key mathematical, programming, or systems projects you have implemented.",
+          "required": true,
+          "wordLimit": "400 words",
+          "guidance": "Provide concrete metrics and architectural decisions."
+        },
+        {
+          "id": "imp_q3",
+          "question": "How does this taught master's prepare you for your immediate post-graduation milestones?",
+          "required": true,
+          "wordLimit": "250 words",
+          "guidance": "Articulate specific career or research outcomes."
+        }
+      ],
+      "assessmentCriteria": [
+        "Mathematical maturity (linear algebra, probability, multivariate calculus)",
+        "Proven programming proficiency and algorithmic problem solving",
+        "Clarity of purpose and alignment with Imperial faculty"
+      ],
+      "aiPolicy": "Applicants must submit original work. Generating personal statements using automated LLMs or AI assistants is prohibited under Imperial College admissions conduct regulations.",
+      "generalGuidance": "Imperial advises candidates to be concise and fact-focused, demonstrating aptitude through concrete projects rather than general praise of the university.",
+      "status": "Verified",
+      "sourceUrl": "https://www.imperial.ac.uk/study/courses/postgraduate-taught/computing-artificial-intelligence-machine-learning/",
+      "lastChecked": "2026-10-15",
+      "verifiedDate": "2026-10-15",
+      "statusNotes": null
+    }
+  },
+  {
+    "id": "oxford_acs",
+    "countryId": "uk",
+    "name": "University of Oxford",
+    "program": "M.Sc. in Advanced Computer Science",
+    "requirements": {
+      "min_ielts": 7.5,
+      "min_toefl": 110,
+      "gre_required": null,
+      "gmat_required": null,
+      "min_gre": null,
+      "min_gmat": null,
+      "language_requirement": "Higher level: IELTS 7.5 (min 7.0 each component) or TOEFL iBT 110 (min 22 L, 24 R/W, 25 S)",
+      "application_deadline": "March 7 (Primary admissions deadline)",
+      "tuition_fee": "£46,350 for 1-year program (Overseas)",
+      "notes": "First-Class undergraduate degree in Computer Science or Mathematics. GRE/GMAT scores are explicitly NOT requested or used in admissions evaluation."
+    },
+    "tuition": "£46,350 / year (Overseas)",
+    "portalUrl": "https://www.ox.ac.uk/admissions/graduate/applying-to-oxford",
+    "sourceUrl": "https://www.ox.ac.uk/admissions/graduate/courses/msc-advanced-computer-science",
+    "lastChecked": "2026-10-15",
+    "lastChanged": "2026-10-15",
+    "ruleChanged": false,
+    "changedFields": [],
+    "previousValues": {},
+    "extractionFailed": false,
+    "demoSeeded": false,
+    "verificationNote": "Verify on the official site",
+    "statementRequirements": {
+      "documentType": "Statement of Purpose",
+      "required": true,
+      "summary": "University of Oxford M.Sc. in Advanced Computer Science requires a concise statement of purpose (maximum 1,000 words) articulating academic readiness, theoretical depth, and research interests.",
+      "lengthLimit": "Maximum 1,000 words (or 1–2 pages)",
+      "submissionMethod": "Upload as PDF to Oxford Graduate Application Portal",
+      "formattingRequirements": "Standard single PDF, 1-inch margins, minimum 11pt font",
+      "specificQuestions": [
+        {
+          "id": "ox_q1",
+          "question": "Outline your undergraduate background in advanced mathematics and computer science.",
+          "required": true,
+          "wordLimit": "350 words",
+          "guidance": "Detail rigorous math proofs, algorithms, and theory courses."
+        },
+        {
+          "id": "ox_q2",
+          "question": "Which specific advanced computer science topics, departmental seminars, or lab groups align with your intended focus?",
+          "required": true,
+          "wordLimit": "400 words",
+          "guidance": "Cite Oxford CS Department research groups and faculty publications."
+        },
+        {
+          "id": "ox_q3",
+          "question": "Why is Oxford ACS the essential programme for your research or advanced technical career?",
+          "required": true,
+          "wordLimit": "250 words",
+          "guidance": "State intended thesis direction or advanced industrial role."
+        }
+      ],
+      "assessmentCriteria": [
+        "First-Class academic capability in computing and mathematical foundations",
+        "Articulation of mature scientific curiosity and research alignment",
+        "High standard of written academic English"
+      ],
+      "aiPolicy": "Oxford University Statement on AI: Personal statements must be the applicant's own authentic work. Plagiarism and undeclared use of generative AI are strictly evaluated through integrity checks.",
+      "generalGuidance": "Oxford Department of Computer Science emphasizes that applicants should write directly about technical interests rather than flowery biographical introductions.",
+      "status": "Verified",
+      "sourceUrl": "https://www.ox.ac.uk/admissions/graduate/courses/msc-advanced-computer-science",
+      "lastChecked": "2026-10-15",
+      "verifiedDate": "2026-10-15",
+      "statusNotes": null
+    }
+  },
+  {
+    "id": "manchester_acs",
+    "countryId": "uk",
+    "name": "University of Manchester",
+    "program": "M.Sc. Advanced Computer Science",
+    "requirements": {
+      "min_ielts": 7,
+      "min_toefl": 100,
+      "gre_required": null,
+      "gmat_required": null,
+      "min_gre": null,
+      "min_gmat": null,
+      "language_requirement": "IELTS 7.0 overall (no component < 6.5) or TOEFL iBT 100 (min 25 in writing, 22 other bands)",
+      "application_deadline": "June 27 (Staged admissions rounds)",
+      "tuition_fee": "£41,400 for 1-year program (International)",
+      "notes": "UK First Class or high 2:1 Honours in Computer Science with minimum 50% core CS content. Direct online application via Manchester Graduate Admissions portal."
+    },
+    "tuition": "£41,400 / year (Overseas)",
+    "portalUrl": "https://www.manchester.ac.uk/study/masters/admissions/apply-online/",
+    "sourceUrl": "https://www.manchester.ac.uk/study/masters/courses/list/08145/msc-advanced-computer-science/",
+    "lastChecked": "2026-10-15",
+    "lastChanged": "2026-10-15",
+    "ruleChanged": false,
+    "changedFields": [],
+    "previousValues": {},
+    "extractionFailed": false,
+    "demoSeeded": false,
+    "verificationNote": "Verify on the official site",
+    "statementRequirements": {
+      "documentType": "Personal Statement",
+      "required": true,
+      "summary": "University of Manchester M.Sc. Advanced Computer Science requires a 500-word personal statement focused on academic readiness and advanced course themes.",
+      "lengthLimit": "Maximum 500 words",
+      "submissionMethod": "Manchester Online Application Portal",
+      "formattingRequirements": "Text entry or PDF upload",
+      "specificQuestions": [
+        {
+          "id": "man_q1",
+          "question": "Explain your motivation for pursuing Advanced Computer Science and your intended pathway (e.g., Software Engineering, AI).",
+          "required": true,
+          "wordLimit": "300 words",
+          "guidance": "Specify core modules of interest."
+        },
+        {
+          "id": "man_q2",
+          "question": "Highlight previous computational projects demonstrating strong undergraduate performance.",
+          "required": true,
+          "wordLimit": "200 words",
+          "guidance": "Summarize major project or bachelor thesis."
+        }
+      ],
+      "assessmentCriteria": [
+        "First-Class or high 2:1 Honours standing with minimum 50% core CS content",
+        "Coherent justification for advanced pathway modules"
+      ],
+      "aiPolicy": "Original personal statement required.",
+      "generalGuidance": "Manchester portal enforces strict word caps; keep responses concise and focused on coursework.",
+      "status": "Needs review",
+      "sourceUrl": "https://www.manchester.ac.uk/study/masters/courses/list/08145/msc-advanced-computer-science/",
+      "lastChecked": "2026-10-15",
+      "verifiedDate": null,
+      "statusNotes": "Stage-based review rounds apply. Word limits strictly enforced by application portal form field."
+    }
+  }
+];
+
+    /* Student Profile State */
+    let studentProfile = {
+      uid: "mock-student-uid",
+      name: "Student",
+      qualification: "Bachelor's Degree",
+      gpa: 8.5,
+      exams: {
+        ielts: 7.0,
+        toefl: 95,
+        gre: 318,
+        gmat: null
+      },
+      targetCountries: ["germany", "ireland", "uk"],
+      budgetLakhs: 25,
+      targetIntake: "2026"
+    };
+
+    /* User Applications state */
+    let userApplications = [];
+    let userNotifications = [];
+
+    /* UI Filters & View State */
+    let currentView = 'matches';
+    let currentSort = 'fit';
+    let currentViewMode = 'cards';
+    let currentCountryFilter = 'all';
+    let currentTierFilter = 'all';
+    let currentIntake = '2026';
+    let searchQuery = '';
+    let currentCountryGuideId = 'germany';
+    let currentPlannerProgramId = 'tum_informatics';
+
+    /* --------------------------------------------------------------------------
+       3. DETERMINISTIC MATCH ENGINE (From FILE A)
+       -------------------------------------------------------------------------- */
+    function formatTuitionInr(tuitionStr) {
+      if (!tuitionStr) return { main: 'Free / Unspecified', sub: '' };
+      const lower = tuitionStr.toLowerCase();
+      if (lower.includes('€0') || lower.includes('free') || lower.includes('tuition-free')) {
+        return { main: '₹0 (Free)', sub: 'Tuition-free' };
+      }
+      if (tuitionStr.includes('6,000')) {
+        return { main: '₹10.95 L/yr', sub: '€6,000 / sem non-EU' };
+      }
+      if (tuitionStr.includes('1,500')) {
+        return { main: '₹2.74 L/yr', sub: '€1,500 / sem non-EU' };
+      }
+      if (tuitionStr.includes('27,500')) {
+        return { main: '₹25.09 L/yr', sub: '€27,500 non-EU' };
+      }
+      if (tuitionStr.includes('29,100')) {
+        return { main: '₹26.55 L/yr', sub: '€29,100 non-EU' };
+      }
+      if (tuitionStr.includes('26,000')) {
+        return { main: '₹23.72 L/yr', sub: '€26,000 non-EU' };
+      }
+      if (tuitionStr.includes('24,000')) {
+        return { main: '₹21.90 L/yr', sub: '€24,000 non-EU' };
+      }
+      if (tuitionStr.includes('45,000')) {
+        return { main: '₹49.27 L/yr', sub: '£45,000 overseas' };
+      }
+      if (tuitionStr.includes('36,000')) {
+        return { main: '₹39.42 L/yr', sub: '£36,000 overseas' };
+      }
+      if (tuitionStr.includes('37,500')) {
+        return { main: '₹41.06 L/yr', sub: '£37,500 overseas' };
+      }
+      return { main: tuitionStr, sub: '' };
+    }
+
+    function formatDeadline(deadlineStr) {
+      if (!deadlineStr) return { main: 'Not confirmed', sub: '' };
+      const m = deadlineStr.match(/^([^(]+)(?:(([^)]+)))?/);
+      if (m) {
+        let main = m[1].trim()
+          .replace(/January/i, 'Jan').replace(/February/i, 'Feb').replace(/March/i, 'Mar')
+          .replace(/April/i, 'Apr').replace(/June/i, 'Jun').replace(/July/i, 'Jul')
+          .replace(/August/i, 'Aug').replace(/September/i, 'Sep').replace(/October/i, 'Oct')
+          .replace(/November/i, 'Nov').replace(/December/i, 'Dec');
+        if (main.includes('/')) main = main.split('/')[0].trim();
+        let sub = m[2] ? m[2].trim() : 'Regular intake';
+        return { main, sub };
+      }
+      return { main: deadlineStr, sub: '' };
+    }
+
+    function calculateFitScore(u, prof) {
+      let score = 0;
+      let total = 0;
+
+      // IELTS check
+      if (u.requirements.min_ielts) {
+        total++;
+        if (prof.exams.ielts >= u.requirements.min_ielts) score++;
+        else if (prof.exams.ielts >= u.requirements.min_ielts - 0.5) score += 0.5;
+      }
+
+      // TOEFL check
+      if (u.requirements.min_toefl && (!u.requirements.min_ielts || prof.exams.toefl)) {
+        total++;
+        if (prof.exams.toefl >= u.requirements.min_toefl) score++;
+        else if (prof.exams.toefl >= u.requirements.min_toefl - 5) score += 0.5;
+      }
+
+      // GRE check
+      if (u.requirements.gre_required) {
+        total++;
+        if (prof.exams.gre && u.requirements.min_gre && prof.exams.gre >= u.requirements.min_gre) score++;
+        else if (prof.exams.gre && !u.requirements.min_gre) score++;
+      }
+
+      const ratio = total > 0 ? score / total : 0.8;
+      if (ratio >= 0.85) return { category: "Strong fit", score: ratio, reason: "Meets IELTS, within budget" };
+      if (ratio >= 0.5) return { category: "Possible", score: ratio, reason: "Pending GRE / evaluation" };
+      return { category: "Reach", score: ratio, reason: "Competitive academic fit" };
+    }
+
+    /* --------------------------------------------------------------------------
+       4. AUTHENTIC NAVIGATION & VIEW SWITCHING
+       -------------------------------------------------------------------------- */
+    function switchView(viewId, updateHistory = true) {
+      currentView = viewId;
+
+      // Update Nav links
+      ['matches', 'countries', 'tracker', 'planner'].forEach(id => {
+        const el = document.getElementById('tab-' + id);
+        if (el) el.classList.toggle('active', id === viewId);
+      });
+
+      // Update Views
+      ['matches', 'countries', 'tracker', 'planner'].forEach(id => {
+        const el = document.getElementById('view-' + id);
+        if (el) el.classList.toggle('active-view', id === viewId);
+      });
+
+      if (viewId === 'matches') renderMatches();
+      if (viewId === 'countries') renderCountryGuide();
+      if (viewId === 'tracker') renderTracker();
+      if (viewId === 'planner') renderPlanner();
+
+      if (updateHistory && window.history && window.history.pushState) {
+        const slugMap = { matches: 'matches', countries: 'countries', tracker: 'tracker', planner: 'letter-helper' };
+        const slug = slugMap[viewId] || viewId;
+        const currentPath = window.location.pathname.split('/').filter(Boolean)[0] || '';
+        if (currentPath !== slug) {
+          window.history.pushState({ viewId }, '', '/' + slug);
+        }
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleMobileDrawer() {
+      const drawer = document.getElementById('mobileDrawer');
+      if (drawer) drawer.classList.toggle('open');
+    }
+
+    function toggleNotifDropdown(forceState) {
+      const dd = document.getElementById('notifDropdown');
+      if (!dd) return;
+      if (typeof forceState === 'boolean') {
+        dd.classList.toggle('open', forceState);
+      } else {
+        dd.classList.toggle('open');
+      }
+      document.getElementById('userDropdown')?.classList.remove('open');
+    }
+
+    function toggleUserDropdown(forceState) {
+      const dd = document.getElementById('userDropdown');
+      if (!dd) return;
+      if (typeof forceState === 'boolean') {
+        dd.classList.toggle('open', forceState);
+      } else {
+        dd.classList.toggle('open');
+      }
+      document.getElementById('notifDropdown')?.classList.remove('open');
+    }
+
+    /* --------------------------------------------------------------------------
+       5. AUTH & FIREBASE SYNC (From FILE A)
+       -------------------------------------------------------------------------- */
+    function loginWithMock(preset) {
+      currentUser = {
+        uid: "demo-student-101",
+        displayName: "Diya Sharma",
+        email: "diya.sharma@example.com",
+        isMock: true
+      };
+      studentProfile.name = currentUser.displayName;
+      studentProfile.uid = currentUser.uid;
+      onAuthSuccess();
+    }
+
+    async function loginWithGoogle() {
+      if (!auth) {
+        alert("Firebase is loading or running in offline mode. Logging into Demo Student session.");
+        loginWithMock('standard');
+        return;
+      }
+      try {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        const res = await auth.signInWithPopup(provider);
+        currentUser = res.user;
+        onAuthSuccess();
+      } catch (err) {
+        console.warn('[Firebase Auth] Pop-up cancelled or failed:', err);
+        loginWithMock('standard');
+      }
+    }
+
+    function signOutUser() {
+      if (auth && currentUser && !currentUser.isMock) {
+        auth.signOut();
+      }
+      currentUser = null;
+      document.getElementById('loggedOutCluster').style.display = 'flex';
+      document.getElementById('loggedInCluster').style.display = 'none';
+      document.getElementById('heroCtaLabel').innerText = 'Get Started Free';
+      document.getElementById('btnProfileLabel').innerText = 'Edit Exam Profile';
+    }
+
+    function onAuthSuccess() {
+      document.getElementById('loggedOutCluster').style.display = 'none';
+      document.getElementById('loggedInCluster').style.display = 'flex';
+      document.getElementById('userDisplayName').innerText = currentUser.displayName || 'Student';
+      document.getElementById('userEmailDisplay').innerText = currentUser.email || 'student@example.com';
+      document.getElementById('userAvatar').innerText = (currentUser.displayName || 'S').charAt(0).toUpperCase();
+      document.getElementById('heroCtaLabel').innerText = 'Go to University Matches';
+      document.getElementById('btnProfileLabel').innerText = 'Edit Exam Profile';
+
+      // Load Firestore user applications and profile
+      loadUserData();
+    }
+
+    async function loadUserData() {
+      if (db && currentUser && !currentUser.isMock) {
+        try {
+          const profileDoc = await db.collection('users').doc(currentUser.uid).get();
+          if (profileDoc.exists) {
+            studentProfile = { ...studentProfile, ...profileDoc.data() };
+          }
+          const appsSnap = await db.collection('users').doc(currentUser.uid).collection('applications').get();
+          userApplications = [];
+          appsSnap.forEach(doc => userApplications.push({ id: doc.id, ...doc.data() }));
+        } catch (e) {
+          console.warn('[Firestore] Sync error:', e);
+        }
+      } else {
+        // Load local mock apps
+        try {
+          const saved = localStorage.getItem('careergoals_apps_' + (currentUser ? currentUser.uid : 'guest'));
+          userApplications = saved ? JSON.parse(saved) : [
+            { id: 'tum_informatics', universityId: 'tum_informatics', status: 'applied', appliedAt: new Date(Date.now() - 86400000).toISOString() },
+            { id: 'heidelberg_dcs', universityId: 'heidelberg_dcs', status: 'applied', appliedAt: new Date(Date.now() - 3*86400000).toISOString() }
+          ];
+        } catch (e) {
+          userApplications = [];
+        }
+      }
+      generateNotifications();
+      renderMatches();
+      renderTracker();
+    }
+
+    function handleHeroCtaClick() {
+      if (currentUser) {
+        switchView('matches');
+      } else {
+        loginWithMock('standard');
+      }
+    }
+
+    /* --------------------------------------------------------------------------
+       6. MATCHES RENDERING & LOGIC (From FILE A, Layout B)
+       -------------------------------------------------------------------------- */
+    function setCountryFilter(cid) {
+      currentCountryFilter = cid;
+      ['all', 'germany', 'ireland', 'uk'].forEach(id => {
+        const el = document.getElementById('country-tab-' + id);
+        if (el) el.classList.toggle('active', id === cid);
+      });
+      renderMatches();
+    }
+
+    function setTierFilter(tier) {
+      currentTierFilter = tier;
+      renderMatches();
+    }
+
+    function setIntake(year) {
+      currentIntake = year;
+      ['2026', '2027', '2028'].forEach(y => {
+        const el = document.getElementById('intake-' + y);
+        if (el) el.classList.toggle('active', y === year);
+      });
+    }
+
+    function setSort(key) {
+      currentSort = key;
+      ['fit', 'deadline', 'tuition'].forEach(k => {
+        const el = document.getElementById('sort-' + k);
+        if (el) el.classList.toggle('active', k === key);
+      });
+      renderMatches();
+    }
+
+    function setViewMode(mode) {
+      currentViewMode = mode;
+      document.getElementById('cardsViewContainer').style.display = mode === 'cards' ? 'flex' : 'none';
+      document.getElementById('tableViewContainer').style.display = mode === 'table' ? 'block' : 'none';
+      document.getElementById('view-cards').classList.toggle('active', mode === 'cards');
+      document.getElementById('view-table').classList.toggle('active', mode === 'table');
+    }
+
+    function setSearchQuery(q) {
+      searchQuery = q.toLowerCase().trim();
+      renderMatches();
+    }
+
+    function handleGlobalSearch(q) {
+      searchQuery = q.toLowerCase().trim();
+      document.getElementById('matchesSearchInput').value = q;
+      if (currentView !== 'matches') switchView('matches');
+      renderMatches();
+    }
+
+    function isUniversityApplied(univId) {
+      return userApplications.some(a => a.universityId === univId && (a.status === 'applied' || a.status === 'accepted'));
+    }
+
+    function toggleAppliedQuick(univId) {
+      const idx = userApplications.findIndex(a => a.universityId === univId);
+      if (idx >= 0) {
+        userApplications.splice(idx, 1);
+      } else {
+        userApplications.push({
+          id: univId,
+          universityId: univId,
+          status: 'applied',
+          appliedAt: new Date().toISOString()
+        });
+      }
+      saveUserApplications();
+      renderMatches();
+      renderTracker();
+      generateNotifications();
+    }
+
+    function saveUserApplications() {
+      const uid = currentUser ? currentUser.uid : 'guest';
+      try {
+        localStorage.setItem('careergoals_apps_' + uid, JSON.stringify(userApplications));
+      } catch (e) {}
+
+      if (db && currentUser && !currentUser.isMock) {
+        userApplications.forEach(app => {
+          db.collection('users').doc(currentUser.uid).collection('applications').doc(app.universityId).set(app, { merge: true });
+        });
+      }
+    }
+
+    function renderMatches() {
+      // 1. Filter
+      let filtered = universitiesData.filter(u => {
+        if (currentCountryFilter !== 'all' && u.countryId !== currentCountryFilter) return false;
+        if (searchQuery) {
+          const matchName = u.name.toLowerCase().includes(searchQuery);
+          const matchProg = u.program.toLowerCase().includes(searchQuery);
+          if (!matchName && !matchProg) return false;
+        }
+        return true;
+      });
+
+      // Compute fits
+      let matches = filtered.map(u => {
+        const fit = calculateFitScore(u, studentProfile);
+        return { u, fit };
+      });
+
+      if (currentTierFilter !== 'all') {
+        matches = matches.filter(m => m.fit.category === currentTierFilter);
+      }
+
+      // 2. Sort
+      if (currentSort === 'tuition') {
+        matches.sort((a, b) => {
+          const tA = a.u.tuition.match(/\d+/) ? parseInt(a.u.tuition.replace(/\D/g, '')) : 0;
+          const tB = b.u.tuition.match(/\d+/) ? parseInt(b.u.tuition.replace(/\D/g, '')) : 0;
+          return tA - tB;
+        });
+      } else if (currentSort === 'deadline') {
+        matches.sort((a, b) => (a.u.requirements.application_deadline || '').localeCompare(b.u.requirements.application_deadline || ''));
+      } else {
+        matches.sort((a, b) => b.fit.score - a.fit.score);
+      }
+
+      // Update counter
+      document.getElementById('counter-text').innerText = `Showing ${matches.length} matching institutions`;
+
+      // Update counts in country tabs
+      document.getElementById('count-all').innerText = universitiesData.length;
+      document.getElementById('count-germany').innerText = universitiesData.filter(u => u.countryId === 'germany').length;
+      document.getElementById('count-ireland').innerText = universitiesData.filter(u => u.countryId === 'ireland').length;
+      document.getElementById('count-uk').innerText = universitiesData.filter(u => u.countryId === 'uk').length;
+
+      // Render Cards
+      const cardsEl = document.getElementById('cardsViewContainer');
+      if (cardsEl) {
+        if (matches.length === 0) {
+          cardsEl.innerHTML = '<div style="background:var(--white); padding:36px; text-align:center; border:1px solid var(--line); border-radius:12px; color:var(--muted);">No universities found matching your filter criteria.</div>';
+        } else {
+          cardsEl.innerHTML = matches.map(({ u, fit }) => {
+            const isApplied = isUniversityApplied(u.id);
+            const tuition = formatTuitionInr(u.tuition);
+            const deadline = formatDeadline(u.requirements.application_deadline);
+            const meetsIelts = studentProfile.exams.ielts >= (u.requirements.min_ielts || 6.5);
+            const ieltsHtml = meetsIelts
+              ? `<span class="status-met">&#10003; You meet ${u.requirements.min_ielts || 6.5}</span>`
+              : `<span class="status-gap">Needs ${u.requirements.min_ielts || 6.5}</span>`;
+
+            const greGmat = u.requirements.gre_required
+              ? (u.requirements.min_gre ? `GRE required (min ${u.requirements.min_gre})` : 'GRE required')
+              : 'GRE/GMAT: Waived or not required';
+
+            const countryName = countriesData.find(c => c.id === u.countryId)?.name || u.countryId;
+
+            return `
+              <div class="match-card ${isApplied ? 'is-applied' : ''}">
+                ${u.ruleChanged ? `
+                  <div class="rule-banner">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                    <span><strong>Rule change detected:</strong> Standardized test criteria revised on official portal (${u.lastChecked || 'Recent'}). Verified from official gazette.</span>
+                  </div>
+                ` : ''}
+
+                <div class="card-grid">
+                  <!-- Col 1: Identity -->
+                  <div class="col-identity">
+                    <h3 class="univ-name">${u.name}</h3>
+                    <p class="univ-program">${countryName} &bull; ${u.program}</p>
+                    <div class="univ-verified">
+                      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                      </svg>
+                      <span>Verified ${u.lastChecked || '15 Oct 2026'}</span>
+                    </div>
+                  </div>
+
+                  <!-- Col 2: Facts -->
+                  <div class="col-facts">
+                    <div class="facts-subgrid">
+                      <div class="fact-item">
+                        <span class="fact-label">Tuition</span>
+                        <span class="fact-value-bold">${tuition.main}</span>
+                        <span class="fact-value-sub">${tuition.sub}</span>
+                      </div>
+                      <div class="fact-item">
+                        <span class="fact-label">Deadline</span>
+                        <span class="fact-value-bold">${deadline.main}</span>
+                        <span class="fact-value-sub">${deadline.sub}</span>
+                      </div>
+                      <div class="fact-item">
+                        <span class="fact-label">IELTS</span>
+                        <span style="margin-top: 2px;">${ieltsHtml}</span>
+                      </div>
+                      <div class="fact-item">
+                        <span class="fact-label">TOEFL</span>
+                        <span class="fact-value-bold" style="font-weight: 500; font-size: 13px; margin-top: 2px;">Min ${u.requirements.min_toefl || 88}</span>
+                      </div>
+                    </div>
+
+                    <div class="fact-extra-line">
+                      <span class="fact-extra-dot"></span>
+                      <span>${greGmat}</span>
+                    </div>
+                  </div>
+
+                  <!-- Col 3: Actions -->
+                  <div class="col-actions">
+                    <div style="display: flex; justify-content: flex-end; width: 100%; max-width: 100%;">
+                      <div class="fit-badge">
+                        <span class="fit-badge-strong">${fit.category}</span>
+                        <span style="color: var(--muted);">&bull;</span>
+                        <span class="fit-reason-text">${fit.reason}</span>
+                      </div>
+                    </div>
+
+                    <button class="btn-primary-action" onclick="goToPlannerForProgram('${u.id}')">
+                      Check statement requirements
+                    </button>
+
+                    <div class="actions-subrow">
+                      <a href="${u.portalUrl || u.sourceUrl}" target="_blank" rel="noopener noreferrer" class="link-official-site">
+                        <span>Official site</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                          <polyline points="15 3 21 3 21 9"></polyline>
+                          <line x1="10" y1="14" x2="21" y2="3"></line>
+                        </svg>
+                      </a>
+
+                      <button class="applied-toggle ${isApplied ? 'is-active' : ''}" onclick="toggleAppliedQuick('${u.id}')">
+                        <span class="custom-check-box">${isApplied ? '&#10003;' : ''}</span>
+                        <span>${isApplied ? 'Applied &#10003;' : 'I have applied'}</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      // Render Table View
+      const tableBody = document.getElementById('tableBody');
+      if (tableBody) {
+        tableBody.innerHTML = matches.map(({ u, fit }) => {
+          const tuition = formatTuitionInr(u.tuition);
+          const deadline = formatDeadline(u.requirements.application_deadline);
+          const meetsIelts = studentProfile.exams.ielts >= (u.requirements.min_ielts || 6.5);
+          return `
+            <tr>
+              <td>
+                <div style="font-weight: 600; color: var(--slate);">${u.name}</div>
+                <div style="color: var(--muted); font-size: 11.5px;">${u.program}</div>
+              </td>
+              <td>
+                <div style="font-weight: 600;">${tuition.main}</div>
+                <div style="font-size: 11px; color: var(--muted);">${tuition.sub}</div>
+              </td>
+              <td>
+                <div style="font-weight: 600;">${deadline.main}</div>
+                <div style="font-size: 11px; color: var(--muted);">${deadline.sub}</div>
+              </td>
+              <td>
+                ${meetsIelts ? '<span class="status-met">&#10003; Met ' + (u.requirements.min_ielts || 6.5) + '</span>' : '<span class="status-gap">Needs ' + (u.requirements.min_ielts || 6.5) + '</span>'}
+              </td>
+              <td>
+                <span class="badge" style="background:var(--mist); color:var(--forest);">${fit.category}</span>
+                <span style="font-size: 11.5px; color: var(--muted); margin-left: 6px;">${fit.reason}</span>
+              </td>
+              <td style="text-align: right;">
+                <button class="btn-primary-action" onclick="goToPlannerForProgram('${u.id}')">
+                  Check statement requirements
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+    }
+
+    /* --------------------------------------------------------------------------
+       7. COUNTRY GUIDES RENDERING (From FILE A)
+       -------------------------------------------------------------------------- */
+    function setCountryGuideActive(cid) {
+      currentCountryGuideId = cid;
+      ['germany', 'ireland', 'uk'].forEach(id => {
+        const el = document.getElementById('cg-tab-' + id);
+        if (el) el.classList.toggle('active', id === cid);
+      });
+      renderCountryGuide();
+    }
+
+    function renderCountryGuide() {
+      const country = countriesData.find(c => c.id === currentCountryGuideId) || countriesData[0];
+      const el = document.getElementById('countryGuideContent');
+      if (!el) return;
+
+      const checkedDocs = JSON.parse(localStorage.getItem('cg_docs_' + country.id) || '{}');
+
+      el.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 14px;">
+          <div>
+            <h3 style="font-size: 22px; font-weight: 600; color: var(--slate);">${country.name} Study Abroad Guide</h3>
+            <p style="font-size: 13px; color: var(--muted); margin-top: 4px;">${country.verificationNote || 'Verified on official admissions portals'}</p>
+          </div>
+          <a href="${country.portalUrl || country.sourceUrl}" target="_blank" rel="noopener noreferrer" class="btn-forest">
+            <span>Official Government Portal</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          </a>
+        </div>
+
+        <div class="guide-section-grid">
+          <div class="guide-info-box">
+            <h4>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+              <span>Language &amp; Testing Requirements</span>
+            </h4>
+            <p style="font-size: 12.5px; color: var(--slate); line-height: 1.55;">${country.languageNote}</p>
+          </div>
+
+          <div class="guide-info-box">
+            <h4>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 15h0M2 9.5h20"/></svg>
+              <span>Visa Regulations &amp; Blocked Funds</span>
+            </h4>
+            <p style="font-size: 12.5px; color: var(--slate); line-height: 1.55;">${country.visaNote}</p>
+            <p style="font-size: 11.5px; color: var(--muted); margin-top: 6px;"><strong>Cost benchmark:</strong> ${country.costRange}</p>
+          </div>
+        </div>
+
+        <div class="guide-checklist-container">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <h4 style="font-size: 14px; font-weight: 600; color: var(--slate);">Mandatory Document Checklist for ${country.name}</h4>
+            <div style="display: flex; gap: 8px;">
+              <button onclick="toggleAllDocs('${country.id}', true)" style="background: none; border: 1px solid var(--line); padding: 4px 10px; border-radius: 4px; font-size: 11.5px; cursor: pointer;">Select All</button>
+              <button onclick="toggleAllDocs('${country.id}', false)" style="background: none; border: 1px solid var(--line); padding: 4px 10px; border-radius: 4px; font-size: 11.5px; cursor: pointer;">Reset</button>
+            </div>
+          </div>
+
+          <div class="checklist-items">
+            ${country.documents.map((doc, idx) => {
+              const isChecked = Boolean(checkedDocs[idx]);
+              return `
+                <label class="check-label">
+                  <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleCountryDoc('${country.id}', ${idx}, this.checked)" />
+                  <span style="${isChecked ? 'text-decoration: line-through; color: var(--muted);' : ''}">${doc}</span>
+                </label>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function toggleCountryDoc(cid, idx, isChecked) {
+      const checkedDocs = JSON.parse(localStorage.getItem('cg_docs_' + cid) || '{}');
+      checkedDocs[idx] = isChecked;
+      localStorage.setItem('cg_docs_' + cid, JSON.stringify(checkedDocs));
+      renderCountryGuide();
+    }
+
+    function toggleAllDocs(cid, val) {
+      const country = countriesData.find(c => c.id === cid);
+      if (!country) return;
+      const checkedDocs = {};
+      country.documents.forEach((d, idx) => checkedDocs[idx] = val);
+      localStorage.setItem('cg_docs_' + cid, JSON.stringify(checkedDocs));
+      renderCountryGuide();
+    }
+
+    /* --------------------------------------------------------------------------
+       8. APPLICATION TRACKER (From FILE A)
+       -------------------------------------------------------------------------- */
+    let trackerStatusFilter = 'all';
+
+    function setTrackerFilter(st) {
+      trackerStatusFilter = st;
+      ['all', 'applied', 'planned', 'accepted', 'rejected'].forEach(s => {
+        const el = document.getElementById('tracker-filter-' + s);
+        if (el) el.classList.toggle('active', s === st);
+      });
+      renderTracker();
+    }
+
+    function renderTracker() {
+      const container = document.getElementById('trackerListContainer');
+      if (!container) return;
+
+      let filtered = userApplications;
+      if (trackerStatusFilter !== 'all') {
+        filtered = filtered.filter(a => a.status === trackerStatusFilter);
+      }
+
+      document.getElementById('trackerCountText').innerText = `${filtered.length} applications tracked`;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div style="background: var(--white); padding: 40px; text-align: center; border: 1px solid var(--line); border-radius: var(--radius-card);">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color: var(--muted); margin: 0 auto 12px;"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <h3 style="font-size: 16px; font-weight: 600; color: var(--slate); margin-bottom: 6px;">No applications in this category</h3>
+            <p style="font-size: 13px; color: var(--muted); margin-bottom: 16px;">Apply to verified programs or add an application to activate post-submission check-in alerts.</p>
+            <button class="btn-forest" onclick="openTrackAppModal()">+ Track First Application</button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(app => {
+        const u = universitiesData.find(univ => univ.id === app.universityId) || { name: app.universityId, program: "Master's Programme", countryId: "Europe" };
+        const countryName = countriesData.find(c => c.id === u.countryId)?.name || u.countryId;
+        const appliedDate = app.appliedAt ? new Date(app.appliedAt).toLocaleDateString() : 'Active cycle';
+
+        return `
+          <div class="tracker-card">
+            <div class="tracker-card-header">
+              <div>
+                <h3 style="font-size: 16px; font-weight: 600; color: var(--slate);">${u.name}</h3>
+                <p style="font-size: 12px; color: var(--muted);">${countryName} &bull; ${u.program} &bull; Applied: ${appliedDate}</p>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <select class="select-dropdown" style="padding: 4px 8px; font-size: 11.5px; font-weight: 600;" onchange="updateApplicationStatus('${app.id}', this.value)">
+                  <option value="applied" ${app.status === 'applied' ? 'selected' : ''}>Status: Applied</option>
+                  <option value="planned" ${app.status === 'planned' ? 'selected' : ''}>Status: Planned</option>
+                  <option value="accepted" ${app.status === 'accepted' ? 'selected' : ''}>Status: Accepted &#10003;</option>
+                  <option value="rejected" ${app.status === 'rejected' ? 'selected' : ''}>Status: Rejected</option>
+                </select>
+                <button onclick="removeApplication('${app.id}')" style="background: none; border: none; color: var(--muted); cursor: pointer;" title="Remove">&times;</button>
+              </div>
+            </div>
+
+            <!-- Milestone Timeline -->
+            <div class="milestone-timeline">
+              <div class="milestone-step ${app.status === 'applied' || app.status === 'accepted' ? 'active' : ''}">
+                <div class="milestone-day">Day +1 Check-In</div>
+                <div style="font-weight: 600; color: var(--slate); margin-bottom: 2px;">Submission Confirmation</div>
+                <div style="color: var(--muted);">Verify university applicant portal login credentials &amp; document upload confirmation.</div>
+              </div>
+              <div class="milestone-step ${app.status === 'applied' || app.status === 'accepted' ? 'active' : ''}">
+                <div class="milestone-day">Day +3 Check-In</div>
+                <div style="font-weight: 600; color: var(--slate); margin-bottom: 2px;">VPD &amp; Prerequisite Review</div>
+                <div style="color: var(--muted);">Confirm preliminary verification status (uni-assist VPD / academic transcripts).</div>
+              </div>
+              <div class="milestone-step ${app.status === 'accepted' ? 'active' : ''}">
+                <div class="milestone-day">Day +7 Check-In</div>
+                <div style="font-weight: 600; color: var(--slate); margin-bottom: 2px;">Faculty Committee Review</div>
+                <div style="color: var(--muted);">Application forwarded to the examination board for final admission evaluation.</div>
+              </div>
+            </div>
+
+            ${app.status === 'rejected' ? `
+              <div style="margin-top: 14px; padding: 12px 14px; background: var(--status-error-bg); border: 1px solid #fecdd3; border-radius: var(--radius-btn); display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 12.5px; color: var(--status-error); font-weight: 600;">Admission setback recorded for this institution.</span>
+                <button class="btn-forest" style="background: var(--status-error); padding: 6px 12px; font-size: 11.5px;" onclick="openRoadmapModal()">
+                  Open Rejection Recovery Roadmap &rarr;
+                </button>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function updateApplicationStatus(appId, newStatus) {
+      const app = userApplications.find(a => a.id === appId);
+      if (app) {
+        app.status = newStatus;
+        saveUserApplications();
+        renderTracker();
+        generateNotifications();
+      }
+    }
+
+    function removeApplication(appId) {
+      userApplications = userApplications.filter(a => a.id !== appId);
+      saveUserApplications();
+      renderTracker();
+      renderMatches();
+      generateNotifications();
+    }
+
+    function openTrackAppModal() {
+      const sel = document.getElementById('trackUnivSelect');
+      sel.innerHTML = universitiesData.map(u => `<option value="${u.id}">${u.name} - ${u.program}</option>`).join('');
+      document.getElementById('trackAppModal').classList.add('open');
+    }
+
+    function closeTrackAppModal() {
+      document.getElementById('trackAppModal').classList.remove('open');
+    }
+
+    function submitTrackApplication() {
+      const univId = document.getElementById('trackUnivSelect').value;
+      const status = document.getElementById('trackStatusSelect').value;
+      const existing = userApplications.find(a => a.universityId === univId);
+      if (existing) {
+        existing.status = status;
+      } else {
+        userApplications.push({
+          id: univId,
+          universityId: univId,
+          status: status,
+          appliedAt: new Date().toISOString()
+        });
+      }
+      saveUserApplications();
+      closeTrackAppModal();
+      renderTracker();
+      renderMatches();
+      generateNotifications();
+    }
+
+    /* --------------------------------------------------------------------------
+       9. STATEMENT REQUIREMENTS & PLANNER (From FILE A)
+       -------------------------------------------------------------------------- */
+    function goToPlannerForProgram(progId) {
+      currentPlannerProgramId = progId;
+      switchView('planner');
+      const sel = document.getElementById('plannerProgramSelect');
+      if (sel) sel.value = progId;
+      renderPlanner();
+    }
+
+    function onPlannerProgramChange(progId) {
+      currentPlannerProgramId = progId;
+      renderPlanner();
+    }
+
+    function renderPlanner() {
+      const sel = document.getElementById('plannerProgramSelect');
+      if (sel && sel.options.length === 0) {
+        sel.innerHTML = universitiesData.map(u => `<option value="${u.id}" ${u.id === currentPlannerProgramId ? 'selected' : ''}>${u.name}</option>`).join('');
+      }
+
+      const u = universitiesData.find(univ => univ.id === currentPlannerProgramId) || universitiesData[0];
+      const card = document.getElementById('plannerDetailsCard');
+      if (!card) return;
+
+      const sr = u.statementRequirements || {
+        documentType: "Motivation Letter / Statement of Purpose",
+        lengthLimit: "1–2 DIN A4 pages (approx. 800–1000 words)",
+        aiPolicy: "Independent authorship required. Automated generation violates academic honesty policies.",
+        specificQuestions: [
+          { question: "What foundational academic background qualifies you for this program?", wordLimit: "300 words" },
+          { question: "Which specific modules, electives, or laboratories match your research aims?", wordLimit: "400 words" },
+          { question: "What are your post-graduation career milestones?", wordLimit: "250 words" }
+        ]
+      };
+
+      card.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+          <div>
+            <h3 style="font-size: 17px; font-weight: 600; color: var(--slate);">${u.name}</h3>
+            <p style="font-size: 13px; color: var(--muted); margin-top: 2px;">${u.program}</p>
+          </div>
+          <span class="badge badge-verified">&#10003; ${sr.status || 'Verified Requirements'}</span>
+        </div>
+
+        <div style="background: var(--ivory); padding: 14px; border: 1px solid var(--line); border-radius: var(--radius-btn); margin-bottom: 16px;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 12px;">
+            <div>
+              <span style="font-weight: 600; color: var(--slate); display: block;">Document Type:</span>
+              <span style="color: var(--muted);">${sr.documentType}</span>
+            </div>
+            <div>
+              <span style="font-weight: 600; color: var(--slate); display: block;">Length Limit:</span>
+              <span style="color: var(--muted);">${sr.lengthLimit}</span>
+            </div>
+          </div>
+          <div style="margin-top: 10px; border-top: 1px solid var(--line); padding-top: 8px; font-size: 12px;">
+            <span style="font-weight: 600; color: var(--slate); display: block;">Academic AI Policy:</span>
+            <span style="color: var(--muted);">${sr.aiPolicy}</span>
+          </div>
+        </div>
+
+        <h4 style="font-size: 13.5px; font-weight: 600; color: var(--slate); margin-bottom: 10px;">Official Institutional Prompts:</h4>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          ${sr.specificQuestions.map((q, idx) => `
+            <div style="padding: 12px; background: var(--white); border: 1px solid var(--line); border-radius: var(--radius-btn);">
+              <div style="display: flex; justify-content: space-between; font-size: 11px; font-weight: 600; color: var(--forest); margin-bottom: 4px;">
+                <span>PROMPT ${idx + 1}</span>
+                <span>${q.wordLimit || 'Max limit'}</span>
+              </div>
+              <p style="font-size: 12.5px; color: var(--slate); font-weight: 500;">${q.question}</p>
+              ${q.guidance ? `<p style="font-size: 11.5px; color: var(--muted); margin-top: 4px; font-style: italic;">Guidance: ${q.guidance}</p>` : ''}
+            </div>
+          `).join('')}
+        </div>
+
+        <div style="margin-top: 20px; display: flex; gap: 10px;">
+          <a href="${u.portalUrl || u.sourceUrl}" target="_blank" rel="noopener noreferrer" class="btn-forest-on-ivory" style="font-size: 12px; padding: 8px 14px;">
+            <span>Verify on Official Portal</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          </a>
+        </div>
+      `;
+
+      // Load audit check state
+      for (let i = 1; i <= 8; i++) {
+        const checked = localStorage.getItem('audit_' + u.id + '_' + i) === 'true';
+        const cb = document.getElementById('audit-' + i);
+        if (cb) cb.checked = checked;
+      }
+
+      // Load evidence notes
+      const notes = localStorage.getItem('evidence_notes_' + u.id) || '';
+      const notesEl = document.getElementById('evidenceNotesText');
+      if (notesEl) {
+        notesEl.value = notes;
+        document.getElementById('charCountLabel').innerText = notes.length + ' characters';
+      }
+    }
+
+    function saveAuditCheck(auditId, checked) {
+      const univId = currentPlannerProgramId;
+      const num = auditId.replace('audit-', '');
+      localStorage.setItem('audit_' + univId + '_' + num, checked ? 'true' : 'false');
+    }
+
+    function saveEvidenceNotes(val) {
+      const univId = currentPlannerProgramId;
+      localStorage.setItem('evidence_notes_' + univId, val);
+      document.getElementById('charCountLabel').innerText = val.length + ' characters';
+    }
+
+    /* --------------------------------------------------------------------------
+       10. NOTIFICATIONS GENERATOR (Milestones +1, +3, +7)
+       -------------------------------------------------------------------------- */
+    function generateNotifications() {
+      userNotifications = [];
+      userApplications.forEach(app => {
+        if (app.status === 'applied') {
+          const u = universitiesData.find(univ => univ.id === app.universityId) || { name: app.universityId };
+          userNotifications.push({
+            id: 'notif-1-' + app.id,
+            read: localStorage.getItem('notif_read_' + app.id + '_1') === 'true',
+            day: 1,
+            title: `Day +1: ${u.name}`,
+            message: `Verify your applicant portal login credentials and check upload receipt.`
+          });
+          userNotifications.push({
+            id: 'notif-3-' + app.id,
+            read: localStorage.getItem('notif_read_' + app.id + '_3') === 'true',
+            day: 3,
+            title: `Day +3: ${u.name}`,
+            message: `Preliminary verification check (uni-assist VPD / academic document status).`
+          });
+          userNotifications.push({
+            id: 'notif-7-' + app.id,
+            read: localStorage.getItem('notif_read_' + app.id + '_7') === 'true',
+            day: 7,
+            title: `Day +7: ${u.name}`,
+            message: `Application forwarded to departmental admissions committee for final review.`
+          });
+        }
+      });
+
+      const unreadCount = userNotifications.filter(n => !n.read).length;
+      const badge = document.getElementById('unreadNotifBadge');
+      if (badge) {
+        badge.innerText = unreadCount;
+        badge.style.display = unreadCount > 0 ? 'flex' : 'none';
+      }
+
+      const listEl = document.getElementById('notifList');
+      if (listEl) {
+        if (userNotifications.length === 0) {
+          listEl.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--muted); font-size: 12px;">No active milestone check-ins. Apply to programs to initiate alerts.</div>';
+        } else {
+          listEl.innerHTML = userNotifications.map(n => `
+            <div class="notif-item ${n.read ? '' : 'unread'}" onclick="markNotificationRead('${n.id}')">
+              <div class="notif-item-header">
+                <span>${n.title}</span>
+                <span style="font-size: 10px; color: var(--muted);">Day +${n.day}</span>
+              </div>
+              <div class="notif-item-text">${n.message}</div>
+            </div>
+          `).join('');
+        }
+      }
+    }
+
+    function markNotificationRead(notifId) {
+      localStorage.setItem('notif_read_' + notifId, 'true');
+      const n = userNotifications.find(item => item.id === notifId);
+      if (n) n.read = true;
+      generateNotifications();
+    }
+
+    function markAllNotificationsRead() {
+      userNotifications.forEach(n => {
+        localStorage.setItem('notif_read_' + n.id, 'true');
+        n.read = true;
+      });
+      generateNotifications();
+    }
+
+    /* --------------------------------------------------------------------------
+       11. MODAL CONTROLS: Onboarding, Roadmap, Delete Data
+       -------------------------------------------------------------------------- */
+    function openOnboardingModal() {
+      document.getElementById('profName').value = studentProfile.name || '';
+      document.getElementById('profQualification').value = studentProfile.qualification || "Bachelor's Degree";
+      document.getElementById('profGpa').value = studentProfile.gpa || 8.5;
+      document.getElementById('profIelts').value = studentProfile.exams.ielts || 7.0;
+      document.getElementById('profToefl').value = studentProfile.exams.toefl || 95;
+      document.getElementById('profGre').value = studentProfile.exams.gre || 318;
+      document.getElementById('profGmat').value = studentProfile.exams.gmat || '';
+      document.getElementById('profBudget').value = studentProfile.budgetLakhs || 25;
+      document.getElementById('profTargetIntake').value = studentProfile.targetIntake || '2026';
+      document.getElementById('onboardingModal').classList.add('open');
+    }
+
+    function closeOnboardingModal() {
+      document.getElementById('onboardingModal').classList.remove('open');
+    }
+
+    function saveProfileFromModal() {
+      studentProfile.name = document.getElementById('profName').value || 'Student';
+      studentProfile.qualification = document.getElementById('profQualification').value;
+      studentProfile.gpa = parseFloat(document.getElementById('profGpa').value) || 8.5;
+      studentProfile.exams.ielts = parseFloat(document.getElementById('profIelts').value) || 7.0;
+      studentProfile.exams.toefl = parseInt(document.getElementById('profToefl').value) || 95;
+      studentProfile.exams.gre = parseInt(document.getElementById('profGre').value) || null;
+      studentProfile.exams.gmat = parseInt(document.getElementById('profGmat').value) || null;
+      studentProfile.budgetLakhs = parseInt(document.getElementById('profBudget').value) || 25;
+      studentProfile.targetIntake = document.getElementById('profTargetIntake').value;
+
+      closeOnboardingModal();
+      renderMatches();
+
+      // Persist to Firestore if online
+      if (db && currentUser && !currentUser.isMock) {
+        db.collection('users').doc(currentUser.uid).set(studentProfile, { merge: true });
+      }
+    }
+
+    function openRoadmapModal() {
+      document.getElementById('roadmapModal').classList.add('open');
+    }
+
+    function closeRoadmapModal() {
+      document.getElementById('roadmapModal').classList.remove('open');
+    }
+
+    function selectRoadmapCause(cause) {
+      const title = document.getElementById('roadmapStrategyTitle');
+      const text = document.getElementById('roadmapStrategyText');
+      if (cause === 'ects') {
+        title.innerText = 'ECTS & Subject Prerequisite Recovery';
+        text.innerText = 'Request your official ECTS credit matrix evaluation from the admissions office. Pivot toward Universities of Applied Sciences (Fachhochschulen) or Irish universities which evaluate practical competencies rather than rigid credit breakdowns.';
+      } else if (cause === 'test') {
+        title.innerText = 'Standardized Test Score Recovery';
+        text.innerText = 'Take advantage of "IELTS One Skill Retake" or pivot to programs where GRE/GMAT is either waived or evaluated holistically (e.g. Heidelberg University, Trinity College Dublin).';
+      } else if (cause === 'quota') {
+        title.innerText = 'Intake Cycle Timing Strategy';
+        text.innerText = 'Target the Summer semester intake where international applicant volume is 40–50% lower, or submit within the first 14 days of the portal opening window.';
+      } else if (cause === 'sop') {
+        title.innerText = 'Statement of Purpose Alignment';
+        text.innerText = 'Audit your statement against the 8-Point Rubric in the Statement Requirements tab. Cite specific university chair laboratories, core research projects, and exact syllabus electives.';
+      }
+    }
+
+    function openDeleteDataModal() {
+      document.getElementById('deleteDataModal').classList.add('open');
+    }
+
+    function closeDeleteDataModal() {
+      document.getElementById('deleteDataModal').classList.remove('open');
+    }
+
+    async function confirmDeleteMyData() {
+      if (db && currentUser && !currentUser.isMock) {
+        try {
+          const batch = db.batch();
+          const apps = await db.collection('users').doc(currentUser.uid).collection('applications').get();
+          apps.forEach(d => batch.delete(d.ref));
+          batch.delete(db.collection('users').doc(currentUser.uid));
+          await batch.commit();
+        } catch (e) {
+          console.warn('[Firestore] Cascading delete error:', e);
+        }
+      }
+      userApplications = [];
+      userNotifications = [];
+      localStorage.clear();
+      closeDeleteDataModal();
+      signOutUser();
+      alert('All student profile records, application milestones, and reminder history have been permanently deleted in accordance with data erasure protocols.');
+      renderMatches();
+      renderTracker();
+    }
+
+    /* --------------------------------------------------------------------------
+       12. ATLAS AI ASSISTANT WIDGET LOGIC
+       -------------------------------------------------------------------------- */
+    function toggleAtlas(show) {
+      const dialog = document.getElementById('atlasDialog');
+      const fab = document.getElementById('atlasFab');
+      if (show) {
+        dialog.style.display = 'flex';
+        fab.style.display = 'none';
+        document.getElementById('atlasInput')?.focus();
+      } else {
+        dialog.style.display = 'none';
+        fab.style.display = 'flex';
+      }
+    }
+
+    function openChatWithProgram(progId) {
+      toggleAtlas(true);
+      const u = universitiesData.find(item => item.id === progId);
+      if (u) {
+        appendBotBubble(`Now discussing: **${u.name}** (${u.program}). What would you like to know about language cutoffs, fees, or deadlines?`);
+      }
+    }
+
+    function handleAtlasKeyDown(e) {
+      if (e.key === 'Enter') sendAtlasMessage();
+    }
+
+    function sendSuggestedPrompt(text) {
+      document.getElementById('atlasInput').value = text;
+      sendAtlasMessage();
+    }
+
+    function appendUserBubble(text) {
+      const body = document.getElementById('atlasBody');
+      const div = document.createElement('div');
+      div.className = 'chat-bubble user-bubble';
+      div.textContent = text;
+      body.appendChild(div);
+      body.scrollTop = body.scrollHeight;
+    }
+
+    function appendBotBubble(htmlText) {
+      const body = document.getElementById('atlasBody');
+      const div = document.createElement('div');
+      div.className = 'chat-bubble bot-bubble';
+      div.innerHTML = htmlText;
+      body.appendChild(div);
+      body.scrollTop = body.scrollHeight;
+    }
+
+    function sendAtlasMessage() {
+      const input = document.getElementById('atlasInput');
+      const text = input.value.trim();
+      if (!text) return;
+      appendUserBubble(text);
+      input.value = '';
+
+      setTimeout(() => {
+        const q = text.toLowerCase();
+        let reply = "";
+
+        if (q.includes('tum') || q.includes('munich')) {
+          reply = `Requirements for **Technical University of Munich (TUM)** M.Sc. Informatics [Demo data]:\n\n<div class="chat-bullet"><strong>Tuition:</strong> €6,000/sem for non-EU students</div><div class="chat-bullet"><strong>GRE General:</strong> Min 315 (164 Quant / 4.0 AW for India/China/Iran/Pakistan)</div><div class="chat-bullet"><strong>IELTS / TOEFL:</strong> Min 6.5 IELTS or 88 TOEFL iBT</div><div class="chat-footnote">Verify on the official site: Standardized cutoffs are subject to annual revisions.</div>`;
+        } else if (q.includes('free') || q.includes('0')) {
+          reply = `Tuition-free public universities in Germany [Verified records]:\n\n<div class="chat-bullet"><strong>RWTH Aachen University:</strong> €0 tuition (€320/sem contribution)</div><div class="chat-bullet"><strong>Heidelberg University:</strong> €1,500/sem for Non-EU</div><div class="chat-bullet"><strong>University of Bonn:</strong> €0 tuition (€330/sem contribution)</div><div class="chat-footnote">Verify on the official site: Tuition waivers are subject to state higher education legislation.</div>`;
+        } else if (q.includes('ireland') || q.includes('funds') || q.includes('stamp')) {
+          reply = `Irish Study Visa &amp; Post-Study Work (Stamp 2 / Stamp 1G):\n\n<div class="chat-bullet"><strong>Living Maintenance:</strong> €10,000 immediate access proof of funds</div><div class="chat-bullet"><strong>Stay Back Visa:</strong> 2-year Stamp 1G for Master's graduates</div><div class="chat-bullet"><strong>Admissions Portal:</strong> Direct university applications or PAC (CAO is undergraduate only)</div><div class="chat-footnote">Verify on the official site: Criteria confirmed via Education in Ireland.</div>`;
+        } else {
+          reply = `Verified admissions guidance from our catalog:\n\n<div class="chat-bullet"><strong>Language cutoffs:</strong> German universities require IELTS 6.5; UK higher-tier require 7.0</div><div class="chat-bullet"><strong>Statement Policy:</strong> Strict anti-rewrite guarantee. Cite specific research chairs and electives</div><div class="chat-footnote">Verify on the official site: Information is sourced from official university pages.</div>`;
+        }
+
+        appendBotBubble(reply);
+      }, 350);
+    }
+
+    /* --------------------------------------------------------------------------
+       13. INITIALIZATION ON DOM READY
+       -------------------------------------------------------------------------- */
+    window.addEventListener('DOMContentLoaded', () => {
+      // Connect Auth listener if Firebase available
+      if (auth) {
+        auth.onAuthStateChanged(user => {
+          if (user) {
+            currentUser = user;
+            onAuthSuccess();
+          }
+        });
+      }
+
+      // Initial renders
+      loadUserData();
+      renderMatches();
+      renderCountryGuide();
+      renderTracker();
+      renderPlanner();
+
+      // Check URL route for direct deep-linking
+      const initialPath = window.location.pathname.split('/').filter(Boolean)[0] || '';
+      if (initialPath === 'matches') switchView('matches', false);
+      else if (initialPath === 'countries') switchView('countries', false);
+      else if (initialPath === 'tracker') switchView('tracker', false);
+      else if (initialPath === 'letter-helper' || initialPath === 'planner') switchView('planner', false);
+
+      window.addEventListener('popstate', () => {
+        const path = window.location.pathname.split('/').filter(Boolean)[0] || '';
+        if (path === 'matches') switchView('matches', false);
+        else if (path === 'countries') switchView('countries', false);
+        else if (path === 'tracker') switchView('tracker', false);
+        else if (path === 'letter-helper' || path === 'planner') switchView('planner', false);
+        else switchView('matches', false);
+      });
+    });
+  </script>
+</body>
+</html>

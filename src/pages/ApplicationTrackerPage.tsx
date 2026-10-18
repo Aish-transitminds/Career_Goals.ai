@@ -234,11 +234,11 @@ export const ApplicationTrackerPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 font-poppins">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0B1026]">
             Application Tracker & Login Reminders
           </h1>
           <p className="text-slate-600 text-sm mt-1">
@@ -249,17 +249,17 @@ export const ApplicationTrackerPage: React.FC = () => {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setShowAddModal(true)}
-            className="inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-sm transition-colors"
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-[#FF5E00] hover:bg-[#E65400] text-[#0B1026] rounded-[6px] text-xs font-semibold shadow-sm transition-colors"
           >
-            <Plus className="w-4 h-4" />
+            <Plus className="w-4 h-4 text-[#0B1026]" />
             <span>Track New University</span>
           </button>
           <Link
             to="/matches"
-            className="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-colors"
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-[#0B1026] hover:bg-[#151B3A] text-white rounded-[6px] text-xs font-semibold transition-colors"
           >
             <span>Browse Matches</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <ArrowRight className="w-3.5 h-3.5 text-[#FF5E00]" />
           </Link>
         </div>
       </div>
@@ -278,10 +278,10 @@ export const ApplicationTrackerPage: React.FC = () => {
             <button
               key={tab.id}
               onClick={() => setStatusFilter(tab.id)}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-colors ${
+              className={`px-3.5 py-1.5 rounded-[6px] text-xs font-bold transition-colors ${
                 isActive
-                  ? 'bg-indigo-600 text-white shadow-sm'
-                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                  ? 'bg-[#0B1026] text-white shadow-sm border border-[#151B3A]'
+                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200/60'
               }`}
             >
               {tab.label} ({tab.count})
@@ -296,10 +296,10 @@ export const ApplicationTrackerPage: React.FC = () => {
           Loading admission records...
         </div>
       ) : filteredApps.length === 0 ? (
-        <div className="bg-white rounded-3xl border border-slate-200 p-8 text-center space-y-4 shadow-sm">
-          <CalendarClock className="w-12 h-12 text-indigo-400 mx-auto" />
+        <div className="bg-white rounded-xl border border-slate-200 p-8 text-center space-y-4 shadow-sm">
+          <CalendarClock className="w-12 h-12 text-[#FF5E00] mx-auto" />
           <div className="space-y-1">
-            <h2 className="text-lg font-bold text-slate-900">
+            <h2 className="text-lg font-bold text-[#0B1026]">
               {statusFilter === 'all'
                 ? 'No applications tracked yet'
                 : `No applications with status "${statusFilter}"`}
@@ -310,9 +310,9 @@ export const ApplicationTrackerPage: React.FC = () => {
           </div>
           <button
             onClick={() => setShowAddModal(true)}
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-sm transition-colors"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#FF5E00] hover:bg-[#E65400] text-[#0B1026] rounded-[6px] text-xs font-semibold shadow-sm transition-colors"
           >
-            <Plus className="w-4 h-4" />
+            <Plus className="w-4 h-4 text-[#0B1026]" />
             <span>Track an Institution</span>
           </button>
         </div>
@@ -325,23 +325,23 @@ export const ApplicationTrackerPage: React.FC = () => {
             return (
               <div
                 key={app.id}
-                className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 space-y-4 flex flex-col justify-between hover:border-slate-300 transition-all"
+                className="bg-white rounded-[8px] border border-slate-200 shadow-sm p-6 space-y-4 flex flex-col justify-between hover:border-[#FF5E00] transition-all"
               >
                 <div className="space-y-3">
                   {/* Card Header: Country & Status Pill */}
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-slate-100 text-slate-600">
+                    <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-[4px] bg-[#0B1026] text-white">
                       {univ?.countryId.toUpperCase() || 'UNIVERSITY'}
                     </span>
                     <span
-                      className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider ${
+                      className={`px-2.5 py-0.5 rounded-[4px] text-[11px] font-bold uppercase tracking-wider ${
                         app.status === 'applied'
-                          ? 'bg-blue-100 text-blue-800'
+                          ? 'bg-blue-100 text-blue-900 border border-blue-200'
                           : app.status === 'accepted'
-                          ? 'bg-emerald-100 text-emerald-800'
+                          ? 'bg-emerald-100 text-emerald-900 border border-emerald-200'
                           : app.status === 'rejected'
-                          ? 'bg-rose-100 text-rose-800'
-                          : 'bg-amber-100 text-amber-800'
+                          ? 'bg-rose-100 text-rose-900 border border-rose-200'
+                          : 'bg-amber-100 text-amber-900 border border-amber-200'
                       }`}
                     >
                       {app.status}
@@ -350,7 +350,7 @@ export const ApplicationTrackerPage: React.FC = () => {
 
                   {/* Institution & Program */}
                   <div>
-                    <h2 className="font-bold text-slate-900 text-lg leading-snug">
+                    <h2 className="font-bold text-[#0B1026] text-lg leading-snug">
                       {univ?.name || app.universityId}
                     </h2>
                     <p className="text-xs text-slate-600 mt-0.5">
@@ -359,16 +359,16 @@ export const ApplicationTrackerPage: React.FC = () => {
                   </div>
 
                   {/* Deadline & Tuition Grid */}
-                  <div className="grid grid-cols-2 gap-2 text-xs bg-slate-50 p-3 rounded-xl border border-slate-100">
+                  <div className="grid grid-cols-2 gap-2 text-xs bg-slate-50 p-3 rounded-[6px] border border-slate-100">
                     <div>
                       <span className="text-slate-500 block">Application Deadline</span>
-                      <span className="font-bold text-slate-800">
+                      <span className="font-bold text-[#0B1026]">
                         {univ?.requirements.application_deadline || 'Not confirmed'}
                       </span>
                     </div>
                     <div>
                       <span className="text-slate-500 block">Tuition Fee</span>
-                      <span className="font-bold text-slate-800">
+                      <span className="font-bold text-[#0B1026]">
                         {univ?.tuition || 'Not confirmed'}
                       </span>
                     </div>
@@ -376,15 +376,15 @@ export const ApplicationTrackerPage: React.FC = () => {
 
                   {/* Submission Timestamp & Milestone Progress */}
                   {app.status === 'applied' && (
-                    <div className="p-3 bg-blue-50/60 rounded-xl border border-blue-100 space-y-2 text-xs">
-                      <div className="flex items-center justify-between text-blue-900 font-semibold">
+                    <div className="p-3 bg-slate-50 rounded-[6px] border border-slate-200 space-y-2 text-xs">
+                      <div className="flex items-center justify-between text-[#0B1026] font-semibold">
                         <span className="flex items-center gap-1.5">
-                          <Clock className="w-3.5 h-3.5 text-blue-600" />
+                          <Clock className="w-3.5 h-3.5 text-[#FF5E00]" />
                           <span>
                             Applied: {new Date(app.appliedAt!).toLocaleDateString()}
                           </span>
                         </span>
-                        <span className="text-[11px] text-blue-700">
+                        <span className="text-[11px] text-slate-600 font-bold">
                           {elapsedDays === 0 ? 'Today' : `${elapsedDays}d ago`}
                         </span>
                       </div>
@@ -392,27 +392,27 @@ export const ApplicationTrackerPage: React.FC = () => {
                       {/* Milestone Progress Steps */}
                       <div className="grid grid-cols-3 gap-1.5 pt-1">
                         <div
-                          className={`p-1.5 rounded-lg text-center text-[10px] font-semibold border ${
+                          className={`p-1.5 rounded-[4px] text-center text-[10px] font-semibold border ${
                             elapsedDays >= 1
-                              ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                              ? 'bg-[#0B1026] text-[#FF5E00] border-[#0B1026] shadow-xs'
                               : 'bg-white text-slate-500 border-slate-200'
                           }`}
                         >
                           Day +1 {elapsedDays >= 1 ? '✓' : 'Pending'}
                         </div>
                         <div
-                          className={`p-1.5 rounded-lg text-center text-[10px] font-semibold border ${
+                          className={`p-1.5 rounded-[4px] text-center text-[10px] font-semibold border ${
                             elapsedDays >= 3
-                              ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                              ? 'bg-[#0B1026] text-[#FF5E00] border-[#0B1026] shadow-xs'
                               : 'bg-white text-slate-500 border-slate-200'
                           }`}
                         >
                           Day +3 {elapsedDays >= 3 ? '✓' : 'Pending'}
                         </div>
                         <div
-                          className={`p-1.5 rounded-lg text-center text-[10px] font-semibold border ${
+                          className={`p-1.5 rounded-[4px] text-center text-[10px] font-semibold border ${
                             elapsedDays >= 7
-                              ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                              ? 'bg-[#0B1026] text-[#FF5E00] border-[#0B1026] shadow-xs'
                               : 'bg-white text-slate-500 border-slate-200'
                           }`}
                         >
@@ -426,7 +426,7 @@ export const ApplicationTrackerPage: React.FC = () => {
                   <div className="text-xs space-y-1">
                     <div className="flex items-center justify-between">
                       <span className="font-semibold text-slate-700 flex items-center gap-1">
-                        <FileText className="w-3.5 h-3.5 text-slate-400" />
+                        <FileText className="w-3.5 h-3.5 text-[#FF5E00]" />
                         <span>Application Notes:</span>
                       </span>
                       {editingNotesId !== app.id && (
@@ -435,7 +435,7 @@ export const ApplicationTrackerPage: React.FC = () => {
                             setEditingNotesId(app.id);
                             setNotesInput(app.notes || '');
                           }}
-                          className="text-indigo-600 hover:text-indigo-800 font-semibold text-[11px]"
+                          className="text-[#FF5E00] hover:text-[#E65400] font-semibold text-[11px]"
                         >
                           {app.notes ? 'Edit' : '+ Add Note'}
                         </button>
@@ -449,7 +449,7 @@ export const ApplicationTrackerPage: React.FC = () => {
                           value={notesInput}
                           onChange={(e) => setNotesInput(e.target.value.slice(0, 500))}
                           placeholder="Save portal application ID, reference numbers, or interview dates..."
-                          className="w-full p-2.5 rounded-xl border border-slate-300 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                          className="w-full p-2.5 rounded-[6px] border border-slate-300 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#FF5E00]"
                           rows={2}
                         />
                         <div className="flex items-center justify-between">
@@ -459,13 +459,13 @@ export const ApplicationTrackerPage: React.FC = () => {
                           <div className="flex items-center gap-1.5">
                             <button
                               onClick={() => setEditingNotesId(null)}
-                              className="px-2.5 py-1 text-[11px] font-semibold text-slate-600 hover:bg-slate-100 rounded-lg"
+                              className="px-2.5 py-1 text-[11px] font-semibold text-slate-600 hover:bg-slate-100 rounded-[6px]"
                             >
                               Cancel
                             </button>
                             <button
                               onClick={() => handleSaveNotes(app)}
-                              className="px-3 py-1 text-[11px] font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-sm"
+                              className="px-3.5 py-1 text-[11px] font-semibold text-[#0B1026] bg-[#FF5E00] hover:bg-[#E65400] rounded-[6px] shadow-sm"
                             >
                               Save
                             </button>
@@ -473,7 +473,7 @@ export const ApplicationTrackerPage: React.FC = () => {
                         </div>
                       </div>
                     ) : app.notes ? (
-                      <p className="text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100 italic">
+                      <p className="text-slate-600 bg-slate-50 p-2.5 rounded-[6px] border border-slate-100 italic">
                         "{app.notes}"
                       </p>
                     ) : (
@@ -491,7 +491,7 @@ export const ApplicationTrackerPage: React.FC = () => {
                         href={univ.portalUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-slate-600 hover:text-indigo-600 text-xs font-semibold"
+                        className="inline-flex items-center gap-1 text-slate-600 hover:text-[#FF5E00] text-xs font-semibold"
                       >
                         <span>Official Portal</span>
                         <ExternalLink className="w-3.5 h-3.5" />
@@ -504,9 +504,9 @@ export const ApplicationTrackerPage: React.FC = () => {
                       {app.status === 'planned' && (
                         <button
                           onClick={() => handleMarkApplied(app.id)}
-                          className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-sm transition-colors"
+                          className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#FF5E00] hover:bg-[#E65400] text-[#0B1026] rounded-[6px] text-xs font-semibold shadow-sm transition-colors"
                         >
-                          <CheckCircle className="w-3.5 h-3.5" />
+                          <CheckCircle className="w-3.5 h-3.5 text-[#0B1026]" />
                           <span>I Have Applied</span>
                         </button>
                       )}
@@ -516,14 +516,14 @@ export const ApplicationTrackerPage: React.FC = () => {
                         <>
                           <button
                             onClick={() => handleMarkAccepted(app)}
-                            className="inline-flex items-center gap-1 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 rounded-xl text-xs font-semibold transition-colors"
+                            className="inline-flex items-center gap-1 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 rounded-[6px] text-xs font-semibold transition-colors border border-emerald-200"
                           >
                             <CheckCircle className="w-3.5 h-3.5 text-emerald-600" />
                             <span>Accepted</span>
                           </button>
                           <button
                             onClick={() => handleMarkRejected(app)}
-                            className="inline-flex items-center gap-1 px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-800 rounded-xl text-xs font-semibold transition-colors"
+                            className="inline-flex items-center gap-1 px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-800 rounded-[6px] text-xs font-semibold transition-colors border border-rose-200"
                           >
                             <XCircle className="w-3.5 h-3.5 text-rose-600" />
                             <span>Mark as Rejected</span>
@@ -535,9 +535,9 @@ export const ApplicationTrackerPage: React.FC = () => {
                       {app.status === 'rejected' && (
                         <Link
                           to={`/roadmap/${app.id}`}
-                          className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold shadow-sm transition-colors"
+                          className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#0B1026] hover:bg-[#151B3A] text-white rounded-[6px] text-xs font-semibold shadow-sm transition-colors"
                         >
-                          <TrendingUp className="w-3.5 h-3.5" />
+                          <TrendingUp className="w-3.5 h-3.5 text-[#FF5E00]" />
                           <span>View Rejection Roadmap</span>
                         </Link>
                       )}
@@ -553,8 +553,8 @@ export const ApplicationTrackerPage: React.FC = () => {
       {/* Track New University Modal */}
       {showAddModal && (
         <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl shadow-xl max-w-md w-full p-6 sm:p-7 space-y-4 border border-slate-200">
-            <h2 className="text-lg font-bold text-slate-900">
+          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 sm:p-7 space-y-4 border border-slate-200">
+            <h2 className="text-lg font-bold text-[#0B1026]">
               Track an Institution in Your Admission Pipeline
             </h2>
             <p className="text-xs text-slate-500">
@@ -564,7 +564,7 @@ export const ApplicationTrackerPage: React.FC = () => {
             <select
               value={selectedUnivToAdd}
               onChange={(e) => setSelectedUnivToAdd(e.target.value)}
-              className="w-full px-3 py-2.5 rounded-xl border border-slate-300 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
+              className="w-full px-3 py-2.5 rounded-[6px] border border-slate-300 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#FF5E00] bg-white"
             >
               <option value="">-- Choose University --</option>
               {universities.map((u) => (
@@ -577,21 +577,21 @@ export const ApplicationTrackerPage: React.FC = () => {
             <div className="flex justify-end gap-2 pt-2">
               <button
                 onClick={() => setShowAddModal(false)}
-                className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl"
+                className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-[6px]"
               >
                 Cancel
               </button>
               <button
                 disabled={!selectedUnivToAdd}
                 onClick={() => handleAddApplication('planned')}
-                className="px-4 py-2 text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl disabled:opacity-50"
+                className="px-4 py-2 text-xs font-semibold text-white bg-[#0B1026] hover:bg-[#151B3A] rounded-[6px] disabled:opacity-50"
               >
                 Add as Planned
               </button>
               <button
                 disabled={!selectedUnivToAdd}
                 onClick={() => handleAddApplication('applied')}
-                className="px-4 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-sm disabled:opacity-50"
+                className="px-4 py-2 text-xs font-semibold text-[#0B1026] bg-[#FF5E00] hover:bg-[#E65400] rounded-[6px] shadow-sm disabled:opacity-50"
               >
                 I Have Applied
               </button>

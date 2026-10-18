@@ -6,20 +6,66 @@
   html {
     scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
+    font-family: 'Poppins', sans-serif;
   }
 
   body {
     @apply bg-slate-50 text-slate-900 antialiased min-h-screen flex flex-col font-sans;
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
   }
 
   :focus-visible {
-    @apply outline-none ring-2 ring-indigo-500 ring-offset-2 ring-offset-white;
+    outline: 2px solid #FF5E00 !important;
+    outline-offset: 2px !important;
+  }
+}
+
+@layer components {
+  /* Fox University design system buttons */
+  .btn-fox-orange {
+    background-color: #FF5E00;
+    color: #0B1026;
+    border-radius: 6px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    transition: background-color 0.2s ease, transform 0.15s ease;
+  }
+  .btn-fox-orange:hover {
+    background-color: #E65400;
+  }
+
+  .btn-fox-ghost {
+    background-color: transparent;
+    color: #ffffff;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 6px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.2s ease;
+  }
+  .btn-fox-ghost:hover {
+    border-color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.1);
   }
 }
 
 @layer utilities {
   .scrollbar-gutter {
     scrollbar-gutter: stable;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
