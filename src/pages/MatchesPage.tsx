@@ -110,6 +110,16 @@ export const MatchesPage: React.FC = () => {
     });
   }, [matchResults, selectedCountry, selectedTier, searchQuery]);
 
+  // Memoized university counts per country tab to avoid re-filtering in render
+  const countryCounts = useMemo(() => {
+    const counts: Record<string, number> = { all: matchResults.length };
+    for (const m of matchResults) {
+      const cid = m.university.countryId;
+      counts[cid] = (counts[cid] || 0) + 1;
+    }
+    return counts;
+  }, [matchResults]);
+
   // Handle "I Have Applied" Quick Action
   const handleMarkApplied = async (universityId: string) => {
     if (!user) {
@@ -188,10 +198,7 @@ export const MatchesPage: React.FC = () => {
               { id: 'uk', label: 'United Kingdom' },
             ].map((tab) => {
               const isActive = selectedCountry === tab.id;
-              const count =
-                tab.id === 'all'
-                  ? matchResults.length
-                  : matchResults.filter((m) => m.university.countryId === tab.id).length;
+              const count = countryCounts[tab.id] || 0;
               return (
                 <button
                   key={tab.id}

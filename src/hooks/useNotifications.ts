@@ -4,7 +4,7 @@
  * Authoritative Reference: ORIGINAL_REQUEST.md (§Screens #6, Tech Stack) & PROJECT.md
  */
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useCatalog } from './useCatalog';
 import { InAppNotification, Application } from '../types';
@@ -193,7 +193,10 @@ export function useNotifications(): UseNotificationsResult {
     await syncReminders(future);
   };
 
-  const unreadCount = notifications.filter((n) => !n.read).length;
+  const unreadCount = useMemo(
+    () => notifications.filter((n) => !n.read).length,
+    [notifications]
+  );
 
   return {
     notifications,

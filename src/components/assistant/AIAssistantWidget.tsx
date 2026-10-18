@@ -55,6 +55,7 @@ export const AIAssistantWidget: React.FC = () => {
 
   // Focus input on open & keyboard escape handler
   useEffect(() => {
+    let focusTimer: ReturnType<typeof setTimeout> | null = null;
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
         setIsOpen(false);
@@ -62,9 +63,12 @@ export const AIAssistantWidget: React.FC = () => {
     };
     window.addEventListener('keydown', handleKeyDown);
     if (isOpen) {
-      setTimeout(() => inputRef.current?.focus(), 100);
+      focusTimer = setTimeout(() => inputRef.current?.focus(), 100);
     }
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      if (focusTimer) clearTimeout(focusTimer);
+    };
   }, [isOpen]);
 
   const handleSendMessage = async (textToSend?: string) => {

@@ -198,7 +198,44 @@ export class SparkFallbackEngine {
       };
     }
 
-    // 3. Resolve matched entities (University or Country)
+    // 3. Out-of-catalog metrics (e.g. acceptance rates are not tracked in verified catalog)
+    if (prompt.includes('acceptance rate')) {
+      const matchedUniv = this.universities.find((u) => {
+        const aliases = ENTITY_ALIASES[u.id] || [];
+        return aliases.some((a) => prompt.includes(a));
+      });
+      return {
+        content:
+          'Acceptance rate statistics are not in our verified catalog. AbroadPath AI strictly tracks verified minimum entry cutoffs, language proficiency, tuition fees, and application deadlines across Germany, Ireland, and the United Kingdom. Please verify acceptance rates directly on the official portal.',
+        sourceUrl: matchedUniv?.sourceUrl || matchedUniv?.portalUrl || 'https://www.daad.de/en/study-and-research-in-germany/',
+        sourceName: matchedUniv ? `${matchedUniv.name} Official Portal` : 'Official University Admissions',
+        lastChecked: '2026-10-15',
+        isFallback: true,
+      };
+    }
+
+    // 4. Out-of-catalog institution / country detection
+    const isExplicitUncatalogedEntity =
+      prompt.includes('stanford') ||
+      prompt.includes('harvard') ||
+      prompt.includes('mit') ||
+      prompt.includes('canada') ||
+      prompt.includes('australia') ||
+      prompt.includes('usa') ||
+      prompt.includes('united states');
+
+    if (isExplicitUncatalogedEntity) {
+      return {
+        content:
+          'This institution or country is not in our verified catalog. AbroadPath AI strictly tracks verified official admission criteria across Germany, Ireland, and the United Kingdom. Please verify requirements directly on the official portal.',
+        sourceUrl: 'https://www.daad.de/en/study-and-research-in-germany/',
+        sourceName: 'Official DAAD & National Study Portals',
+        lastChecked: '2026-10-15',
+        isFallback: true,
+      };
+    }
+
+    // 5. Resolve matched entities (University or Country)
     const entity = this.resolveEntity(prompt);
 
     // 4. Resolve intent
@@ -557,7 +594,7 @@ export class SparkFallbackEngine {
   private getDefaultResponse(): AssistantResponse {
     return {
       content:
-        'I am your CareerGoals factual guide for official study-abroad requirements. I answer verified queries using official university portals and government guidelines across Germany, Ireland, and the United Kingdom.\n\nYou can ask me:\n• "What are the IELTS and GRE cutoffs for TUM?"\n• "Which universities in Germany offer free tuition?"\n• "What are the visa blocked account rules for Germany?"\n• "What are the deadlines and tuition for Trinity College Dublin?"\n• "What documents are required for an Ireland student visa?"\n\nVerify on the official site: Always confirm details directly on official portals.',
+        'I am your AbroadPath factual guide (CareerGoals) for official study-abroad requirements. I answer verified queries using official university portals and government guidelines across Germany, Ireland, and the United Kingdom.\n\nNote: If an institution, program, or metric is not in our verified catalog, please verify directly on the official portal.\n\nYou can ask me:\n• "What are the IELTS and GRE cutoffs for TUM?"\n• "Which universities in Germany offer free tuition?"\n• "What are the visa blocked account rules for Germany?"\n• "What are the deadlines and tuition for Trinity College Dublin?"\n• "What documents are required for an Ireland student visa?"\n\nVerify on the official site: Always confirm details directly on official portals.',
       sourceUrl: 'https://www.daad.de/en/study-and-research-in-germany/',
       sourceName: 'Official DAAD & National Portals',
       lastChecked: '2026-10-15',

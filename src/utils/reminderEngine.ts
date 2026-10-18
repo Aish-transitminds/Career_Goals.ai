@@ -40,7 +40,7 @@ export const MILESTONES: MilestoneDefinition[] = [
  * Format: notif_{sanitizedAppId}_day{dayOffset}
  */
 export function getNotificationId(applicationId: string, dayOffset: number): string {
-  const sanitized = applicationId.replace(/[^a-zA-Z0-9_-]/g, '_');
+  const sanitized = applicationId.replace(/[^a-zA-Z0-9_-]+/g, '_');
   return `notif_${sanitized}_day${dayOffset}`;
 }
 
