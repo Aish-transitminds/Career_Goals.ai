@@ -1,52 +1,50 @@
 # CareerGoals.ai 🎓 (AbroadPath)
 
-> **Live Application**: [https://careergoals-296e4.web.app](https://careergoals-296e4.web.app)  
->  
-> **Target Deadline**: 18 October 2026
+> **Live Application**: [https://careergoals-296e4.web.app](https://careergoals-296e4.web.app)
 
 An intelligent, ethical, zero-hallucination study-abroad decision platform. Built for students targeting international master's programs, CareerGoals.ai combines deterministic client-side matching, verifiable source provenance, in-app milestone reminders, and an ethical SOP guide with strict privacy invariants.
 
 ---
 
-## 🏗️ Architecture Overview
+## 🏗️ Architecture & Decision Flow
 
 ```mermaid
-graph TD
-    subgraph Client Application [React 18 + Vite 5 + Tailwind]
-        UI[Student Interface]
-        Engine[Deterministic Match Engine]
-        Rerank[Secondary Tier Reranking]
-        Assistant[Factual Floating Assistant]
-        Tracker[Application Tracker & Reminders]
-        Auth[Firebase Auth & Mock Fallback]
+flowchart TD
+    %% Subgraph 1: Zero-Hallucination Pipeline
+    subgraph Pipeline ["1. Zero-Hallucination Data Pipeline"]
+        direction TB
+        A["🌐 Official University Portals"] --> B["🤖 Polite Crawler<br/>(robots.txt Compliant)"]
+        B --> C["🔍 SHA-256 Change Detector"]
+        C -->|Content Changed| D["⚡ Gemini Flash Extraction"]
+        C -->|Unchanged| E["⏱️ Refresh Audit Timestamp"]
+        D --> F["🛡️ Strict Pydantic Sanity Check"]
+        F --> G[("🗄️ Verified Firestore Catalog<br/>(Verbatim Quotes & Source Citations)")]
     end
 
-    subgraph Data & Verification [Zero-Hallucination Pipeline]
-        Official[Official University Portals]
-        Scraper[Python 3.11 Crawler / robots.txt]
-        SHA[SHA-256 Change Detector]
-        Gemini[Gemini Flash Extraction]
-        Pydantic[Strict Pydantic Sanity Ranges]
-        Catalog[(Firestore Catalog / universities.json)]
+    %% Subgraph 2: Deterministic Match & Scoring Engine
+    subgraph Matching ["2. Deterministic Matching Engine"]
+        direction TB
+        H["🎓 Student Profile<br/>(GPA, Scores, Budget, Countries)"]
+        G --> I["⚖️ Requirement Scoring<br/>(Met / Near / Below Cutoffs)"]
+        H --> I
+        I --> J{"Fit Classification"}
+        J -->|Score >= 0.90| K["🟢 Strong Fit"]
+        J -->|Score 0.60 - 0.89| L["🟡 Possible"]
+        J -->|Score < 0.60| M["🔴 Reach"]
+        J -->|No Exams Taken| N["📚 Prep Needed"]
     end
 
-    subgraph Storage & Security [Firebase Cloud]
-        Rules[Strict Firestore Security Rules]
-        UserDoc[(users/{uid} isolated subcollections)]
+    %% Subgraph 3: Student Experience & Decision Hub
+    subgraph Decision ["3. Student Decision Experience"]
+        direction TB
+        K --> O["📊 Multi-Factor Reranker<br/>(35% Budget | 30% Margin | 25% Certainty | 10% Freshness)"]
+        L --> O
+        M --> O
+        O --> P["📋 Transparent University Cards<br/>('Ranked higher because...' Badge)"]
+        N --> Q["🗺️ Actionable Exam Prep Roadmap"]
+        P --> R["📅 In-App Milestone Tracker"]
+        P --> S["✍️ Ethical SOP Writing Guide"]
     end
-
-    Official -->|Polite Crawl| Scraper
-    Scraper -->|Hash Compare| SHA
-    SHA -->|Changed Content| Gemini
-    Gemini -->|Extract Fields + Snippets| Pydantic
-    Pydantic -->|Verified Ingestion| Catalog
-    Catalog -->|Live Subscription| UI
-    UI -->|Input Profile| Engine
-    Engine -->|Deterministic Scoring| Rerank
-    Rerank -->|Ranked Cards + Breakdown| UI
-    Assistant -->|Reads ONLY Catalog Facts| Catalog
-    Tracker -->|In-App Milestones +1, +3, +7| UserDoc
-    UserDoc -->|Owner-Only Protected| Rules
 ```
 
 ---
