@@ -76,20 +76,20 @@ export const Navbar: React.FC = () => {
 
   return (
     <>
-      {/* Unified Sticky Forest Nav (#0B1E17): Logo, Exact 4 Tabs, Search, Notifications, Profile */}
-      <nav className="bg-[#0b1e17]/95 backdrop-blur-md text-white sticky top-0 z-40 shadow-md font-sans border-b border-[#164e3b]">
+      {/* Unified Sticky Forest Nav (#1B4D3E): Logo, Exact 4 Tabs, Search, Notifications, Profile */}
+      <nav className="bg-[#1B4D3E] text-white sticky top-0 z-40 shadow-soft font-sans border-b border-[#2E6B57]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16 gap-4">
             {/* Logo on Left */}
             <Link to="/" className="flex items-center space-x-2.5 shrink-0 group mr-2 lg:mr-4">
-              <div className="w-9 h-9 rounded-[6px] bg-[#deb062] flex items-center justify-center text-[#0b1e17] font-bold shadow-xs group-hover:scale-105 transition-transform">
-                <GraduationCap className="w-5 h-5 text-[#0b1e17]" />
+              <div className="w-9 h-9 rounded-[6px] bg-[#F3C97E] flex items-center justify-center text-[#1B4D3E] font-bold shadow-xs group-hover:scale-105 transition-transform">
+                <GraduationCap className="w-5 h-5 text-[#1B4D3E]" />
               </div>
               <div className="hidden sm:flex flex-col">
                 <span className="text-base font-bold text-white tracking-tight leading-tight flex items-center">
-                  Career<span className="text-[#deb062]">Goals</span>
+                  Career<span className="text-[#F3C97E]">Goals</span>
                 </span>
-                <span className="text-[10px] text-slate-300 font-medium leading-none -mt-0.5">
+                <span className="text-[10px] text-[#FAF7F0]/80 font-medium leading-none -mt-0.5">
                   Study Abroad Guide
                 </span>
               </div>
@@ -105,8 +105,8 @@ export const Navbar: React.FC = () => {
                     to={link.path}
                     className={`px-2 2xl:px-3 py-2 text-xs 2xl:text-sm font-medium tracking-normal transition-all duration-150 flex items-center whitespace-nowrap border-b-2 shrink-0 ${
                       active
-                        ? 'text-[#deb062] font-semibold border-[#deb062]'
-                        : 'text-slate-200 hover:text-white border-transparent hover:border-white/20'
+                        ? 'text-[#F3C97E] font-semibold border-[#F3C97E]'
+                        : 'text-[#FAF7F0]/80 hover:text-white border-transparent hover:border-white/20'
                     }`}
                   >
                     {link.name}

@@ -468,8 +468,8 @@ export const LetterHelperPage: React.FC = () => {
           {/* Top metadata tags */}
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-[4px] bg-[#0B1026] text-white text-xs font-bold uppercase tracking-wider">
-                <Globe className="w-3.5 h-3.5 text-[#FF5E00]" />
+              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-[4px] bg-[#1B4D3E] text-[#FAF7F0] text-xs font-bold uppercase tracking-wider">
+                <Globe className="w-3.5 h-3.5 text-[#F3C97E]" />
                 <span>{countryName || selectedUniversity.countryId.toUpperCase()}</span>
               </span>
               <span className="inline-flex items-center gap-1 px-3 py-1 rounded-[4px] bg-orange-50 text-[#0B1026] text-xs font-bold uppercase tracking-wider border border-orange-200">
@@ -740,15 +740,15 @@ export const LetterHelperPage: React.FC = () => {
         </div>
       ) : (
         /* General Header when no specific programme is selected */
-        <div className="bg-white rounded-[8px] border border-slate-200 p-6 sm:p-8 shadow-sm space-y-4 hover:border-[#FF5E00] transition-colors font-poppins">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-[4px] bg-[#0B1026] text-white text-xs font-bold uppercase tracking-wider">
-            <FileText className="w-4 h-4 text-[#FF5E00]" />
+        <div className="bg-white rounded-[8px] border border-[#E6DFCF] p-6 sm:p-8 shadow-xs space-y-4 hover:border-[#1B4D3E] transition-colors font-poppins">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-[4px] bg-[#1B4D3E] text-[#FAF7F0] text-xs font-bold uppercase tracking-wider">
+            <FileText className="w-4 h-4 text-[#F3C97E]" />
             General Academic Structural Framework &bull; Authentic Student Voice
           </div>
-          <h1 className="text-2xl sm:text-4xl font-extrabold text-[#0B1026] tracking-tight">
+          <h1 className="text-2xl sm:text-4xl font-extrabold text-[#1B4D3E] tracking-tight">
             Statement Requirements & Planner
           </h1>
-          <p className="text-slate-600 text-sm sm:text-base max-w-3xl leading-relaxed">
+          <p className="text-[#5C6B63] text-sm sm:text-base max-w-3xl leading-relaxed">
             Check official statement requirements for your selected university programme and plan your own application statement.
           </p>
         </div>
@@ -795,17 +795,17 @@ export const LetterHelperPage: React.FC = () => {
       {/* 4. PLANNING WORKSPACE */}
       <div className="space-y-6 font-poppins">
         {/* Workspace Toolbar */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/15 pb-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E6DFCF] pb-3">
           <div>
-            <h2 className="text-xl font-bold text-white flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-[#deb062]" />
+            <h2 className="text-xl font-bold text-[#1B4D3E] flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-[#B45309]" />
               <span>
                 {hasSpecificQuestions
                   ? 'Programme-Prescribed Questions (Primary Focus)'
                   : 'SOP Structural Framework (6 Core Sections)'}
               </span>
             </h2>
-            <p className="text-xs text-slate-300 mt-0.5">
+            <p className="text-xs text-[#5C6B63] mt-0.5">
               Draft your outline notes in the local scratchpad (max 500 chars per block). Saved in your browser.
             </p>
           </div>
@@ -813,9 +813,9 @@ export const LetterHelperPage: React.FC = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={copyAllDrafts}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-[6px] bg-white/10 hover:bg-white/20 text-white border border-white/20 text-xs font-semibold transition-colors"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-[6px] bg-white hover:bg-[#F3EEE2] text-[#1B4D3E] border border-[#E6DFCF] text-xs font-semibold transition-colors"
             >
-              {copiedAll ? <Check className="w-4 h-4 text-[#deb062]" /> : <Copy className="w-4 h-4 text-[#deb062]" />}
+              {copiedAll ? <Check className="w-4 h-4 text-[#1B4D3E]" /> : <Copy className="w-4 h-4 text-[#1B4D3E]" />}
               <span>{copiedAll ? 'All Drafts Copied' : 'Export All Drafts'}</span>
             </button>
           </div>

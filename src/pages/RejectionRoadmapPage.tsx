@@ -193,37 +193,37 @@ ${user?.email || 'email@example.com'}`;
   return (
     <div className="space-y-8 max-w-6xl mx-auto pb-12 font-poppins">
       {/* 1. Contextual Empathetic Header */}
-      <div className="bg-[#0B1026] border border-[#151B3A] rounded-[8px] p-6 sm:p-10 text-white shadow-xl space-y-4">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-[4px] bg-[#FF5E00]/10 text-[#FF5E00] border border-[#FF5E00]/30 text-xs font-bold uppercase tracking-wider">
-          <TrendingUp className="w-4 h-4 text-[#FF5E00]" />
+      <div className="bg-[#1B4D3E] border border-[#2E6B57] rounded-[8px] p-6 sm:p-10 text-[#FAF7F0] shadow-soft space-y-4">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-[4px] bg-[#FAF7F0]/15 text-[#F3C97E] border border-[#FAF7F0]/25 text-xs font-bold uppercase tracking-wider">
+          <TrendingUp className="w-4 h-4 text-[#F3C97E]" />
           Strategic Recovery & Pivot Roadmap
         </div>
 
         <div className="space-y-2">
-          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
+          <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-[#FAF7F0]">
             {rejectedUniv ? (
               <>
-                Post-Rejection Pivot for <span className="text-[#FF5E00]">{rejectedUniv.name}</span>
+                Post-Rejection Pivot for <span className="text-[#F3C97E]">{rejectedUniv.name}</span>
               </>
             ) : (
               'Post-Rejection Strategic Pivot & Recovery'
             )}
           </h1>
-          <p className="text-slate-300 text-sm sm:text-base max-w-2xl leading-relaxed">
+          <p className="text-[#FAF7F0]/90 text-sm sm:text-base max-w-2xl leading-relaxed">
             A rejection is never a final verdict on your potential — it is a diagnostic data point.
             Identify root causes, retool your application, and pivot to verified programs matching your profile.
           </p>
         </div>
 
         {rejectedUniv && (
-          <div className="pt-2 flex flex-wrap items-center gap-3 text-xs text-slate-300">
-            <span className="px-2.5 py-1 rounded-[4px] bg-white/10 font-medium">
+          <div className="pt-2 flex flex-wrap items-center gap-3 text-xs text-[#FAF7F0]/80">
+            <span className="px-2.5 py-1 rounded-[4px] bg-white/15 font-medium">
               Program: {rejectedUniv.program}
             </span>
-            <span className="px-2.5 py-1 rounded-[4px] bg-white/10 font-medium">
+            <span className="px-2.5 py-1 rounded-[4px] bg-white/15 font-medium">
               Country: {rejectedUniv.countryId.toUpperCase()}
             </span>
-            <span className="px-2.5 py-1 rounded-[4px] bg-white/10 font-medium">
+            <span className="px-2.5 py-1 rounded-[4px] bg-white/15 font-medium">
               Tuition: {rejectedUniv.tuition}
             </span>
           </div>
@@ -360,15 +360,15 @@ ${user?.email || 'email@example.com'}`;
             </p>
           </div>
 
-          <div className="p-4 bg-[#0B1026] rounded-[6px] text-slate-300 font-mono text-[11px] overflow-x-auto whitespace-pre-wrap leading-relaxed border border-[#151B3A]">
+          <div className="p-4 bg-white rounded-[6px] text-[#2B3A33] font-mono text-[11px] overflow-x-auto whitespace-pre-wrap leading-relaxed border border-[#E6DFCF]">
             {sampleEmailTemplate}
           </div>
         </div>
 
         {/* Reapplication Intake Mapping */}
-        <div className="bg-white rounded-[8px] border border-slate-200 p-6 sm:p-8 shadow-sm space-y-4 hover:border-[#FF5E00] transition-colors">
-          <h2 className="text-lg font-bold text-[#0B1026] flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-[#FF5E00]" />
+        <div className="bg-white rounded-[8px] border border-[#E6DFCF] p-6 sm:p-8 shadow-xs space-y-4 hover:border-[#1B4D3E] transition-colors">
+          <h2 className="text-lg font-bold text-[#1B4D3E] flex items-center gap-2">
+            <Calendar className="w-5 h-5 text-[#B45309]" />
             Step 3: Target the Next Intake Cycle
           </h2>
           <p className="text-xs text-slate-500">

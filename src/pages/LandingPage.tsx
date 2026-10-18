@@ -257,122 +257,122 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 4. Four-Block Feature Strip: Dark Glass pillar cards */}
+      {/* 4. Four-Block Feature Strip: Warm Ivory & Deep Green Pillar Cards */}
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Block 1 */}
-        <div className="backdrop-blur-md bg-[#0c221a]/70 rounded-xl p-6 border border-[#1a493a]/70 shadow-lg hover:shadow-2xl hover:border-[#deb062]/60 hover:bg-[#0c221a]/90 transition-all duration-200 flex flex-col justify-between group">
+        <div className="bg-white rounded-xl p-6 border border-[#E6DFCF] shadow-xs hover:shadow-md hover:border-[#1B4D3E] transition-all duration-200 flex flex-col justify-between group">
           <div>
-            <div className="w-10 h-10 rounded-lg bg-[#deb062]/10 text-[#deb062] border border-[#deb062]/30 flex items-center justify-center mb-4 group-hover:scale-105 transition-transform shadow-xs">
-              <ShieldCheck className="w-5 h-5 text-[#deb062]" />
+            <div className="w-10 h-10 rounded-lg bg-[rgba(27,77,62,0.08)] text-[#1B4D3E] flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+              <ShieldCheck className="w-5 h-5 text-[#1B4D3E]" />
             </div>
-            <h3 className="font-semibold text-base mb-1 text-white group-hover:text-[#deb062] transition-colors">
+            <h3 className="font-semibold text-base mb-1 text-[#1B4D3E] transition-colors">
               Verified requirements
             </h3>
-            <p className="text-xs text-slate-300 leading-relaxed">
+            <p className="text-xs text-[#5C6B63] leading-relaxed">
               Direct from official university portals. No crowdsourced guesses or obsolete cutoffs.
             </p>
           </div>
         </div>
 
         {/* Block 2 */}
-        <div className="backdrop-blur-md bg-[#0c221a]/70 rounded-xl p-6 border border-[#1a493a]/70 shadow-lg hover:shadow-2xl hover:border-[#deb062]/60 hover:bg-[#0c221a]/90 transition-all duration-200 flex flex-col justify-between group">
+        <div className="bg-white rounded-xl p-6 border border-[#E6DFCF] shadow-xs hover:shadow-md hover:border-[#1B4D3E] transition-all duration-200 flex flex-col justify-between group">
           <div>
-            <div className="w-10 h-10 rounded-lg bg-[#deb062]/10 text-[#deb062] border border-[#deb062]/30 flex items-center justify-center mb-4 group-hover:scale-105 transition-transform shadow-xs">
-              <AlertTriangle className="w-5 h-5 text-[#deb062]" />
+            <div className="w-10 h-10 rounded-lg bg-[rgba(27,77,62,0.08)] text-[#1B4D3E] flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+              <AlertTriangle className="w-5 h-5 text-[#1B4D3E]" />
             </div>
-            <h3 className="font-semibold text-base mb-1 text-white group-hover:text-[#deb062] transition-colors">
+            <h3 className="font-semibold text-base mb-1 text-[#1B4D3E] transition-colors">
               Live change detection
             </h3>
-            <p className="text-xs text-slate-300 leading-relaxed">
+            <p className="text-xs text-[#5C6B63] leading-relaxed">
               Automated crawlers audit portal rule changes daily. Instant alerts for revised criteria.
             </p>
           </div>
         </div>
 
         {/* Block 3 */}
-        <div className="backdrop-blur-md bg-[#0c221a]/70 rounded-xl p-6 border border-[#1a493a]/70 shadow-lg hover:shadow-2xl hover:border-[#deb062]/60 hover:bg-[#0c221a]/90 transition-all duration-200 flex flex-col justify-between group">
+        <div className="bg-white rounded-xl p-6 border border-[#E6DFCF] shadow-xs hover:shadow-md hover:border-[#1B4D3E] transition-all duration-200 flex flex-col justify-between group">
           <div>
-            <div className="w-10 h-10 rounded-lg bg-[#deb062]/10 text-[#deb062] border border-[#deb062]/30 flex items-center justify-center mb-4 group-hover:scale-105 transition-transform shadow-xs">
-              <CalendarClock className="w-5 h-5 text-[#deb062]" />
+            <div className="w-10 h-10 rounded-lg bg-[rgba(27,77,62,0.08)] text-[#1B4D3E] flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+              <CalendarClock className="w-5 h-5 text-[#1B4D3E]" />
             </div>
-            <h3 className="font-semibold text-base mb-1 text-white group-hover:text-[#deb062] transition-colors">
+            <h3 className="font-semibold text-base mb-1 text-[#1B4D3E] transition-colors">
               Application tracking
             </h3>
-            <p className="text-xs text-slate-300 leading-relaxed">
+            <p className="text-xs text-[#5C6B63] leading-relaxed">
               Milestone timeline and automated follow-ups. +1, +3, and +7 days post-submission check-ins.
             </p>
           </div>
         </div>
 
         {/* Block 4 */}
-        <div className="backdrop-blur-md bg-[#0c221a]/70 rounded-xl p-6 border border-[#1a493a]/70 shadow-lg hover:shadow-2xl hover:border-[#deb062]/60 hover:bg-[#0c221a]/90 transition-all duration-200 flex flex-col justify-between group">
+        <div className="bg-white rounded-xl p-6 border border-[#E6DFCF] shadow-xs hover:shadow-md hover:border-[#1B4D3E] transition-all duration-200 flex flex-col justify-between group">
           <div>
-            <div className="w-10 h-10 rounded-lg bg-[#deb062]/10 text-[#deb062] border border-[#deb062]/30 flex items-center justify-center mb-4 group-hover:scale-105 transition-transform shadow-xs">
-              <Compass className="w-5 h-5 text-[#deb062]" />
+            <div className="w-10 h-10 rounded-lg bg-[rgba(27,77,62,0.08)] text-[#1B4D3E] flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+              <Compass className="w-5 h-5 text-[#1B4D3E]" />
             </div>
-            <h3 className="font-semibold text-base mb-1 text-white group-hover:text-[#deb062] transition-colors">
+            <h3 className="font-semibold text-base mb-1 text-[#1B4D3E] transition-colors">
               Rejection roadmaps
             </h3>
-            <p className="text-xs text-slate-300 leading-relaxed">
+            <p className="text-xs text-[#5C6B63] leading-relaxed">
               Turn admission setbacks into actionable strategies. Peer-tier alternatives and score improvement plans.
             </p>
           </div>
         </div>
       </section>
 
-      {/* 5. A Three-Step "Shortlist to Submission" Section: Dark Forest Theme */}
-      <section className="bg-[#0b1e17]/70 rounded-2xl p-6 sm:p-10 border border-[#164e3b]/60 shadow-xl space-y-8 backdrop-blur-xs">
+      {/* 5. A Three-Step "Shortlist to Submission" Section */}
+      <section className="bg-white rounded-2xl p-6 sm:p-10 border border-[#E6DFCF] shadow-xs space-y-8">
         <div className="text-center max-w-2xl mx-auto space-y-2">
-          <span className="text-[#deb062] font-bold text-xs uppercase tracking-wider">
+          <span className="text-[#B45309] font-bold text-xs uppercase tracking-wider">
             Clear Guidance Workflow
           </span>
-          <h2 className="text-2xl sm:text-3xl font-semibold text-white">
+          <h2 className="text-2xl sm:text-3xl font-semibold text-[#1B4D3E]">
             From Shortlist to Submission in Three Steps
           </h2>
-          <p className="text-slate-300 text-sm">
+          <p className="text-[#5C6B63] text-sm">
             A structured, transparent roadmap engineered for global master's applicants.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Step 1 */}
-          <div className="p-6 bg-[#06140f]/90 rounded-xl border border-[#164e3b]/60 space-y-3 relative overflow-hidden">
-            <span className="text-3xl font-extrabold text-[#deb062]/15 absolute top-4 right-4">
+          <div className="p-6 bg-[#F3EEE2] rounded-xl border border-[#E6DFCF] space-y-3 relative overflow-hidden">
+            <span className="text-3xl font-extrabold text-[#1B4D3E]/10 absolute top-4 right-4">
               01
             </span>
-            <div className="w-9 h-9 rounded-lg bg-[#deb062] text-[#0b1e17] flex items-center justify-center font-bold text-sm">
+            <div className="w-9 h-9 rounded-lg bg-[#1B4D3E] text-[#FAF7F0] flex items-center justify-center font-bold text-sm">
               1
             </div>
-            <h3 className="font-semibold text-base text-white">Deterministic Matching</h3>
-            <p className="text-xs text-slate-300 leading-relaxed">
+            <h3 className="font-semibold text-base text-[#1B4D3E]">Deterministic Matching</h3>
+            <p className="text-xs text-[#5C6B63] leading-relaxed">
               Input your GPA, test scores (IELTS/GRE), and budget. The mathematical engine evaluates criteria into transparent fit tiers (Strong, Possible, Reach, Prep needed) without LLM guessing.
             </p>
           </div>
 
           {/* Step 2 */}
-          <div className="p-6 bg-[#06140f]/90 rounded-xl border border-[#164e3b]/60 space-y-3 relative overflow-hidden">
-            <span className="text-3xl font-extrabold text-[#deb062]/15 absolute top-4 right-4">
+          <div className="p-6 bg-[#F3EEE2] rounded-xl border border-[#E6DFCF] space-y-3 relative overflow-hidden">
+            <span className="text-3xl font-extrabold text-[#1B4D3E]/10 absolute top-4 right-4">
               02
             </span>
-            <div className="w-9 h-9 rounded-lg bg-[#deb062] text-[#0b1e17] flex items-center justify-center font-bold text-sm">
+            <div className="w-9 h-9 rounded-lg bg-[#1B4D3E] text-[#FAF7F0] flex items-center justify-center font-bold text-sm">
               2
             </div>
-            <h3 className="font-semibold text-base text-white">Requirements &amp; SOP Planner</h3>
-            <p className="text-xs text-slate-300 leading-relaxed">
+            <h3 className="font-semibold text-base text-[#1B4D3E]">Requirements &amp; SOP Planner</h3>
+            <p className="text-xs text-[#5C6B63] leading-relaxed">
               Access university-specific questions, exact word limits, and AI anti-rewrite guidelines. Craft authentic essays with an 8-point pre-submission analytical writing checker.
             </p>
           </div>
 
           {/* Step 3 */}
-          <div className="p-6 bg-[#06140f]/90 rounded-xl border border-[#164e3b]/60 space-y-3 relative overflow-hidden">
-            <span className="text-3xl font-extrabold text-[#deb062]/15 absolute top-4 right-4">
+          <div className="p-6 bg-[#F3EEE2] rounded-xl border border-[#E6DFCF] space-y-3 relative overflow-hidden">
+            <span className="text-3xl font-extrabold text-[#1B4D3E]/10 absolute top-4 right-4">
               03
             </span>
-            <div className="w-9 h-9 rounded-lg bg-[#deb062] text-[#0b1e17] flex items-center justify-center font-bold text-sm">
+            <div className="w-9 h-9 rounded-lg bg-[#1B4D3E] text-[#FAF7F0] flex items-center justify-center font-bold text-sm">
               3
             </div>
-            <h3 className="font-semibold text-base text-white">Track &amp; Submit Confidently</h3>
-            <p className="text-xs text-slate-300 leading-relaxed">
+            <h3 className="font-semibold text-base text-[#1B4D3E]">Track &amp; Submit Confidently</h3>
+            <p className="text-xs text-[#5C6B63] leading-relaxed">
               Log application progress, receive automated +1, +3, +7 day check-in reminders, confirm German blocked accounts or Irish visa funding, and execute rejection roadmaps if needed.
             </p>
           </div>
@@ -380,35 +380,35 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* R4 Privacy Pledge Card */}
-      <section className="bg-[#0b1e17]/70 rounded-xl border border-[#164e3b]/60 shadow-xl p-6 sm:p-8 backdrop-blur-xs">
+      <section className="bg-white rounded-xl border border-[#E6DFCF] shadow-xs p-6 sm:p-8">
         <div className="flex flex-col sm:flex-row items-start gap-4">
-          <div className="p-3 bg-[#deb062]/15 text-[#deb062] border border-[#deb062]/30 rounded-lg shrink-0">
+          <div className="p-3 bg-[#FAF7F0] text-[#1B4D3E] border border-[#E6DFCF] rounded-lg shrink-0">
             <Lock className="w-6 h-6" />
           </div>
           <div className="space-y-2">
             <div className="flex flex-wrap items-center gap-2">
-              <h2 className="text-base font-semibold text-white">
+              <h2 className="text-base font-semibold text-[#1B4D3E]">
                 Student Privacy Commitment: No Personal Data Shared with AI
               </h2>
-              <span className="bg-emerald-950 text-emerald-300 border border-emerald-800 text-[10px] px-2 py-0.5 rounded font-semibold">
+              <span className="bg-[#DCFCE7] text-[#16A34A] border border-[#86efac] text-[10px] px-2 py-0.5 rounded font-semibold">
                 R4 Invariant
               </span>
             </div>
-            <p className="text-slate-300 text-xs leading-relaxed">
-              <strong className="text-white">
+            <p className="text-[#5C6B63] text-xs leading-relaxed">
+              <strong className="text-[#2B3A33]">
                 No student personal data (such as your name, test scores, target countries, budget, or application documents) is ever transmitted to any external Large Language Model.
               </strong>{' '}
               Your profile is stored exclusively under your private Firestore UID.
             </p>
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-1 text-xs text-slate-400 font-medium">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-1 text-xs text-[#5C6B63] font-medium">
               <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> 500-Character Universal Input Cap
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#16A34A]" /> 500-Character Universal Input Cap
               </span>
               <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> Private UID Scoping
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#16A34A]" /> Private UID Scoping
               </span>
               <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> "Delete My Data" Right
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#16A34A]" /> "Delete My Data" Right
               </span>
             </div>
           </div>

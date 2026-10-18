@@ -125,16 +125,16 @@ export const CountryGuidePage: React.FC = () => {
     <div className="space-y-6 font-poppins">
       {/* Header */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-white">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-[#1B4D3E]">
           Country Admission & Visa Guides
         </h1>
-        <p className="text-slate-300 text-sm mt-1">
+        <p className="text-[#5C6B63] text-sm mt-1">
           Verified admission criteria, language rules, blocked accounts, and official application portals.
         </p>
       </div>
 
       {/* Country Selector Tabs */}
-      <div className="flex flex-wrap items-center gap-2 border-b border-white/15 pb-3">
+      <div className="flex flex-wrap items-center gap-2 border-b border-[#E6DFCF] pb-3">
         {[
           { id: 'germany', name: 'Germany', flag: '🇩🇪' },
           { id: 'ireland', name: 'Ireland', flag: '🇮🇪' },
@@ -150,8 +150,8 @@ export const CountryGuidePage: React.FC = () => {
               }}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-[6px] text-sm font-bold transition-all ${
                 isActive
-                  ? 'bg-[#deb062] text-[#0b1e17] shadow-sm'
-                  : 'bg-white/10 text-slate-200 hover:bg-white/20 border border-white/15'
+                  ? 'bg-[#1B4D3E] text-[#FAF7F0] shadow-sm'
+                  : 'bg-white text-[#2B3A33] hover:bg-[#F3EEE2] border border-[#E6DFCF]'
               }`}
             >
               <span>{tab.flag}</span>
@@ -202,20 +202,20 @@ export const CountryGuidePage: React.FC = () => {
           )}
 
           {/* Top Country Hero Card */}
-          <div className="bg-white rounded-[8px] border border-slate-200 p-6 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-[#FF5E00] transition-colors">
+          <div className="bg-white rounded-[8px] border border-[#E6DFCF] p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-[#1B4D3E] transition-colors">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <span className="text-xs uppercase font-bold tracking-wider text-[#FF5E00]">
+                <span className="text-xs uppercase font-bold tracking-wider text-[#1B4D3E]">
                   National Admissions Dossier
                 </span>
-                <span className="text-slate-300">&bull;</span>
+                <span className="text-[#5C6B63]">&bull;</span>
                 <VerifiedBadge
                   lastChecked={activeCountry.lastChecked}
                   sourceUrl={activeCountry.sourceUrl}
                 />
               </div>
-              <h2 className="text-2xl font-black text-[#0B1026]">{activeCountry.name}</h2>
-              <p className="text-xs text-slate-500">
+              <h2 className="text-2xl font-black text-[#1B4D3E]">{activeCountry.name}</h2>
+              <p className="text-xs text-[#5C6B63]">
                 Official destination guidelines for international degree-seeking students.
               </p>
             </div>
@@ -224,10 +224,10 @@ export const CountryGuidePage: React.FC = () => {
               href={activeCountry.portalUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-[6px] bg-[#FF5E00] hover:bg-[#E65400] text-[#0B1026] text-xs font-semibold shadow-sm transition-colors self-start md:self-center"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-[6px] bg-[#1B4D3E] hover:bg-[#2E6B57] text-[#FAF7F0] text-xs font-semibold shadow-xs transition-colors self-start md:self-center"
             >
               <span>Visit Official National Portal</span>
-              <ExternalLink className="w-4 h-4 text-[#0B1026]" />
+              <ExternalLink className="w-4 h-4 text-[#FAF7F0]" />
             </a>
           </div>
 
