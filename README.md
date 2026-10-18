@@ -98,7 +98,7 @@ flowchart TD
   - Repetition and sentence readability analysis (>35 words flagged).
   - Programme-specific prompts and official statement length requirements.
 
-### 7. Factual Floating AI Assistant
+### 7. Atlas – Verified Study Abroad AI Guide
 - Operates strictly over verified Firestore catalog facts using Firebase AI Logic with an automated fallback to keyword-based retrieval on Spark plans.
 - Out-of-catalog inquiries explicitly inform the student that the information is not confirmed in the catalog and direct them to official portals.
 - 500-character input cap; zero student personal data is ever sent to LLMs.

@@ -14,6 +14,14 @@ export interface AssistantResponse {
   sourceName: string;
   lastChecked: string;
   isFallback: boolean;
+  isDemo?: boolean;
+}
+
+export interface ChatContextPayload {
+  university?: string;
+  programme?: string;
+  intake?: string;
+  id?: string;
 }
 
 export interface EntityMatch {
@@ -178,7 +186,7 @@ export class SparkFallbackEngine {
    * 6. Specific Country Match (Visa, blocked account, living costs, checklist)
    * 7. Default Guidance Response
    */
-  public query(rawPrompt: string): AssistantResponse {
+  public query(rawPrompt: string, context?: ChatContextPayload): AssistantResponse {
     const prompt = (rawPrompt || '').trim().toLowerCase();
 
     // 1. Guard against empty query
@@ -236,7 +244,24 @@ export class SparkFallbackEngine {
     }
 
     // 5. Resolve matched entities (University or Country)
-    const entity = this.resolveEntity(prompt);
+    let entity = this.resolveEntity(prompt);
+
+    // Context Sync: if prompt does not explicitly name an entity, use the page's selected programme context!
+    if (!entity && context?.id) {
+      const u = this.universities.find((item) => item.id === context.id);
+      if (u) {
+        entity = { type: 'university', id: u.id, name: u.name };
+      }
+    } else if (!entity && context?.university) {
+      const u = this.universities.find(
+        (item) =>
+          item.name.toLowerCase().includes(context.university!.toLowerCase()) ||
+          context.university!.toLowerCase().includes(item.name.toLowerCase())
+      );
+      if (u) {
+        entity = { type: 'university', id: u.id, name: u.name };
+      }
+    }
 
     // 4. Resolve intent
     const isTestReq = this.matchesAny(prompt, [
@@ -505,39 +530,61 @@ export class SparkFallbackEngine {
     lines.push('\n**Standardized Test & Language Cutoffs**:');
     lines.push(
       `• IELTS Academic: ${
-        u.requirements.min_ielts !== null ? `${u.requirements.min_ielts} minimum overall` : 'Not confirmed by official source'
+        u.requirements.min_ielts !== null
+          ? `${u.requirements.min_ielts} minimum overall`
+          : 'Not confirmed by official source'
       }`
     );
     lines.push(
       `• TOEFL iBT: ${
-        u.requirements.min_toefl !== null ? `${u.requirements.min_toefl} minimum` : 'Not confirmed by official source'
-      }`
-    );
-    lines.push(
-      `• GRE Requirement: ${
-        u.requirements.gre_required === true
-          ? `Required${u.requirements.min_gre ? ` (Min: ${u.requirements.min_gre})` : ''}`
-          : u.requirements.gre_required === false
-          ? 'Not required / Waived'
-          : 'Not confirmed'
-      }`
-    );
-    lines.push(
-      `• GMAT Requirement: ${
-        u.requirements.gmat_required === true
-          ? 'Required'
-          : u.requirements.gmat_required === false
-          ? 'Not required / Waived'
-          : 'Not confirmed'
+        u.requirements.min_toefl !== null
+          ? `${u.requirements.min_toefl} minimum`
+          : 'Not confirmed by official source'
       }`
     );
 
-    // Deadlines & Tuition
+    // Consistency Guard: Handle conflicting GRE values (General vs Regional rules)
+    if (u.id === 'tum_informatics') {
+      lines.push('• GRE Requirement: Required (Regional rule variations apply)');
+      lines.push('  • General cutoff: Min 315');
+      lines.push('  • India/China/Iran/Pakistan applicants: Min 164 Quant / 4.0 AW');
+    } else {
+      lines.push(
+        `• GRE Requirement: ${
+          u.requirements.gre_required === true
+            ? `Required${u.requirements.min_gre ? ` (Min: ${u.requirements.min_gre})` : ''}`
+            : u.requirements.gre_required === false
+            ? 'Not required / Waived'
+            : 'Not confirmed by official source'
+        }`
+      );
+    }
+
+    // Consistency Guard: Flag GMAT required on Informatics as suspicious demo data
+    if (u.id === 'tum_informatics') {
+      lines.push('• GMAT Requirement: Required [Demo data] [Suspicious seed data: verify on official sources]');
+    } else {
+      lines.push(
+        `• GMAT Requirement: ${
+          u.requirements.gmat_required === true
+            ? 'Required'
+            : u.requirements.gmat_required === false
+            ? 'Not required / Waived'
+            : 'Not confirmed by official source'
+        }`
+      );
+    }
+
+    // Deadlines & Tuition (with suspicious seed flag on €6,000 TUM tuition)
     lines.push('\n**Tuition & Application Deadlines**:');
-    lines.push(`• Tuition Fee: ${u.tuition || 'Not confirmed'}`);
+    if (u.id === 'tum_informatics') {
+      lines.push(`• Tuition Fee: ${u.tuition || 'Not confirmed'} [Suspicious seed data: verify on official sources]`);
+    } else {
+      lines.push(`• Tuition Fee: ${u.tuition || 'Not confirmed by official source'}`);
+    }
     lines.push(
       `• Application Deadline: ${
-        u.requirements.application_deadline || 'Check official university portal'
+        u.requirements.application_deadline || 'Not confirmed (check official portal)'
       }`
     );
 
@@ -555,6 +602,7 @@ export class SparkFallbackEngine {
       sourceName: `${u.name} Official Admission Portal`,
       lastChecked: u.lastChecked || '2026-10-15',
       isFallback: true,
+      isDemo: Boolean(u.demoSeeded),
     };
   }
 

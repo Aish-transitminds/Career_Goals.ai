@@ -4,7 +4,7 @@
  * Authoritative Reference: ORIGINAL_REQUEST.md (R4, R5, §Tech Stack) & PROJECT.md
  */
 
-import { sparkFallbackEngine, AssistantResponse } from './SparkFallbackEngine';
+import { sparkFallbackEngine, AssistantResponse, ChatContextPayload } from './SparkFallbackEngine';
 import { University, Country } from '../types';
 
 export interface ChatMessage {
@@ -15,6 +15,8 @@ export interface ChatMessage {
   sourceName?: string;
   lastChecked?: string;
   isFallback?: boolean;
+  isDemo?: boolean;
+  isSystem?: boolean;
 }
 
 export class AIAssistantService {
@@ -31,7 +33,8 @@ export class AIAssistantService {
    */
   public async askQuestion(
     prompt: string,
-    catalog?: { universities: University[]; countries: Country[] }
+    catalog?: { universities: University[]; countries: Country[] },
+    context?: ChatContextPayload
   ): Promise<AssistantResponse> {
     // 1. Enforce strict 500-character input cap (R4)
     const sanitizedPrompt = (prompt || '').slice(0, 500).trim();
@@ -42,9 +45,9 @@ export class AIAssistantService {
 
     // 2. Dual-Engine Execution:
     // Firebase AI Logic requires Blaze plan / App Check cloud proxy.
-    // On the free Spark plan, we instantly delegate to the deterministic keyword retrieval engine.
+    // On the free Spark plan, we instantly delegate to the deterministic keyword retrieval engine with context.
     try {
-      const response = sparkFallbackEngine.query(sanitizedPrompt);
+      const response = sparkFallbackEngine.query(sanitizedPrompt, context);
       return response;
     } catch (err) {
       console.warn('[AIAssistantService] Engine error, falling back to default:', err);

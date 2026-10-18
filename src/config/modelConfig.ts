@@ -16,7 +16,7 @@ export const ASSISTANT_MAX_RETRIES = 3;
 export const ASSISTANT_BASE_BACKOFF_MS = 1000;
 
 export const ASSISTANT_UNAVAILABLE_MESSAGE =
-  'The AI assistant is temporarily unavailable. Please try again in a moment, or verify requirements directly on the official university portal.';
+  'Atlas is temporarily unavailable. Please try again in a moment, or verify requirements directly on the official university portal.';
 
 export const NOT_IN_CATALOG_MESSAGE =
   'This information is not in our verified catalog. Our verified dataset currently covers institutions and guidelines in Germany, Ireland, and the United Kingdom. Please verify directly on the official portal.';

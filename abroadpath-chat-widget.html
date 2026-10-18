@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Atlas - Study Abroad Guide &amp; Chat Widget</title>
+  <style>
+    /* Base Reset & Typography */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Page Demo Mockup Header */
+    .page-header {
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .brand-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #4338ca;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .programme-selector-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #f1f5f9;
+      padding: 8px 14px;
+      border-radius: 12px;
+      border: 1px solid #cbd5e1;
+    }
+    .programme-selector-bar label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #475569;
+    }
+    .programme-select {
+      font-size: 13px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #0f172a;
+      font-weight: 500;
+      cursor: pointer;
+      outline: none;
+    }
+    .programme-select:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+    }
+
+    /* Main Page Context Display (Statement Requirements Mockup) */
+    .page-container {
+      max-width: 900px;
+      margin: 32px auto;
+      padding: 0 20px;
+      flex: 1;
+      width: 100%;
+    }
+    .card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      margin-bottom: 24px;
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 12px;
+    }
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .info-box {
+      background: #f8fafc;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: 1px solid #e2e8f0;
+    }
+    .info-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .info-value {
+      font-size: 14px;
+      font-weight: 600;
+      color: #0f172a;
+      margin-top: 4px;
+    }
+    .instructions-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 13px;
+      color: #1e40af;
+      line-height: 1.6;
+    }
+
+    /* === REQUIRED SPECIFICATION CSS === */
+    .chat-bullet {
+      position: relative;
+      padding-left: 14px;
+      margin: 2px 0;
+    }
+    .chat-bullet::before {
+      content: "•";
+      position: absolute;
+      left: 2px;
+      color: #4f46e5;
+    }
+    .chat-gap {
+      height: 8px;
+    }
+    .chat-footnote {
+      margin-top: 8px;
+      font-size: 11.5px;
+      color: #6b7280;
+    }
+    .chat-bubble {
+      white-space: normal;
+      line-height: 1.5;
+    }
+    .chat-bubble strong {
+      font-weight: 600;
+    }
+
+    /* Badge styles for Demo data & Suspicious flags */
+    .demo-badge {
+      display: inline-block;
+      padding: 1px 6px;
+      margin-left: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      background-color: #fef3c7;
+      color: #92400e;
+      border-radius: 4px;
+      border: 1px solid #fcd34d;
+      vertical-align: middle;
+    }
+    .suspicious-badge {
+      display: inline-block;
+      padding: 1px 6px;
+      margin-left: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      background-color: #ffe4e6;
+      color: #9f1239;
+      border-radius: 4px;
+      border: 1px solid #fecdd3;
+      vertical-align: middle;
+    }
+
+    /* Floating Widget UI */
+    .chat-widget-wrapper {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9999;
+    }
+
+    /* Floating Button */
+    .chat-fab {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+      color: #ffffff;
+      border: none;
+      box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.4), 0 8px 10px -6px rgba(79, 70, 229, 0.2);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+      outline: none;
+    }
+    .chat-fab:hover {
+      transform: scale(1.05);
+      box-shadow: 0 14px 28px -4px rgba(79, 70, 229, 0.5);
+    }
+    .chat-fab .status-dot {
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      width: 14px;
+      height: 14px;
+      background: #10b981;
+      border: 2.5px solid #ffffff;
+      border-radius: 50%;
+    }
+
+    /* Chat Window Container */
+    .chat-window {
+      width: 380px;
+      max-width: calc(100vw - 32px);
+      height: 560px;
+      max-height: calc(100vh - 80px);
+      background: #ffffff;
+      border-radius: 24px;
+      box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.15), 0 10px 15px -5px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: chatSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes chatSlideUp {
+      from { opacity: 0; transform: translateY(12px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Window Header */
+    .chat-header {
+      background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+      color: #ffffff;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+    }
+    .header-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .header-icon {
+      width: 34px;
+      height: 34px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .header-title-box h3 {
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .badge-verified {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10.5px;
+      color: #a7f3d0;
+      font-weight: 500;
+    }
+    .badge-demo {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10.5px;
+      color: #fde68a;
+      background: rgba(245, 158, 11, 0.25);
+      border: 1px solid rgba(252, 211, 77, 0.4);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .header-btn {
+      background: transparent;
+      border: none;
+      color: #e0e7ff;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .header-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+    }
+
+    /* Chat Messages Body */
+    .chat-body {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 12.5px;
+    }
+
+    /* System Notes */
+    .system-note {
+      text-align: center;
+      margin: 6px 0;
+    }
+    .system-note-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      background: #e2e8f0;
+      color: #334155;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 999px;
+      border: 1px solid #cbd5e1;
+    }
+
+    /* Message Bubbles */
+    .msg-row {
+      display: flex;
+      width: 100%;
+    }
+    .msg-row.user {
+      justify-content: flex-end;
+    }
+    .msg-row.bot {
+      justify-content: flex-start;
+    }
+    .bubble {
+      max-width: 90%;
+      border-radius: 16px;
+      padding: 12px 14px;
+      font-size: 12.5px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+    .bubble.user-bubble {
+      background: #4f46e5;
+      color: #ffffff;
+      border-bottom-right-radius: 4px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .bubble.bot-bubble {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      color: #1e293b;
+      border-bottom-left-radius: 4px;
+      word-break: break-word;
+    }
+    .bot-footer-meta {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid #f1f5f9;
+      font-size: 11px;
+      color: #64748b;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .bot-footer-meta a {
+      color: #4f46e5;
+      text-decoration: underline;
+      font-weight: 600;
+    }
+
+    /* Quick Starter Prompts */
+    .quick-prompts-container {
+      padding: 8px 12px;
+      background: #ffffff;
+      border-top: 1px solid #f1f5f9;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .quick-chip {
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      color: #475569;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .quick-chip:hover {
+      background: #e0e7ff;
+      color: #4338ca;
+      border-color: #c7d2fe;
+    }
+
+    /* Input Box */
+    .chat-input-area {
+      padding: 12px 14px;
+      background: #ffffff;
+      border-top: 1px solid #e2e8f0;
+    }
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .chat-textarea {
+      width: 100%;
+      height: 48px;
+      resize: none;
+      padding: 8px 38px 8px 10px;
+      font-size: 12px;
+      color: #0f172a;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      outline: none;
+      font-family: inherit;
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+    .chat-textarea:focus {
+      border-color: #6366f1;
+      background: #ffffff;
+      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+    }
+    .send-btn {
+      position: absolute;
+      right: 8px;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: #4f46e5;
+      color: #ffffff;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s ease, opacity 0.15s ease;
+    }
+    .send-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .input-meta-row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 4px;
+      font-size: 10px;
+      color: #94a3b8;
+    }
+    .char-count.warning {
+      color: #e11d48;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Mock Navigation Bar -->
+  <header class="page-header">
+    <div class="brand-title">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+        <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+      </svg>
+      CareerGoals &bull; Statement Requirements (featuring Atlas AI)
+    </div>
+
+    <!-- Programme Selector (Controls shared application state) -->
+    <div class="programme-selector-bar">
+      <label for="programmeSelect">Active Programme:</label>
+      <select id="programmeSelect" class="programme-select" onchange="handleSelectChange(this.value)">
+        <option value="heidelberg_dcs">Heidelberg University – M.Sc. Data and Computer Science [Verified]</option>
+        <option value="tum_informatics">Technical University of Munich – M.Sc. Informatics [Demo Record]</option>
+        <option value="oxford_acs">University of Oxford – M.Sc. Advanced Computer Science [Verified]</option>
+        <option value="rwth_cs">RWTH Aachen University – M.Sc. Computer Science [Verified]</option>
+      </select>
+    </div>
+  </header>
+
+  <!-- Statement Requirements Page Content -->
+  <main class="page-container">
+    <div class="card">
+      <div class="card-header">
+        <h2 id="pageProgTitle" class="card-title">Heidelberg University – M.Sc. Data and Computer Science</h2>
+        <span id="pageRecordBadge" class="badge-verified" style="color: #059669; font-weight: 600;">Official Catalog Record</span>
+      </div>
+
+      <div class="grid-2">
+        <div class="info-box">
+          <div class="info-label">
+            <span>Tuition &amp; Semester Fees</span>
+            <span id="tuitionBadge"></span>
+          </div>
+          <div id="pageTuition" class="info-value">€1,500/semester (Non-EU)</div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-label">
+            <span>Standardized Tests (GRE / GMAT)</span>
+            <span id="testBadge"></span>
+          </div>
+          <div id="pageTests" class="info-value">Not required / Not confirmed</div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-label">
+            <span>English Proficiency (IELTS / TOEFL)</span>
+          </div>
+          <div id="pageEnglish" class="info-value">IELTS 6.5 (min 6.0 each) / TOEFL 90</div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-label">
+            <span>Application Deadline (Winter Intake)</span>
+          </div>
+          <div id="pageDeadline" class="info-value">July 15, 2026</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="instructions-box">
+      <strong>Task Verification Guide:</strong>
+      <ul style="margin-left: 20px; margin-top: 6px;">
+        <li><strong>Context Sync:</strong> Switching the programme above triggers <code>onProgrammeChange(sel)</code>, resetting the chat and showing <em>"Now discussing: &lt;University&gt; – &lt;Programme&gt;"</em>.</li>
+        <li><strong>Demo Data Labelling:</strong> Select TUM Informatics to observe the header badge switch from <em>Verified Catalog Data</em> to <em>Demo Data Record</em> and see <code>[Demo data]</code> and <code>[Suspicious seed data]</code> badges.</li>
+        <li><strong>Consistency Guards:</strong> Heidelberg's GRE/GMAT correctly states unconfirmed status. TUM GRE shows conflicting values as separate labelled rules (General cutoff vs India/China/Iran/Pakistan applicants), never merged into one line. Tuition and deadlines use <code>.chat-footnote</code>.</li>
+        <li><strong>Markdown Rendering:</strong> Bot bubbles parse via <code>renderChatText()</code> with unescaped LLM defense, while user bubbles strictly preserve <code>textContent</code>.</li>
+      </ul>
+    </div>
+  </main>
+
+  <!-- AbroadPath Chat Widget Component -->
+  <div class="chat-widget-wrapper">
+    <!-- Floating Action Button (FAB) -->
+    <button id="chatFab" class="chat-fab" onclick="toggleChat(true)" aria-label="Open Atlas, your Study Abroad Guide">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="rgba(255,255,255,0.2)"></polygon>
+      </svg>
+      <span class="status-dot"></span>
+    </button>
+
+    <!-- Expanded Chat Window -->
+    <div id="chatWindow" class="chat-window" style="display: none;">
+      <!-- Header -->
+      <div class="chat-header">
+        <div class="header-info">
+          <div class="header-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="rgba(255,255,255,0.25)"></polygon>
+            </svg>
+          </div>
+          <div class="header-title-box">
+            <h3>
+              Atlas
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="#fde047" stroke="#fde047" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <span style="font-size: 11px; font-weight: normal; color: #c7d2fe;">&bull; Guide</span>
+            </h3>
+            <!-- Header Badge toggles between Verified Catalog Data and Demo Data Record -->
+            <span id="chatHeaderBadge" class="badge-verified">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              Verified Catalog Data
+            </span>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <button class="header-btn" onclick="resetChat()" title="Reset conversation" aria-label="Reset conversation">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+          </button>
+          <button class="header-btn" onclick="toggleChat(false)" title="Close chat" aria-label="Close chat">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Scrollable Message Body -->
+      <div id="chatBody" class="chat-body" role="log" aria-live="polite">
+        <!-- Messages will be rendered here dynamically -->
+      </div>
+
+      <!-- Suggested Starter Prompts -->
+      <div id="quickPrompts" class="quick-prompts-container">
+        <button class="quick-chip" onclick="sendQuickPrompt('What are the GRE and IELTS requirements?')">GRE &amp; IELTS requirements</button>
+        <button class="quick-chip" onclick="sendQuickPrompt('What is the tuition fee and deadline?')">Tuition &amp; deadlines</button>
+        <button class="quick-chip" onclick="sendQuickPrompt('Is GMAT required for this programme?')">GMAT requirement</button>
+      </div>
+
+      <!-- Chat Input Area -->
+      <div class="chat-input-area">
+        <div class="input-wrapper">
+          <textarea
+            id="chatInput"
+            class="chat-textarea"
+            placeholder="Ask about requirements, cutoffs, deadlines (max 500 chars)..."
+            maxlength="500"
+            oninput="handleInput(this)"
+            onkeydown="handleKeyDown(event)"
+          ></textarea>
+          <button id="sendBtn" class="send-btn" onclick="sendMessage()" disabled aria-label="Send message">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          </button>
+        </div>
+        <div class="input-meta-row">
+          <span>Enter to send, Shift+Enter for new line</span>
+          <span id="charCounter" class="char-count">0 / 500</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ==========================================================================
+       DATA LAYER & APPLICATION STATE
+       ========================================================================== */
+    const catalogData = {
+      heidelberg_dcs: {
+        id: "heidelberg_dcs",
+        university: "Heidelberg University",
+        programme: "M.Sc. Data and Computer Science",
+        intake: "2026",
+        demo: false,
+        tuition: "€1,500/semester (Non-EU)",
+        greGmatStatus: "Not confirmed", // Unconfirmed field
+        greDetails: "Not confirmed by official source. The admissions committee evaluates quantitative coursework directly from transcripts; standardized GRE is not required.",
+        gmatDetails: "Not required.",
+        english: "IELTS 6.5 (minimum 6.0 in all bands) or TOEFL iBT 90.",
+        deadline: "July 15, 2026",
+        portalUrl: "https://www.uni-heidelberg.de/en/study/admissions",
+        portalName: "Heidelberg Admissions Portal"
+      },
+      tum_informatics: {
+        id: "tum_informatics",
+        university: "Technical University of Munich",
+        programme: "M.Sc. Informatics",
+        intake: "2026",
+        demo: true, // Tagged demo record
+        tuition: "€6,000/semester [Suspicious seed data: verify on official sources]",
+        greGmatStatus: "Conflicting / Specific Rules",
+        greGeneralCutoff: "Min 315",
+        greRegionCutoff: "164 Quant / 4.0 AW",
+        gmatDetails: "Required [Suspicious seed data: verify on official sources]",
+        english: "IELTS 6.5 or TOEFL iBT 88.",
+        deadline: "May 31, 2026",
+        portalUrl: "https://www.tum.de/en/studies/degree-programs/detail/informatics-master-of-science-msc",
+        portalName: "TUM Official Portal"
+      },
+      oxford_acs: {
+        id: "oxford_acs",
+        university: "University of Oxford",
+        programme: "M.Sc. Advanced Computer Science",
+        intake: "2026",
+        demo: false,
+        tuition: "£36,000/year (Overseas)",
+        greGmatStatus: "Not required",
+        greDetails: "GRE scores are not considered in the assessment of applications.",
+        gmatDetails: "Not required.",
+        english: "IELTS 7.5 (min 7.0 each) or TOEFL iBT 110.",
+        deadline: "January 8, 2026",
+        portalUrl: "https://www.ox.ac.uk/admissions/graduate/courses/msc-advanced-computer-science",
+        portalName: "Oxford Graduate Admissions"
+      },
+      rwth_cs: {
+        id: "rwth_cs",
+        university: "RWTH Aachen University",
+        programme: "M.Sc. Computer Science",
+        intake: "2026",
+        demo: false,
+        tuition: "€0 tuition (€320/semester social contribution)",
+        greGmatStatus: "Mandatory for Non-EU",
+        greGeneralCutoff: "GRE Revised General Test: min 160 Quant, 145 Verbal, 3.0 AW",
+        gmatDetails: "Not accepted as GRE alternative.",
+        english: "IELTS 6.5 / TOEFL 90.",
+        deadline: "March 1, 2026",
+        portalUrl: "https://www.rwth-aachen.de/cms/root/studium/Vor-dem-Studium/Studiengaenge/Liste-Aktuelle-Studiengaenge/Studiengangbeschreibung/~bovc/Informatik-M-Sc-/",
+        portalName: "RWTH Official Admissions"
+      }
+    };
+
+    // Shared Application State
+    const state = {
+      selectedProgramme: catalogData.heidelberg_dcs
+    };
+
+    let chatThread = [];
+
+    // DOM Elements
+    const chatBody = document.getElementById("chatBody");
+    const chatInput = document.getElementById("chatInput");
+    const sendBtn = document.getElementById("sendBtn");
+    const charCounter = document.getElementById("charCounter");
+    const chatWindow = document.getElementById("chatWindow");
+    const chatFab = document.getElementById("chatFab");
+    const chatHeaderBadge = document.getElementById("chatHeaderBadge");
+
+    /* ==========================================================================
+       TASK 1: MARKDOWN RENDERING
+       ========================================================================== */
+    function renderChatText(raw) {
+      const esc = String(raw ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+
+      return esc
+        .split("\n")
+        .filter(line => !/demonstration-seeded|live change detection record/i.test(line))
+        .map(line => {
+          const t = line.trim();
+          let bold = t.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+          // Format demo badges & suspicious data badges
+          bold = bold.replace(/\[Demo data\]/gi, '<span class="demo-badge">Demo data</span>');
+          bold = bold.replace(/\[Suspicious seed data: verify on official sources\]/gi, '<span class="suspicious-badge">Suspicious seed data &ndash; verify</span>');
+          if (/^(•|-\s)/.test(t)) {
+            return `<div class="chat-bullet">${bold.replace(/^(•|-)\s*/, "")}</div>`;
+          }
+          if (/^verify on the official site/i.test(t)) {
+            return `<div class="chat-footnote">${bold}</div>`;
+          }
+          return t ? `<div>${bold}</div>` : `<div class="chat-gap"></div>`;
+        })
+        .join("");
+    }
+
+    /* ==========================================================================
+       TASK 2: CONTEXT SYNC
+       ========================================================================== */
+    function buildChatPayload(userMsg) {
+      const sel = state.selectedProgramme;
+      return {
+        message: userMsg.slice(0, 500),
+        context: {
+          id: sel.id,
+          university: sel.university,
+          programme: sel.programme,
+          intake: sel.intake,
+          demo: Boolean(sel.demo)
+        }
+      };
+    }
+
+    function appendSystemNote(text) {
+      const noteEl = document.createElement("div");
+      noteEl.className = "system-note";
+      const badge = document.createElement("span");
+      badge.className = "system-note-badge";
+      badge.textContent = text;
+      noteEl.appendChild(badge);
+      chatBody.appendChild(noteEl);
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    function onProgrammeChange(sel) {
+      chatThread = [];
+      chatBody.innerHTML = "";
+      appendSystemNote(`Now discussing: ${sel.university} – ${sel.programme}`);
+      updateHeaderBadge(sel.demo);
+    }
+
+    /* ==========================================================================
+       TASK 3: DEMO DATA LABELLING & HEADER BADGE
+       ========================================================================== */
+    function updateHeaderBadge(isDemo) {
+      if (isDemo) {
+        chatHeaderBadge.className = "badge-demo";
+        chatHeaderBadge.innerHTML = `
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          Demo Data Record
+        `;
+      } else {
+        chatHeaderBadge.className = "badge-verified";
+        chatHeaderBadge.innerHTML = `
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          Verified Catalog Data
+        `;
+      }
+    }
+
+    /* ==========================================================================
+       TASK 4: CONSISTENCY GUARDS & INTELLIGENT BOT RESPONSE ENGINE
+       ========================================================================== */
+    function generateBotReply(payload) {
+      const p = catalogData[payload.context.id] || state.selectedProgramme;
+      const q = payload.message.toLowerCase();
+
+      const lines = [];
+
+      // Demo tag announcement if demo record
+      if (p.demo) {
+        lines.push(`Requirements for **${p.programme}** at **${p.university}** [Demo data]:`);
+      } else {
+        lines.push(`Verified admission requirements for **${p.programme}** at **${p.university}**:`);
+      }
+
+      // Query-specific matching
+      if (q.includes("gre") || q.includes("gmat") || q.includes("test")) {
+        lines.push("");
+        lines.push(`**Standardized Test Evaluation:**`);
+
+        if (p.id === "tum_informatics") {
+          // Rule 4b: Conflicting values for TUM GRE represented as separate labelled rules
+          lines.push(`• **General cutoff:** ${p.greGeneralCutoff}`);
+          lines.push(`• **India/China/Iran/Pakistan applicants:** Min ${p.greRegionCutoff}`);
+          // Rule 4d: GMAT required flagged as suspicious seed data
+          lines.push(`• **GMAT:** ${p.gmatDetails}`);
+        } else if (p.greGmatStatus === "Not confirmed") {
+          // Rule 4a: Field not confirmed must not be presented as verified
+          lines.push(`• **GRE / GMAT:** Not confirmed (verify on official portal)`);
+          lines.push(`• **Notes:** ${p.greDetails}`);
+        } else {
+          lines.push(`• **GRE Requirement:** ${p.greGeneralCutoff || p.greDetails}`);
+          lines.push(`• **GMAT:** ${p.gmatDetails}`);
+        }
+      } else if (q.includes("fee") || q.includes("tuition") || q.includes("deadline")) {
+        lines.push("");
+        // Rule 4d: Flag suspicious €6,000 tuition for TUM Informatics
+        lines.push(`• **Tuition Fee:** ${p.tuition}`);
+        lines.push(`• **Application Deadline:** ${p.deadline}`);
+        // Rule 4c: Tuition and deadlines get .chat-footnote, not bold body text
+        lines.push(`Verify on the official site: Tuition amounts and deadlines are subject to ministerial and faculty updates.`);
+      } else {
+        // Comprehensive overview
+        lines.push("");
+        lines.push(`• **English Proficiency:** ${p.english}`);
+        if (p.id === "tum_informatics") {
+          lines.push(`• **GRE (General cutoff):** ${p.greGeneralCutoff}`);
+          lines.push(`• **GRE (India/China/Iran/Pakistan):** Min ${p.greRegionCutoff}`);
+          lines.push(`• **GMAT:** ${p.gmatDetails}`);
+        } else if (p.greGmatStatus === "Not confirmed") {
+          lines.push(`• **GRE / GMAT:** Not confirmed (verify on official portal)`);
+        } else {
+          lines.push(`• **GRE / GMAT:** ${p.greGeneralCutoff || p.greDetails}`);
+        }
+        lines.push(`• **Tuition & Fees:** ${p.tuition}`);
+        lines.push(`• **Application Deadline:** ${p.deadline}`);
+        lines.push(`Verify on the official site: Cutoffs and regulations are confirmed via official university portal.`);
+      }
+
+      return {
+        replyText: lines.join("\n"),
+        sourceName: p.portalName,
+        sourceUrl: p.portalUrl,
+        isDemo: p.demo
+      };
+    }
+
+    /* ==========================================================================
+       CHAT INTERACTION LOGIC
+       ========================================================================== */
+    function appendUserMessage(text) {
+      const row = document.createElement("div");
+      row.className = "msg-row user";
+      const bubble = document.createElement("div");
+      bubble.className = "bubble user-bubble";
+      // TASK 1: User bubbles keep textContent strictly
+      bubble.textContent = text;
+      row.appendChild(bubble);
+      chatBody.appendChild(row);
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    function appendBotMessage(replyText, sourceName, sourceUrl, isDemo) {
+      const row = document.createElement("div");
+      row.className = "msg-row bot";
+      const bubble = document.createElement("div");
+      bubble.className = "bubble bot-bubble chat-bubble";
+
+      // TASK 1: Bot bubble rendered via innerHTML with renderChatText()
+      bubble.innerHTML = renderChatText(replyText);
+
+      // Metadata footer
+      const meta = document.createElement("div");
+      meta.className = "bot-footer-meta";
+      meta.innerHTML = `
+        <span>${isDemo ? '<span class="demo-badge">Demo Record</span>' : 'Verified Catalog Data'}</span>
+        <a href="${sourceUrl}" target="_blank" rel="noopener noreferrer">${sourceName} &rarr;</a>
+      `;
+      bubble.appendChild(meta);
+
+      row.appendChild(bubble);
+      chatBody.appendChild(row);
+      chatBody.scrollTop = chatBody.scrollHeight;
+
+      // Update header badge dynamically based on the record answering
+      updateHeaderBadge(isDemo);
+    }
+
+    function sendMessage() {
+      const text = chatInput.value.trim();
+      if (!text) return;
+
+      const payload = buildChatPayload(text);
+      appendUserMessage(payload.message);
+
+      chatInput.value = "";
+      handleInput(chatInput);
+
+      // Simulate network / AI response
+      sendBtn.disabled = true;
+      setTimeout(() => {
+        const response = generateBotReply(payload);
+        appendBotMessage(response.replyText, response.sourceName, response.sourceUrl, response.isDemo);
+        sendBtn.disabled = false;
+        chatInput.focus();
+      }, 400);
+    }
+
+    function sendQuickPrompt(promptText) {
+      chatInput.value = promptText;
+      handleInput(chatInput);
+      sendMessage();
+    }
+
+    function resetChat() {
+      onProgrammeChange(state.selectedProgramme);
+    }
+
+    function handleInput(textarea) {
+      const len = textarea.value.length;
+      charCounter.textContent = `${len} / 500`;
+      charCounter.classList.toggle("warning", len >= 480);
+      sendBtn.disabled = len === 0;
+    }
+
+    function handleKeyDown(e) {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    }
+
+    function toggleChat(show) {
+      if (show) {
+        chatWindow.style.display = "flex";
+        chatFab.style.display = "none";
+        chatInput.focus();
+      } else {
+        chatWindow.style.display = "none";
+        chatFab.style.display = "flex";
+      }
+    }
+
+    /* ==========================================================================
+       PAGE MOCK SYNC HANDLER
+       ========================================================================== */
+    function handleSelectChange(progId) {
+      const p = catalogData[progId];
+      if (!p) return;
+      state.selectedProgramme = p;
+
+      // Update Page Mockup
+      document.getElementById("pageProgTitle").textContent = `${p.university} – ${p.programme}`;
+      document.getElementById("pageTuition").textContent = p.tuition;
+      document.getElementById("pageEnglish").textContent = p.english;
+      document.getElementById("pageDeadline").textContent = p.deadline;
+
+      const badge = document.getElementById("pageRecordBadge");
+      if (p.demo) {
+        badge.className = "badge-demo";
+        badge.textContent = "Demo Data Record";
+      } else {
+        badge.className = "badge-verified";
+        badge.style.color = "#059669";
+        badge.textContent = "Official Catalog Record";
+      }
+
+      if (p.id === "tum_informatics") {
+        document.getElementById("pageTests").innerHTML = `
+          <div><strong>General cutoff:</strong> Min 315</div>
+          <div><strong>India/China/Iran/Pakistan:</strong> 164 Quant / 4.0 AW</div>
+          <div><strong>GMAT:</strong> Required <span class="suspicious-badge">Suspicious seed data &ndash; verify</span></div>
+        `;
+      } else if (p.greGmatStatus === "Not confirmed") {
+        document.getElementById("pageTests").innerHTML = `Not confirmed (verify on official portal)`;
+      } else {
+        document.getElementById("pageTests").textContent = p.greGeneralCutoff || p.greDetails;
+      }
+
+      // TASK 2 Context Sync Trigger
+      onProgrammeChange(p);
+    }
+
+    // Initialize Widget on Load
+    window.addEventListener("DOMContentLoaded", () => {
+      onProgrammeChange(state.selectedProgramme);
+      // Auto open widget for demo convenience
+      toggleChat(true);
+    });
+  </script>
+</body>
+</html>

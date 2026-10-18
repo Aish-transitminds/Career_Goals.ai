@@ -8,7 +8,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useCatalog } from '../../hooks/useCatalog';
 import { aiAssistantService, ChatMessage } from '../../services/aiAssistantService';
 import {
-  Bot,
+  Compass,
   X,
   Send,
   Sparkles,
@@ -22,7 +22,7 @@ const INITIAL_WELCOME: ChatMessage = {
   id: 'welcome-0',
   role: 'assistant',
   content:
-    'Hello! I am your CareerGoals Guide. I provide verified, fact-checked admission requirements, language score cutoffs, blocked account policies, and application deadlines across Germany, Ireland, and the UK.\n\nEvery answer is grounded strictly in official university admission portals with zero AI hallucinations.',
+    'Hello! I am Atlas, your friendly study abroad guide. I provide verified, fact-checked admission requirements, language score cutoffs, blocked account policies, and application deadlines across Germany, Ireland, and the UK.\n\nEvery answer is grounded strictly in official university admission portals with zero AI hallucinations.',
   sourceUrl: 'https://www.daad.de/en/study-and-research-in-germany/',
   sourceName: 'Official DAAD & University Admissions',
   lastChecked: '2026-10-15',
@@ -36,15 +36,94 @@ const SUGGESTED_PROMPTS = [
   'Deadlines for Trinity College Dublin',
 ];
 
+// 1. Renderer (bot bubbles only)
+function renderChatText(raw?: string): string {
+  const esc = String(raw ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+  return esc
+    .split('\n')
+    .filter((line) => !/demonstration-seeded|live change detection record/i.test(line))
+    .map((line) => {
+      const t = line.trim();
+      let bold = t.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      bold = bold.replace(/\[Demo data\]/gi, '<span class="demo-badge">Demo data</span>');
+      bold = bold.replace(
+        /\[Suspicious seed data: verify on official sources\]/gi,
+        '<span class="suspicious-badge">Suspicious seed data – verify</span>'
+      );
+      if (/^(•|-\s)/.test(t)) {
+        return `<div class="chat-bullet">${bold.replace(/^(•|-)\s*/, '')}</div>`;
+      }
+      if (/^verify on the official site/i.test(t)) {
+        return `<div class="chat-footnote">${bold}</div>`;
+      }
+      return t ? `<div>${bold}</div>` : `<div class="chat-gap"></div>`;
+    })
+    .join('');
+}
+
 export const AIAssistantWidget: React.FC = () => {
   const { universities, countries } = useCatalog();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [inputText, setInputText] = useState<string>('');
   const [messages, setMessages] = useState<ChatMessage[]>([INITIAL_WELCOME]);
   const [isTyping, setIsTyping] = useState<boolean>(false);
+  const lastDiscussedProgId = useRef<string | null>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  // Helper to read currently selected programme from the same storage key the Statement Requirements page uses
+  const getSelectedProgramme = () => {
+    try {
+      const progId = localStorage.getItem('abroadpath_last_selected_program') || 'heidelberg_dcs';
+      const intake = localStorage.getItem('abroadpath_last_selected_intake') || '2026';
+      const univ = universities.find((u) => u.id === progId);
+      if (univ) {
+        return {
+          id: univ.id,
+          university: univ.name,
+          programme: univ.program,
+          intake,
+          isDemo: Boolean(univ.demoSeeded),
+        };
+      }
+    } catch {}
+    return {
+      id: 'heidelberg_dcs',
+      university: 'Heidelberg University',
+      programme: 'M.Sc. Data and Computer Science',
+      intake: '2026',
+      isDemo: false,
+    };
+  };
+
+  // 2. Context sync: Reset chat thread and show system note when selected programme changes
+  useEffect(() => {
+    const syncProgramme = () => {
+      const sel = getSelectedProgramme();
+      if (sel && sel.id !== lastDiscussedProgId.current) {
+        lastDiscussedProgId.current = sel.id;
+        setMessages([
+          {
+            id: `sys-${Date.now()}`,
+            role: 'assistant',
+            isSystem: true,
+            content: `Now discussing: ${sel.university} – ${sel.programme}`,
+          },
+        ]);
+      }
+    };
+
+    window.addEventListener('storage', syncProgramme);
+    if (isOpen) {
+      syncProgramme();
+    }
+    return () => window.removeEventListener('storage', syncProgramme);
+  }, [isOpen, universities]);
 
   // Auto-scroll to latest message
   useEffect(() => {
@@ -71,17 +150,31 @@ export const AIAssistantWidget: React.FC = () => {
     };
   }, [isOpen]);
 
+  // 2. Context sync builder
+  function buildChatPayload(userMsg: string) {
+    const sel = getSelectedProgramme();
+    return {
+      message: userMsg.slice(0, 500),
+      context: {
+        id: sel.id,
+        university: sel.university,
+        programme: sel.programme,
+        intake: sel.intake,
+      },
+    };
+  }
+
   const handleSendMessage = async (textToSend?: string) => {
     const text = (textToSend !== undefined ? textToSend : inputText).trim();
     if (!text || isTyping) return;
 
     // Strict 500-character input capping (R4)
-    const clampedText = text.slice(0, 500);
+    const payload = buildChatPayload(text);
 
     const userMsg: ChatMessage = {
       id: `user-${Date.now()}`,
       role: 'user',
-      content: clampedText,
+      content: payload.message,
     };
 
     setMessages((prev) => [...prev, userMsg]);
@@ -89,10 +182,14 @@ export const AIAssistantWidget: React.FC = () => {
     setIsTyping(true);
 
     try {
-      const response = await aiAssistantService.askQuestion(clampedText, {
-        universities,
-        countries,
-      });
+      const response = await aiAssistantService.askQuestion(
+        payload.message,
+        {
+          universities,
+          countries,
+        },
+        payload.context
+      );
 
       const assistantMsg: ChatMessage = {
         id: `assistant-${Date.now()}`,
@@ -102,6 +199,7 @@ export const AIAssistantWidget: React.FC = () => {
         sourceName: response.sourceName,
         lastChecked: response.lastChecked,
         isFallback: response.isFallback,
+        isDemo: response.isDemo,
       };
 
       setMessages((prev) => [...prev, assistantMsg]);
@@ -133,21 +231,44 @@ export const AIAssistantWidget: React.FC = () => {
   };
 
   const handleReset = () => {
-    setMessages([INITIAL_WELCOME]);
+    const sel = getSelectedProgramme();
+    setMessages([
+      {
+        id: `sys-${Date.now()}`,
+        role: 'assistant',
+        isSystem: true,
+        content: `Now discussing: ${sel.university} – ${sel.programme}`,
+      },
+    ]);
   };
+
+  // Determine if the active conversation is currently discussing a demo record
+  const lastBotMsg = [...messages].reverse().find((m) => m.role === 'assistant' && !m.isSystem);
+  const isDemoActive = lastBotMsg ? Boolean(lastBotMsg.isDemo) : Boolean(getSelectedProgramme().isDemo);
 
   return (
     <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50">
+      <style>{`
+        .chat-bullet { position: relative; padding-left: 14px; margin: 2px 0; }
+        .chat-bullet::before { content: "•"; position: absolute; left: 2px; color: #6366f1; }
+        .chat-gap { height: 8px; }
+        .chat-footnote { margin-top: 8px; font-size: 11px; color: #64748b; font-style: italic; }
+        .chat-bubble { white-space: normal; line-height: 1.5; }
+        .chat-bubble strong { font-weight: 600; color: #0f172a; }
+        .demo-badge { display: inline-block; padding: 1px 5px; margin-left: 4px; font-size: 10px; font-weight: 600; background-color: #fef3c7; color: #92400e; border-radius: 4px; border: 1px solid #fcd34d; }
+        .suspicious-badge { display: inline-block; padding: 1px 5px; margin-left: 4px; font-size: 10px; font-weight: 600; background-color: #ffe4e6; color: #9f1239; border-radius: 4px; border: 1px solid #fecdd3; }
+      `}</style>
+
       {/* Floating Action Button (FAB) */}
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
           className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-tr from-indigo-600 to-indigo-700 text-white shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-indigo-300"
-          aria-label="Open CareerGoals Study Assistant"
+          aria-label="Open Atlas, your Study Abroad Guide"
           aria-expanded={false}
           aria-haspopup="dialog"
         >
-          <Bot className="w-7 h-7" />
+          <Compass className="w-7 h-7 text-white" />
           <span className="absolute -top-1 -right-1 flex h-4 w-4">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-4 w-4 bg-emerald-500 border-2 border-white" />
@@ -155,7 +276,7 @@ export const AIAssistantWidget: React.FC = () => {
 
           {/* Hover Tooltip */}
           <span className="absolute right-16 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-lg pointer-events-none">
-            Verified Study-Abroad Assistant
+            Ask Atlas – Study Guide
           </span>
         </button>
       )}
@@ -164,24 +285,33 @@ export const AIAssistantWidget: React.FC = () => {
       {isOpen && (
         <div
           role="dialog"
-          aria-label="CareerGoals Study Assistant"
+          aria-label="Atlas - Study Abroad Guide"
           className="w-[calc(100vw-2rem)] sm:w-96 h-[540px] max-h-[calc(100vh-5rem)] bg-white rounded-3xl shadow-2xl border border-slate-200 flex flex-col overflow-hidden animate-fadeIn"
         >
           {/* Header */}
           <div className="bg-gradient-to-r from-indigo-600 to-indigo-700 text-white p-4 flex items-center justify-between shadow-sm">
             <div className="flex items-center space-x-2.5">
               <div className="p-2 bg-white/10 rounded-xl">
-                <Bot className="w-5 h-5 text-indigo-100" />
+                <Compass className="w-5 h-5 text-indigo-100" />
               </div>
               <div>
                 <h3 className="font-bold text-sm tracking-tight flex items-center gap-1.5">
-                  CareerGoals Guide
+                  Atlas
                   <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                  <span className="text-[11px] font-normal text-indigo-200">· Guide</span>
                 </h3>
-                <span className="inline-flex items-center gap-1 text-[10px] text-emerald-200 font-medium">
-                  <ShieldCheck className="w-3 h-3 text-emerald-300" />
-                  Verified Catalog Data
-                </span>
+                {/* 3. Demo Data Labelling: Header badge only shows Verified Catalog Data when non-demo */}
+                {isDemoActive ? (
+                  <span className="inline-flex items-center gap-1 text-[10px] text-amber-200 font-medium bg-amber-500/20 px-1.5 py-0.5 rounded border border-amber-300/30">
+                    <AlertCircle className="w-3 h-3 text-amber-300" />
+                    Demo Data Record
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1 text-[10px] text-emerald-200 font-medium">
+                    <ShieldCheck className="w-3 h-3 text-emerald-300" />
+                    Verified Catalog Data
+                  </span>
+                )}
               </div>
             </div>
 
@@ -212,6 +342,16 @@ export const AIAssistantWidget: React.FC = () => {
             className="flex-1 p-4 overflow-y-auto space-y-4 bg-slate-50 text-xs"
           >
             {messages.map((msg) => {
+              if (msg.isSystem) {
+                return (
+                  <div key={msg.id} className="text-center my-2">
+                    <span className="inline-block px-3 py-1 bg-slate-200/80 text-slate-700 text-[11px] font-semibold rounded-full border border-slate-300/60 shadow-2xs">
+                      {msg.content}
+                    </span>
+                  </div>
+                );
+              }
+
               const isUser = msg.role === 'user';
               return (
                 <div
@@ -225,10 +365,17 @@ export const AIAssistantWidget: React.FC = () => {
                         : 'bg-white border border-slate-200 text-slate-800 rounded-bl-xs'
                     }`}
                   >
-                    {/* Message Body */}
-                    <div className="leading-relaxed whitespace-pre-wrap font-sans text-xs">
-                      {msg.content}
-                    </div>
+                    {/* Message Body (1. Markdown Rendering via renderChatText for bot, textContent for user) */}
+                    {isUser ? (
+                      <div className="leading-relaxed whitespace-pre-wrap font-sans text-xs">
+                        {msg.content}
+                      </div>
+                    ) : (
+                      <div
+                        className="leading-relaxed font-sans text-xs chat-bubble"
+                        dangerouslySetInnerHTML={{ __html: renderChatText(msg.content) }}
+                      />
+                    )}
 
                     {/* Mandatory Verification & Source Footer on Assistant Messages (R2, R5) */}
                     {!isUser && (
