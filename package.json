@@ -13,7 +13,8 @@
     "seed:emulator": "cross-env FIRESTORE_EMULATOR_HOST=localhost:8080 tsx scripts/seed.ts",
     "test:match": "tsx tests/unit/matchEngine.test.ts",
     "test:letter": "tsx tests/unit/letterHelperRequirements.test.ts",
-    "test": "npm run test:match && npm run test:letter"
+    "test:profile": "tsx tests/unit/onboardingProfile.test.ts",
+    "test": "npm run test:match && npm run test:letter && npm run test:profile"
   },
   "dependencies": {
     "firebase": "^10.14.1",

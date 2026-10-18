@@ -162,7 +162,15 @@ export interface UserExams {
   toefl: number | null;
   /** IELTS academic score between 0.0 and 9.0 (step 0.5), or null if not taken */
   ielts: number | null;
+  /** PTE Academic score between 10 and 90, or null if not taken */
+  pte?: number | null;
 }
+
+export type GradingScale = '10.0' | '4.0' | '100%' | 'other';
+export type DegreeLevel = "Bachelor's" | "Master's" | 'PhD / Doctorate' | 'Diploma / Certificate' | 'Other';
+export type BudgetPeriod = 'annual' | 'total';
+export type BudgetCoverage = 'tuition_only' | 'total_cost';
+export type EnglishTestType = 'IELTS' | 'TOEFL' | 'PTE' | 'None';
 
 export interface UserProfile {
   /** Firebase Auth UID */
@@ -183,6 +191,58 @@ export interface UserProfile {
   createdAt: string;
   /** ISO 8601 last update timestamp */
   updatedAt?: string;
+
+  // --- A. Academic Background (Optional for backward compatibility) ---
+  /** Highest completed or current qualification (e.g. "Bachelor's Degree", "Master's Degree") */
+  qualification?: string | null;
+  /** Degree title (e.g. "B.Tech", "B.A.", "B.Sc.") */
+  degreeTitle?: string | null;
+  /** Major or field of study for prior qualification (e.g. "Computer Science", "Fashion Design") */
+  fieldOfStudy?: string | null;
+  /** Previous academic institution attended */
+  institution?: string | null;
+  /** Academic grade or GPA score without scaling */
+  gpa?: number | null;
+  /** Explicit grading scale applied to the gpa score */
+  gpaScale?: GradingScale | string | null;
+  /** Graduation year or expected graduation year */
+  graduationYear?: number | null;
+
+  // --- B. Intended Studies (Optional for backward compatibility) ---
+  /** Intended degree level (e.g. "Master's", "Bachelor's", "PhD / Doctorate") */
+  intendedDegreeLevel?: DegreeLevel | string | null;
+  /** Intended subject or broad field of study (e.g. "Computer Science & Informatics", "Fashion Design & Textile Arts") */
+  intendedSubject?: string | null;
+  /** Specific sub-specialisation */
+  specialisation?: string | null;
+  /** Target intake year (e.g. "2025", "2026", "2027") */
+  targetIntakeYear?: string | null;
+  /** Target intake semester (e.g. "Fall / Winter", "Spring / Summer") */
+  targetIntakeSemester?: string | null;
+  /** Optional preselected target programme ID from catalogue */
+  targetProgramId?: string | null;
+
+  // --- C. English Proficiency Details ---
+  /** Whether the student has taken a standardized English proficiency test */
+  englishTestTaken?: boolean | null;
+  /** Test type taken: 'IELTS' | 'TOEFL' | 'PTE' | 'None' */
+  englishTestType?: EnglishTestType | string | null;
+  /** Numerical score obtained on the English test */
+  englishTestScore?: number | null;
+  /** Date the English test was taken (YYYY-MM or YYYY-MM-DD) */
+  englishTestDate?: string | null;
+
+  // --- D. Other Admission Tests Details ---
+  /** Whether the student has taken any other standardized admission test (GRE / GMAT) */
+  otherTestsTaken?: boolean | null;
+
+  // --- E. Preferences and Budget Details ---
+  /** Budget timeframe: annual vs total programme duration */
+  budgetPeriod?: BudgetPeriod | null;
+  /** Budget coverage: tuition only vs total study and living costs */
+  budgetCovers?: BudgetCoverage | null;
+  /** Whether student prefers programmes with scholarship/funding opportunities */
+  scholarshipPreference?: boolean | null;
 }
 
 export type ApplicationStatus = 'planned' | 'applied' | 'accepted' | 'rejected';
