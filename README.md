@@ -1,8 +1,8 @@
-# CareerGoals.ai (AbroadPath)
+# AbroadPath AI (CareerGoals.ai)
 
 > **Live Application**: [https://careergoals-296e4.web.app](https://careergoals-296e4.web.app)
 
-An intelligent, ethical, zero-hallucination study-abroad decision platform. Built for students targeting international master's programs, CareerGoals.ai combines deterministic client-side matching, verifiable source provenance, in-app milestone reminders, and an ethical SOP guide with strict privacy invariants.
+AbroadPath AI is an intelligent, ethical, zero-hallucination study-abroad decision and application platform. Designed for students targeting international master's programs, the platform combines deterministic client-side matching, verified source provenance, automated milestone reminders, an ethical SOP writing coach with an anti-rewrite guarantee, and strict privacy invariants.
 
 ---
 
@@ -49,101 +49,137 @@ flowchart TD
 
 ---
 
-## Honest Project Scope
+## Core Pillars & Project Capabilities
 
-- **Primary Focus**: European graduate education with a core emphasis on **Germany** (public tuition-free universities, DAAD requirements, APS certificates, ECTS credit conversions), supplemented by representative institutions in **Ireland** and the **United Kingdom**.
-- **Verified Institutions**: **11 fully audited university programs** cataloged with 100% verified source provenance (verbatim quotes, direct links, and audit dates).
-- **Zero Hallucination Policy**: Every single admission requirement displays its official source link, verification date, and verbatim official snippet. Unconfirmed fields remain `null` and display *"Unconfirmed, verify on official portal"*. No LLM ever guesses or predicts missing requirements.
+### 1. Deterministic Client-Side Match Engine
+- **Algorithmic Scoring**: Calculates exact fit scores across verified entrance requirements without LLM variance:
+  - `1.0` (Met): Score meets or exceeds required cutoff.
+  - `0.5` (Near): Score falls within a narrow near-margin (IELTS within 0.5, TOEFL within 5, GRE within 5, GMAT within 20).
+  - `0.0` (Below): Score is below cutoff.
+- **Strict Null Exclusion**: Unconfirmed requirements are completely excluded from the scoring denominator. Students are never penalized for missing university information.
+- **Four Distinct Fit Tiers**:
+  - **Strong Fit** (Score >= 0.90): Student meets or comfortably clears requirements.
+  - **Possible** (Score 0.60 - 0.89): Competitive profile with 1-2 near requirements.
+  - **Reach** (Score < 0.60): Ambitious stretch institution.
+  - **Prep Needed**: Dedicated path for students who have not yet taken exams (`examsTaken: false`), routing directly to test planning.
+- **Multi-Factor Secondary Reranker**:
+  - `35% Budget Fit`: Rewards programs matching student budget, giving maximum score to tuition-free institutions.
+  - `30% Score Margin`: Measures clearance above minimum thresholds.
+  - `25% Data Certainty`: Prioritizes institutions with fewer unconfirmed requirements.
+  - `10% Data Freshness`: Rewards recently audited institutional criteria.
+  - Every card displays a transparent *"Ranked higher because..."* badge detailing the exact ranking factors.
 
----
+### 2. Zero-Hallucination Data Pipeline
+- **Verified University Catalog**: 11 audited master's programs across Germany, Ireland, and the United Kingdom.
+- **100% Provenance & Citations**: Every requirement includes the official portal URL, audit date, and verbatim official snippet.
+- **Automated Sync Pipeline (`pipeline/sync_pipeline.py`)**:
+  - Python 3.11 crawler compliant with `robots.txt`.
+  - SHA-256 hash comparison ensures LLM extraction runs only when official content changes.
+  - Pydantic schema validation validates score ranges (IELTS 0.0-9.0, TOEFL 0-120, GRE 260-340, GMAT 200-800).
+  - Detects rule changes and flags them (`ruleChanged: true`) with previous vs. new values (demonstrated live with TUM's GMAT rule update).
+  - Automated weekly execution via GitHub Actions (`.github/workflows/data_pipeline.yml`).
 
-## How Matching & Reranking Work
+### 3. Country Guides & Regulatory Requirements
+- Comprehensive guides for **Germany**, **Ireland**, and the **United Kingdom**.
+- Details official documentation, blocked accounts (German *Sperrkonto* €11,904/year, Irish Stamp 2 funds €10,000), APS certificates (India/China/Vietnam), health insurance requirements, and official portals (DAAD, Education in Ireland).
 
-### 1. Primary Fit Tier Formula (Deterministic)
+### 4. Application Tracker & Automated Reminders
+- Tracks stages across five milestones: *Shortlisted*, *Preparing*, *Applied*, *Accepted*, and *Rejected*.
+- Automatically generates in-app reminders at +1, +3, and +7 days post-submission (`appliedAt`), displaying remaining days and actionable checklist items.
 
-Admission tiers are evaluated purely algorithmically:
-$$\text{Base Score} = \frac{\sum \text{Evaluated Requirement Scores}}{\text{Number of Confirmed Requirements}}$$
+### 5. Rejection Next-Step Roadmap
+- Converts rejection into an actionable plan with peer-tier alternatives, profile refinement tips, and static cost/loan estimate tables labeled clearly as non-financial estimates.
 
-- **Per-Requirement Scores**:
-  - `1.0` (Met): Student score meets or exceeds requirement cutoff.
-  - `0.5` (Near): Student score is within near margin (IELTS within 0.5, TOEFL within 5, GRE within 5, GMAT within 20).
-  - `0.0` (Below): Student score is below cutoff.
-  - *Null Exclusion*: Unconfirmed requirements are completely excluded from the denominator to avoid penalizing students for university data gaps.
-- **Bonuses**: +0.05 Country Preference match, +0.05 Budget Fit (Total capped strictly at `1.00`).
-- **Fit Tiers**:
-  - **Strong Fit**: Final Score $\ge 0.90$ (90%+)
-  - **Possible**: Final Score $0.60 - 0.89$ (60% – 89%)
-  - **Reach**: Final Score $< 0.60$ (< 60%)
-  - **Prep Needed**: Triggered when a student has not taken required exams or has missing mandatory exam scores. Rather than rejecting, the system outlines the specific exams needed.
+### 6. Ethical Statement of Purpose (SOP) Coach
+- **Anti-Rewrite Guarantee**: Built-in guardrails ensure the system never generates or rewrites student drafts.
+- **Analytical Writing Quality Checker**:
+  - Specificity and concrete anchor detection (percentages, tool names, course codes, faculty names).
+  - Cliché and vague claim detector.
+  - Repetition and sentence readability analysis (>35 words flagged).
+  - Programme-specific prompts and official statement length requirements.
 
-### 2. Secondary Tier Reranking Formula (No LLM)
-
-Within each tier, universities are reranked using a deterministic multi-factor weighted score defined in `TIER_RANK_WEIGHTS`:
-$$\text{Rank Score} = 0.35 \times \text{BudgetFit} + 0.30 \times \text{ScoreMargin} + 0.25 \times \text{ConfirmedDataRatio} + 0.10 \times \text{Freshness}$$
-
-- **Budget Fit (35%)**: Compares annual tuition against the student's declared INR/EUR budget (100% tuition-free programs earn maximum weight).
-- **Score Margin (30%)**: Measures how comfortably the student exceeds the cutoffs.
-- **Data Certainty (25%)**: Prioritizes institutions with fewer unconfirmed (null) requirements.
-- **Data Freshness (10%)**: Favors recently verified institutional requirements.
-- **Card Explanation**: Each university card displays a transparent *"Ranked higher because..."* badge citing the exact reason.
-
----
-
-## Provenance & Verification
-
-1. **Verbatim Snippets**: Every requirement in the catalog is stored alongside its verbatim quote from the university's official site.
-2. **Sanity Range Enforcement**: All extracted values are validated against strict ranges:
-   - IELTS: `0.0 – 9.0` (step 0.5)
-   - TOEFL: `0 – 120`
-   - GRE: `260 – 340`
-   - GMAT: `200 – 800`
-   - GPA: Validated strictly against its declared scale (e.g. 4.0, 10.0, 5.0)
-3. **Weekly Change Detection**: Python scraper computes SHA-256 hashes of portal contents. Unchanged pages bypass LLM extraction. Detected changes trigger live alert banners in the UI (demonstrated live with TUM's GMAT rule update).
+### 7. Factual Floating AI Assistant
+- Operates strictly over verified Firestore catalog facts using Firebase AI Logic with an automated fallback to keyword-based retrieval on Spark plans.
+- Out-of-catalog inquiries explicitly inform the student that the information is not confirmed in the catalog and direct them to official portals.
+- 500-character input cap; zero student personal data is ever sent to LLMs.
 
 ---
 
 ## Security & Privacy Invariants
 
-- **Zero Student Data Sent to LLMs**: Neither student names, scores, documents, nor profiles are ever transmitted in LLM prompts.
-- **Floating AI Assistant Lockdown**: Operates strictly on verified Firestore catalog facts. Queries outside the catalog (e.g. *"What is MIT's acceptance rate?"*) explicitly state that the information is not in the verified catalog and direct students to official portals.
-- **Firestore Security Rules**: Authenticated owner-only access for `users/{uid}`, read-only for public catalog, with database-level score boundary checks.
-- **Cascading Data Purge**: One-click *"Delete My Data"* purges all user profile, application, and notification documents immediately.
+- **Zero Student Data Sent to LLMs**: Student profile details, scores, and names are kept client-side or scoped strictly to authenticated Firestore paths.
+- **Firestore Security Rules**: User subcollections (`users/{uid}`) enforce authenticated owner-only reads and writes with score boundary validation. The public catalog (`universities`, `countries`) is strictly read-only.
+- **One-Click Data Purge**: A "Delete My Data" feature immediately cascades deletion across all user profile, application, and notification records.
+- **No Client Secrets**: API keys and service account credentials are kept out of client bundles and git tracking.
 
 ---
 
-## Quickstart & Demo Profiles
+## Project Structure
 
-### 1. Prerequisites
+```
+.
+|-- .github/workflows/
+|   `-- data_pipeline.yml         # GitHub Actions cron for live data synchronization
+|-- pipeline/                     # Python 3.11 Zero-Hallucination Scraper & Sync Engine
+|   |-- sync_pipeline.py          # Main sync pipeline orchestrator
+|   |-- fetcher.py                # robots.txt compliant page fetcher
+|   |-- extractor.py              # SHA-256 content hashing & text extraction
+|   |-- llm_client.py             # Gemini Flash extraction client with retry/backoff
+|   |-- schema.py                 # Pydantic schema validation & range checks
+|   `-- diff_engine.py            # Rule change detection
+|-- src/
+|   |-- components/               # Navbar, layout, and factual assistant widget
+|   |-- pages/                    # 8 core views (Matches, Onboarding, Tracker, etc.)
+|   |-- services/                 # Firebase Auth, Firestore sync, fallback engine
+|   |-- utils/                    # Deterministic match engine, writing checker
+|   `-- data/                     # Seeded verified datasets (universities.json, countries.json)
+|-- tests/
+|   |-- unit/                     # Unit test suites (match, letter, profile, assistant)
+|   |-- firestore_rules_stress.ts # Firestore security rules stress test
+|   `-- stress_match_engine.ts    # Match engine volume & edge case tests
+`-- package.json
+```
+
+---
+
+## Quickstart & Commands
+
+### Prerequisites
 - Node.js 18+ (tested on Node v20/v24)
 - npm 9+
+- Python 3.11+ (optional, for running the data sync pipeline locally)
 
-### 2. Installation
+### Installation
 ```bash
 git clone https://github.com/Aish-transitminds/Career_Goals.ai.git
 cd Career_Goals.ai
 npm install
 ```
 
-### 3. Local Development Server
+### Local Development
 ```bash
 npm run dev
 ```
 
-### 4. Run Automated Test Suites
+### Automated Test Suites
 ```bash
-npm run test:match       # 74 Match engine & reranking tests
-npm run test:rules       # 206 Firestore security rules & hygiene tests
-npm run test:assistant   # AI Assistant lockdown & out-of-catalog tests
-npm run test:pipeline    # Scraper pipeline sanity & Pydantic validation tests
+npm test                 # Runs matchEngine, letterHelperRequirements, and onboardingProfile
+npm run test:match       # 59 Match engine & reranking unit tests
+npm run test:letter      # Statement requirements & anti-rewrite checklist tests
+npm run test:profile     # Onboarding profile validation & boundary tests
 ```
 
-### 5. Production Build
+### Production Build
 ```bash
 npm run build
 ```
 
-### Pre-Configured Demo Profiles
-The landing page includes instant one-click demo logins:
-1. **Standard Demo Student (`Alex Chen`)**: IELTS 7.5, GRE 320, Target: Germany/Ireland, Budget: €15,000. Demonstrates strong fits, criterion breakdowns, and live rule-change alerts.
-2. **Prep Needed Demo (`Jordan Lee`)**: No exams taken yet (`examsTaken: false`). Demonstrates the educational "Prep Needed" path routing.
-3. **Low Budget Demo (`Maria Santos`)**: Budget €3,000. Demonstrates budget reranking favoring tuition-free German universities.
+---
+
+## Pre-Configured Demo Profiles
+
+The landing page provides instant one-click demo logins to test distinct applicant journeys:
+
+1. **Alex Chen (Standard Profile)**: IELTS 7.5, GRE 320, Target: Germany/Ireland, Budget: €15,000. Demonstrates strong fit calculations, transparent factor breakdowns, and live rule-change alerts.
+2. **Jordan Lee (Prep Needed Profile)**: No exams taken yet (`examsTaken: false`). Demonstrates the educational "Prep Needed" path routing and test planning checklist.
+3. **Maria Santos (Low Budget Profile)**: Budget: €3,000. Demonstrates budget reranking favoring public tuition-free German universities.
