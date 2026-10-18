@@ -4,9 +4,13 @@
  * Authoritative Reference: ORIGINAL_REQUEST.md (R1, R4) & PROJECT.md
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useCatalog } from '../hooks/useCatalog';
+import { getUserApplications } from '../services/firestoreService';
+import { Application } from '../types';
+import ApplicationStatusCard from '../ApplicationStatusCard';
 import {
   ShieldCheck,
   CheckCircle2,
@@ -20,9 +24,91 @@ import {
 
 export const LandingPage: React.FC = () => {
   const { user, profile, signInWithGoogle, signInWithMock, loading } = useAuth();
+  const { universities } = useCatalog();
   const navigate = useNavigate();
+
   const [authError, setAuthError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [userApplications, setUserApplications] = useState<Application[]>([]);
+
+  // Fetch real tracker applications for logged in / mock user
+  useEffect(() => {
+    let isMounted = true;
+    if (!user) {
+      setUserApplications([]);
+      return;
+    }
+
+    const loadApps = async () => {
+      try {
+        let apps: Application[] = [];
+        if (user.isMock) {
+          const saved = localStorage.getItem(`abroadpath_mock_apps_${user.uid}`);
+          apps = saved ? JSON.parse(saved) : [];
+        } else {
+          try {
+            apps = await getUserApplications(user.uid);
+          } catch {
+            const saved = localStorage.getItem(`abroadpath_mock_apps_${user.uid}`);
+            apps = saved ? JSON.parse(saved) : [];
+          }
+        }
+        if (isMounted) {
+          setUserApplications(apps);
+        }
+      } catch (err) {
+        console.warn('[LandingPage] Failed to fetch applications:', err);
+      }
+    };
+
+    loadApps();
+    return () => {
+      isMounted = false;
+    };
+  }, [user]);
+
+  // Map 3 most recent real applications onto "changed" | "verified" | "progress"
+  const statusCardItems = useMemo(() => {
+    if (!userApplications || userApplications.length === 0) {
+      return [];
+    }
+
+    const sorted = [...userApplications].sort((a, b) => {
+      const timeA = new Date(a.updatedAt || a.appliedAt || 0).getTime();
+      const timeB = new Date(b.updatedAt || b.appliedAt || 0).getTime();
+      return timeB - timeA;
+    });
+
+    return sorted.slice(0, 3).map((app) => {
+      const univ = universities.find((u) => u.id === app.universityId);
+      const universityName = univ ? univ.name : app.universityId;
+      const programmeName = univ ? univ.program : 'Graduate Studies';
+
+      let status: 'changed' | 'verified' | 'progress' = 'progress';
+      if (univ?.ruleChanged) {
+        status = 'changed';
+      } else if (app.status === 'accepted' || univ?.statementRequirements?.status === 'Verified') {
+        status = 'verified';
+      } else {
+        status = 'progress';
+      }
+
+      return {
+        id: app.id,
+        university: universityName,
+        programme: programmeName,
+        status,
+      };
+    });
+  }, [userApplications, universities]);
+
+  // Compute real provenance percentage from official portal links in catalog
+  const realProvenance = useMemo(() => {
+    if (!universities || universities.length === 0) return undefined;
+    const verifiedCount = universities.filter((u) => Boolean(u.sourceUrl)).length;
+    const ratio = Math.round((verifiedCount / universities.length) * 100);
+    return `${ratio}% Provenance`;
+  }, [universities]);
 
   const handleSignIn = async () => {
     try {
@@ -66,31 +152,50 @@ export const LandingPage: React.FC = () => {
 
   return (
     <div className="space-y-12 py-2 sm:py-6 font-sans">
-      {/* 3. Hero Section: Dark navy gradient, bold 2-line headline, orange + ghost CTAs, and white 'Your applications' card */}
-      <section className="bg-gradient-to-br from-[#0B1026] via-[#111736] to-[#151B3A] rounded-2xl p-6 sm:p-10 lg:p-12 text-white shadow-2xl border border-[#151B3A]">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+      {/* 3. Hero Section: Forest background with soft radial glows, gold gradient highlight, and Atlas verification card */}
+      <section className="relative overflow-hidden rounded-2xl p-6 sm:p-10 lg:p-12 text-white shadow-2xl border border-[#164e3b]/50 bg-gradient-to-br from-[#0b1e17] via-[#164e3b] to-[#0f3a2b] max-w-full contain-paint">
+        {/* Soft radial glow backgrounds matching reference HTML */}
+        <div
+          className="absolute -top-28 -right-10 w-[420px] h-[420px] rounded-full pointer-events-none opacity-80"
+          style={{
+            background: 'radial-gradient(circle, rgba(222, 176, 98, 0.16) 0%, rgba(22, 78, 59, 0) 70%)',
+          }}
+          aria-hidden="true"
+        />
+        <div
+          className="absolute -bottom-32 -left-20 w-[420px] h-[420px] rounded-full pointer-events-none opacity-60"
+          style={{
+            background: 'radial-gradient(circle, rgba(16, 185, 129, 0.14) 0%, rgba(11, 30, 23, 0) 70%)',
+          }}
+          aria-hidden="true"
+        />
+
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           {/* Left Column: Headlines & CTAs */}
           <div className="lg:col-span-7 space-y-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#151B3A] border border-[#FF5E00]/40 text-[#FF5E00] text-xs font-semibold uppercase tracking-wider">
-              <GraduationCap className="w-4 h-4" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-[#deb062]/30 text-[#deb062] text-xs font-semibold uppercase tracking-wider backdrop-blur-xs">
+              <GraduationCap className="w-4 h-4 text-[#deb062]" />
               <span>CareerGoals &bull; Study Abroad Guide</span>
             </div>
 
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-white tracking-tight leading-tight">
               Navigate Global Admissions<br />
-              <span className="text-[#FF5E00]">With Verified Facts</span>, Not Guesses.
+              <span className="font-bold bg-gradient-to-r from-[#deb062] via-[#f7e3ba] to-[#deb062] bg-clip-text text-transparent inline-block">
+                With Verified Facts
+              </span>
+              , Not Guesses.
             </h1>
 
-            <p className="text-slate-300 text-sm sm:text-base leading-relaxed max-w-xl">
+            <p className="text-slate-200/90 text-sm sm:text-base leading-relaxed max-w-xl">
               Real admission criteria directly from official university portals in Germany, Ireland, and the UK. Live verification, automated change alerts, and zero AI hallucinations.
             </p>
 
-            {/* CTAs: Orange CTA + Ghost CTA */}
+            {/* CTAs: Gold Primary + Ghost CTA */}
             <div className="pt-2 flex flex-wrap items-center gap-3">
               {user ? (
                 <button
                   onClick={handleNavigateApp}
-                  className="px-6 py-3 rounded-[6px] bg-[#FF5E00] hover:bg-[#E65400] text-[#0B1026] font-semibold text-sm transition-all shadow-md inline-flex items-center gap-2"
+                  className="px-6 py-3 rounded-lg bg-[#deb062] hover:bg-[#c99b4d] text-[#0b1e17] font-semibold text-sm transition-all shadow-md inline-flex items-center gap-2"
                 >
                   <span>{profile ? 'Go to University Matches' : 'Complete Your Profile'}</span>
                   <ArrowRight className="w-4 h-4" />
@@ -100,7 +205,7 @@ export const LandingPage: React.FC = () => {
                   <button
                     onClick={() => handleMockSignIn('standard')}
                     disabled={isSubmitting || loading}
-                    className="px-6 py-3 rounded-[6px] bg-[#FF5E00] hover:bg-[#E65400] text-[#0B1026] font-semibold text-sm transition-all shadow-md inline-flex items-center gap-2"
+                    className="px-6 py-3 rounded-lg bg-[#deb062] hover:bg-[#c99b4d] text-[#0b1e17] font-semibold text-sm transition-all shadow-md inline-flex items-center gap-2"
                   >
                     <span>Get Started Free</span>
                     <ArrowRight className="w-4 h-4" />
@@ -109,7 +214,7 @@ export const LandingPage: React.FC = () => {
                   <button
                     onClick={handleSignIn}
                     disabled={isSubmitting || loading}
-                    className="px-5 py-3 rounded-[6px] border-2 border-white/40 hover:border-white text-white font-semibold text-sm transition-all inline-flex items-center gap-2"
+                    className="px-5 py-3 rounded-lg border-2 border-white/30 hover:border-white text-white font-semibold text-sm transition-all inline-flex items-center gap-2 bg-white/5 hover:bg-white/10"
                   >
                     {/* Google SVG */}
                     <svg className="w-4 h-4" viewBox="0 0 24 24">
@@ -137,119 +242,79 @@ export const LandingPage: React.FC = () => {
             </div>
 
             {authError && (
-              <div className="p-2.5 bg-rose-500/20 border border-rose-400 text-rose-200 text-xs rounded-[6px]">
+              <div className="p-2.5 bg-rose-500/20 border border-rose-400 text-rose-200 text-xs rounded-lg">
                 {authError}
               </div>
             )}
           </div>
 
-          {/* Right Column: White 'Your applications' card with Verified / Changed / In progress badges */}
-          <div className="lg:col-span-5 flex justify-center">
-            <div className="bg-white rounded-xl p-5 text-slate-900 shadow-2xl border border-slate-200 max-w-sm w-full">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
-                <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#FF5E00] animate-pulse"></span>
-                  <h3 className="font-semibold text-sm text-[#0B1026]">Your Applications</h3>
-                </div>
-                <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider bg-slate-100 px-2 py-0.5 rounded">
-                  Fall 2026
-                </span>
-              </div>
-
-              <div className="space-y-2.5">
-                {/* Application 1: Changed */}
-                <div className="p-3 bg-amber-50/70 rounded-lg border border-amber-200 flex items-center justify-between">
-                  <div>
-                    <p className="font-semibold text-xs text-slate-900">Technical University of Munich</p>
-                    <p className="text-[11px] text-slate-500">M.Sc. Informatics</p>
-                  </div>
-                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300">
-                    Changed
-                  </span>
-                </div>
-
-                {/* Application 2: Verified */}
-                <div className="p-3 bg-emerald-50/70 rounded-lg border border-emerald-200 flex items-center justify-between">
-                  <div>
-                    <p className="font-semibold text-xs text-slate-900">Heidelberg University</p>
-                    <p className="text-[11px] text-slate-500">M.Sc. Data &amp; CompSci</p>
-                  </div>
-                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-900 border border-emerald-300">
-                    Verified
-                  </span>
-                </div>
-
-                {/* Application 3: In progress */}
-                <div className="p-3 bg-blue-50/70 rounded-lg border border-blue-200 flex items-center justify-between">
-                  <div>
-                    <p className="font-semibold text-xs text-slate-900">University of Oxford</p>
-                    <p className="text-[11px] text-slate-500">M.Sc. Adv. Computer Science</p>
-                  </div>
-                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-900 border border-blue-300">
-                    In progress
-                  </span>
-                </div>
-              </div>
-
-              <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
-                <span className="flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Live Portal Sync
-                </span>
-                <span className="text-[#FF5E00] font-semibold">100% Provenance</span>
-              </div>
-            </div>
+          {/* Right Column: <ApplicationStatusCard /> */}
+          <div className="lg:col-span-5 flex justify-center items-center w-full">
+            <ApplicationStatusCard
+              items={statusCardItems}
+              cycle={new Date().getFullYear()}
+              provenance={realProvenance}
+            />
           </div>
         </div>
       </section>
 
-      {/* 4. Four-Block Feature Strip alternating orange (#FF5E00) and navy (#0B1026 / #151B3A) */}
+      {/* 4. Four-Block Feature Strip: Dark Glass pillar cards */}
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Block 1: Orange */}
-        <div className="bg-[#FF5E00] text-[#0B1026] p-6 rounded-[6px] shadow-sm flex flex-col justify-between">
+        {/* Block 1 */}
+        <div className="backdrop-blur-md bg-[#0c221a]/70 rounded-xl p-6 border border-[#1a493a]/70 shadow-lg hover:shadow-2xl hover:border-[#deb062]/60 hover:bg-[#0c221a]/90 transition-all duration-200 flex flex-col justify-between group">
           <div>
-            <div className="w-10 h-10 rounded-lg bg-black/10 text-[#0B1026] flex items-center justify-center mb-4">
-              <ShieldCheck className="w-6 h-6 stroke-[1.5]" />
+            <div className="w-10 h-10 rounded-lg bg-[#deb062]/10 text-[#deb062] border border-[#deb062]/30 flex items-center justify-center mb-4 group-hover:scale-105 transition-transform shadow-xs">
+              <ShieldCheck className="w-5 h-5 text-[#deb062]" />
             </div>
-            <h3 className="font-semibold text-base mb-1 text-[#0B1026]">Verified requirements</h3>
-            <p className="text-xs text-[#0B1026]/90 leading-relaxed">
+            <h3 className="font-semibold text-base mb-1 text-white group-hover:text-[#deb062] transition-colors">
+              Verified requirements
+            </h3>
+            <p className="text-xs text-slate-300 leading-relaxed">
               Direct from official university portals. No crowdsourced guesses or obsolete cutoffs.
             </p>
           </div>
         </div>
 
-        {/* Block 2: Navy */}
-        <div className="bg-[#0B1026] text-white p-6 rounded-[6px] shadow-sm flex flex-col justify-between border border-[#151B3A]">
+        {/* Block 2 */}
+        <div className="backdrop-blur-md bg-[#0c221a]/70 rounded-xl p-6 border border-[#1a493a]/70 shadow-lg hover:shadow-2xl hover:border-[#deb062]/60 hover:bg-[#0c221a]/90 transition-all duration-200 flex flex-col justify-between group">
           <div>
-            <div className="w-10 h-10 rounded-lg bg-white/10 text-[#FF5E00] flex items-center justify-center mb-4">
-              <AlertTriangle className="w-6 h-6 stroke-[1.5]" />
+            <div className="w-10 h-10 rounded-lg bg-[#deb062]/10 text-[#deb062] border border-[#deb062]/30 flex items-center justify-center mb-4 group-hover:scale-105 transition-transform shadow-xs">
+              <AlertTriangle className="w-5 h-5 text-[#deb062]" />
             </div>
-            <h3 className="font-semibold text-base mb-1 text-white">Live change detection</h3>
+            <h3 className="font-semibold text-base mb-1 text-white group-hover:text-[#deb062] transition-colors">
+              Live change detection
+            </h3>
             <p className="text-xs text-slate-300 leading-relaxed">
               Automated crawlers audit portal rule changes daily. Instant alerts for revised criteria.
             </p>
           </div>
         </div>
 
-        {/* Block 3: Orange */}
-        <div className="bg-[#FF5E00] text-[#0B1026] p-6 rounded-[6px] shadow-sm flex flex-col justify-between">
+        {/* Block 3 */}
+        <div className="backdrop-blur-md bg-[#0c221a]/70 rounded-xl p-6 border border-[#1a493a]/70 shadow-lg hover:shadow-2xl hover:border-[#deb062]/60 hover:bg-[#0c221a]/90 transition-all duration-200 flex flex-col justify-between group">
           <div>
-            <div className="w-10 h-10 rounded-lg bg-black/10 text-[#0B1026] flex items-center justify-center mb-4">
-              <CalendarClock className="w-6 h-6 stroke-[1.5]" />
+            <div className="w-10 h-10 rounded-lg bg-[#deb062]/10 text-[#deb062] border border-[#deb062]/30 flex items-center justify-center mb-4 group-hover:scale-105 transition-transform shadow-xs">
+              <CalendarClock className="w-5 h-5 text-[#deb062]" />
             </div>
-            <h3 className="font-semibold text-base mb-1 text-[#0B1026]">Application tracking</h3>
-            <p className="text-xs text-[#0B1026]/90 leading-relaxed">
+            <h3 className="font-semibold text-base mb-1 text-white group-hover:text-[#deb062] transition-colors">
+              Application tracking
+            </h3>
+            <p className="text-xs text-slate-300 leading-relaxed">
               Milestone timeline and automated follow-ups. +1, +3, and +7 days post-submission check-ins.
             </p>
           </div>
         </div>
 
-        {/* Block 4: Navy-2 */}
-        <div className="bg-[#151B3A] text-white p-6 rounded-[6px] shadow-sm flex flex-col justify-between border border-slate-700">
+        {/* Block 4 */}
+        <div className="backdrop-blur-md bg-[#0c221a]/70 rounded-xl p-6 border border-[#1a493a]/70 shadow-lg hover:shadow-2xl hover:border-[#deb062]/60 hover:bg-[#0c221a]/90 transition-all duration-200 flex flex-col justify-between group">
           <div>
-            <div className="w-10 h-10 rounded-lg bg-white/10 text-[#FF5E00] flex items-center justify-center mb-4">
-              <Compass className="w-6 h-6 stroke-[1.5]" />
+            <div className="w-10 h-10 rounded-lg bg-[#deb062]/10 text-[#deb062] border border-[#deb062]/30 flex items-center justify-center mb-4 group-hover:scale-105 transition-transform shadow-xs">
+              <Compass className="w-5 h-5 text-[#deb062]" />
             </div>
-            <h3 className="font-semibold text-base mb-1 text-white">Rejection roadmaps</h3>
+            <h3 className="font-semibold text-base mb-1 text-white group-hover:text-[#deb062] transition-colors">
+              Rejection roadmaps
+            </h3>
             <p className="text-xs text-slate-300 leading-relaxed">
               Turn admission setbacks into actionable strategies. Peer-tier alternatives and score improvement plans.
             </p>
@@ -257,59 +322,59 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 5. A Three-Step "Shortlist to Submission" Section */}
-      <section className="bg-white rounded-2xl p-6 sm:p-10 border border-slate-200 shadow-sm space-y-8">
+      {/* 5. A Three-Step "Shortlist to Submission" Section: Dark Forest Theme */}
+      <section className="bg-[#0b1e17]/70 rounded-2xl p-6 sm:p-10 border border-[#164e3b]/60 shadow-xl space-y-8 backdrop-blur-xs">
         <div className="text-center max-w-2xl mx-auto space-y-2">
-          <span className="text-[#FF5E00] font-bold text-xs uppercase tracking-wider">
+          <span className="text-[#deb062] font-bold text-xs uppercase tracking-wider">
             Clear Guidance Workflow
           </span>
-          <h2 className="text-2xl sm:text-3xl font-semibold text-[#0B1026]">
+          <h2 className="text-2xl sm:text-3xl font-semibold text-white">
             From Shortlist to Submission in Three Steps
           </h2>
-          <p className="text-slate-600 text-sm">
+          <p className="text-slate-300 text-sm">
             A structured, transparent roadmap engineered for global master's applicants.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Step 1 */}
-          <div className="p-6 bg-slate-50 rounded-xl border border-slate-200 space-y-3 relative overflow-hidden">
-            <span className="text-3xl font-extrabold text-[#FF5E00]/25 absolute top-4 right-4">
+          <div className="p-6 bg-[#06140f]/90 rounded-xl border border-[#164e3b]/60 space-y-3 relative overflow-hidden">
+            <span className="text-3xl font-extrabold text-[#deb062]/15 absolute top-4 right-4">
               01
             </span>
-            <div className="w-9 h-9 rounded-[6px] bg-[#0B1026] text-[#FF5E00] flex items-center justify-center font-bold text-sm">
+            <div className="w-9 h-9 rounded-lg bg-[#deb062] text-[#0b1e17] flex items-center justify-center font-bold text-sm">
               1
             </div>
-            <h3 className="font-semibold text-base text-[#0B1026]">Deterministic Matching</h3>
-            <p className="text-xs text-slate-600 leading-relaxed">
+            <h3 className="font-semibold text-base text-white">Deterministic Matching</h3>
+            <p className="text-xs text-slate-300 leading-relaxed">
               Input your GPA, test scores (IELTS/GRE), and budget. The mathematical engine evaluates criteria into transparent fit tiers (Strong, Possible, Reach, Prep needed) without LLM guessing.
             </p>
           </div>
 
           {/* Step 2 */}
-          <div className="p-6 bg-slate-50 rounded-xl border border-slate-200 space-y-3 relative overflow-hidden">
-            <span className="text-3xl font-extrabold text-[#FF5E00]/25 absolute top-4 right-4">
+          <div className="p-6 bg-[#06140f]/90 rounded-xl border border-[#164e3b]/60 space-y-3 relative overflow-hidden">
+            <span className="text-3xl font-extrabold text-[#deb062]/15 absolute top-4 right-4">
               02
             </span>
-            <div className="w-9 h-9 rounded-[6px] bg-[#0B1026] text-[#FF5E00] flex items-center justify-center font-bold text-sm">
+            <div className="w-9 h-9 rounded-lg bg-[#deb062] text-[#0b1e17] flex items-center justify-center font-bold text-sm">
               2
             </div>
-            <h3 className="font-semibold text-base text-[#0B1026]">Requirements &amp; SOP Planner</h3>
-            <p className="text-xs text-slate-600 leading-relaxed">
+            <h3 className="font-semibold text-base text-white">Requirements &amp; SOP Planner</h3>
+            <p className="text-xs text-slate-300 leading-relaxed">
               Access university-specific questions, exact word limits, and AI anti-rewrite guidelines. Craft authentic essays with an 8-point pre-submission analytical writing checker.
             </p>
           </div>
 
           {/* Step 3 */}
-          <div className="p-6 bg-slate-50 rounded-xl border border-slate-200 space-y-3 relative overflow-hidden">
-            <span className="text-3xl font-extrabold text-[#FF5E00]/25 absolute top-4 right-4">
+          <div className="p-6 bg-[#06140f]/90 rounded-xl border border-[#164e3b]/60 space-y-3 relative overflow-hidden">
+            <span className="text-3xl font-extrabold text-[#deb062]/15 absolute top-4 right-4">
               03
             </span>
-            <div className="w-9 h-9 rounded-[6px] bg-[#0B1026] text-[#FF5E00] flex items-center justify-center font-bold text-sm">
+            <div className="w-9 h-9 rounded-lg bg-[#deb062] text-[#0b1e17] flex items-center justify-center font-bold text-sm">
               3
             </div>
-            <h3 className="font-semibold text-base text-[#0B1026]">Track &amp; Submit Confidently</h3>
-            <p className="text-xs text-slate-600 leading-relaxed">
+            <h3 className="font-semibold text-base text-white">Track &amp; Submit Confidently</h3>
+            <p className="text-xs text-slate-300 leading-relaxed">
               Log application progress, receive automated +1, +3, +7 day check-in reminders, confirm German blocked accounts or Irish visa funding, and execute rejection roadmaps if needed.
             </p>
           </div>
@@ -317,35 +382,35 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* R4 Privacy Pledge Card */}
-      <section className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 sm:p-8">
+      <section className="bg-[#0b1e17]/70 rounded-xl border border-[#164e3b]/60 shadow-xl p-6 sm:p-8 backdrop-blur-xs">
         <div className="flex flex-col sm:flex-row items-start gap-4">
-          <div className="p-3 bg-[#0B1026] text-[#FF5E00] rounded-[6px] shrink-0">
+          <div className="p-3 bg-[#deb062]/15 text-[#deb062] border border-[#deb062]/30 rounded-lg shrink-0">
             <Lock className="w-6 h-6" />
           </div>
           <div className="space-y-2">
             <div className="flex flex-wrap items-center gap-2">
-              <h2 className="text-base font-semibold text-[#0B1026]">
+              <h2 className="text-base font-semibold text-white">
                 Student Privacy Commitment: No Personal Data Shared with AI
               </h2>
-              <span className="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded font-semibold">
+              <span className="bg-emerald-950 text-emerald-300 border border-emerald-800 text-[10px] px-2 py-0.5 rounded font-semibold">
                 R4 Invariant
               </span>
             </div>
-            <p className="text-slate-600 text-xs leading-relaxed">
-              <strong>
+            <p className="text-slate-300 text-xs leading-relaxed">
+              <strong className="text-white">
                 No student personal data (such as your name, test scores, target countries, budget, or application documents) is ever transmitted to any external Large Language Model.
               </strong>{' '}
               Your profile is stored exclusively under your private Firestore UID.
             </p>
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-1 text-xs text-slate-500 font-medium">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-1 text-xs text-slate-400 font-medium">
               <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> 500-Character Universal Input Cap
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> 500-Character Universal Input Cap
               </span>
               <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> Private UID Scoping
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> Private UID Scoping
               </span>
               <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> "Delete My Data" Right
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> "Delete My Data" Right
               </span>
             </div>
           </div>

@@ -622,7 +622,7 @@ export const MatchesPage: React.FC = () => {
             return (
               <div
                 key={u.id}
-                className={`bg-white rounded-xl border transition-all p-6 ${
+                className={`match-card bg-white rounded-xl border transition-all ${
                   isApplied
                     ? 'border-emerald-300 bg-emerald-50/10 shadow-2xs'
                     : 'border-[#E6E8F0] hover:border-slate-300 shadow-sm'
@@ -630,7 +630,7 @@ export const MatchesPage: React.FC = () => {
               >
                 {/* Rule Changed Banner (rendered when official criteria change detected) */}
                 {u.ruleChanged && (
-                  <div className="mb-4">
+                  <div className="match-card__banner mb-4">
                     <RuleChangedBanner
                       changedFields={u.changedFields || ['gmat_required']}
                       previousValues={u.previousValues || { gmat_required: null }}
@@ -641,156 +641,153 @@ export const MatchesPage: React.FC = () => {
                   </div>
                 )}
 
-                {/* 3-Column Fixed CSS Grid Layout */}
-                <div className="grid grid-cols-1 lg:grid-cols-[30%_44%_26%] gap-6 items-center">
-                  {/* Column 1, Identity (about 30%) */}
-                  <div className="space-y-1.5">
-                    <h2 className="text-[20px] font-semibold text-[#0B1026] leading-snug">
-                      {u.name}
-                    </h2>
-                    <p className="text-sm font-normal text-slate-500">
-                      {formatCountryAndProgram(u.countryId, u.program)}
-                    </p>
-                    <div className="pt-2 flex items-center gap-1.5 text-xs text-slate-400 font-normal">
-                      <Shield className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                      <span>{formatVerificationDate(u.lastChecked)}</span>
-                    </div>
+                {/* Column 1, Identity (min-width:0) */}
+                <div className="match-card__identity space-y-1.5 min-w-0">
+                  <h2 className="text-[20px] font-semibold text-[#0B1026] leading-snug">
+                    {u.name}
+                  </h2>
+                  <p className="text-sm font-normal text-slate-500">
+                    {formatCountryAndProgram(u.countryId, u.program)}
+                  </p>
+                  <div className="pt-2 flex items-center gap-1.5 text-xs text-slate-400 font-normal">
+                    <Shield className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                    <span>{formatVerificationDate(u.lastChecked)}</span>
                   </div>
+                </div>
 
-                  {/* Column 2, Facts (about 44%), NO grey box, hairline divider on desktop */}
-                  <div className="lg:border-l lg:border-[#E6E8F0] lg:pl-6 space-y-3">
-                    {/* Aligned sub-columns with proportional widths */}
-                    <div className="grid grid-cols-2 sm:grid-cols-[1.3fr_1.1fr_1fr_0.8fr] gap-3 items-start">
-                      {/* Tuition */}
-                      <div className="min-w-0">
-                        <span className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
-                          Tuition
+                {/* Column 2, Facts (min-width:0), NO grey box, hairline divider on desktop */}
+                <div className="match-card__facts space-y-3 min-w-0">
+                  {/* Aligned sub-columns with proportional widths */}
+                  <div className="grid grid-cols-2 lg:grid-cols-[1.3fr_1.1fr_1fr_0.8fr] gap-3 items-start min-w-0">
+                    {/* Tuition */}
+                    <div className="min-w-0">
+                      <span className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                        Tuition
+                      </span>
+                      <span className="block text-sm font-semibold text-[#0B1026] mt-0.5">
+                        {tuitionDisplay.main}
+                      </span>
+                      {tuitionDisplay.sub && (
+                        <span className="block text-xs text-slate-500 font-normal leading-tight mt-0.5">
+                          {tuitionDisplay.sub}
                         </span>
-                        <span className="block text-sm font-semibold text-[#0B1026] mt-0.5 whitespace-nowrap">
-                          {tuitionDisplay.main}
-                        </span>
-                        {tuitionDisplay.sub && (
-                          <span className="block text-xs text-slate-500 font-normal leading-tight mt-0.5">
-                            {tuitionDisplay.sub}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Deadline */}
-                      <div className="min-w-0">
-                        <span className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
-                          Deadline
-                        </span>
-                        <span className="block text-sm font-semibold text-[#0B1026] mt-0.5 whitespace-nowrap">
-                          {deadlineDisplay.main}
-                        </span>
-                        {deadlineDisplay.sub && (
-                          <span className="block text-xs text-slate-500 font-normal leading-tight mt-0.5">
-                            {deadlineDisplay.sub}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* IELTS */}
-                      <div className="min-w-0">
-                        <span className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
-                          IELTS
-                        </span>
-                        <span
-                          className={`block text-xs mt-0.5 leading-tight ${
-                            ieltsStatus.status === 'met'
-                              ? 'text-emerald-700 font-semibold'
-                              : ieltsStatus.status === 'gap'
-                              ? 'text-amber-700 font-semibold'
-                              : 'text-slate-700 font-medium'
-                          }`}
-                        >
-                          {ieltsStatus.text}
-                        </span>
-                      </div>
-
-                      {/* TOEFL */}
-                      <div className="min-w-0">
-                        <span className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
-                          TOEFL
-                        </span>
-                        <span className="block text-xs font-normal text-slate-700 mt-0.5 leading-tight">
-                          {toeflDisplay}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* GRE / GMAT single muted line */}
-                    <div className="pt-1 text-xs text-slate-500 font-normal flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
-                      <span>{greGmatSummary}</span>
-                    </div>
-                  </div>
-
-                  {/* Column 3, Fit & Action (about 26%, right aligned on desktop) */}
-                  <div className="lg:border-l lg:border-[#E6E8F0] lg:pl-6 flex flex-col items-start lg:items-end justify-center space-y-3">
-                    {/* Fit summary (editorial typography, no box) */}
-                    <div className="text-xs leading-none">
-                      <span className="font-semibold text-[#0B1026]">{fitCategory}</span>
-                      {fitReason && (
-                        <>
-                          <span className="text-slate-400 mx-1.5">·</span>
-                          <span className="text-slate-500 font-normal">{fitReason}</span>
-                        </>
                       )}
                     </div>
 
-                    {/* Primary Action Button */}
-                    <button
-                      onClick={() => {
-                        try {
-                          localStorage.setItem('abroadpath_last_selected_program', u.id);
-                          localStorage.setItem('abroadpath_last_selected_intake', selectedIntake);
-                        } catch {}
-                        navigate(
-                          `/letter-helper?programId=${encodeURIComponent(u.id)}&intake=${encodeURIComponent(selectedIntake)}`
-                        );
-                      }}
-                      className="w-full sm:w-auto px-5 py-2.5 bg-[#FF5E00] hover:bg-[#E65400] text-[#0B1026] text-xs font-semibold rounded-[6px] shadow-xs transition-colors focus-visible:outline-2 focus-visible:outline-[#FF5E00] whitespace-nowrap"
-                    >
-                      Check statement requirements
-                    </button>
+                    {/* Deadline */}
+                    <div className="min-w-0">
+                      <span className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                        Deadline
+                      </span>
+                      <span className="block text-sm font-semibold text-[#0B1026] mt-0.5">
+                        {deadlineDisplay.main}
+                      </span>
+                      {deadlineDisplay.sub && (
+                        <span className="block text-xs text-slate-500 font-normal leading-tight mt-0.5">
+                          {deadlineDisplay.sub}
+                        </span>
+                      )}
+                    </div>
 
-                    {/* Unified Official site link + Quiet I have applied checkbox */}
-                    <div className="w-full flex items-center justify-between lg:justify-end gap-4 pt-0.5">
-                      <a
-                        href={u.portalUrl || u.sourceUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs font-medium text-slate-600 hover:text-[#0B1026] inline-flex items-center gap-1 transition-colors"
-                      >
-                        <span>Official site</span>
-                        <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
-                      </a>
-
-                      {/* Quiet I have applied checkbox */}
-                      <button
-                        type="button"
-                        onClick={() => handleMarkApplied(u.id)}
-                        disabled={isApplied}
-                        className={`inline-flex items-center gap-1.5 text-xs transition-colors py-0.5 ${
-                          isApplied
-                            ? 'text-emerald-700 font-semibold cursor-default'
-                            : 'text-slate-500 hover:text-slate-800 cursor-pointer'
+                    {/* IELTS */}
+                    <div className="min-w-0">
+                      <span className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                        IELTS
+                      </span>
+                      <span
+                        className={`block text-xs mt-0.5 leading-tight ${
+                          ieltsStatus.status === 'met'
+                            ? 'text-emerald-700 font-semibold'
+                            : ieltsStatus.status === 'gap'
+                            ? 'text-amber-700 font-semibold'
+                            : 'text-slate-700 font-medium'
                         }`}
                       >
-                        <span
-                          className={`w-3.5 h-3.5 rounded-[3px] border flex items-center justify-center transition-colors ${
-                            isApplied
-                              ? 'bg-emerald-600 border-emerald-600 text-white'
-                              : 'border-slate-300 bg-white'
-                          }`}
-                        >
-                          {isApplied && <Check className="w-2.5 h-2.5 stroke-[3]" />}
-                        </span>
-                        <span>{isApplied ? 'Applied ✓' : 'I have applied'}</span>
-                      </button>
+                        {ieltsStatus.text}
+                      </span>
                     </div>
+
+                    {/* TOEFL */}
+                    <div className="min-w-0">
+                      <span className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                        TOEFL
+                      </span>
+                      <span className="block text-xs font-normal text-slate-700 mt-0.5 leading-tight">
+                        {toeflDisplay}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* GRE / GMAT single muted line */}
+                  <div className="pt-1 text-xs text-slate-500 font-normal flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
+                    <span>{greGmatSummary}</span>
+                  </div>
+                </div>
+
+                {/* Column 3, Fit & Action (Action column: display:flex; flex-direction:column; gap:12px; min-width:0; align-items:stretch) */}
+                <div className="match-card__actions min-w-0">
+                  {/* Fit summary (editorial typography, no box) */}
+                  <div className="match-card__fit-line text-xs leading-normal min-w-0">
+                    <span className="font-semibold text-[#0B1026]">{fitCategory}</span>
+                    {fitReason && (
+                      <>
+                        <span className="text-slate-400 mx-1.5">·</span>
+                        <span className="text-slate-500 font-normal">{fitReason}</span>
+                      </>
+                    )}
+                  </div>
+
+                  {/* Primary Action Button */}
+                  <button
+                    onClick={() => {
+                      try {
+                        localStorage.setItem('abroadpath_last_selected_program', u.id);
+                        localStorage.setItem('abroadpath_last_selected_intake', selectedIntake);
+                      } catch {}
+                      navigate(
+                        `/letter-helper?programId=${encodeURIComponent(u.id)}&intake=${encodeURIComponent(selectedIntake)}`
+                      );
+                    }}
+                    className="match-card__button w-full px-5 py-2.5 bg-[#FF5E00] hover:bg-[#E65400] text-[#0B1026] text-xs font-semibold rounded-[6px] shadow-xs transition-colors focus-visible:outline-2 focus-visible:outline-[#FF5E00]"
+                  >
+                    Check statement requirements
+                  </button>
+
+                  {/* Unified Official site link + Quiet I have applied checkbox */}
+                  <div className="match-card__links-row pt-0.5">
+                    <a
+                      href={u.portalUrl || u.sourceUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs font-medium text-slate-600 hover:text-[#0B1026] inline-flex items-center gap-1 transition-colors"
+                    >
+                      <span>Official site</span>
+                      <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
+                    </a>
+
+                    {/* Quiet I have applied checkbox */}
+                    <button
+                      type="button"
+                      onClick={() => handleMarkApplied(u.id)}
+                      disabled={isApplied}
+                      className={`inline-flex items-center gap-1.5 text-xs transition-colors py-0.5 ${
+                        isApplied
+                          ? 'text-emerald-700 font-semibold cursor-default'
+                          : 'text-slate-500 hover:text-slate-800 cursor-pointer'
+                      }`}
+                    >
+                      <span
+                        className={`w-3.5 h-3.5 rounded-[3px] border flex items-center justify-center transition-colors ${
+                          isApplied
+                            ? 'bg-emerald-600 border-emerald-600 text-white'
+                            : 'border-slate-300 bg-white'
+                        }`}
+                      >
+                        {isApplied && <Check className="w-2.5 h-2.5 stroke-[3]" />}
+                      </span>
+                      <span>{isApplied ? 'Applied ✓' : 'I have applied'}</span>
+                    </button>
                   </div>
                 </div>
               </div>

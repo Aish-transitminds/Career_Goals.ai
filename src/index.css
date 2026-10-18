@@ -1,18 +1,29 @@
+@import './atlas-card.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 @layer base {
   html {
+    box-sizing: border-box;
     scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
     font-family: 'Poppins', sans-serif;
+    background-color: #050505;
   }
 
   body {
-    @apply bg-slate-50 text-slate-900 antialiased min-h-screen flex flex-col font-sans;
+    box-sizing: border-box;
+    @apply bg-[#050505] text-slate-100 antialiased min-h-screen flex flex-col font-sans;
     font-family: 'Poppins', sans-serif;
     font-weight: 400;
+    background-color: #050505;
+    color: #f1f5f9;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -21,8 +32,161 @@
   }
 
   :focus-visible {
-    outline: 2px solid #FF5E00 !important;
+    outline: 2px solid #deb062 !important;
     outline-offset: 2px !important;
+  }
+}
+
+/* ==========================================================================
+   MATCH CARD (3-COLUMN FIXED GRID & RESPONSIVE BREAKPOINTS)
+   ========================================================================== */
+.match-card {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.5fr) minmax(220px, 300px);
+  column-gap: 24px;
+  row-gap: 20px;
+  padding: 24px 28px;
+  align-items: center;
+}
+
+/* Every direct child of the card: min-width:0 */
+.match-card > * {
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.match-card__banner {
+  grid-column: 1 / -1;
+  width: 100%;
+  min-width: 0;
+}
+
+.match-card__identity {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.match-card__facts {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-left: 1px solid #E6E8F0;
+  padding-left: 24px;
+}
+
+.match-card__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  align-items: stretch;
+  border-left: 1px solid #E6E8F0;
+  padding-left: 24px;
+  justify-content: center;
+}
+
+.match-card__button {
+  width: 100% !important;
+  white-space: normal !important;
+  text-align: center !important;
+  box-sizing: border-box !important;
+}
+
+.match-card__fit-line {
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+  text-align: right;
+  width: 100%;
+  min-width: 0;
+}
+
+.match-card__links-row {
+  display: flex !important;
+  justify-content: space-between !important;
+  flex-wrap: wrap !important;
+  gap: 8px 12px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  align-items: center !important;
+}
+
+@media (max-width: 1099.98px) {
+  .match-card {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    padding: 20px 22px;
+    row-gap: 18px;
+  }
+
+  .match-card__identity {
+    grid-column: 1;
+  }
+
+  .match-card__facts {
+    grid-column: 2;
+    border-left: 1px solid #E6E8F0;
+    padding-left: 20px;
+  }
+
+  .match-card__actions {
+    grid-column: 1 / -1;
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid #E6E8F0;
+    padding-left: 0;
+    padding-top: 16px;
+    align-items: stretch;
+  }
+
+  .match-card__fit-line {
+    text-align: left;
+  }
+
+  .match-card__button {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 719.98px) {
+  .match-card {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 18px 16px;
+    row-gap: 16px;
+  }
+
+  .match-card__identity {
+    grid-column: 1;
+  }
+
+  .match-card__facts {
+    grid-column: 1;
+    border-left: none;
+    border-top: 1px solid #E6E8F0;
+    padding-left: 0;
+    padding-top: 14px;
+  }
+
+  .match-card__actions {
+    grid-column: 1;
+    border-left: none;
+    border-top: 1px solid #E6E8F0;
+    padding-left: 0;
+    padding-top: 14px;
+    width: 100%;
+  }
+
+  .match-card__fit-line {
+    text-align: left;
+  }
+
+  .match-card__button {
+    width: 100% !important;
   }
 }
 

@@ -9,16 +9,16 @@ import { ShieldCheck, Lock } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   return (
-    <footer id="contact" className="bg-[#0B1026] text-white border-t border-[#151B3A] mt-auto py-10 font-sans">
+    <footer id="contact" className="bg-[#050505] text-white border-t border-[#164e3b]/50 mt-auto py-10 font-sans">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-xs text-slate-300">
           <div>
             <div className="flex items-center space-x-2.5 mb-3">
-              <div className="w-8 h-8 rounded-lg bg-[#FF5E00] flex items-center justify-center text-[#0B1026] font-bold">
+              <div className="w-8 h-8 rounded-lg bg-[#deb062] flex items-center justify-center text-[#0b1e17] font-bold">
                 CG
               </div>
               <span className="text-base font-bold text-white tracking-tight">
-                Career<span className="text-[#FF5E00]">Goals</span>
+                Career<span className="text-[#deb062]">Goals</span>
               </span>
             </div>
             <p className="leading-relaxed text-slate-400">
@@ -28,7 +28,7 @@ export const Footer: React.FC = () => {
 
           <div>
             <p className="font-semibold text-white flex items-center gap-1.5 mb-2 text-sm">
-              <ShieldCheck className="w-4 h-4 text-[#FF5E00]" />
+              <ShieldCheck className="w-4 h-4 text-[#deb062]" />
               Data Integrity Policy
             </p>
             <p className="leading-relaxed text-slate-400">
@@ -38,7 +38,7 @@ export const Footer: React.FC = () => {
 
           <div>
             <p className="font-semibold text-white flex items-center gap-1.5 mb-2 text-sm">
-              <Lock className="w-4 h-4 text-[#FF5E00]" />
+              <Lock className="w-4 h-4 text-[#deb062]" />
               Admissions Support &amp; Privacy
             </p>
             <p className="leading-relaxed text-slate-400 mb-2">
