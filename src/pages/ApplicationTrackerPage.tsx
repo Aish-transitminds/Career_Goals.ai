@@ -238,10 +238,10 @@ export const ApplicationTrackerPage: React.FC = () => {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0B1026]">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white">
             Application Tracker & Login Reminders
           </h1>
-          <p className="text-slate-600 text-sm mt-1">
+          <p className="text-slate-300 text-sm mt-1">
             Track admission pipelines with automated milestone check-ins (+1, +3, +7 days from submission).
           </p>
         </div>
@@ -256,16 +256,16 @@ export const ApplicationTrackerPage: React.FC = () => {
           </button>
           <Link
             to="/matches"
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-[#0B1026] hover:bg-[#151B3A] text-white rounded-[6px] text-xs font-semibold transition-colors"
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-[6px] text-xs font-semibold transition-colors"
           >
             <span>Browse Matches</span>
-            <ArrowRight className="w-3.5 h-3.5 text-[#FF5E00]" />
+            <ArrowRight className="w-3.5 h-3.5 text-[#deb062]" />
           </Link>
         </div>
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 pb-3">
+      <div className="flex flex-wrap items-center gap-2 border-b border-white/15 pb-3">
         {[
           { id: 'all', label: 'All Applications', count: counts.all },
           { id: 'planned', label: 'Planned', count: counts.planned },
@@ -280,8 +280,8 @@ export const ApplicationTrackerPage: React.FC = () => {
               onClick={() => setStatusFilter(tab.id)}
               className={`px-3.5 py-1.5 rounded-[6px] text-xs font-bold transition-colors ${
                 isActive
-                  ? 'bg-[#0B1026] text-white shadow-sm border border-[#151B3A]'
-                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200/60'
+                  ? 'bg-[#deb062] text-[#0b1e17] shadow-sm'
+                  : 'bg-white/10 text-slate-200 hover:bg-white/20 border border-white/15'
               }`}
             >
               {tab.label} ({tab.count})

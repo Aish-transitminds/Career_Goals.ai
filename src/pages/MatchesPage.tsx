@@ -339,10 +339,10 @@ export const MatchesPage: React.FC = () => {
       {/* Page Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0B1026]">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white">
             Verified University Matches
           </h1>
-          <p className="text-slate-600 text-sm mt-1">
+          <p className="text-slate-300 text-sm mt-1">
             Ranked by deterministic score calculation against verified admission criteria.
           </p>
         </div>
@@ -439,7 +439,7 @@ export const MatchesPage: React.FC = () => {
       </div>
 
       {/* Sort & View Mode Controls Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-500 font-medium px-1">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-300 font-medium px-1">
         <div className="flex items-center gap-2">
           <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
           <span>Sort by:</span>

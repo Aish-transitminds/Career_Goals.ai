@@ -12,12 +12,12 @@ import { getUserApplications } from '../services/firestoreService';
 import { Application } from '../types';
 import ApplicationStatusCard from '../ApplicationStatusCard';
 import {
+  Shield,
   ShieldCheck,
   CheckCircle2,
   AlertTriangle,
   Compass,
   CalendarClock,
-  GraduationCap,
   ArrowRight,
   Lock,
 } from 'lucide-react';
@@ -172,22 +172,20 @@ export const LandingPage: React.FC = () => {
 
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           {/* Left Column: Headlines & CTAs */}
-          <div className="lg:col-span-7 space-y-6">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-[#deb062]/30 text-[#deb062] text-xs font-semibold uppercase tracking-wider backdrop-blur-xs">
-              <GraduationCap className="w-4 h-4 text-[#deb062]" />
-              <span>CareerGoals &bull; Study Abroad Guide</span>
+          <div className="lg:col-span-7 space-y-5">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/20 bg-white/10 text-white text-[11px] font-semibold uppercase tracking-wider backdrop-blur-xs">
+              <Shield className="w-3.5 h-3.5 text-[#deb062]" />
+              <span>Verified Official Admissions</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-white tracking-tight leading-tight">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-[1.18]">
               Navigate Global Admissions<br />
-              <span className="font-bold bg-gradient-to-r from-[#deb062] via-[#f7e3ba] to-[#deb062] bg-clip-text text-transparent inline-block">
-                With Verified Facts
-              </span>
-              , Not Guesses.
+              <span className="text-[#deb062]">With Verified Facts</span>, Not<br />
+              Guesses.
             </h1>
 
             <p className="text-slate-200/90 text-sm sm:text-base leading-relaxed max-w-xl">
-              Real admission criteria directly from official university portals in Germany, Ireland, and the UK. Live verification, automated change alerts, and zero AI hallucinations.
+              Official entry requirements derived exclusively from institutional portals in Germany, Ireland, and the United Kingdom. Live verification, automated change alerts, and zero AI hallucinations.
             </p>
 
             {/* CTAs: Gold Primary + Ghost CTA */}
