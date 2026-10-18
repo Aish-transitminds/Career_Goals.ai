@@ -1,4 +1,4 @@
-# CareerGoals.ai 🎓 (AbroadPath)
+# CareerGoals.ai (AbroadPath)
 
 > **Live Application**: [https://careergoals-296e4.web.app](https://careergoals-296e4.web.app)
 
@@ -6,50 +6,50 @@ An intelligent, ethical, zero-hallucination study-abroad decision platform. Buil
 
 ---
 
-## 🏗️ Architecture & Decision Flow
+## Architecture & Decision Flow
 
 ```mermaid
 flowchart TD
     %% Subgraph 1: Zero-Hallucination Pipeline
     subgraph Pipeline ["1. Zero-Hallucination Data Pipeline"]
         direction TB
-        A["🌐 Official University Portals"] --> B["🤖 Polite Crawler<br/>(robots.txt Compliant)"]
-        B --> C["🔍 SHA-256 Change Detector"]
-        C -->|Content Changed| D["⚡ Gemini Flash Extraction"]
-        C -->|Unchanged| E["⏱️ Refresh Audit Timestamp"]
-        D --> F["🛡️ Strict Pydantic Sanity Check"]
-        F --> G[("🗄️ Verified Firestore Catalog<br/>(Verbatim Quotes & Source Citations)")]
+        A["Official University Portals"] --> B["Polite Crawler<br/>(robots.txt Compliant)"]
+        B --> C["SHA-256 Change Detector"]
+        C -->|Content Changed| D["Gemini Flash Extraction"]
+        C -->|Unchanged| E["Refresh Audit Timestamp"]
+        D --> F["Strict Pydantic Sanity Check"]
+        F --> G[("Verified Firestore Catalog<br/>(Verbatim Quotes & Source Citations)")]
     end
 
     %% Subgraph 2: Deterministic Match & Scoring Engine
     subgraph Matching ["2. Deterministic Matching Engine"]
         direction TB
-        H["🎓 Student Profile<br/>(GPA, Scores, Budget, Countries)"]
-        G --> I["⚖️ Requirement Scoring<br/>(Met / Near / Below Cutoffs)"]
+        H["Student Profile<br/>(GPA, Scores, Budget, Countries)"]
+        G --> I["Requirement Scoring<br/>(Met / Near / Below Cutoffs)"]
         H --> I
         I --> J{"Fit Classification"}
-        J -->|Score >= 0.90| K["🟢 Strong Fit"]
-        J -->|Score 0.60 - 0.89| L["🟡 Possible"]
-        J -->|Score < 0.60| M["🔴 Reach"]
-        J -->|No Exams Taken| N["📚 Prep Needed"]
+        J -->|Score >= 0.90| K["Strong Fit"]
+        J -->|Score 0.60 - 0.89| L["Possible"]
+        J -->|Score < 0.60| M["Reach"]
+        J -->|No Exams Taken| N["Prep Needed"]
     end
 
     %% Subgraph 3: Student Experience & Decision Hub
     subgraph Decision ["3. Student Decision Experience"]
         direction TB
-        K --> O["📊 Multi-Factor Reranker<br/>(35% Budget | 30% Margin | 25% Certainty | 10% Freshness)"]
+        K --> O["Multi-Factor Reranker<br/>(35% Budget | 30% Margin | 25% Certainty | 10% Freshness)"]
         L --> O
         M --> O
-        O --> P["📋 Transparent University Cards<br/>('Ranked higher because...' Badge)"]
-        N --> Q["🗺️ Actionable Exam Prep Roadmap"]
-        P --> R["📅 In-App Milestone Tracker"]
-        P --> S["✍️ Ethical SOP Writing Guide"]
+        O --> P["Transparent University Cards<br/>('Ranked higher because...' Badge)"]
+        N --> Q["Actionable Exam Prep Roadmap"]
+        P --> R["In-App Milestone Tracker"]
+        P --> S["Ethical SOP Writing Guide"]
     end
 ```
 
 ---
 
-## 🎯 Honest Project Scope
+## Honest Project Scope
 
 - **Primary Focus**: European graduate education with a core emphasis on **Germany** (public tuition-free universities, DAAD requirements, APS certificates, ECTS credit conversions), supplemented by representative institutions in **Ireland** and the **United Kingdom**.
 - **Verified Institutions**: **11 fully audited university programs** cataloged with 100% verified source provenance (verbatim quotes, direct links, and audit dates).
@@ -57,7 +57,7 @@ flowchart TD
 
 ---
 
-## 🧮 How Matching & Reranking Work
+## How Matching & Reranking Work
 
 ### 1. Primary Fit Tier Formula (Deterministic)
 
@@ -71,10 +71,10 @@ $$\text{Base Score} = \frac{\sum \text{Evaluated Requirement Scores}}{\text{Numb
   - *Null Exclusion*: Unconfirmed requirements are completely excluded from the denominator to avoid penalizing students for university data gaps.
 - **Bonuses**: +0.05 Country Preference match, +0.05 Budget Fit (Total capped strictly at `1.00`).
 - **Fit Tiers**:
-  - 🟢 **Strong Fit**: Final Score $\ge 0.90$ (90%+)
-  - 🟡 **Possible**: Final Score $0.60 - 0.89$ (60% – 89%)
-  - 🔴 **Reach**: Final Score $< 0.60$ (< 60%)
-  - 📚 **Prep Needed**: Triggered when a student has not taken required exams or has missing mandatory exam scores. Rather than rejecting, the system outlines the specific exams needed.
+  - **Strong Fit**: Final Score $\ge 0.90$ (90%+)
+  - **Possible**: Final Score $0.60 - 0.89$ (60% – 89%)
+  - **Reach**: Final Score $< 0.60$ (< 60%)
+  - **Prep Needed**: Triggered when a student has not taken required exams or has missing mandatory exam scores. Rather than rejecting, the system outlines the specific exams needed.
 
 ### 2. Secondary Tier Reranking Formula (No LLM)
 
@@ -89,7 +89,7 @@ $$\text{Rank Score} = 0.35 \times \text{BudgetFit} + 0.30 \times \text{ScoreMarg
 
 ---
 
-## 🛡️ Provenance & Verification
+## Provenance & Verification
 
 1. **Verbatim Snippets**: Every requirement in the catalog is stored alongside its verbatim quote from the university's official site.
 2. **Sanity Range Enforcement**: All extracted values are validated against strict ranges:
@@ -102,7 +102,7 @@ $$\text{Rank Score} = 0.35 \times \text{BudgetFit} + 0.30 \times \text{ScoreMarg
 
 ---
 
-## 🔒 Security & Privacy Invariants
+## Security & Privacy Invariants
 
 - **Zero Student Data Sent to LLMs**: Neither student names, scores, documents, nor profiles are ever transmitted in LLM prompts.
 - **Floating AI Assistant Lockdown**: Operates strictly on verified Firestore catalog facts. Queries outside the catalog (e.g. *"What is MIT's acceptance rate?"*) explicitly state that the information is not in the verified catalog and direct students to official portals.
@@ -111,7 +111,7 @@ $$\text{Rank Score} = 0.35 \times \text{BudgetFit} + 0.30 \times \text{ScoreMarg
 
 ---
 
-## 🚀 Quickstart & Demo Profiles
+## Quickstart & Demo Profiles
 
 ### 1. Prerequisites
 - Node.js 18+ (tested on Node v20/v24)
@@ -142,7 +142,7 @@ npm run test:pipeline    # Scraper pipeline sanity & Pydantic validation tests
 npm run build
 ```
 
-### 🎭 Pre-Configured Demo Profiles
+### Pre-Configured Demo Profiles
 The landing page includes instant one-click demo logins:
 1. **Standard Demo Student (`Alex Chen`)**: IELTS 7.5, GRE 320, Target: Germany/Ireland, Budget: €15,000. Demonstrates strong fits, criterion breakdowns, and live rule-change alerts.
 2. **Prep Needed Demo (`Jordan Lee`)**: No exams taken yet (`examsTaken: false`). Demonstrates the educational "Prep Needed" path routing.
