@@ -99,6 +99,5 @@ Thumbs.db
 
 # Python tooling
 .ruff_cache/
+.kombai/
 
-# Markdown documentation files
-*.md
