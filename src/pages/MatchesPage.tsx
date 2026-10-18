@@ -339,10 +339,10 @@ export const MatchesPage: React.FC = () => {
       {/* Page Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#1B4D3E]">
             Verified University Matches
           </h1>
-          <p className="text-slate-300 text-sm mt-1">
+          <p className="text-[#5C6B63] text-sm mt-1">
             Ranked by deterministic score calculation against verified admission criteria.
           </p>
         </div>
@@ -350,7 +350,7 @@ export const MatchesPage: React.FC = () => {
         {!profile && (
           <button
             onClick={() => navigate('/onboarding')}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-[#FF5E00] hover:bg-[#E65400] text-[#0B1026] rounded-[6px] text-sm font-semibold shadow-xs transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-[#1B4D3E] hover:bg-[#2E6B57] text-[#FAF7F0] rounded-[6px] text-sm font-semibold shadow-xs transition-colors"
           >
             <BookOpen className="w-4 h-4" />
             <span>Complete Onboarding Profile</span>
@@ -359,7 +359,7 @@ export const MatchesPage: React.FC = () => {
       </div>
 
       {/* Filter Toolbar */}
-      <div className="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+      <div className="bg-white p-4 sm:p-5 rounded-xl border border-[#E6DFCF] shadow-xs space-y-4">
         {/* Search & Tier Dropdown */}
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
@@ -439,16 +439,16 @@ export const MatchesPage: React.FC = () => {
       </div>
 
       {/* Sort & View Mode Controls Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-300 font-medium px-1">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-[#5C6B63] font-medium px-1">
         <div className="flex items-center gap-2">
-          <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
+          <ArrowUpDown className="w-3.5 h-3.5 text-[#5C6B63]" />
           <span>Sort by:</span>
-          <div className="inline-flex rounded-[6px] border border-slate-200 bg-white p-0.5 shadow-2xs">
+          <div className="inline-flex rounded-[6px] border border-[#E6DFCF] bg-white p-0.5 shadow-2xs">
             <button
               onClick={() => setSortBy('fit')}
               className={`px-2.5 py-1 rounded-[4px] text-xs transition-colors ${
                 sortBy === 'fit'
-                  ? 'bg-[#0B1026] text-white font-semibold'
+                  ? 'bg-[#1B4D3E] text-[#FAF7F0] font-semibold'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -458,7 +458,7 @@ export const MatchesPage: React.FC = () => {
               onClick={() => setSortBy('deadline')}
               className={`px-2.5 py-1 rounded-[4px] text-xs transition-colors ${
                 sortBy === 'deadline'
-                  ? 'bg-[#0B1026] text-white font-semibold'
+                  ? 'bg-[#1B4D3E] text-[#FAF7F0] font-semibold'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -468,7 +468,7 @@ export const MatchesPage: React.FC = () => {
               onClick={() => setSortBy('tuition')}
               className={`px-2.5 py-1 rounded-[4px] text-xs transition-colors ${
                 sortBy === 'tuition'
-                  ? 'bg-[#0B1026] text-white font-semibold'
+                  ? 'bg-[#1B4D3E] text-[#FAF7F0] font-semibold'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -479,13 +479,13 @@ export const MatchesPage: React.FC = () => {
 
         <div className="flex items-center gap-3">
           <span>Showing {sortedMatches.length} matching institutions</span>
-          <div className="inline-flex rounded-[6px] border border-slate-200 bg-white p-0.5 shadow-2xs">
+          <div className="inline-flex rounded-[6px] border border-[#E6DFCF] bg-white p-0.5 shadow-2xs">
             <button
               onClick={() => setViewMode('cards')}
               title="Cards View"
               className={`p-1 rounded-[4px] transition-colors ${
                 viewMode === 'cards'
-                  ? 'bg-[#0B1026] text-white'
+                  ? 'bg-[#1B4D3E] text-[#FAF7F0]'
                   : 'text-slate-500 hover:text-slate-800'
               }`}
             >
@@ -496,7 +496,7 @@ export const MatchesPage: React.FC = () => {
               title="Compact Table View"
               className={`p-1 rounded-[4px] transition-colors ${
                 viewMode === 'table'
-                  ? 'bg-[#0B1026] text-white'
+                  ? 'bg-[#1B4D3E] text-[#FAF7F0]'
                   : 'text-slate-500 hover:text-slate-800'
               }`}
             >

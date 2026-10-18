@@ -316,15 +316,15 @@ export const OnboardingPage: React.FC = () => {
         <span className="text-xs font-bold text-[#FF5E00] uppercase tracking-wider">
           Student Profile Setup
         </span>
-        <h1 className="text-3xl font-extrabold text-white">
+        <h1 className="text-3xl font-extrabold text-[#1B4D3E]">
           Academic Profile & Study Preferences
         </h1>
-        <p className="text-slate-300 text-sm max-w-xl mx-auto">
+        <p className="text-[#5C6B63] text-sm max-w-xl mx-auto">
           Configure your academic foundation, target disciplines, and test credentials to generate live-verified university matches.
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-white rounded-[8px] shadow-sm border border-slate-200 p-6 sm:p-8 space-y-8 hover:border-[#FF5E00]/60 transition-colors">
+      <form onSubmit={handleSubmit} className="bg-white rounded-[8px] shadow-xs border border-[#E6DFCF] p-6 sm:p-8 space-y-8 hover:border-[#1B4D3E]/60 transition-colors">
         
         {/* ========================================================= */}
         {/* SECTION 1: Personal Details                               */}

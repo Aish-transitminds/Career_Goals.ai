@@ -238,10 +238,10 @@ export const ApplicationTrackerPage: React.FC = () => {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#1B4D3E]">
             Application Tracker & Login Reminders
           </h1>
-          <p className="text-slate-300 text-sm mt-1">
+          <p className="text-[#5C6B63] text-sm mt-1">
             Track admission pipelines with automated milestone check-ins (+1, +3, +7 days from submission).
           </p>
         </div>
@@ -249,17 +249,17 @@ export const ApplicationTrackerPage: React.FC = () => {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setShowAddModal(true)}
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-[#FF5E00] hover:bg-[#E65400] text-[#0B1026] rounded-[6px] text-xs font-semibold shadow-sm transition-colors"
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-[#1B4D3E] hover:bg-[#2E6B57] text-[#FAF7F0] rounded-[6px] text-xs font-semibold shadow-sm transition-colors"
           >
-            <Plus className="w-4 h-4 text-[#0B1026]" />
+            <Plus className="w-4 h-4 text-[#FAF7F0]" />
             <span>Track New University</span>
           </button>
           <Link
             to="/matches"
-            className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-[6px] text-xs font-semibold transition-colors"
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-white hover:bg-[#F3EEE2] text-[#1B4D3E] border border-[#E6DFCF] rounded-[6px] text-xs font-semibold transition-colors"
           >
             <span>Browse Matches</span>
-            <ArrowRight className="w-3.5 h-3.5 text-[#deb062]" />
+            <ArrowRight className="w-3.5 h-3.5 text-[#1B4D3E]" />
           </Link>
         </div>
       </div>
@@ -325,12 +325,12 @@ export const ApplicationTrackerPage: React.FC = () => {
             return (
               <div
                 key={app.id}
-                className="bg-white rounded-[8px] border border-slate-200 shadow-sm p-6 space-y-4 flex flex-col justify-between hover:border-[#FF5E00] transition-all"
+                className="bg-white rounded-[8px] border border-[#E6DFCF] shadow-xs p-6 space-y-4 flex flex-col justify-between hover:border-[#1B4D3E] transition-all"
               >
                 <div className="space-y-3">
                   {/* Card Header: Country & Status Pill */}
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-[4px] bg-[#0B1026] text-white">
+                    <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-[4px] bg-[#1B4D3E] text-[#FAF7F0]">
                       {univ?.countryId.toUpperCase() || 'UNIVERSITY'}
                     </span>
                     <span
@@ -535,9 +535,9 @@ export const ApplicationTrackerPage: React.FC = () => {
                       {app.status === 'rejected' && (
                         <Link
                           to={`/roadmap/${app.id}`}
-                          className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#0B1026] hover:bg-[#151B3A] text-white rounded-[6px] text-xs font-semibold shadow-sm transition-colors"
+                          className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#1B4D3E] hover:bg-[#2E6B57] text-[#FAF7F0] rounded-[6px] text-xs font-semibold shadow-xs transition-colors"
                         >
-                          <TrendingUp className="w-3.5 h-3.5 text-[#FF5E00]" />
+                          <TrendingUp className="w-3.5 h-3.5 text-[#F3C97E]" />
                           <span>View Rejection Roadmap</span>
                         </Link>
                       )}
@@ -553,18 +553,18 @@ export const ApplicationTrackerPage: React.FC = () => {
       {/* Track New University Modal */}
       {showAddModal && (
         <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 sm:p-7 space-y-4 border border-slate-200">
-            <h2 className="text-lg font-bold text-[#0B1026]">
+          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 sm:p-7 space-y-4 border border-[#E6DFCF]">
+            <h2 className="text-lg font-bold text-[#1B4D3E]">
               Track an Institution in Your Admission Pipeline
             </h2>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-[#5C6B63]">
               Select a verified institution from our catalog to monitor deadlines and automated follow-ups.
             </p>
 
             <select
               value={selectedUnivToAdd}
               onChange={(e) => setSelectedUnivToAdd(e.target.value)}
-              className="w-full px-3 py-2.5 rounded-[6px] border border-slate-300 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#FF5E00] bg-white"
+              className="w-full px-3 py-2.5 rounded-[6px] border border-[#E6DFCF] text-xs text-[#2B3A33] focus:outline-none focus:ring-2 focus:ring-[#1B4D3E] bg-white"
             >
               <option value="">-- Choose University --</option>
               {universities.map((u) => (
@@ -577,21 +577,21 @@ export const ApplicationTrackerPage: React.FC = () => {
             <div className="flex justify-end gap-2 pt-2">
               <button
                 onClick={() => setShowAddModal(false)}
-                className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-[6px]"
+                className="px-4 py-2 text-xs font-semibold text-[#5C6B63] hover:bg-[#F3EEE2] rounded-[6px]"
               >
                 Cancel
               </button>
               <button
                 disabled={!selectedUnivToAdd}
                 onClick={() => handleAddApplication('planned')}
-                className="px-4 py-2 text-xs font-semibold text-white bg-[#0B1026] hover:bg-[#151B3A] rounded-[6px] disabled:opacity-50"
+                className="px-4 py-2 text-xs font-semibold text-[#1B4D3E] border border-[#E6DFCF] bg-white hover:bg-[#F3EEE2] rounded-[6px] disabled:opacity-50"
               >
                 Add as Planned
               </button>
               <button
                 disabled={!selectedUnivToAdd}
                 onClick={() => handleAddApplication('applied')}
-                className="px-4 py-2 text-xs font-semibold text-[#0B1026] bg-[#FF5E00] hover:bg-[#E65400] rounded-[6px] shadow-sm disabled:opacity-50"
+                className="px-4 py-2 text-xs font-semibold text-[#FAF7F0] bg-[#1B4D3E] hover:bg-[#2E6B57] rounded-[6px] shadow-xs disabled:opacity-50"
               >
                 I Have Applied
               </button>
