@@ -76,10 +76,11 @@ export const AIAssistantWidget: React.FC = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  // Helper to read currently selected programme from the same storage key the Statement Requirements page uses
+  // Helper to read currently selected programme from storage (returns null if user has not selected one)
   const getSelectedProgramme = () => {
     try {
-      const progId = localStorage.getItem('abroadpath_last_selected_program') || 'heidelberg_dcs';
+      const progId = localStorage.getItem('abroadpath_last_selected_program');
+      if (!progId) return null;
       const intake = localStorage.getItem('abroadpath_last_selected_intake') || '2026';
       const univ = universities.find((u) => u.id === progId);
       if (univ) {
@@ -92,29 +93,28 @@ export const AIAssistantWidget: React.FC = () => {
         };
       }
     } catch {}
-    return {
-      id: 'heidelberg_dcs',
-      university: 'Heidelberg University',
-      programme: 'M.Sc. Data and Computer Science',
-      intake: '2026',
-      isDemo: false,
-    };
+    return null;
   };
 
-  // 2. Context sync: Reset chat thread and show system note when selected programme changes
+  // 2. Context sync: Show discussing pill only when a program has actually been selected by the user
   useEffect(() => {
     const syncProgramme = () => {
       const sel = getSelectedProgramme();
-      if (sel && sel.id !== lastDiscussedProgId.current) {
-        lastDiscussedProgId.current = sel.id;
-        setMessages([
-          {
-            id: `sys-${Date.now()}`,
-            role: 'assistant',
-            isSystem: true,
-            content: `Now discussing: ${sel.university} – ${sel.programme}`,
-          },
-        ]);
+      if (sel) {
+        if (sel.id !== lastDiscussedProgId.current) {
+          lastDiscussedProgId.current = sel.id;
+          setMessages([
+            INITIAL_WELCOME,
+            {
+              id: `sys-${Date.now()}`,
+              role: 'assistant',
+              isSystem: true,
+              content: `Now discussing: ${sel.university} – ${sel.programme}`,
+            },
+          ]);
+        }
+      } else {
+        lastDiscussedProgId.current = null;
       }
     };
 
@@ -155,12 +155,14 @@ export const AIAssistantWidget: React.FC = () => {
     const sel = getSelectedProgramme();
     return {
       message: userMsg.slice(0, 500),
-      context: {
-        id: sel.id,
-        university: sel.university,
-        programme: sel.programme,
-        intake: sel.intake,
-      },
+      context: sel
+        ? {
+            id: sel.id,
+            university: sel.university,
+            programme: sel.programme,
+            intake: sel.intake,
+          }
+        : undefined,
     };
   }
 
@@ -232,19 +234,24 @@ export const AIAssistantWidget: React.FC = () => {
 
   const handleReset = () => {
     const sel = getSelectedProgramme();
-    setMessages([
-      {
-        id: `sys-${Date.now()}`,
-        role: 'assistant',
-        isSystem: true,
-        content: `Now discussing: ${sel.university} – ${sel.programme}`,
-      },
-    ]);
+    if (sel) {
+      setMessages([
+        INITIAL_WELCOME,
+        {
+          id: `sys-${Date.now()}`,
+          role: 'assistant',
+          isSystem: true,
+          content: `Now discussing: ${sel.university} – ${sel.programme}`,
+        },
+      ]);
+    } else {
+      setMessages([INITIAL_WELCOME]);
+    }
   };
 
   // Determine if the active conversation is currently discussing a demo record
   const lastBotMsg = [...messages].reverse().find((m) => m.role === 'assistant' && !m.isSystem);
-  const isDemoActive = lastBotMsg ? Boolean(lastBotMsg.isDemo) : Boolean(getSelectedProgramme().isDemo);
+  const isDemoActive = lastBotMsg ? Boolean(lastBotMsg.isDemo) : Boolean(getSelectedProgramme()?.isDemo);
 
   return (
     <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50">

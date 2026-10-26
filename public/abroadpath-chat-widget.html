@@ -503,6 +503,7 @@
     <div class="programme-selector-bar">
       <label for="programmeSelect">Active Programme:</label>
       <select id="programmeSelect" class="programme-select" onchange="handleSelectChange(this.value)">
+        <option value="" selected>-- Select a Programme (or ask Atlas generally) --</option>
         <option value="heidelberg_dcs">Heidelberg University – M.Sc. Data and Computer Science [Verified]</option>
         <option value="tum_informatics">Technical University of Munich – M.Sc. Informatics [Demo Record]</option>
         <option value="oxford_acs">University of Oxford – M.Sc. Advanced Computer Science [Verified]</option>
@@ -712,9 +713,9 @@
       }
     };
 
-    // Shared Application State
+    // Shared Application State (defaults to null so Atlas greets without hardcoded Heidelberg)
     const state = {
-      selectedProgramme: catalogData.heidelberg_dcs
+      selectedProgramme: null
     };
 
     let chatThread = [];
@@ -764,13 +765,13 @@
       const sel = state.selectedProgramme;
       return {
         message: userMsg.slice(0, 500),
-        context: {
+        context: sel ? {
           id: sel.id,
           university: sel.university,
           programme: sel.programme,
           intake: sel.intake,
           demo: Boolean(sel.demo)
-        }
+        } : null
       };
     }
 
@@ -788,8 +789,18 @@
     function onProgrammeChange(sel) {
       chatThread = [];
       chatBody.innerHTML = "";
-      appendSystemNote(`Now discussing: ${sel.university} – ${sel.programme}`);
-      updateHeaderBadge(sel.demo);
+      if (sel) {
+        appendSystemNote(`Now discussing: ${sel.university} – ${sel.programme}`);
+        updateHeaderBadge(sel.demo);
+      } else {
+        appendBotMessage(
+          "Hello! I am **Atlas**, your study abroad guide for verified university admissions in Germany, Ireland, and the UK.\n\nAsk me anything about admission requirements, deadlines, tuition fees, or scholarships!",
+          "Official DAAD & University Admissions",
+          "https://www.daad.de/en/study-and-research-in-germany/",
+          false
+        );
+        updateHeaderBadge(false);
+      }
     }
 
     /* ==========================================================================
@@ -815,61 +826,120 @@
        TASK 4: CONSISTENCY GUARDS & INTELLIGENT BOT RESPONSE ENGINE
        ========================================================================== */
     function generateBotReply(payload) {
-      const p = catalogData[payload.context.id] || state.selectedProgramme;
-      const q = payload.message.toLowerCase();
+      const q = (payload.message || "").toLowerCase().trim();
+
+      // Rule 2: Greetings and small talk get friendly 1-2 sentence reply + invitation
+      if (/^(hi|hii|hello|hey|heyy|thanks|thank you|thx|ok|okay)[\s!.]*$/i.test(q)) {
+        return {
+          replyText: "Hello! I am **Atlas**, your study abroad guide for verified university admissions in Germany, Ireland, and the UK.\n\nHow can I help you today? You can ask about requirements, deadlines, fees, or scholarships.",
+          sourceName: "Official Catalog",
+          sourceUrl: "https://www.daad.de/en/study-and-research-in-germany/",
+          isDemo: false
+        };
+      }
+
+      // Out of scope / weather
+      if (q.includes("weather") || q.includes("sports") || q.includes("movie")) {
+        return {
+          replyText: "I am Atlas, your study abroad guide for verified university admissions in Germany, Ireland, and the UK. Weather and general trivia are not tracked in our official catalog. Feel free to ask about admissions criteria, language cutoffs, tuition fees, or deadlines!",
+          sourceName: "Official Catalog",
+          sourceUrl: "https://www.daad.de/en/study-and-research-in-germany/",
+          isDemo: false
+        };
+      }
+
+      const p = payload.context ? (catalogData[payload.context.id] || payload.context) : state.selectedProgramme;
+
+      if (!p) {
+        if (q.includes("free") || q.includes("tuition-free") || q.includes("0")) {
+          return {
+            replyText: `Verified public universities in Germany offering zero/minimal state tuition:\n\n• **RWTH Aachen University:** €0 tuition (€320/sem contribution)\n• **Heidelberg University:** €1,500/sem for Non-EU\n• **University of Bonn:** €0 tuition (€330/sem contribution)\nVerify on the official site: Tuition waivers are subject to state higher education legislation.`,
+            sourceName: "DAAD Germany",
+            sourceUrl: "https://www.daad.de",
+            isDemo: false
+          };
+        }
+        return {
+          replyText: `I am **Atlas**, your study abroad guide for verified admissions across Germany, Ireland, and the UK.\n\nPlease select a university from the top dropdown or ask about a specific university (e.g., TUM, RWTH Aachen, Oxford, Heidelberg)!`,
+          sourceName: "Official Catalog",
+          sourceUrl: "https://www.daad.de",
+          isDemo: false
+        };
+      }
 
       const lines = [];
 
-      // Demo tag announcement if demo record
-      if (p.demo) {
-        lines.push(`Requirements for **${p.programme}** at **${p.university}** [Demo data]:`);
-      } else {
-        lines.push(`Verified admission requirements for **${p.programme}** at **${p.university}**:`);
+      // Specific query: English / IELTS / TOEFL
+      if (q.includes("ielts") || q.includes("toefl") || q.includes("english") || q.includes("language")) {
+        lines.push(`Verified English language requirements for **${p.programme}** at **${p.university}**:`);
+        lines.push(`• **English Proficiency:** ${p.english}`);
+        lines.push(`Verify on the official site: Language score minimums are enforced by the admissions committee.`);
+        return {
+          replyText: lines.join("\n"),
+          sourceName: p.portalName,
+          sourceUrl: p.portalUrl,
+          isDemo: p.demo
+        };
       }
 
-      // Query-specific matching
+      // Specific query: GRE / GMAT
       if (q.includes("gre") || q.includes("gmat") || q.includes("test")) {
-        lines.push("");
         lines.push(`**Standardized Test Evaluation:**`);
-
         if (p.id === "tum_informatics") {
-          // Rule 4b: Conflicting values for TUM GRE represented as separate labelled rules
           lines.push(`• **General cutoff:** ${p.greGeneralCutoff}`);
           lines.push(`• **India/China/Iran/Pakistan applicants:** Min ${p.greRegionCutoff}`);
-          // Rule 4d: GMAT required flagged as suspicious seed data
           lines.push(`• **GMAT:** ${p.gmatDetails}`);
         } else if (p.greGmatStatus === "Not confirmed") {
-          // Rule 4a: Field not confirmed must not be presented as verified
           lines.push(`• **GRE / GMAT:** Not confirmed (verify on official portal)`);
           lines.push(`• **Notes:** ${p.greDetails}`);
         } else {
           lines.push(`• **GRE Requirement:** ${p.greGeneralCutoff || p.greDetails}`);
           lines.push(`• **GMAT:** ${p.gmatDetails}`);
         }
-      } else if (q.includes("fee") || q.includes("tuition") || q.includes("deadline")) {
-        lines.push("");
-        // Rule 4d: Flag suspicious €6,000 tuition for TUM Informatics
-        lines.push(`• **Tuition Fee:** ${p.tuition}`);
-        lines.push(`• **Application Deadline:** ${p.deadline}`);
-        // Rule 4c: Tuition and deadlines get .chat-footnote, not bold body text
-        lines.push(`Verify on the official site: Tuition amounts and deadlines are subject to ministerial and faculty updates.`);
-      } else {
-        // Comprehensive overview
-        lines.push("");
-        lines.push(`• **English Proficiency:** ${p.english}`);
-        if (p.id === "tum_informatics") {
-          lines.push(`• **GRE (General cutoff):** ${p.greGeneralCutoff}`);
-          lines.push(`• **GRE (India/China/Iran/Pakistan):** Min ${p.greRegionCutoff}`);
-          lines.push(`• **GMAT:** ${p.gmatDetails}`);
-        } else if (p.greGmatStatus === "Not confirmed") {
-          lines.push(`• **GRE / GMAT:** Not confirmed (verify on official portal)`);
-        } else {
-          lines.push(`• **GRE / GMAT:** ${p.greGeneralCutoff || p.greDetails}`);
-        }
-        lines.push(`• **Tuition & Fees:** ${p.tuition}`);
-        lines.push(`• **Application Deadline:** ${p.deadline}`);
-        lines.push(`Verify on the official site: Cutoffs and regulations are confirmed via official university portal.`);
+        return {
+          replyText: lines.join("\n"),
+          sourceName: p.portalName,
+          sourceUrl: p.portalUrl,
+          isDemo: p.demo
+        };
       }
+
+      // Specific query: Tuition / Fees
+      if (q.includes("fee") || q.includes("tuition") || q.includes("cost") || q.includes("price")) {
+        lines.push(`Tuition & fee structure for **${p.programme}** at **${p.university}**:`);
+        lines.push(`• **Tuition Fee:** ${p.tuition}`);
+        lines.push(`Verify on the official site: Tuition amounts and semester fees are subject to state updates.`);
+        return {
+          replyText: lines.join("\n"),
+          sourceName: p.portalName,
+          sourceUrl: p.portalUrl,
+          isDemo: p.demo
+        };
+      }
+
+      // Specific query: Deadline
+      if (q.includes("deadline") || q.includes("intake") || q.includes("date") || q.includes("apply")) {
+        lines.push(`Application deadline for **${p.programme}** at **${p.university}**:`);
+        lines.push(`• **Application Deadline:** ${p.deadline}`);
+        lines.push(`Verify on the official site: Deadlines are strictly enforced by the faculty.`);
+        return {
+          replyText: lines.join("\n"),
+          sourceName: p.portalName,
+          sourceUrl: p.portalUrl,
+          isDemo: p.demo
+        };
+      }
+
+      // Broad question / overview (concise 3-4 lines)
+      if (p.demo) {
+        lines.push(`Requirements for **${p.programme}** at **${p.university}** [Demo data]:`);
+      } else {
+        lines.push(`Verified admission requirements for **${p.programme}** at **${p.university}**:`);
+      }
+      lines.push(`• **English Proficiency:** ${p.english}`);
+      lines.push(`• **Tuition:** ${p.tuition}`);
+      lines.push(`• **Deadline:** ${p.deadline}`);
+      lines.push(`Verify on the official site: Cutoffs and regulations are confirmed via official university portal.`);
 
       return {
         replyText: lines.join("\n"),
@@ -979,6 +1049,20 @@
        PAGE MOCK SYNC HANDLER
        ========================================================================== */
     function handleSelectChange(progId) {
+      if (!progId) {
+        state.selectedProgramme = null;
+        document.getElementById("pageProgTitle").textContent = "Select a Programme (or ask Atlas generally)";
+        document.getElementById("pageTuition").textContent = "—";
+        document.getElementById("pageEnglish").textContent = "—";
+        document.getElementById("pageDeadline").textContent = "—";
+        document.getElementById("pageTests").textContent = "—";
+        const badge = document.getElementById("pageRecordBadge");
+        badge.className = "badge-verified";
+        badge.style.color = "#059669";
+        badge.textContent = "Official Catalog Record";
+        onProgrammeChange(null);
+        return;
+      }
       const p = catalogData[progId];
       if (!p) return;
       state.selectedProgramme = p;

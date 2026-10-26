@@ -4637,7 +4637,7 @@
     /* --------------------------------------------------------------------------
        12. ATLAS AI ASSISTANT WIDGET LOGIC
        -------------------------------------------------------------------------- */
-    let currentAtlasPinnedProgId = 'heidelberg_dcs';
+    let currentAtlasPinnedProgId = null;
 
     // A) System prompt rules adhering to strict safety, accuracy, and anti-rewrite standards
     const ATLAS_SYSTEM_PROMPT = `You are Atlas, a knowledgeable study abroad guide for university admissions in Germany, Ireland, and the UK. Ground all answers strictly in verified official university admissions facts.
@@ -4708,6 +4708,7 @@ Rules:
 
     // B) Data injection helper: reference context (not a template to display)
     function buildProgramReferenceContext(p) {
+      if (!p) return 'Reference data: Verified European university admissions catalog (Germany, Ireland, UK).';
       const req = p.requirements || {};
       return `Reference data, use only if relevant to the question:
 University: ${p.name}
@@ -4725,12 +4726,24 @@ Notes: ${req.notes || 'None'}`;
     // Calibrated response engine implementing all 5 system prompt rules
     function getCalibratedAtlasResponse(queryText, p) {
       const q = queryText.toLowerCase().trim();
-      const req = p.requirements || {};
 
       // 1. Weather / Out-of-scope query
       if (q.includes('weather') || q.includes('climate') || q.includes('temperature') || q.includes('sports') || q.includes('movie')) {
         return `I am Atlas, your study abroad guide for verified university admissions in Germany, Ireland, and the UK. Weather and general trivia are not tracked in our official catalog. Feel free to ask about admissions criteria, language cutoffs, tuition fees, or deadlines!`;
       }
+
+      // If no program is pinned, handle general catalog queries or prompt user
+      if (!p) {
+        if (q.includes('free') || q.includes('tuition-free') || q.includes('0')) {
+          return `Verified public universities in Germany offering zero/minimal state tuition:\n\n<div class="chat-bullet"><strong>RWTH Aachen University:</strong> €0 tuition (€320/sem contribution)</div><div class="chat-bullet"><strong>Heidelberg University:</strong> €1,500/sem for Non-EU</div><div class="chat-bullet"><strong>University of Bonn:</strong> €0 tuition (€330/sem contribution)</div><div class="chat-footnote">Verify on the official site: Tuition waivers are subject to state higher education legislation.</div>`;
+        }
+        if (q.includes('ireland') || q.includes('funds') || q.includes('stamp')) {
+          return `Irish Study Visa &amp; Post-Study Work (Stamp 2 / Stamp 1G):\n\n<div class="chat-bullet"><strong>Living Maintenance:</strong> €10,000 immediate access proof of funds</div><div class="chat-bullet"><strong>Stay Back Visa:</strong> 2-year Stamp 1G for Master's graduates</div><div class="chat-footnote">Verify on the official site: Criteria confirmed via Education in Ireland.</div>`;
+        }
+        return `I am **Atlas**, your study abroad guide for verified university admissions across Germany, Ireland, and the UK.\n\nPlease specify which university program you'd like to check requirements for (e.g., TUM, RWTH Aachen, Heidelberg, Trinity College Dublin), or click 'Ask Atlas' on any university card!`;
+      }
+
+      const req = p.requirements || {};
 
       // 2. Specific question: IELTS / Language
       const isIelts = q.includes('ielts');
@@ -4814,8 +4827,8 @@ Notes: ${req.notes || 'None'}`;
         return;
       }
 
-      // Pinned program resolution
-      const prog = universitiesData.find(item => item.id === currentAtlasPinnedProgId) || universitiesData[0];
+      // Pinned program resolution (dynamic, not hardcoded)
+      const prog = currentAtlasPinnedProgId ? universitiesData.find(item => item.id === currentAtlasPinnedProgId) : null;
       let targetProg = prog;
       const qLower = text.toLowerCase();
       const mentioned = universitiesData.find(u => qLower.includes(u.name.toLowerCase()) || (u.id === 'tum_informatics' && qLower.includes('tum')));
