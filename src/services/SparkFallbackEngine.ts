@@ -206,6 +206,34 @@ export class SparkFallbackEngine {
       };
     }
 
+    // 2b. Greetings and small talk shortcut (Rule A2 & D)
+    const isGreeting = /^(hi|hii|hello|hey|heyy)[\s!.]*$/i.test(prompt);
+    const isThanks = /^(thanks|thank you|thx|ok|okay)[\s!.]*$/i.test(prompt);
+    if (isGreeting || isThanks) {
+      const u = (context?.id && this.universities.find((item) => item.id === context.id)) || null;
+      return {
+        content: isThanks
+          ? "You're very welcome! Let me know if you would like details on language requirements, application deadlines, or tuition & fees.\n\nVerify on the official site: Criteria should be confirmed on official portals prior to application."
+          : `Hello! I am **Atlas**, your study abroad guide.${u ? ` Currently discussing **${u.name}** (${u.program}).` : ''} How can I help you today? Feel free to ask about language requirements, application deadlines, tuition fees, or visas.\n\nVerify on the official site: Sourced from verified catalog admissions portals.`,
+        sourceUrl: u?.sourceUrl || u?.portalUrl || 'https://www.daad.de/en/study-and-research-in-germany/',
+        sourceName: u ? `${u.name} Official Portal` : 'Official DAAD Portal',
+        lastChecked: '2026-10-15',
+        isFallback: true,
+      };
+    }
+
+    // 2c. Out-of-catalog topics (weather, general trivia)
+    if (prompt.includes('weather') || prompt.includes('climate') || prompt.includes('sports')) {
+      return {
+        content:
+          'I am Atlas, your study abroad guide for verified university admissions in Germany, Ireland, and the United Kingdom. Weather and general trivia are not tracked in our verified catalog. Please ask about university requirements, deadlines, tuition fees, or visas!\n\nVerify on the official site: Check national portals for regional information.',
+        sourceUrl: 'https://www.daad.de/en/study-and-research-in-germany/',
+        sourceName: 'Official DAAD Portal',
+        lastChecked: '2026-10-15',
+        isFallback: true,
+      };
+    }
+
     // 3. Out-of-catalog metrics (e.g. acceptance rates are not tracked in verified catalog)
     if (prompt.includes('acceptance rate')) {
       const matchedUniv = this.universities.find((u) => {
@@ -505,6 +533,60 @@ export class SparkFallbackEngine {
       isRuleChange: boolean;
     }
   ): AssistantResponse {
+    // Specific Intent Filtering (Rule A1 & A3: Answer only what was asked)
+    if (intent.isTestReq && !intent.isDeadline && !intent.isTuition) {
+      const tLines: string[] = [];
+      tLines.push(`Language and test requirements for **${u.name}** (${u.program}):`);
+      tLines.push(`• IELTS Academic: ${u.requirements.min_ielts !== null ? `${u.requirements.min_ielts} minimum overall` : 'Not confirmed by official source'}`);
+      tLines.push(`• TOEFL iBT: ${u.requirements.min_toefl !== null ? `${u.requirements.min_toefl} minimum` : 'Not confirmed by official source'}`);
+      if (u.id === 'tum_informatics') {
+        tLines.push('• GRE Requirement: Required (Regional rules: Min 315 general, Min 164 Quant / 4.0 AW for India/China/Iran/Pakistan)');
+        tLines.push('• GMAT: Required [Demo data]');
+      } else {
+        tLines.push(`• GRE: ${u.requirements.gre_required === true ? `Required${u.requirements.min_gre ? ` (Min: ${u.requirements.min_gre})` : ''}` : (u.requirements.gre_required === false ? 'Not required / Waived' : 'Not confirmed by official source')}`);
+        tLines.push(`• GMAT: ${u.requirements.gmat_required === true ? 'Required' : (u.requirements.gmat_required === false ? 'Not required / Waived' : 'Not confirmed by official source')}`);
+      }
+      tLines.push('\nVerify on the official site: Always confirm test requirements on the official portal.');
+      return {
+        content: tLines.join('\n'),
+        sourceUrl: u.sourceUrl || u.portalUrl,
+        sourceName: `${u.name} Official Admission Portal`,
+        lastChecked: u.lastChecked || '2026-10-15',
+        isFallback: true,
+        isDemo: Boolean(u.demoSeeded),
+      };
+    }
+
+    if (intent.isDeadline && !intent.isTestReq && !intent.isTuition) {
+      const dLines: string[] = [];
+      dLines.push(`Application deadline for **${u.name}** (${u.program}):`);
+      dLines.push(`• Application Deadline: ${u.requirements.application_deadline || 'Not confirmed (check official portal)'}`);
+      dLines.push('\nVerify on the official site: Always confirm deadlines on the official university portal.');
+      return {
+        content: dLines.join('\n'),
+        sourceUrl: u.sourceUrl || u.portalUrl,
+        sourceName: `${u.name} Official Admission Portal`,
+        lastChecked: u.lastChecked || '2026-10-15',
+        isFallback: true,
+        isDemo: Boolean(u.demoSeeded),
+      };
+    }
+
+    if (intent.isTuition && !intent.isTestReq && !intent.isDeadline) {
+      const feeLines: string[] = [];
+      feeLines.push(`Tuition fee policy for **${u.name}** (${u.program}):`);
+      feeLines.push(`• Tuition Fee: ${u.tuition || 'Not confirmed by official source'}`);
+      feeLines.push('\nVerify on the official site: Tuition waivers and semester contributions are confirmed via ministerial gazette.');
+      return {
+        content: feeLines.join('\n'),
+        sourceUrl: u.sourceUrl || u.portalUrl,
+        sourceName: `${u.name} Official Admission Portal`,
+        lastChecked: u.lastChecked || '2026-10-15',
+        isFallback: true,
+        isDemo: Boolean(u.demoSeeded),
+      };
+    }
+
     const lines: string[] = [];
 
     lines.push(`Verified Admission Details for **${u.name}** (${u.program}):`);
