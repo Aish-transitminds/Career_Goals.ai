@@ -17,6 +17,7 @@ import {
   AlertCircle,
   RotateCcw,
 } from 'lucide-react';
+import DOMPurify from 'dompurify';
 
 const INITIAL_WELCOME: ChatMessage = {
   id: 'welcome-0',
@@ -43,7 +44,7 @@ function renderChatText(raw?: string): string {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
 
-  return esc
+  const html = esc
     .split('\n')
     .filter((line) => !/demonstration-seeded|live change detection record/i.test(line))
     .map((line) => {
@@ -63,6 +64,11 @@ function renderChatText(raw?: string): string {
       return t ? `<div>${bold}</div>` : `<div class="chat-gap"></div>`;
     })
     .join('');
+
+  return DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: ['strong', 'span', 'div', 'b', 'i', 'em'],
+    ALLOWED_ATTR: ['class'],
+  });
 }
 
 export const AIAssistantWidget: React.FC = () => {
