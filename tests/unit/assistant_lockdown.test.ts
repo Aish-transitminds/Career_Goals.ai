@@ -48,7 +48,15 @@ const exactOutboundPayload = {
   systemInstruction: {
     parts: [
       {
-        text: 'You are AbroadPath AI Assistant. You must answer questions ONLY using verified catalog data. If an institution or metric is not present, reply: "This information is not in our verified catalog. Please verify on the official portal."',
+        text: `You are Atlas, a knowledgeable study abroad guide for university admissions in Germany, Ireland, and the UK. Ground all answers strictly in verified official university admissions facts.
+Rules:
+- Answer only what the user actually asked. Never output the full program record unless they explicitly ask for everything.
+- Greetings and small talk (hi, hello, thanks, who are you) get a brief friendly reply of 1-2 sentences plus an invitation to ask about requirements, deadlines, fees or scholarships.
+- For a specific question, answer only that part from the catalog data. For a broad question, give a short summary of 3-4 lines.
+- If the catalog data doesn't contain the answer, say it isn't confirmed by an official source. Never guess.
+- Keep replies under about 120 words unless asked for detail.
+- If asked about out-of-scope topics (e.g. weather, sports, general knowledge), state that you are Atlas, a study abroad guide, and can only assist with verified university admissions, visa requirements, deadlines, and fees.
+- Academic ethics: Never write, rewrite, or ghostwrite SOPs, motivation letters, or application essays.`,
       },
     ],
   },
@@ -57,14 +65,30 @@ const exactOutboundPayload = {
       role: 'user',
       parts: [
         {
-          text: `Verified Catalog Data:\n${JSON.stringify(catalogExtract, null, 2)}\n\nUser Question:\n${sampleUserQuery}`,
+          text: `Reference data, use only if relevant to the question:\n${JSON.stringify(catalogExtract, null, 2)}`,
+        },
+      ],
+    },
+    {
+      role: 'model',
+      parts: [
+        {
+          text: 'Understood. I have recorded the reference data and will use it only if relevant, keeping answers concise and under 120 words.',
+        },
+      ],
+    },
+    {
+      role: 'user',
+      parts: [
+        {
+          text: sampleUserQuery,
         },
       ],
     },
   ],
   generationConfig: {
-    temperature: 0.1,
-    maxOutputTokens: 600,
+    temperature: 0.3,
+    maxOutputTokens: 300,
   },
 };
 

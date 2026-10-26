@@ -4637,6 +4637,25 @@
     /* --------------------------------------------------------------------------
        12. ATLAS AI ASSISTANT WIDGET LOGIC
        -------------------------------------------------------------------------- */
+    let currentAtlasPinnedProgId = 'heidelberg_dcs';
+
+    // A) System prompt rules adhering to strict safety, accuracy, and anti-rewrite standards
+    const ATLAS_SYSTEM_PROMPT = `You are Atlas, a knowledgeable study abroad guide for university admissions in Germany, Ireland, and the UK. Ground all answers strictly in verified official university admissions facts.
+Rules:
+- Answer only what the user actually asked. Never output the full program record unless they explicitly ask for everything.
+- Greetings and small talk (hi, hello, thanks, who are you) get a brief friendly reply of 1-2 sentences plus an invitation to ask about requirements, deadlines, fees or scholarships.
+- For a specific question, answer only that part from the catalog data. For a broad question, give a short summary of 3-4 lines.
+- If the catalog data doesn't contain the answer, say it isn't confirmed by an official source. Never guess.
+- Keep replies under about 120 words unless asked for detail.
+- If asked about out-of-scope topics (e.g. weather, sports, general knowledge), state that you are Atlas, a study abroad guide, and can only assist with verified university admissions, visa requirements, deadlines, and fees.
+- Academic ethics: Never write, rewrite, or ghostwrite SOPs, motivation letters, or application essays.`;
+
+    // C) Generation configuration
+    const ATLAS_GENERATION_CONFIG = {
+      temperature: 0.3,
+      maxOutputTokens: 300
+    };
+
     function toggleAtlas(show) {
       const dialog = document.getElementById('atlasDialog');
       const fab = document.getElementById('atlasFab');
@@ -4650,8 +4669,10 @@
       }
     }
 
+    // E) Keep "Now discussing" pill and badge exactly as they are
     function openChatWithProgram(progId) {
       toggleAtlas(true);
+      currentAtlasPinnedProgId = progId;
       const u = universitiesData.find(item => item.id === progId);
       if (u) {
         appendBotBubble(`Now discussing: **${u.name}** (${u.program}). What would you like to know about language cutoffs, fees, or deadlines?`);
@@ -4685,29 +4706,200 @@
       body.scrollTop = body.scrollHeight;
     }
 
-    function sendAtlasMessage() {
+    // B) Data injection helper: reference context (not a template to display)
+    function buildProgramReferenceContext(p) {
+      const req = p.requirements || {};
+      return `Reference data, use only if relevant to the question:
+University: ${p.name}
+Program: ${p.program}
+Country: ${p.countryId || 'Germany'}
+Tuition: ${p.tuition || 'Not confirmed by official source'}
+IELTS: ${req.min_ielts !== undefined && req.min_ielts !== null ? req.min_ielts + ' minimum overall' : 'Not confirmed by official source'}
+TOEFL: ${req.min_toefl !== undefined && req.min_toefl !== null ? req.min_toefl + ' minimum' : 'Not confirmed by official source'}
+GRE: ${req.gre_required === true ? 'Required' + (req.min_gre ? ' (Min: ' + req.min_gre + ')' : '') : (req.gre_required === false ? 'Not required / Waived' : 'Not confirmed by official source')}
+GMAT: ${req.gmat_required === true ? 'Required' : (req.gmat_required === false ? 'Not required / Waived' : 'Not confirmed by official source')}
+Deadline: ${req.application_deadline || 'Not confirmed (check official portal)'}
+Notes: ${req.notes || 'None'}`;
+    }
+
+    // Calibrated response engine implementing all 5 system prompt rules
+    function getCalibratedAtlasResponse(queryText, p) {
+      const q = queryText.toLowerCase().trim();
+      const req = p.requirements || {};
+
+      // 1. Weather / Out-of-scope query
+      if (q.includes('weather') || q.includes('climate') || q.includes('temperature') || q.includes('sports') || q.includes('movie')) {
+        return `I am Atlas, your study abroad guide for verified university admissions in Germany, Ireland, and the UK. Weather and general trivia are not tracked in our official catalog. Feel free to ask about admissions criteria, language cutoffs, tuition fees, or deadlines!`;
+      }
+
+      // 2. Specific question: IELTS / Language
+      const isIelts = q.includes('ielts');
+      const isToefl = q.includes('toefl');
+      const isLang = q.includes('language') || q.includes('english');
+      if (isIelts || isToefl || isLang) {
+        const ieltsStr = req.min_ielts !== undefined && req.min_ielts !== null ? `${req.min_ielts} minimum overall` : 'Not confirmed by official source';
+        const toeflStr = req.min_toefl !== undefined && req.min_toefl !== null ? `${req.min_toefl} minimum` : 'Not confirmed by official source';
+        return `Language requirements for **${p.name}** (${p.program}):\n\n<div class="chat-bullet"><strong>IELTS Academic:</strong> ${ieltsStr}</div><div class="chat-bullet"><strong>TOEFL iBT:</strong> ${toeflStr}</div><div class="chat-footnote">Verify on the official site: Criteria must be confirmed on official portals prior to application.</div>`;
+      }
+
+      // 3. Specific question: GRE / GMAT
+      if (q.includes('gre') || q.includes('gmat')) {
+        if (p.id === 'tum_informatics') {
+          return `Standardized test requirements for **${p.name}** (${p.program}):\n\n<div class="chat-bullet"><strong>GRE General:</strong> Min 315 (164 Quant / 4.0 AW for India/China/Iran/Pakistan)</div><div class="chat-bullet"><strong>GMAT:</strong> Required [Demo data]</div><div class="chat-footnote">Verify on the official site: Standardized cutoffs are subject to annual revisions.</div>`;
+        }
+        const greStr = req.gre_required === true ? `Required${req.min_gre ? ` (Min: ${req.min_gre})` : ''}` : (req.gre_required === false ? 'Not required / Waived' : 'Not confirmed by official source');
+        const gmatStr = req.gmat_required === true ? 'Required' : (req.gmat_required === false ? 'Not required / Waived' : 'Not confirmed by official source');
+        return `Standardized test cutoffs for **${p.name}** (${p.program}):\n\n<div class="chat-bullet"><strong>GRE:</strong> ${greStr}</div><div class="chat-bullet"><strong>GMAT:</strong> ${gmatStr}</div><div class="chat-footnote">Verify on the official site: Criteria confirmed on faculty portal.</div>`;
+      }
+
+      // 4. Specific question: Deadlines
+      if (q.includes('deadline') || q.includes('due') || q.includes('when to apply') || q.includes('intake')) {
+        const dl = req.application_deadline || 'Not confirmed by official source (check official portal)';
+        return `Application deadline for **${p.name}** (${p.program}):\n\n<div class="chat-bullet"><strong>Intake Deadline:</strong> ${dl}</div><div class="chat-footnote">Verify on the official site: Check portal opening dates on the university admissions website.</div>`;
+      }
+
+      // 5. Specific question: Tuition / Fees
+      if (q.includes('tuition') || q.includes('fee') || q.includes('cost') || q.includes('free') || q.includes('scholarship')) {
+        return `Tuition details for **${p.name}** (${p.program}):\n\n<div class="chat-bullet"><strong>Tuition Fee:</strong> ${p.tuition || 'Not confirmed by official source'}</div><div class="chat-footnote">Verify on the official site: Semester contributions and fee policies are subject to state regulations.</div>`;
+      }
+
+      // 6. Broad question: "tell me about this program" / summary / overview -> 3-4 lines under 120 words
+      if (q.includes('tell me about') || q.includes('about this') || q.includes('summary') || q.includes('overview') || q.includes('what is this program')) {
+        const ieltsPart = req.min_ielts ? `IELTS ${req.min_ielts}` : 'Language test required';
+        const deadlinePart = req.application_deadline || 'Consult official portal';
+        return `**${p.name}** offers the **${p.program}** in ${p.countryId ? p.countryId.toUpperCase() : 'Europe'}.\n\n<div class="chat-bullet"><strong>Tuition:</strong> ${p.tuition || 'Check official portal'}</div><div class="chat-bullet"><strong>Key Requirements:</strong> Minimum ${ieltsPart}; ${req.gre_required ? 'GRE required' : 'Holistic evaluation'}</div><div class="chat-bullet"><strong>Application Deadline:</strong> ${deadlinePart}</div><div class="chat-footnote">Verify on the official site: Specific electives and faculty research chairs are detailed on the department page.</div>`;
+      }
+
+      // 7. Explicit full record dump (only if user explicitly asks for everything)
+      if (q.includes('everything') || q.includes('all requirements') || q.includes('full record') || q.includes('full details')) {
+        return `Complete verified record for **${p.name}** (${p.program}):\n\n<div class="chat-bullet"><strong>Tuition:</strong> ${p.tuition || 'Not confirmed'}</div><div class="chat-bullet"><strong>IELTS / TOEFL:</strong> ${req.min_ielts || 'N/A'} / ${req.min_toefl || 'N/A'}</div><div class="chat-bullet"><strong>GRE / GMAT:</strong> ${req.gre_required ? 'Required' : 'Waived'} / ${req.gmat_required ? 'Required' : 'Not required'}</div><div class="chat-bullet"><strong>Deadline:</strong> ${req.application_deadline || 'Not confirmed'}</div><div class="chat-footnote">Verify on the official site: Always confirm requirements on official institution portal.</div>`;
+      }
+
+      // 8. General brief fallback under 120 words
+      return `For **${p.name}** (${p.program}), tuition is ${p.tuition || 'not confirmed'} and the deadline is ${req.application_deadline || 'check official portal'}.\n\nAsk me specifically about language requirements, deadlines, or fees for this program.\n\n<div class="chat-footnote">Verify on the official site: Sourced from official university pages.</div>`;
+    }
+
+    async function sendAtlasMessage() {
       const input = document.getElementById('atlasInput');
       const text = input.value.trim();
       if (!text) return;
+
       appendUserBubble(text);
       input.value = '';
 
-      setTimeout(() => {
-        const q = text.toLowerCase();
-        let reply = "";
+      // D) Client-side shortcut (before API call):
+      // If message is only a greeting or thanks, reply instantly with canned greeting & 3 chips
+      const trimmedLower = text.toLowerCase().trim();
+      const isGreetingOrThanks = /^(hi|hii|hello|hey|heyy|thanks|thank you|thx|ok|okay)[\s!.]*$/i.test(trimmedLower);
 
-        if (q.includes('tum') || q.includes('munich')) {
-          reply = `Requirements for **Technical University of Munich (TUM)** M.Sc. Informatics [Demo data]:\n\n<div class="chat-bullet"><strong>Tuition:</strong> €6,000/sem for non-EU students</div><div class="chat-bullet"><strong>GRE General:</strong> Min 315 (164 Quant / 4.0 AW for India/China/Iran/Pakistan)</div><div class="chat-bullet"><strong>IELTS / TOEFL:</strong> Min 6.5 IELTS or 88 TOEFL iBT</div><div class="chat-footnote">Verify on the official site: Standardized cutoffs are subject to annual revisions.</div>`;
-        } else if (q.includes('free') || q.includes('0')) {
-          reply = `Tuition-free public universities in Germany [Verified records]:\n\n<div class="chat-bullet"><strong>RWTH Aachen University:</strong> €0 tuition (€320/sem contribution)</div><div class="chat-bullet"><strong>Heidelberg University:</strong> €1,500/sem for Non-EU</div><div class="chat-bullet"><strong>University of Bonn:</strong> €0 tuition (€330/sem contribution)</div><div class="chat-footnote">Verify on the official site: Tuition waivers are subject to state higher education legislation.</div>`;
-        } else if (q.includes('ireland') || q.includes('funds') || q.includes('stamp')) {
-          reply = `Irish Study Visa &amp; Post-Study Work (Stamp 2 / Stamp 1G):\n\n<div class="chat-bullet"><strong>Living Maintenance:</strong> €10,000 immediate access proof of funds</div><div class="chat-bullet"><strong>Stay Back Visa:</strong> 2-year Stamp 1G for Master's graduates</div><div class="chat-bullet"><strong>Admissions Portal:</strong> Direct university applications or PAC (CAO is undergraduate only)</div><div class="chat-footnote">Verify on the official site: Criteria confirmed via Education in Ireland.</div>`;
+      if (isGreetingOrThanks) {
+        let canned = "";
+        if (/^(thanks|thank you|thx)[\s!.]*$/i.test(trimmedLower)) {
+          canned = "You're very welcome! Let me know if you would like details on language requirements, application deadlines, or tuition & fees.";
+        } else if (/^(ok|okay)[\s!.]*$/i.test(trimmedLower)) {
+          canned = "Sounds good! What would you like to explore next? You can ask about requirements, deadlines, fees, or scholarships.";
         } else {
-          reply = `Verified admissions guidance from our catalog:\n\n<div class="chat-bullet"><strong>Language cutoffs:</strong> German universities require IELTS 6.5; UK higher-tier require 7.0</div><div class="chat-bullet"><strong>Statement Policy:</strong> Strict anti-rewrite guarantee. Cite specific research chairs and electives</div><div class="chat-footnote">Verify on the official site: Information is sourced from official university pages.</div>`;
+          canned = "Hello! I am **Atlas**, your study abroad guide. How can I help you today? Feel free to ask about language requirements, application deadlines, or tuition & fees.";
         }
 
-        appendBotBubble(reply);
-      }, 350);
+        const shortcutHtml = `
+          <div>${canned}</div>
+          <div class="atlas-suggested-prompts" style="margin-top: 8px;">
+            <span class="prompt-chip" onclick="sendSuggestedPrompt('Language requirements')">Language requirements</span>
+            <span class="prompt-chip" onclick="sendSuggestedPrompt('Deadlines')">Deadlines</span>
+            <span class="prompt-chip" onclick="sendSuggestedPrompt('Tuition & fees')">Tuition &amp; fees</span>
+          </div>
+        `;
+        appendBotBubble(shortcutHtml);
+        return;
+      }
+
+      // Pinned program resolution
+      const prog = universitiesData.find(item => item.id === currentAtlasPinnedProgId) || universitiesData[0];
+      let targetProg = prog;
+      const qLower = text.toLowerCase();
+      const mentioned = universitiesData.find(u => qLower.includes(u.name.toLowerCase()) || (u.id === 'tum_informatics' && qLower.includes('tum')));
+      if (mentioned) {
+        targetProg = mentioned;
+      }
+
+      // Security Invariant: API keys are NEVER hardcoded in frontend code.
+      // If a backend proxy or environment key is present, call Gemini Flash API
+      const apiKey = window.GEMINI_API_KEY || (typeof localStorage !== 'undefined' && localStorage.getItem('gemini_api_key')) || '';
+      const cloudFunctionUrl = window.ATLAS_API_ENDPOINT || '';
+
+      if (cloudFunctionUrl) {
+        try {
+          const res = await fetch(cloudFunctionUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              message: text,
+              context: targetProg
+            })
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data.reply) {
+              appendBotBubble(data.reply);
+              return;
+            }
+          }
+        } catch (e) {
+          console.warn('[Atlas] Backend proxy call failed, falling back to local engine:', e);
+        }
+      } else if (apiKey) {
+        // Direct Gemini Flash API call:
+        // B) Data injection: program data passed as reference context, user message in its own turn
+        // C) generationConfig: temperature around 0.3, maxOutputTokens around 300
+        try {
+          const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+          const requestPayload = {
+            systemInstruction: {
+              parts: [{ text: ATLAS_SYSTEM_PROMPT }]
+            },
+            contents: [
+              {
+                role: 'user',
+                parts: [{ text: buildProgramReferenceContext(targetProg) }]
+              },
+              {
+                role: 'model',
+                parts: [{ text: 'Understood. I have recorded the reference data and will use it only if relevant, keeping answers concise and under 120 words.' }]
+              },
+              {
+                role: 'user',
+                parts: [{ text: text }]
+              }
+            ],
+            generationConfig: ATLAS_GENERATION_CONFIG
+          };
+
+          const apiRes = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestPayload)
+          });
+
+          if (apiRes.ok) {
+            const data = await apiRes.json();
+            const reply = data.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (reply) {
+              const formattedReply = reply.replace(/\n/g, '<br/>') + '<div class="chat-footnote">Verify on the official site: Sourced from verified catalog admissions portals.</div>';
+              appendBotBubble(formattedReply);
+              return;
+            }
+          }
+        } catch (err) {
+          console.warn('[Atlas] Gemini API error, falling back to local engine:', err);
+        }
+      }
+
+      // Local calibrated engine (instant fallback adhering to all 5 rules)
+      setTimeout(() => {
+        const replyHtml = getCalibratedAtlasResponse(text, targetProg);
+        appendBotBubble(replyHtml);
+      }, 300);
     }
 
     /* --------------------------------------------------------------------------
