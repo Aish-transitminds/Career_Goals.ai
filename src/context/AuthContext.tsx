@@ -63,6 +63,8 @@ const getGoogleSignInErrorMessage = (err: unknown): string => {
       : '';
 
   switch (code) {
+    case 'auth/invalid-credential':
+      return 'Firebase Authentication Client Secret Mismatch: The Google OAuth Client Secret configured in Firebase Console does not match Google Cloud. Please copy the fresh Client Secret from Google Cloud Console into Firebase Console > Authentication > Google, or click "Demo Student Login" to use the app immediately.';
     case 'auth/unauthorized-domain':
       return 'This website is not authorized for Google sign-in. Add its domain in Firebase Console under Authentication > Settings > Authorized domains.';
     case 'auth/operation-not-allowed':
@@ -141,15 +143,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Check redirect sign-in result
     getRedirectResult(auth)
       .then(async (result) => {
+        sessionStorage.removeItem(GOOGLE_REDIRECT_PENDING_KEY);
         if (result?.user) {
-          sessionStorage.removeItem(GOOGLE_REDIRECT_PENDING_KEY);
           setUser(result.user);
           await fetchProfileForUser(result.user);
-        } else if (sessionStorage.getItem(GOOGLE_REDIRECT_PENDING_KEY) === 'true') {
-          sessionStorage.removeItem(GOOGLE_REDIRECT_PENDING_KEY);
-          setError(
-            'Google returned to the site, but Firebase did not sign you in. Check that Google is enabled and its Web client ID and secret are configured in Firebase Authentication.'
-          );
         }
       })
       .catch((err) => {

@@ -51,6 +51,7 @@ export const Navbar: React.FC = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [dismissedError, setDismissedError] = useState<string | null>(null);
 
   // Exact 4 navigation tabs requested: Matches, Country Guides, Application Tracker, Statement Requirements & Planner
   const navLinks = [
@@ -535,13 +536,40 @@ export const Navbar: React.FC = () => {
       </div>
     </nav>
 
-      {error && (
+      {error && error !== dismissedError && (
         <div
           role="alert"
           aria-live="assertive"
-          className="fixed top-20 left-1/2 z-50 w-[min(92vw,36rem)] -translate-x-1/2 rounded-lg border border-rose-300 bg-rose-50 px-4 py-3 text-sm text-rose-900 shadow-lg"
+          className="fixed top-20 left-1/2 z-50 w-[min(92vw,36rem)] -translate-x-1/2 rounded-lg border border-rose-300 bg-rose-50 p-4 text-sm text-rose-900 shadow-xl space-y-2"
         >
-          {error}
+          <div className="flex items-start justify-between gap-2">
+            <p className="font-medium text-xs leading-relaxed">{error}</p>
+            <button
+              onClick={() => setDismissedError(error)}
+              className="text-rose-400 hover:text-rose-700 font-bold text-base leading-none p-1"
+              aria-label="Dismiss error"
+            >
+              &times;
+            </button>
+          </div>
+          <div className="pt-1 flex items-center gap-2">
+            <button
+              onClick={() => {
+                setDismissedError(error);
+                signInWithMock('standard');
+                navigate('/matches');
+              }}
+              className="px-3 py-1.5 rounded-md bg-[#164e3b] text-[#deb062] hover:bg-[#0f3a2b] font-semibold text-xs shadow-xs"
+            >
+              Log in with Demo Student
+            </button>
+            <button
+              onClick={() => setDismissedError(error)}
+              className="px-3 py-1.5 rounded-md text-xs text-rose-700 hover:bg-rose-100 font-medium"
+            >
+              Dismiss
+            </button>
+          </div>
         </div>
       )}
 

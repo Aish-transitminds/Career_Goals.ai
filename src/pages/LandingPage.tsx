@@ -128,7 +128,12 @@ export const LandingPage: React.FC = () => {
     } catch (err: any) {
       if (err?.code !== 'auth/popup-closed-by-user') {
         console.error('Sign in failed:', err);
-        setAuthError(err.message || 'Failed to sign in with Google. Please try again.');
+        const msg = err?.message || '';
+        if (err?.code === 'auth/invalid-credential' || msg.includes('client secret') || msg.includes('invalid_client')) {
+          setAuthError('Google OAuth Client Secret Mismatch: The OAuth secret in Firebase Console does not match Google Cloud. Click "Get Started Free" to access the app immediately while the secret is refreshed.');
+        } else {
+          setAuthError(msg || 'Failed to sign in with Google. Please try again.');
+        }
       }
     } finally {
       setIsSubmitting(false);
@@ -191,7 +196,7 @@ export const LandingPage: React.FC = () => {
               Guesses.
             </h1>
 
-                        <p className="text-slate-200/90 text-sm sm:text-base leading-relaxed max-w-xl">
+            <p className="text-slate-200/90 text-sm sm:text-base leading-relaxed max-w-xl">
               Official entry requirements derived exclusively from institutional portals in Germany, Ireland, and the United Kingdom. Every fact links to its official source, with the date we last checked it.
             </p>
 
@@ -200,27 +205,27 @@ export const LandingPage: React.FC = () => {
               <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider">Coverage:</span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white text-xs font-medium border border-white/20 shadow-2xs">
                 <svg className="w-4 h-2.5 rounded-2xs shadow-xs" viewBox="0 0 640 480">
-                  <path fill="#000" d="M0 0h640v160H0z"/>
-                  <path fill="#D00" d="M0 160h640v160H0z"/>
-                  <path fill="#FFCE00" d="M0 320h640v160H0z"/>
+                  <path fill="#000" d="M0 0h640v160H0z" />
+                  <path fill="#D00" d="M0 160h640v160H0z" />
+                  <path fill="#FFCE00" d="M0 320h640v160H0z" />
                 </svg>
                 <span>Germany</span>
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white text-xs font-medium border border-white/20 shadow-2xs">
                 <svg className="w-4 h-2.5 rounded-2xs shadow-xs" viewBox="0 0 640 480">
-                  <path fill="#169B62" d="M0 0h213.3v480H0z"/>
-                  <path fill="#FFF" d="M213.3 0h213.4v480H213.3z"/>
-                  <path fill="#FF883E" d="M426.7 0H640v480H426.7z"/>
+                  <path fill="#169B62" d="M0 0h213.3v480H0z" />
+                  <path fill="#FFF" d="M213.3 0h213.4v480H213.3z" />
+                  <path fill="#FF883E" d="M426.7 0H640v480H426.7z" />
                 </svg>
                 <span>Ireland</span>
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white text-xs font-medium border border-white/20 shadow-2xs">
                 <svg className="w-4 h-2.5 rounded-2xs shadow-xs" viewBox="0 0 640 480">
-                  <path fill="#012169" d="M0 0v480h640V0z"/>
-                  <path stroke="#FFF" strokeWidth="60" d="m0 0 640 480m0-480L0 480"/>
-                  <path stroke="#C8102E" strokeWidth="40" d="m0 0 640 480m0-480L0 480"/>
-                  <path stroke="#FFF" strokeWidth="100" d="M320 0v480M0 240h640"/>
-                  <path stroke="#C8102E" strokeWidth="60" d="M320 0v480M0 240h640"/>
+                  <path fill="#012169" d="M0 0v480h640V0z" />
+                  <path stroke="#FFF" strokeWidth="60" d="m0 0 640 480m0-480L0 480" />
+                  <path stroke="#C8102E" strokeWidth="40" d="m0 0 640 480m0-480L0 480" />
+                  <path stroke="#FFF" strokeWidth="100" d="M320 0v480M0 240h640" />
+                  <path stroke="#C8102E" strokeWidth="60" d="M320 0v480M0 240h640" />
                 </svg>
                 <span>United Kingdom</span>
               </span>
@@ -295,7 +300,7 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-            {/* How to Use CareerGoals: 3 Step Cards */}
+      {/* How to Use CareerGoals: 3 Step Cards */}
       <section className="space-y-6 pt-2">
         <div className="text-center max-w-xl mx-auto space-y-1.5">
           <span className="text-[#B45309] font-bold text-xs uppercase tracking-wider">
