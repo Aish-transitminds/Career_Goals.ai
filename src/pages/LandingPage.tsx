@@ -30,6 +30,22 @@ export const LandingPage: React.FC = () => {
   const [userApplications, setUserApplications] = useState<Application[]>([]);
   const [tourStep, setTourStep] = useState<number | null>(null);
 
+  // Auto-launch bubble guide for fresh first-time users
+  useEffect(() => {
+    const hasSeen = localStorage.getItem('careergoals_bubble_tour_seen');
+    if (!hasSeen) {
+      const timer = setTimeout(() => {
+        setTourStep(0);
+      }, 850);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
+  const dismissTour = () => {
+    dismissTour();
+    localStorage.setItem('careergoals_bubble_tour_seen', 'true');
+  };
+
   // Fetch real tracker applications for logged in / mock user
   useEffect(() => {
     let isMounted = true;
@@ -493,7 +509,7 @@ export const LandingPage: React.FC = () => {
         <div 
           className="fixed inset-0 z-50 bg-[#0B1026]/60 backdrop-blur-2xs flex items-center justify-center p-4 animate-fadeIn font-sans"
           onClick={(e) => {
-            if (e.target === e.currentTarget) setTourStep(null);
+            if (e.target === e.currentTarget) dismissTour();
           }}
         >
           <div className="relative bg-white rounded-2xl max-w-sm w-full p-5 shadow-2xl border border-slate-200 space-y-3 animate-scaleUp">
@@ -507,7 +523,7 @@ export const LandingPage: React.FC = () => {
               </span>
               <button
                 type="button"
-                onClick={() => setTourStep(null)}
+                onClick={dismissTour}
                 className="text-slate-400 hover:text-slate-600 text-lg leading-none"
                 title="Close guide"
               >

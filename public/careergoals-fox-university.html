@@ -3968,6 +3968,7 @@
       "notes": "Preliminary documentation (VPD) via uni-assist required prior to TUMonline application. Mandatory GRE General (min 164 Quant, 4.0 AW) for degrees from India, China, Iran, Pakistan."
     },
     "tuition": "€6,000 / semester (Non-EU)",
+    "photoUrl": "https://images.unsplash.com/photo-1590579491624-f98f36d4c763?auto=format&fit=crop&w=800&q=80",
     "portalUrl": "https://campus.tum.de/",
     "sourceUrl": "https://www.tum.de/en/studies/degree-programs/detail/informatics-master-of-science-msc",
     "lastChecked": "2026-10-15",
@@ -4044,6 +4045,7 @@
       "notes": "Strict curricular prerequisite: 34 ECTS Practical CS, 24 ECTS Technical CS, 24 ECTS Theoretical CS, 26 ECTS Math. Mandatory GRE (Quant > 75th percentile, Verbal > 15th percentile, AW >= 3.5)."
     },
     "tuition": "€0 (Tuition-free)",
+    "photoUrl": "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=800&q=80",
     "portalUrl": "https://online.rwth-aachen.de/",
     "sourceUrl": "https://www.rwth-aachen.de/go/id/bkmq/?lidx=1",
     "lastChecked": "2026-10-15",
@@ -4093,6 +4095,7 @@
       "notes": "Baden-Württemberg state statutory fee applies to all non-EU students. Apply directly via heiCO portal."
     },
     "tuition": "€1,500 / semester (Non-EU)",
+    "photoUrl": "https://images.unsplash.com/photo-1527866959252-deab85ef7d1b?auto=format&fit=crop&w=800&q=80",
     "portalUrl": "https://heico.uni-heidelberg.de/",
     "sourceUrl": "https://www.uni-heidelberg.de/en/study/all-degree-programmes/data-and-computer-science-master",
     "lastChecked": "2026-10-15",
@@ -4211,6 +4214,7 @@
       "notes": "Requires First- or upper second-class honours degree (2:1) in CS or closely related discipline. Apply directly via my.tcd.ie (application fee €55)."
     },
     "tuition": "€27,500 / year (Non-EU)",
+    "photoUrl": "https://images.unsplash.com/photo-1549918864-48ac978761a4?auto=format&fit=crop&w=800&q=80",
     "portalUrl": "https://my.tcd.ie/",
     "sourceUrl": "https://www.tcd.ie/courses/postgraduate/courses/computer-science--intelligent-systems-msc/",
     "lastChecked": "2026-10-15",
@@ -4275,6 +4279,7 @@
       "notes": "Requires NFQ Level 8 2:1 Honours in Computer Science or related degree. Direct online application via UCD Graduate Admissions portal."
     },
     "tuition": "€29,100 / year (Non-EU)",
+    "photoUrl": "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=800&q=80",
     "portalUrl": "https://www.ucd.ie/apply/",
     "sourceUrl": "https://www.ucd.ie/courses/msc-computer-science-negotiated-learning",
     "lastChecked": "2026-10-15",
@@ -4514,6 +4519,7 @@
       "notes": "First-Class undergraduate degree in Computer Science or Mathematics. GRE/GMAT scores are explicitly NOT requested or used in admissions evaluation."
     },
     "tuition": "£46,350 / year (Overseas)",
+    "photoUrl": "https://images.unsplash.com/photo-1569012871812-f38ee64cd54c?auto=format&fit=crop&w=800&q=80",
     "portalUrl": "https://www.ox.ac.uk/admissions/graduate/applying-to-oxford",
     "sourceUrl": "https://www.ox.ac.uk/admissions/graduate/courses/msc-advanced-computer-science",
     "lastChecked": "2026-10-15",
@@ -4586,6 +4592,7 @@
       "notes": "UK First Class or high 2:1 Honours in Computer Science with minimum 50% core CS content. Direct online application via Manchester Graduate Admissions portal."
     },
     "tuition": "£41,400 / year (Overseas)",
+    "photoUrl": "https://images.unsplash.com/photo-1583083527882-4bee9aba2eea?auto=format&fit=crop&w=800&q=80",
     "portalUrl": "https://www.manchester.ac.uk/study/masters/admissions/apply-online/",
     "sourceUrl": "https://www.manchester.ac.uk/study/masters/courses/list/08145/msc-advanced-computer-science/",
     "lastChecked": "2026-10-15",
@@ -6598,6 +6605,7 @@ Notes: ${req.notes || 'None'}`;
     }
 
     function skipAppTour() {
+      localStorage.setItem('careergoals_bubble_tour_seen', 'true');
       document.getElementById('appTourOverlay').style.display = 'none';
       document.querySelectorAll('.tour-spotlight-active').forEach(el => el.classList.remove('tour-spotlight-active'));
     }
@@ -6664,6 +6672,17 @@ Notes: ${req.notes || 'None'}`;
         if (btn) btn.classList.toggle('active', id === tabName);
       });
     }
+
+
+    // Auto-launch 30s bubble guide for first-time visitors
+    window.addEventListener('DOMContentLoaded', () => {
+      const tourSeen = localStorage.getItem('careergoals_bubble_tour_seen');
+      if (!tourSeen) {
+        setTimeout(() => {
+          startAppTour();
+        }, 850);
+      }
+    });
 
   </script>
 
