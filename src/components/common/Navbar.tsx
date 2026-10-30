@@ -27,10 +27,23 @@ import {
 } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
-  const { user, signInWithGoogle, signInWithMock, signOutUser, deleteMyData, isMockAuth } = useAuth();
+  const { user, profile, error, loading, signInWithGoogle, signInWithMock, signOutUser, deleteMyData, isMockAuth } = useAuth();
   const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
   const location = useLocation();
   const navigate = useNavigate();
+
+  const handleGoogleSignIn = async () => {
+    try {
+      await signInWithGoogle();
+      if (!profile) {
+        navigate('/onboarding');
+      } else {
+        navigate('/matches');
+      }
+    } catch {
+      // Handled in AuthContext
+    }
+  };
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
@@ -324,7 +337,7 @@ export const Navbar: React.FC = () => {
                     Demo Student Login
                   </button>
                   <button
-                    onClick={signInWithGoogle}
+                    onClick={handleGoogleSignIn}
                     className="inline-flex items-center px-4 py-2 border border-white/20 text-xs font-semibold rounded-[6px] shadow-sm text-white bg-white/10 hover:bg-white/15 transition-colors focus:ring-2 focus:ring-[#deb062]"
                   >
                     Sign In with Google
@@ -335,6 +348,22 @@ export const Navbar: React.FC = () => {
 
             {/* Mobile Hamburger Toggle */}
             <div className="flex items-center xl:hidden">
+              {!user && (
+                <button
+                  onClick={handleGoogleSignIn}
+                  disabled={loading}
+                  className="mr-2 inline-flex items-center gap-1.5 rounded-md border border-white/20 bg-white/10 px-2.5 py-2 text-xs font-semibold text-white transition-colors hover:bg-white/15 disabled:cursor-not-allowed disabled:opacity-60"
+                  aria-label="Sign in with Google"
+                >
+                  <svg aria-hidden="true" className="h-4 w-4 shrink-0" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.14z" />
+                    <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.34 24 12 24z" />
+                    <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z" />
+                    <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.34 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z" />
+                  </svg>
+                  <span>Sign in</span>
+                </button>
+              )}
               {user && (
                 <Link
                   to="/tracker"
@@ -445,7 +474,7 @@ export const Navbar: React.FC = () => {
                 <button
                   onClick={() => {
                     setMobileMenuOpen(false);
-                    signInWithGoogle();
+                    handleGoogleSignIn();
                   }}
                   className="w-full flex justify-center items-center px-4 py-2.5 rounded-[6px] text-xs font-semibold text-white bg-white/10 hover:bg-white/15 border border-white/20"
                 >
@@ -505,6 +534,16 @@ export const Navbar: React.FC = () => {
         </Link>
       </div>
     </nav>
+
+      {error && (
+        <div
+          role="alert"
+          aria-live="assertive"
+          className="fixed top-20 left-1/2 z-50 w-[min(92vw,36rem)] -translate-x-1/2 rounded-lg border border-rose-300 bg-rose-50 px-4 py-3 text-sm text-rose-900 shadow-lg"
+        >
+          {error}
+        </div>
+      )}
 
       {/* R4 "Delete My Data" Confirmation Modal */}
       <DeleteDataModal

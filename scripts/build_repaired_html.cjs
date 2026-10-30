@@ -2976,18 +2976,16 @@ const html = `<!DOCTYPE html>
 
     async function loginWithGoogle() {
       if (!auth) {
-        alert("Firebase is loading or running in offline mode. Logging into Demo Student session.");
-        loginWithMock('standard');
+        alert("Google sign-in is unavailable because Firebase could not be initialized. Please try again later.");
         return;
       }
       try {
         const provider = new firebase.auth.GoogleAuthProvider();
-        const res = await auth.signInWithPopup(provider);
-        currentUser = res.user;
-        onAuthSuccess();
+        provider.setCustomParameters({ prompt: 'select_account' });
+        await auth.signInWithRedirect(provider);
       } catch (err) {
-        console.warn('[Firebase Auth] Pop-up cancelled or failed:', err);
-        loginWithMock('standard');
+        console.error('[Firebase Auth] Google redirect sign-in failed:', err);
+        alert('Google sign-in failed: ' + (err.message || err.code || 'Please try again.'));
       }
     }
 
@@ -3929,6 +3927,11 @@ const html = `<!DOCTYPE html>
     window.addEventListener('DOMContentLoaded', () => {
       // Connect Auth listener if Firebase available
       if (auth) {
+        auth.getRedirectResult().catch(err => {
+          console.error('[Firebase Auth] Redirect result failed:', err);
+          alert('Google sign-in failed: ' + (err.message || err.code || 'Please try again.'));
+        });
+
         auth.onAuthStateChanged(user => {
           if (user) {
             currentUser = user;

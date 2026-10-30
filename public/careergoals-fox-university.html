@@ -10,6 +10,16 @@
   />
   <meta name="theme-color" content="#164E3B" />
 
+  <!-- Canonical redirect to careergoals-296e4.firebaseapp.com to ensure 1st-party Google OAuth cookies -->
+  <script>
+    (function() {
+      if (window.location.hostname === 'careergoals-296e4.web.app') {
+        var target = 'https://careergoals-296e4.firebaseapp.com' + window.location.pathname + window.location.search + window.location.hash;
+        window.location.replace(target);
+      }
+    })();
+  </script>
+
   <!-- Google Fonts: Poppins (400, 500, 600, 700) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -4935,25 +4945,27 @@
 
     async function loginWithGoogle() {
       if (!auth) {
-        alert("Firebase is loading or running in offline mode. Logging into Demo Student session.");
-        loginWithMock('standard');
+        alert("Google sign-in is unavailable because Firebase could not be initialized. Please try again later.");
         return;
       }
       const provider = new firebase.auth.GoogleAuthProvider();
       provider.setCustomParameters({ prompt: 'select_account' });
 
       try {
-        await auth.signInWithRedirect(provider);
-      } catch (err) {
-        console.warn('[Firebase Auth] Redirect failed, trying popup:', err);
-        try {
-          const res = await auth.signInWithPopup(provider);
+        const res = await auth.signInWithPopup(provider);
+        if (res && res.user) {
           currentUser = res.user;
+          await loadUserData();
           onAuthSuccess();
-        } catch (popupErr) {
-          alert('Google Sign-In failed: ' + popupErr.message);
-          loginWithMock('standard');
         }
+      } catch (err) {
+        if (err.code === 'auth/popup-blocked' || err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request') {
+          console.info('[Firebase Auth] Popup unavailable, using redirect flow...');
+          await auth.signInWithRedirect(provider);
+          return;
+        }
+        console.error('[Firebase Auth] Google sign-in failed:', err);
+        alert('Google sign-in failed: ' + (err.message || err.code || 'Please try again.'));
       }
     }
 
@@ -6514,7 +6526,10 @@ Return JSON matching schema: { directAnswer: string, blocks: [{ text, factKey }]
             currentUser = result.user;
             onAuthSuccess();
           }
-        }).catch(err => console.warn('[Auth] Redirect error:', err));
+        }).catch(err => {
+          console.error('[Firebase Auth] Redirect result failed:', err);
+          alert('Google sign-in failed: ' + (err.message || err.code || 'Please try again.'));
+        });
         auth.onAuthStateChanged(user => {
           if (user) {
             currentUser = user;

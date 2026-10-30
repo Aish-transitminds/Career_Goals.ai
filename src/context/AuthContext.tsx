@@ -54,6 +54,32 @@ googleProvider.setCustomParameters({ prompt: 'select_account' });
 
 const MOCK_STORAGE_KEY = 'abroadpath_mock_user';
 const MOCK_PROFILE_STORAGE_KEY = 'abroadpath_mock_profile';
+const GOOGLE_REDIRECT_PENDING_KEY = 'abroadpath_google_redirect_pending';
+
+const getGoogleSignInErrorMessage = (err: unknown): string => {
+  const code =
+    typeof err === 'object' && err !== null && 'code' in err && typeof err.code === 'string'
+      ? err.code
+      : '';
+
+  switch (code) {
+    case 'auth/unauthorized-domain':
+      return 'This website is not authorized for Google sign-in. Add its domain in Firebase Console under Authentication > Settings > Authorized domains.';
+    case 'auth/operation-not-allowed':
+      return 'Google sign-in is not enabled for this Firebase project. Enable the Google provider in Firebase Console > Authentication > Sign-in method.';
+    case 'auth/invalid-api-key':
+      return 'Firebase rejected the web API key. Check the Firebase web app configuration used for this deployment.';
+    case 'auth/network-request-failed':
+      return 'Google sign-in could not reach Firebase. Check your internet connection and try again.';
+    default:
+      return typeof err === 'object' &&
+        err !== null &&
+        'message' in err &&
+        typeof err.message === 'string'
+        ? err.message
+        : 'Google sign-in failed. Please try again.';
+  }
+};
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<AuthUser | null>(null);
@@ -67,10 +93,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const urlParams = new URLSearchParams(window.location.search);
     const forceMock = urlParams.get('mock_auth') === 'true';
     const envMock = import.meta.env.VITE_USE_MOCK_AUTH === 'true';
-    const placeholderApiKey =
-      !import.meta.env.VITE_FIREBASE_API_KEY ||
-      import.meta.env.VITE_FIREBASE_API_KEY.includes('placeholder');
-    return forceMock || envMock || placeholderApiKey;
+    return forceMock || envMock;
   }, []);
 
   // Fetch or refresh profile
@@ -98,7 +121,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Initialize listener & redirect result
   useEffect(() => {
-    // Check local storage for persistent mock session
+    // Restore a demo session without skipping Firebase's redirect result or auth listener.
     const savedMock = localStorage.getItem(MOCK_STORAGE_KEY);
     if (savedMock) {
       try {
@@ -109,7 +132,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setProfile(JSON.parse(savedProfile));
         }
         setLoading(false);
-        return;
       } catch {
         localStorage.removeItem(MOCK_STORAGE_KEY);
         localStorage.removeItem(MOCK_PROFILE_STORAGE_KEY);
@@ -120,12 +142,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     getRedirectResult(auth)
       .then(async (result) => {
         if (result?.user) {
+          sessionStorage.removeItem(GOOGLE_REDIRECT_PENDING_KEY);
           setUser(result.user);
           await fetchProfileForUser(result.user);
+        } else if (sessionStorage.getItem(GOOGLE_REDIRECT_PENDING_KEY) === 'true') {
+          sessionStorage.removeItem(GOOGLE_REDIRECT_PENDING_KEY);
+          setError(
+            'Google returned to the site, but Firebase did not sign you in. Check that Google is enabled and its Web client ID and secret are configured in Firebase Authentication.'
+          );
         }
       })
       .catch((err) => {
+        sessionStorage.removeItem(GOOGLE_REDIRECT_PENDING_KEY);
         console.warn('[Auth] Redirect sign-in result error:', err);
+        setError(getGoogleSignInErrorMessage(err));
+        setLoading(false);
       });
 
     // Firebase Auth State Listener
@@ -133,11 +164,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       auth,
       async (firebaseUser) => {
         if (firebaseUser) {
+          sessionStorage.removeItem(GOOGLE_REDIRECT_PENDING_KEY);
           setUser(firebaseUser);
           await fetchProfileForUser(firebaseUser);
-        } else if (!localStorage.getItem(MOCK_STORAGE_KEY)) {
-          setUser(null);
-          setProfile(null);
+        } else {
+          if (!localStorage.getItem(MOCK_STORAGE_KEY)) {
+            setUser(null);
+            setProfile(null);
+          }
         }
         setLoading(false);
       },
@@ -151,35 +185,38 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return () => unsubscribe();
   }, [isMockAuthEnabled]);
 
-  // Google Sign-In via full redirect (100% reliable, zero blank popups)
+  // Hybrid sign-in: attempt fast popup first; if blocked or closed, gracefully fallback to redirect
   const signInWithGoogle = async () => {
     setError(null);
     setLoading(true);
-
-    if (
-      isMockAuthEnabled &&
-      (!import.meta.env.VITE_FIREBASE_API_KEY ||
-        import.meta.env.VITE_FIREBASE_API_KEY.includes('placeholder'))
-    ) {
-      await signInWithMock('standard');
-      return;
-    }
+    localStorage.removeItem(MOCK_STORAGE_KEY);
+    localStorage.removeItem(MOCK_PROFILE_STORAGE_KEY);
 
     try {
-      await signInWithRedirect(auth, googleProvider);
-    } catch (redirectError: any) {
-      console.warn('[Auth] Redirect sign-in failed, trying popup fallback:', redirectError);
-      try {
-        const result = await signInWithPopup(auth, googleProvider);
+      const result = await signInWithPopup(auth, googleProvider);
+      if (result?.user) {
+        sessionStorage.removeItem(GOOGLE_REDIRECT_PENDING_KEY);
         setUser(result.user);
-        localStorage.removeItem(MOCK_STORAGE_KEY);
-        localStorage.removeItem(MOCK_PROFILE_STORAGE_KEY);
         await fetchProfileForUser(result.user);
-      } catch (popupError: any) {
-        setError(popupError.message || 'Google sign-in failed');
-      } finally {
-        setLoading(false);
+        return;
       }
+    } catch (popupErr: any) {
+      if (
+        popupErr?.code === 'auth/popup-blocked' ||
+        popupErr?.code === 'auth/popup-closed-by-user' ||
+        popupErr?.code === 'auth/cancelled-popup-request'
+      ) {
+        console.info('[Auth] Popup unavailable or dismissed, falling back to full-page redirect...');
+        sessionStorage.setItem(GOOGLE_REDIRECT_PENDING_KEY, 'true');
+        await signInWithRedirect(auth, googleProvider);
+        return;
+      }
+      console.error('[Auth] Google sign-in failed:', popupErr);
+      setError(getGoogleSignInErrorMessage(popupErr));
+      setLoading(false);
+      throw popupErr;
+    } finally {
+      setLoading(false);
     }
   };
 

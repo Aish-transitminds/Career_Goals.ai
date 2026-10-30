@@ -9,6 +9,16 @@
       content="CareerGoals guides your global education with verified requirements from official university sources, live change detection, application tracking, and rejection roadmaps."
     />
     <meta name="theme-color" content="#0f172a" />
+
+    <!-- Canonical redirect to careergoals-296e4.firebaseapp.com to ensure 1st-party Google OAuth cookies and prevent blank popup/redirect failures -->
+    <script>
+      (function() {
+        if (window.location.hostname === 'careergoals-296e4.web.app') {
+          var target = 'https://careergoals-296e4.firebaseapp.com' + window.location.pathname + window.location.search + window.location.hash;
+          window.location.replace(target);
+        }
+      })();
+    </script>
     
     <!-- Google Font: Poppins (Fox University Template typography) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

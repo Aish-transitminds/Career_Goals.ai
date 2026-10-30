@@ -21,30 +21,13 @@ import {
 } from 'lucide-react';
 
 export const LandingPage: React.FC = () => {
-  const { user, profile, signInWithGoogle, signInWithMock, loading } = useAuth();
+  const { user, profile, signInWithGoogle, signInWithMock, loading, error } = useAuth();
   const { universities } = useCatalog();
   const navigate = useNavigate();
 
   const [authError, setAuthError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [userApplications, setUserApplications] = useState<Application[]>([]);
-  const [tourStep, setTourStep] = useState<number | null>(null);
-
-  // Auto-launch bubble guide for fresh first-time users
-  useEffect(() => {
-    const hasSeen = localStorage.getItem('careergoals_bubble_tour_seen');
-    if (!hasSeen) {
-      const timer = setTimeout(() => {
-        setTourStep(0);
-      }, 850);
-      return () => clearTimeout(timer);
-    }
-  }, []);
-
-  const dismissTour = () => {
-    dismissTour();
-    localStorage.setItem('careergoals_bubble_tour_seen', 'true');
-  };
 
   // Fetch real tracker applications for logged in / mock user
   useEffect(() => {
@@ -125,6 +108,13 @@ export const LandingPage: React.FC = () => {
     return `${ratio}% Provenance`;
   }, [universities]);
 
+  // Auto-forward newly signed up users without a profile straight to onboarding
+  useEffect(() => {
+    if (!loading && user && !profile) {
+      navigate('/onboarding');
+    }
+  }, [user, profile, loading, navigate]);
+
   const handleSignIn = async () => {
     try {
       setAuthError(null);
@@ -136,8 +126,10 @@ export const LandingPage: React.FC = () => {
         navigate('/onboarding');
       }
     } catch (err: any) {
-      console.error('Sign in failed:', err);
-      setAuthError(err.message || 'Failed to sign in with Google. Please try again.');
+      if (err?.code !== 'auth/popup-closed-by-user') {
+        console.error('Sign in failed:', err);
+        setAuthError(err.message || 'Failed to sign in with Google. Please try again.');
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -285,7 +277,7 @@ export const LandingPage: React.FC = () => {
               )}
             </div>
 
-            {authError && (
+            {authError && !error && (
               <div className="p-2.5 bg-rose-500/20 border border-rose-400 text-rose-200 text-xs rounded-lg">
                 {authError}
               </div>
@@ -521,91 +513,6 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Bubble Guide for Features Tour */}
-      {tourStep !== null && (
-        <div 
-          className="fixed inset-0 z-50 bg-[#0B1026]/60 backdrop-blur-2xs flex items-center justify-center p-4 animate-fadeIn font-sans"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) dismissTour();
-          }}
-        >
-          <div className="relative bg-white rounded-2xl max-w-sm w-full p-5 shadow-2xl border border-slate-200 space-y-3 animate-scaleUp">
-            {/* Bubble arrow tip pointing toward featured elements */}
-            <div className="absolute -top-2 left-8 w-4 h-4 bg-white border-t border-l border-slate-200 transform rotate-45" />
-
-            <div className="flex items-center justify-between">
-              <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-[#B45309] uppercase tracking-wider">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#B45309]" />
-                Feature {tourStep + 1} of 5
-              </span>
-              <button
-                type="button"
-                onClick={dismissTour}
-                className="text-slate-400 hover:text-slate-600 text-lg leading-none"
-                title="Close guide"
-              >
-                &times;
-              </button>
-            </div>
-
-            <div>
-              <h3 className="text-base font-bold text-[#1B4D3E]">
-                {tourStep === 0 && 'Live Applications & Changes Feed'}
-                {tourStep === 1 && 'Deterministic Matches & Campus Scenes'}
-                {tourStep === 2 && 'Application Submission Tracker'}
-                {tourStep === 3 && 'Backward Milestone Planner'}
-                {tourStep === 4 && 'Atlas AI Guide & Receipts'}
-              </h3>
-              <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                {tourStep === 0 &&
-                  'The live auditor continuously checks university admissions gazettes across Germany, Ireland, and the UK, reporting revised criteria and updated deadlines.'}
-                {tourStep === 1 &&
-                  'Matches are ranked by deterministic mathematical scoring against actual faculty criteria. View campus scenes, fees in INR/EUR, and official portal links.'}
-                {tourStep === 2 &&
-                  'Track deadlines and receive automated follow-ups at +1, +3, and +7 days after submitting to stay ahead of institutional portal notifications.'}
-                {tourStep === 3 &&
-                  'Calculate preparation lead times backward from your target application deadline for SOP writing, tests, and visa filing.'}
-                {tourStep === 4 &&
-                  'Click the floating compass button at any time to open Atlas as a bottom sheet. Ask questions and get receipts with the date last checked.'}
-              </p>
-            </div>
-
-            <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-              <button
-                type="button"
-                onClick={() => setTourStep((prev) => (prev !== null && prev > 0 ? prev - 1 : 0))}
-                disabled={tourStep === 0}
-                className="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 disabled:opacity-40"
-              >
-                Back
-              </button>
-              <div className="flex gap-1.5">
-                {[0, 1, 2, 3, 4].map((i) => (
-                  <span
-                    key={i}
-                    className={`w-2 h-2 rounded-full transition-colors ${
-                      i === tourStep ? 'bg-[#deb062]' : 'bg-slate-200'
-                    }`}
-                  />
-                ))}
-              </div>
-              <button
-                type="button"
-                onClick={() => {
-                  if (tourStep < 4) {
-                    setTourStep((prev) => (prev !== null ? prev + 1 : null));
-                  } else {
-                    setTourStep(null);
-                  }
-                }}
-                className="px-4 py-1.5 rounded-lg text-xs font-semibold bg-[#1B4D3E] hover:bg-[#2E6B57] text-white shadow-xs"
-              >
-                {tourStep === 4 ? 'Finish Guide' : 'Next →'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
