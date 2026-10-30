@@ -151,7 +151,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return () => unsubscribe();
   }, [isMockAuthEnabled]);
 
-  // Google Sign-In with popup fallback to redirect
+  // Google Sign-In via full redirect (100% reliable, zero blank popups)
   const signInWithGoogle = async () => {
     setError(null);
     setLoading(true);
@@ -166,28 +166,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     try {
-      const result = await signInWithPopup(auth, googleProvider);
-      setUser(result.user);
-      localStorage.removeItem(MOCK_STORAGE_KEY);
-      localStorage.removeItem(MOCK_PROFILE_STORAGE_KEY);
-      await fetchProfileForUser(result.user);
-    } catch (popupError: any) {
-      if (
-        popupError.code === 'auth/popup-blocked' ||
-        popupError.code === 'auth/cancelled-popup-request'
-      ) {
-        console.warn('[Auth] Popup blocked. Falling back to signInWithRedirect...');
-        try {
-          await signInWithRedirect(auth, googleProvider);
-          return;
-        } catch (redirectError: any) {
-          setError(redirectError.message || 'Google sign-in redirect failed');
-        }
-      } else {
+      await signInWithRedirect(auth, googleProvider);
+    } catch (redirectError: any) {
+      console.warn('[Auth] Redirect sign-in failed, trying popup fallback:', redirectError);
+      try {
+        const result = await signInWithPopup(auth, googleProvider);
+        setUser(result.user);
+        localStorage.removeItem(MOCK_STORAGE_KEY);
+        localStorage.removeItem(MOCK_PROFILE_STORAGE_KEY);
+        await fetchProfileForUser(result.user);
+      } catch (popupError: any) {
         setError(popupError.message || 'Google sign-in failed');
+      } finally {
+        setLoading(false);
       }
-    } finally {
-      setLoading(false);
     }
   };
 

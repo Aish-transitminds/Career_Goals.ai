@@ -4944,14 +4944,21 @@
         loginWithMock('standard');
         return;
       }
+      const provider = new firebase.auth.GoogleAuthProvider();
+      provider.setCustomParameters({ prompt: 'select_account' });
+
       try {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        const res = await auth.signInWithPopup(provider);
-        currentUser = res.user;
-        onAuthSuccess();
+        await auth.signInWithRedirect(provider);
       } catch (err) {
-        console.warn('[Firebase Auth] Pop-up cancelled or failed:', err);
-        loginWithMock('standard');
+        console.warn('[Firebase Auth] Redirect failed, trying popup:', err);
+        try {
+          const res = await auth.signInWithPopup(provider);
+          currentUser = res.user;
+          onAuthSuccess();
+        } catch (popupErr) {
+          alert('Google Sign-In failed: ' + popupErr.message);
+          loginWithMock('standard');
+        }
       }
     }
 
@@ -6507,6 +6514,12 @@ Return JSON matching schema: { directAnswer: string, blocks: [{ text, factKey }]
     window.addEventListener('DOMContentLoaded', () => {
       // Connect Auth listener if Firebase available
       if (auth) {
+        auth.getRedirectResult().then(result => {
+          if (result && result.user) {
+            currentUser = result.user;
+            onAuthSuccess();
+          }
+        }).catch(err => console.warn('[Auth] Redirect error:', err));
         auth.onAuthStateChanged(user => {
           if (user) {
             currentUser = user;
