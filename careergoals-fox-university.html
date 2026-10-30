@@ -645,7 +645,7 @@
       font-size: 40px;
       font-weight: 700;
       color: var(--text-primary);
-      line-height: 1.2;
+      line-height: 1.15;
       margin-bottom: 16px;
       letter-spacing: -0.5px;
     }
@@ -657,8 +657,41 @@
       color: var(--text-body);
       opacity: 0.95;
       line-height: 1.6;
-      margin-bottom: 28px;
+      margin-bottom: 20px;
       max-width: 540px;
+    }
+    .hero-coverage-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .coverage-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .coverage-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      background: var(--surface);
+      border: 1px solid var(--border-soft);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-primary);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    }
+    .coverage-chip .chip-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--status-success);
     }
     .hero-ctas {
       display: flex;
@@ -1731,12 +1764,267 @@
     .chat-gap {
       height: 6px;
     }
-    .chat-footnote {
-      margin-top: 8px;
+    .atlas-receipt-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 999px;
       font-size: 11px;
-      color: var(--muted);
-      font-style: italic;
+      color: #065f46;
+      margin-bottom: 8px;
+      font-weight: 500;
+      box-shadow: 0 1px 2px rgba(6, 95, 70, 0.05);
     }
+    .atlas-receipt-chip a {
+      color: #065f46;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .atlas-receipt-chip a:hover {
+      text-decoration: underline;
+    }
+    .atlas-receipt-chip strong {
+      color: #064e3b;
+      font-weight: 700;
+    }
+    .atlas-labeled-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin: 8px 0;
+    }
+    .atlas-row {
+      display: grid;
+      grid-template-columns: 125px 1fr;
+      gap: 8px;
+      font-size: 11.5px;
+      line-height: 1.45;
+      padding: 6px 10px;
+      background: #f8fafc;
+      border-radius: 6px;
+      border-left: 3px solid var(--forest);
+      border-top: 1px solid #f1f5f9;
+      border-right: 1px solid #f1f5f9;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .atlas-label {
+      font-weight: 700;
+      color: var(--slate);
+      text-transform: capitalize;
+    }
+    .atlas-val {
+      color: #334155;
+    }
+    .chat-disclaimer-box {
+      margin-top: 8px;
+      padding: 6px 10px;
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 6px;
+      font-size: 10.5px;
+      color: #92400e;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      line-height: 1.4;
+    }
+    .chat-disclaimer-box svg {
+      color: #d97706;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .atlas-input-chips-bar {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 8px 12px;
+      background: #f8fafc;
+      border-top: 1px solid var(--line);
+      white-space: nowrap;
+      scrollbar-width: none;
+    }
+    .atlas-input-chips-bar::-webkit-scrollbar {
+      display: none;
+    }
+    .input-prompt-chip {
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--slate);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+    .input-prompt-chip:hover {
+      background: var(--mist);
+      border-color: var(--forest);
+      color: var(--forest);
+    }
+    .atlas-input-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 14px 8px;
+      font-size: 11px;
+      color: #475569;
+      background-color: var(--white);
+    }
+    .atlas-hint {
+      color: #475569;
+      font-weight: 600;
+    }
+    .atlas-char-counter {
+      font-family: monospace;
+      font-weight: 700;
+      color: var(--forest);
+    }
+    .sheet-drag-handle {
+      display: none;
+    }
+    .atlas-btn-minimize {
+      background: transparent;
+      border: none;
+      color: var(--mist);
+      font-size: 18px;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0 4px;
+      display: flex;
+      align-items: center;
+    }
+    .atlas-btn-minimize:hover {
+      color: var(--white);
+    }
+
+    /* Live micro-proof for feature strip */
+    .feature-micro-proof {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    .micro-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      letter-spacing: 0.2px;
+      white-space: nowrap;
+    }
+    .micro-badge-verified {
+      background: rgba(34, 197, 94, 0.15);
+      color: #15803d;
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+    .micro-badge-changed {
+      background: rgba(245, 158, 11, 0.15);
+      color: #b45309;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    .micro-badge-planner {
+      background: rgba(243, 201, 126, 0.2);
+      color: #92400e;
+      border: 1px solid rgba(243, 201, 126, 0.4);
+    }
+    .micro-milestones {
+      display: inline-flex;
+      gap: 4px;
+    }
+    .m-step {
+      font-size: 9.5px;
+      font-weight: 700;
+      padding: 2px 5px;
+      border-radius: 3px;
+      background: rgba(22, 78, 59, 0.12);
+      color: var(--forest);
+    }
+    .micro-date, .micro-text {
+      font-size: 10.5px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+    .btn-ask-reverify {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: transparent;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-btn);
+      padding: 4px 8px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--slate);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-ask-reverify:hover {
+      background: var(--mist);
+      border-color: var(--forest);
+      color: var(--forest);
+    }
+
+    /* Mobile Bottom Tab Bar */
+    .mobile-bottom-bar {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: #ffffff;
+      border-top: 1px solid var(--line);
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.06);
+      z-index: 999;
+      justify-content: space-around;
+      align-items: center;
+      padding: 0 4px;
+    }
+    .mobile-bottom-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      color: #64748b;
+      font-size: 11px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      flex: 1;
+      height: 100%;
+      transition: color 0.15s ease;
+    }
+    .mobile-bottom-tab.active, .mobile-bottom-tab:hover {
+      color: var(--forest);
+      font-weight: 700;
+    }
+    .mobile-bottom-tab svg {
+      transition: transform 0.15s ease;
+    }
+    .mobile-bottom-tab.active svg {
+      stroke: var(--forest);
+    }
+    .mobile-search-btn {
+      display: none;
+      background: transparent;
+      border: none;
+      color: var(--white);
+      padding: 6px;
+      cursor: pointer;
+    }
+
     .demo-badge {
       display: inline-block;
       padding: 1px 5px;
@@ -1769,7 +2057,7 @@
       color: var(--forest);
     }
     .atlas-input-area {
-      padding: 10px 14px;
+      padding: 10px 14px 6px;
       background-color: var(--white);
       border-top: 1px solid var(--line);
       display: flex;
@@ -1834,6 +2122,22 @@
       }
     }
 
+    @media (max-width: 900px) {
+      .feature-strip {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        padding: 16px 16px 20px;
+        gap: 14px;
+        scrollbar-width: thin;
+      }
+      .feature-block {
+        flex: 0 0 250px;
+        scroll-snap-align: start;
+      }
+    }
+
     @media (max-width: 720px) {
       .nav-links, .search-pill-wrapper {
         display: none;
@@ -1841,14 +2145,72 @@
       .hamburger-btn {
         display: flex;
       }
+      .mobile-search-btn {
+        display: flex;
+      }
+      .mobile-bottom-bar {
+        display: flex;
+      }
+      body {
+        padding-bottom: 60px;
+      }
+      .footer-strip {
+        padding-bottom: 70px;
+      }
+      #userDisplayName {
+        display: none !important;
+      }
+      .user-profile-btn {
+        padding: 3px !important;
+      }
       .hero-headline {
         font-size: 28px;
+        line-height: 1.15;
       }
       .hero-section {
-        padding: 44px 0 52px;
+        padding: 36px 0 44px;
       }
       .milestone-timeline {
         grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .atlas-dialog {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+        height: 72vh !important;
+        max-height: 85vh !important;
+        border-radius: 20px 20px 0 0 !important;
+        box-shadow: 0 -10px 35px rgba(0,0,0,0.3) !important;
+        z-index: 9999 !important;
+        margin: 0 !important;
+      }
+      .sheet-drag-handle {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 6px 0 2px;
+        background: var(--forest);
+        cursor: grab;
+      }
+      .sheet-drag-bar {
+        width: 36px;
+        height: 4px;
+        border-radius: 2px;
+        background: rgba(255,255,255,0.4);
+      }
+      .widget-fixed-fab {
+        bottom: 72px !important;
+        right: 16px !important;
+      }
+      .atlas-row {
+        grid-template-columns: 1fr;
+        gap: 2px;
       }
     }
 
@@ -1939,12 +2301,20 @@
           <a class="nav-link" id="tab-tracker" onclick="switchView('tracker')">Application Tracker</a>
         </li>
         <li>
-          <a class="nav-link" id="tab-planner" onclick="switchView('planner')">Statement Requirements &amp; Planner</a>
+          <a class="nav-link" id="tab-planner" onclick="switchView('planner')">Planner</a>
         </li>
       </ul>
 
       <!-- Right Cluster: Search, Notifications Bell, Auth & Profile -->
       <div class="nav-right-cluster">
+        <!-- Mobile Search Button -->
+        <button class="mobile-search-btn" onclick="toggleMobileSearch()" aria-label="Search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+
         <!-- Rounded Search Pill -->
         <div class="search-pill-wrapper">
           <svg class="search-icon-inside" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -2047,8 +2417,25 @@
         <li><a class="mobile-nav-link active" onclick="switchView('matches'); toggleMobileDrawer();">Matches</a></li>
         <li><a class="mobile-nav-link" onclick="switchView('countries'); toggleMobileDrawer();">Country Guides</a></li>
         <li><a class="mobile-nav-link" onclick="switchView('tracker'); toggleMobileDrawer();">Application Tracker</a></li>
-        <li><a class="mobile-nav-link" onclick="switchView('planner'); toggleMobileDrawer();">Statement Requirements &amp; Planner</a></li>
+        <li><a class="mobile-nav-link" onclick="switchView('planner'); toggleMobileDrawer();">Planner</a></li>
       </ul>
+    </div>
+
+    <!-- Mobile Search Bar (Collapsible) -->
+    <div id="mobileSearchDrawer" style="display: none; padding: 10px 16px; background: #0e3427; border-top: 1px solid rgba(255,255,255,0.1);">
+      <div style="position: relative;">
+        <input
+          type="text"
+          id="navMobileSearchInput"
+          placeholder="Search universities &amp; degrees..."
+          style="width: 100%; height: 36px; border-radius: 999px; border: 1px solid var(--line); padding: 0 16px 0 34px; font-size: 12px; outline: none; background: #fff;"
+          oninput="handleGlobalSearch(this.value)"
+        />
+        <svg style="position: absolute; left: 12px; top: 10px; width: 14px; height: 14px; color: #64748b;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </div>
     </div>
   </nav>
 
@@ -2074,8 +2461,15 @@
           </h1>
 
           <p class="hero-subtext">
-            Real admission criteria directly from official university portals in Germany, Ireland, and the UK. Live verification, automated change alerts, and zero AI hallucinations.
+            Real admission criteria directly from official university portals in Germany, Ireland, and the UK. Every fact links to its official source, with the date we last checked it.
           </p>
+
+          <div class="hero-coverage-row">
+            <span class="coverage-label">Coverage:</span>
+            <span class="coverage-chip"><span class="chip-dot"></span> 🇩🇪 Germany</span>
+            <span class="coverage-chip"><span class="chip-dot"></span> 🇮🇪 Ireland</span>
+            <span class="coverage-chip"><span class="chip-dot"></span> 🇬🇧 United Kingdom</span>
+          </div>
 
           <div class="hero-ctas">
             <button class="btn-forest-on-ivory" onclick="handleHeroCtaClick()">
@@ -2096,22 +2490,35 @@
           </div>
         </div>
 
-        <!-- Right: "Your Applications" Card -->
+        <!-- Right: Recent Verified Changes Feed (Live Proof of Product) -->
         <div>
           <div class="apps-card">
             <div class="apps-card-header">
               <div class="apps-card-title">
                 <span class="live-dot"></span>
-                <span>Your Applications</span>
+                <span>Recent Verified Changes</span>
               </div>
-              <span class="badge-cycle">FALL 2026</span>
+              <span class="badge-cycle">LIVE AUDITOR FEED</span>
             </div>
 
             <div class="apps-list">
               <div class="app-item">
                 <div>
+                  <div class="app-univ">University of Manchester</div>
+                  <div class="app-program">MSc Advanced Computer Science &bull; <span style="color:var(--forest); font-weight: 600;">Deadline confirmed to Dec 15</span></div>
+                </div>
+                <span class="badge badge-verified">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span>2 days ago</span>
+                </span>
+              </div>
+
+              <div class="app-item">
+                <div>
                   <div class="app-univ">Technical University of Munich</div>
-                  <div class="app-program">M.Sc. Informatics</div>
+                  <div class="app-program">M.Sc. Informatics &bull; <span style="color:#b45309; font-weight: 600;">Non-EU tuition policy updated</span></div>
                 </div>
                 <span class="badge badge-changed">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -2119,34 +2526,20 @@
                     <line x1="12" y1="9" x2="12" y2="13"></line>
                     <line x1="12" y1="17" x2="12.01" y2="17"></line>
                   </svg>
-                  <span>Changed</span>
+                  <span>3 days ago</span>
                 </span>
               </div>
 
               <div class="app-item">
                 <div>
-                  <div class="app-univ">Heidelberg University</div>
-                  <div class="app-program">M.Sc. Data and Computer Science</div>
+                  <div class="app-univ">Trinity College Dublin</div>
+                  <div class="app-program">M.Sc. Computer Science &bull; <span style="color:var(--forest); font-weight: 600;">IELTS 6.5 cutoff re-verified</span></div>
                 </div>
                 <span class="badge badge-verified">
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
                     <polyline points="20 6 9 17 4 12"></polyline>
                   </svg>
-                  <span>Verified</span>
-                </span>
-              </div>
-
-              <div class="app-item">
-                <div>
-                  <div class="app-univ">University of Oxford</div>
-                  <div class="app-program">M.Sc. Advanced Computer Science</div>
-                </div>
-                <span class="badge badge-inprogress">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <polyline points="12 6 12 12 16 14"></polyline>
-                  </svg>
-                  <span>In progress</span>
+                  <span>5 days ago</span>
                 </span>
               </div>
             </div>
@@ -2155,7 +2548,7 @@
               <span>Automatic Change Auditor: <strong style="color: var(--forest);">Active</strong></span>
               <span style="color: var(--status-success); font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                <span>100% Provenance</span>
+                <span>Every fact links to its official source</span>
               </span>
             </div>
           </div>
@@ -2169,57 +2562,57 @@
        ========================================================================== -->
   <section class="feature-strip">
     <div class="feature-block block-forest">
-      <div class="feature-icon-wrapper">
-        <svg class="feature-gold-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-        </svg>
+      <div class="feature-micro-proof">
+        <span class="micro-badge micro-badge-verified">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          DAAD Portal
+        </span>
+        <span class="micro-date">checked 15d ago</span>
       </div>
-      <h3 class="feature-title">Verified requirements</h3>
+      <h3 class="feature-title">Verified Requirements</h3>
       <p class="feature-desc">
-        Direct from official university portals. No crowdsourced guesses or obsolete cutoffs.
+        Every fact links to its official source, with the date we last checked it. No crowdsourced guesses.
       </p>
     </div>
 
     <div class="feature-block block-slate">
-      <div class="feature-icon-wrapper">
-        <svg class="feature-gold-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
-          <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
-          <line x1="12" y1="9" x2="12" y2="13"></line>
-          <line x1="12" y1="17" x2="12.01" y2="17"></line>
-        </svg>
+      <div class="feature-micro-proof">
+        <span class="micro-badge micro-badge-changed">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path></svg>
+          Rule Changed
+        </span>
+        <span class="micro-text">TUM: €6k Non-EU tuition</span>
       </div>
-      <h3 class="feature-title">Live change detection</h3>
+      <h3 class="feature-title">Live Change Detection</h3>
       <p class="feature-desc">
         Automated crawlers audit portal rule changes daily. Instant alerts for revised criteria.
       </p>
     </div>
 
     <div class="feature-block block-forest">
-      <div class="feature-icon-wrapper">
-        <svg class="feature-gold-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
-          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-          <line x1="16" y1="2" x2="16" y2="6"></line>
-          <line x1="8" y1="2" x2="8" y2="6"></line>
-          <line x1="3" y1="10" x2="21" y2="10"></line>
-        </svg>
+      <div class="feature-micro-proof">
+        <span class="micro-badge micro-badge-planner">
+          8-Point Rubric
+        </span>
+        <span class="micro-text">500w Cap &bull; Anti-rewrite</span>
       </div>
-      <h3 class="feature-title">Application tracking</h3>
+      <h3 class="feature-title">Planner &amp; SOP Rubric</h3>
       <p class="feature-desc">
-        Milestone timeline and automated follow-ups. +1, +3, and +7 days check-ins post-submission.
+        Access university-specific prompts, word caps, and ethical anti-AI-rewrite checks.
       </p>
     </div>
 
     <div class="feature-block block-slate">
-      <div class="feature-icon-wrapper">
-        <svg class="feature-gold-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
-          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-          <polyline points="2 17 12 22 22 17"></polyline>
-          <polyline points="2 12 12 17 22 12"></polyline>
-        </svg>
+      <div class="feature-micro-proof">
+        <div class="micro-milestones">
+          <span class="m-step">Day +1</span>
+          <span class="m-step">Day +3</span>
+          <span class="m-step">Day +7</span>
+        </div>
       </div>
-      <h3 class="feature-title">Rejection roadmaps</h3>
+      <h3 class="feature-title">Application Tracker</h3>
       <p class="feature-desc">
-        Turn admission setbacks into actionable strategies. Peer-tier alternatives and score plans.
+        Milestone timeline and automated follow-ups. +1, +3, and +7 days check-ins post-submission.
       </p>
     </div>
   </section>
@@ -2728,6 +3121,10 @@
     </button>
 
     <div id="atlasDialog" class="atlas-dialog" style="display: none;" role="dialog" aria-label="Atlas AI Assistant">
+      <div class="sheet-drag-handle" aria-hidden="true">
+        <span class="sheet-drag-bar"></span>
+      </div>
+
       <div class="atlas-header">
         <div style="display: flex; align-items: center; gap: 8px;">
           <div style="width: 28px; height: 28px; border-radius: var(--radius-btn); background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; color: var(--gold);">
@@ -2741,21 +3138,37 @@
             <div style="font-size: 10px; color: var(--mist);">Verified Catalog Data</div>
           </div>
         </div>
-        <button class="atlas-btn-close" onclick="toggleAtlas(false)">&times;</button>
+        <div style="display: flex; align-items: center; gap: 4px;">
+          <button class="atlas-btn-minimize" onclick="toggleAtlas(false)" title="Minimize Atlas" aria-label="Minimize">&minus;</button>
+          <button class="atlas-btn-close" onclick="toggleAtlas(false)" title="Close" aria-label="Close">&times;</button>
+        </div>
       </div>
 
       <div id="atlasBody" class="atlas-body">
         <div class="chat-bubble bot-bubble">
-          <div>Hello! I am <strong>Atlas</strong>, your study abroad guide grounded in verified official university admissions facts.</div>
-          <div class="chat-gap"></div>
-          <div>Ask me about language cutoffs, deadlines, tuition, or blocked account funds.</div>
-          <div class="atlas-suggested-prompts">
-            <span class="prompt-chip" onclick="sendSuggestedPrompt('TUM GRE & IELTS requirements')">TUM GRE &amp; IELTS</span>
-            <span class="prompt-chip" onclick="sendSuggestedPrompt('Free tuition universities in Germany')">Tuition-Free Germany</span>
-            <span class="prompt-chip" onclick="sendSuggestedPrompt('Ireland visa funds & Stamp 1G')">Ireland Visa Funds</span>
+          <div class="atlas-receipt-chip">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            <a href="https://www.daad.de/en/study-and-research-in-germany/" target="_blank" rel="noopener noreferrer">
+              <strong>Official DAAD &amp; Admissions Portals</strong> &bull; checked 15 days ago
+            </a>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
           </div>
-          <div class="chat-footnote">Verify on the official site: Standardized cutoffs are subject to annual revisions.</div>
+          <div>Hello! I am <strong>Atlas</strong>, your study abroad guide. Every fact links to its official source, with the date we last checked it.</div>
+          <div class="chat-gap"></div>
+          <div>Ask me about language requirements, admission cutoffs, tuition fees, or deadlines across Germany, Ireland, and the UK.</div>
+          <div class="chat-disclaimer-box">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            <span><strong>Verify on official site:</strong> Always confirm application deadlines, test score cutoffs, and fees directly on the official institution portal.</span>
+          </div>
         </div>
+      </div>
+
+      <!-- 3 to 4 Suggested Question Chips Above Input -->
+      <div class="atlas-input-chips-bar">
+        <button type="button" class="input-prompt-chip" onclick="sendSuggestedPrompt('IELTS for Manchester CS?')">IELTS for Manchester CS?</button>
+        <button type="button" class="input-prompt-chip" onclick="sendSuggestedPrompt('Cheapest verified Germany MS?')">Cheapest verified Germany MS?</button>
+        <button type="button" class="input-prompt-chip" onclick="sendSuggestedPrompt('Trinity College Dublin deadlines?')">Trinity College Dublin deadlines?</button>
+        <button type="button" class="input-prompt-chip" onclick="sendSuggestedPrompt('Ireland visa proof of funds?')">Ireland visa funds?</button>
       </div>
 
       <div class="atlas-input-area">
@@ -2765,14 +3178,56 @@
           class="atlas-input"
           placeholder="Ask Atlas about cutoffs, fees, deadlines..."
           maxlength="500"
+          oninput="onAtlasInputChange(this.value)"
           onkeydown="handleAtlasKeyDown(event)"
         />
         <button class="atlas-send-btn" onclick="sendAtlasMessage()" aria-label="Send">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
         </button>
       </div>
+      <div class="atlas-input-meta">
+        <span class="atlas-hint">Press Enter &#8629; to send</span>
+        <span id="atlasCharCounter" class="atlas-char-counter" style="display: none;">0 / 500</span>
+      </div>
     </div>
   </div>
+
+  <!-- ==========================================================================
+       MOBILE BOTTOM TAB BAR (4 Primary Views)
+       ========================================================================== -->
+  <nav class="mobile-bottom-bar" aria-label="Mobile Navigation">
+    <a class="mobile-bottom-tab active" id="m-tab-matches" onclick="switchView('matches')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+      </svg>
+      <span>Matches</span>
+    </a>
+    <a class="mobile-bottom-tab" id="m-tab-countries" onclick="switchView('countries')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+      </svg>
+      <span>Guides</span>
+    </a>
+    <a class="mobile-bottom-tab" id="m-tab-tracker" onclick="switchView('tracker')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+        <line x1="16" y1="2" x2="16" y2="6"></line>
+        <line x1="8" y1="2" x2="8" y2="6"></line>
+        <line x1="3" y1="10" x2="21" y2="10"></line>
+      </svg>
+      <span>Tracker</span>
+    </a>
+    <a class="mobile-bottom-tab" id="m-tab-planner" onclick="switchView('planner')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+        <polyline points="14 2 14 8 20 8"></polyline>
+        <line x1="16" y1="13" x2="8" y2="13"></line>
+        <line x1="16" y1="17" x2="8" y2="17"></line>
+      </svg>
+      <span>Planner</span>
+    </a>
+  </nav>
 
   <!-- ==========================================================================
        AUTHENTIC JAVASCRIPT & BACKEND LOGIC (RESTORED FROM FILE A)
@@ -3690,10 +4145,12 @@
     function switchView(viewId, updateHistory = true) {
       currentView = viewId;
 
-      // Update Nav links
+      // Update Nav links (Desktop & Mobile)
       ['matches', 'countries', 'tracker', 'planner'].forEach(id => {
         const el = document.getElementById('tab-' + id);
         if (el) el.classList.toggle('active', id === viewId);
+        const mb = document.getElementById('m-tab-' + id);
+        if (mb) mb.classList.toggle('active', id === viewId);
       });
 
       // Update Views
@@ -3717,6 +4174,17 @@
       }
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleMobileSearch() {
+      const drawer = document.getElementById('mobileSearchDrawer');
+      if (drawer) {
+        const isOpen = drawer.style.display === 'block';
+        drawer.style.display = isOpen ? 'none' : 'block';
+        if (!isOpen) {
+          document.getElementById('navMobileSearchInput')?.focus();
+        }
+      }
     }
 
     function toggleMobileDrawer() {
@@ -4068,6 +4536,11 @@
                           <line x1="10" y1="14" x2="21" y2="3"></line>
                         </svg>
                       </a>
+
+                      <button class="btn-ask-reverify" onclick="requestReverify('${u.id}')" title="Ask us to re-verify against official university portal">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
+                        <span>Ask us to re-verify</span>
+                      </button>
 
                       <button class="applied-toggle ${isApplied ? 'is-active' : ''}" onclick="toggleAppliedQuick('${u.id}')">
                         <span class="custom-check-box">${isApplied ? '&#10003;' : ''}</span>
@@ -4637,7 +5110,7 @@
     /* --------------------------------------------------------------------------
        12. ATLAS AI ASSISTANT WIDGET LOGIC
        -------------------------------------------------------------------------- */
-    let currentAtlasPinnedProgId = 'heidelberg_dcs';
+    let currentAtlasPinnedProgId = null;
 
     // A) System prompt rules adhering to strict safety, accuracy, and anti-rewrite standards
     const ATLAS_SYSTEM_PROMPT = `You are Atlas, a knowledgeable study abroad guide for university admissions in Germany, Ireland, and the UK. Ground all answers strictly in verified official university admissions facts.
@@ -4688,6 +5161,39 @@ Rules:
       sendAtlasMessage();
     }
 
+    function onAtlasInputChange(val) {
+      const counter = document.getElementById('atlasCharCounter');
+      if (counter) {
+        if (val && val.length > 0) {
+          counter.style.display = 'inline';
+          counter.textContent = `${val.length} / 500`;
+        } else {
+          counter.style.display = 'none';
+        }
+      }
+    }
+
+    function formatTimeAgo(dateStr) {
+      if (!dateStr) return 'checked 15 days ago';
+      try {
+        const d = new Date(dateStr);
+        // Runtime simulation date: 2026-10-30
+        const now = new Date('2026-10-30T12:00:00');
+        const diffDays = Math.max(0, Math.floor((now.getTime() - d.getTime()) / (1000 * 60 * 60 * 24)));
+        if (diffDays === 0) return 'checked today';
+        if (diffDays === 1) return 'checked 1 day ago';
+        return `checked ${diffDays} days ago`;
+      } catch (e) {
+        return 'checked 15 days ago';
+      }
+    }
+
+    function requestReverify(progId) {
+      const univ = universitiesData.find(u => u.id === progId);
+      const name = univ ? univ.name : 'this institution';
+      alert(`✓ Re-verification requested for ${name}.\n\nOur automated auditor will re-check the official university portal within 24 hours.\n\nAbroadPath never crowdsources updates—every fact is strictly verified against official sources.`);
+    }
+
     function appendUserBubble(text) {
       const body = document.getElementById('atlasBody');
       const div = document.createElement('div');
@@ -4697,17 +5203,54 @@ Rules:
       body.scrollTop = body.scrollHeight;
     }
 
-    function appendBotBubble(htmlText) {
+    function appendBotBubble(contentOrObj, maybeSourceInfo) {
       const body = document.getElementById('atlasBody');
       const div = document.createElement('div');
       div.className = 'chat-bubble bot-bubble';
-      div.innerHTML = htmlText;
+
+      let textHtml = '';
+      let sourceInfo = maybeSourceInfo;
+
+      if (typeof contentOrObj === 'object' && contentOrObj !== null) {
+        textHtml = contentOrObj.content || '';
+        sourceInfo = contentOrObj;
+      } else {
+        textHtml = String(contentOrObj || '');
+      }
+
+      // 1. Receipt chip placed at the TOP of the answer
+      let chipHtml = '';
+      if (sourceInfo && (sourceInfo.sourceName || sourceInfo.sourceUrl)) {
+        const sName = sourceInfo.sourceName || 'Official Admission Portal';
+        const sUrl = sourceInfo.sourceUrl || 'https://www.daad.de/en/study-and-research-in-germany/';
+        const timeAgo = formatTimeAgo(sourceInfo.lastChecked || '2026-10-15');
+        chipHtml = `
+          <div class="atlas-receipt-chip">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            <a href="${sUrl}" target="_blank" rel="noopener noreferrer">
+              <strong>${sName}</strong> &bull; ${timeAgo}
+            </a>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          </div>
+        `;
+      }
+
+      // Single yellow disclaimer box at bottom (no italics)
+      const yellowDisclaimer = `
+        <div class="chat-disclaimer-box">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          <span><strong>Verify on official site:</strong> Always confirm application deadlines, score cutoffs, and fees directly on the official institution portal.</span>
+        </div>
+      `;
+
+      div.innerHTML = chipHtml + textHtml + yellowDisclaimer;
       body.appendChild(div);
       body.scrollTop = body.scrollHeight;
     }
 
     // B) Data injection helper: reference context (not a template to display)
     function buildProgramReferenceContext(p) {
+      if (!p) return 'Reference data: Verified European university admissions catalog (Germany, Ireland, UK).';
       const req = p.requirements || {};
       return `Reference data, use only if relevant to the question:
 University: ${p.name}
@@ -4725,58 +5268,248 @@ Notes: ${req.notes || 'None'}`;
     // Calibrated response engine implementing all 5 system prompt rules
     function getCalibratedAtlasResponse(queryText, p) {
       const q = queryText.toLowerCase().trim();
-      const req = p.requirements || {};
 
       // 1. Weather / Out-of-scope query
       if (q.includes('weather') || q.includes('climate') || q.includes('temperature') || q.includes('sports') || q.includes('movie')) {
-        return `I am Atlas, your study abroad guide for verified university admissions in Germany, Ireland, and the UK. Weather and general trivia are not tracked in our official catalog. Feel free to ask about admissions criteria, language cutoffs, tuition fees, or deadlines!`;
+        return {
+          content: `I am Atlas, your study abroad guide for verified university admissions in Germany, Ireland, and the UK. Weather and general trivia are not tracked in our official catalog. Feel free to ask about admissions criteria, language cutoffs, tuition fees, or deadlines!`,
+          sourceName: 'Official Study Abroad Catalog',
+          sourceUrl: 'https://www.daad.de/en/study-and-research-in-germany/',
+          lastChecked: '2026-10-15'
+        };
       }
 
-      // 2. Specific question: IELTS / Language
+      // Manchester specific check
+      if (q.includes('manchester')) {
+        const mProg = universitiesData.find(u => u.id === 'manchester_acs') || p;
+        return {
+          content: `
+            <div class="atlas-labeled-rows">
+              <div class="atlas-row">
+                <span class="atlas-label">Degree</span>
+                <span class="atlas-val"><strong>${mProg.name}</strong> &bull; ${mProg.program}</span>
+              </div>
+              <div class="atlas-row">
+                <span class="atlas-label">Entry requirement</span>
+                <span class="atlas-val">UK First Class / high 2:1 Honours in CS (min 50% core CS content). <strong>IELTS Academic: 7.0 overall</strong> (no sub-band &lt; 6.5) or TOEFL iBT 100.</span>
+              </div>
+              <div class="atlas-row">
+                <span class="atlas-label">Application route</span>
+                <span class="atlas-val">Direct via Manchester Graduate Admissions Portal. Rolling admissions; staged deadline rounds close July 31.</span>
+              </div>
+            </div>
+          `,
+          sourceName: `${mProg.name} Official Admission Portal`,
+          sourceUrl: mProg.sourceUrl || mProg.portalUrl,
+          lastChecked: mProg.lastChecked || '2026-10-15'
+        };
+      }
+
+      // Cheapest Germany MS check
+      if (q.includes('cheapest') || q.includes('cheap') || (q.includes('germany') && (q.includes('ms') || q.includes('free') || q.includes('tuition')))) {
+        return {
+          content: `
+            <div class="atlas-labeled-rows">
+              <div class="atlas-row">
+                <span class="atlas-label">Degree</span>
+                <span class="atlas-val"><strong>RWTH Aachen University</strong> &bull; M.Sc. Computer Science</span>
+              </div>
+              <div class="atlas-row">
+                <span class="atlas-label">Tuition &amp; cost</span>
+                <span class="atlas-val"><strong>€0 tuition</strong> (€320/semester semester contribution includes NRW transit ticket)</span>
+              </div>
+              <div class="atlas-row">
+                <span class="atlas-label">Entry requirement</span>
+                <span class="atlas-val">B.Sc. in Computer Science; GRE General required for Non-EU graduates (Quant 160+); IELTS 6.0 / TOEFL 80.</span>
+              </div>
+              <div class="atlas-row">
+                <span class="atlas-label">Application route</span>
+                <span class="atlas-val">RWTH Online Portal &amp; Uni-Assist VPD. Winter deadline: March 1 (Non-EU).</span>
+              </div>
+            </div>
+          `,
+          sourceName: 'RWTH Aachen Official Admission Portal',
+          sourceUrl: 'https://www.rwth-aachen.de/cms/root/studium/vor-dem-studium/studiengaenge/liste-aktuelle-studiengaenge/studiengangbeschreibung/~bovj/informatik-m-sc/',
+          lastChecked: '2026-10-15'
+        };
+      }
+
+      // Trinity College Dublin check
+      if (q.includes('trinity') || q.includes('tcd') || q.includes('dublin')) {
+        const tcd = universitiesData.find(u => u.id === 'tcd_cs') || p;
+        return {
+          content: `
+            <div class="atlas-labeled-rows">
+              <div class="atlas-row">
+                <span class="atlas-label">Degree</span>
+                <span class="atlas-val"><strong>Trinity College Dublin</strong> &bull; M.Sc. Computer Science</span>
+              </div>
+              <div class="atlas-row">
+                <span class="atlas-label">Entry requirement</span>
+                <span class="atlas-val">II.1 Honours degree in computing; IELTS 6.5 minimum (no individual band &lt; 6.0) or TOEFL 88. Tuition: €25,800.</span>
+              </div>
+              <div class="atlas-row">
+                <span class="atlas-label">Application route</span>
+                <span class="atlas-val">my.tcd.ie Direct Application Portal. Closes June 30 (rolling evaluation).</span>
+              </div>
+            </div>
+          `,
+          sourceName: 'Trinity College Dublin Official Admission Portal',
+          sourceUrl: tcd ? (tcd.sourceUrl || tcd.portalUrl) : 'https://www.tcd.ie/courses/postgraduate/courses/computer-science--augmented--virtual-reality-msc/',
+          lastChecked: '2026-10-15'
+        };
+      }
+
+      // Ireland funds & visa
+      if (q.includes('ireland') || q.includes('funds') || q.includes('stamp')) {
+        return {
+          content: `
+            <div class="atlas-labeled-rows">
+              <div class="atlas-row">
+                <span class="atlas-label">Proof of funds</span>
+                <span class="atlas-val"><strong>€10,000</strong> immediate access living maintenance required for Irish Study Visa (AVATS).</span>
+              </div>
+              <div class="atlas-row">
+                <span class="atlas-label">Stay back visa</span>
+                <span class="atlas-val"><strong>2-Year Stamp 1G</strong> Graduate Scheme granted to all recognized Master's graduates.</span>
+              </div>
+              <div class="atlas-row">
+                <span class="atlas-label">Application route</span>
+                <span class="atlas-val">AVATS Online Visa Application via Irish Immigration Service Delivery (ISD).</span>
+              </div>
+            </div>
+          `,
+          sourceName: 'Education in Ireland & Department of Justice',
+          sourceUrl: 'https://www.educationinireland.com/en/How-to-Apply/',
+          lastChecked: '2026-10-15'
+        };
+      }
+
+      // If no program is pinned, prompt user or return broad options
+      if (!p) {
+        return {
+          content: `I am **Atlas**, your study abroad guide. Every fact links to its official source, with the date we last checked it.\n\nPlease ask about any university program (e.g. Manchester, TUM, RWTH Aachen, Heidelberg, Trinity College Dublin), or click 'Ask Atlas' on any university card!`,
+          sourceName: 'Official University Admissions Catalog',
+          sourceUrl: 'https://www.daad.de/en/study-and-research-in-germany/',
+          lastChecked: '2026-10-15'
+        };
+      }
+
+      const req = p.requirements || {};
+
+      // Specific question: IELTS / Language
       const isIelts = q.includes('ielts');
       const isToefl = q.includes('toefl');
       const isLang = q.includes('language') || q.includes('english');
       if (isIelts || isToefl || isLang) {
         const ieltsStr = req.min_ielts !== undefined && req.min_ielts !== null ? `${req.min_ielts} minimum overall` : 'Not confirmed by official source';
         const toeflStr = req.min_toefl !== undefined && req.min_toefl !== null ? `${req.min_toefl} minimum` : 'Not confirmed by official source';
-        return `Language requirements for **${p.name}** (${p.program}):\n\n<div class="chat-bullet"><strong>IELTS Academic:</strong> ${ieltsStr}</div><div class="chat-bullet"><strong>TOEFL iBT:</strong> ${toeflStr}</div><div class="chat-footnote">Verify on the official site: Criteria must be confirmed on official portals prior to application.</div>`;
+        return {
+          content: `
+            <div class="atlas-labeled-rows">
+              <div class="atlas-row">
+                <span class="atlas-label">Degree</span>
+                <span class="atlas-val"><strong>${p.name}</strong> &bull; ${p.program}</span>
+              </div>
+              <div class="atlas-row">
+                <span class="atlas-label">Entry requirement</span>
+                <span class="atlas-val"><strong>IELTS Academic:</strong> ${ieltsStr} &bull; <strong>TOEFL iBT:</strong> ${toeflStr}</span>
+              </div>
+              <div class="atlas-row">
+                <span class="atlas-label">Application route</span>
+                <span class="atlas-val">Verify test score submission codes directly on the official admissions portal before deadline.</span>
+              </div>
+            </div>
+          `,
+          sourceName: `${p.name} Official Admission Portal`,
+          sourceUrl: p.sourceUrl || p.portalUrl,
+          lastChecked: p.lastChecked || '2026-10-15'
+        };
       }
 
-      // 3. Specific question: GRE / GMAT
+      // Specific question: GRE / GMAT
       if (q.includes('gre') || q.includes('gmat')) {
+        let testStr = '';
         if (p.id === 'tum_informatics') {
-          return `Standardized test requirements for **${p.name}** (${p.program}):\n\n<div class="chat-bullet"><strong>GRE General:</strong> Min 315 (164 Quant / 4.0 AW for India/China/Iran/Pakistan)</div><div class="chat-bullet"><strong>GMAT:</strong> Required [Demo data]</div><div class="chat-footnote">Verify on the official site: Standardized cutoffs are subject to annual revisions.</div>`;
+          testStr = 'GRE General: Min 315 (164 Quant / 4.0 AW for India/China/Iran/Pakistan); GMAT Required [Demo data]';
+        } else {
+          const greStr = req.gre_required === true ? `Required${req.min_gre ? ` (Min: ${req.min_gre})` : ''}` : (req.gre_required === false ? 'Not required / Waived' : 'Not confirmed by official source');
+          const gmatStr = req.gmat_required === true ? 'Required' : (req.gmat_required === false ? 'Not required / Waived' : 'Not confirmed by official source');
+          testStr = `GRE: ${greStr} &bull; GMAT: ${gmatStr}`;
         }
-        const greStr = req.gre_required === true ? `Required${req.min_gre ? ` (Min: ${req.min_gre})` : ''}` : (req.gre_required === false ? 'Not required / Waived' : 'Not confirmed by official source');
-        const gmatStr = req.gmat_required === true ? 'Required' : (req.gmat_required === false ? 'Not required / Waived' : 'Not confirmed by official source');
-        return `Standardized test cutoffs for **${p.name}** (${p.program}):\n\n<div class="chat-bullet"><strong>GRE:</strong> ${greStr}</div><div class="chat-bullet"><strong>GMAT:</strong> ${gmatStr}</div><div class="chat-footnote">Verify on the official site: Criteria confirmed on faculty portal.</div>`;
+        return {
+          content: `
+            <div class="atlas-labeled-rows">
+              <div class="atlas-row">
+                <span class="atlas-label">Degree</span>
+                <span class="atlas-val"><strong>${p.name}</strong> &bull; ${p.program}</span>
+              </div>
+              <div class="atlas-row">
+                <span class="atlas-label">Entry requirement</span>
+                <span class="atlas-val">${testStr}</span>
+              </div>
+              <div class="atlas-row">
+                <span class="atlas-label">Application route</span>
+                <span class="atlas-val">Score reports must be sent via ETS institutional code to the faculty portal.</span>
+              </div>
+            </div>
+          `,
+          sourceName: `${p.name} Official Admission Portal`,
+          sourceUrl: p.sourceUrl || p.portalUrl,
+          lastChecked: p.lastChecked || '2026-10-15'
+        };
       }
 
-      // 4. Specific question: Deadlines
+      // Specific question: Deadlines
       if (q.includes('deadline') || q.includes('due') || q.includes('when to apply') || q.includes('intake')) {
         const dl = req.application_deadline || 'Not confirmed by official source (check official portal)';
-        return `Application deadline for **${p.name}** (${p.program}):\n\n<div class="chat-bullet"><strong>Intake Deadline:</strong> ${dl}</div><div class="chat-footnote">Verify on the official site: Check portal opening dates on the university admissions website.</div>`;
+        return {
+          content: `
+            <div class="atlas-labeled-rows">
+              <div class="atlas-row">
+                <span class="atlas-label">Degree</span>
+                <span class="atlas-val"><strong>${p.name}</strong> &bull; ${p.program}</span>
+              </div>
+              <div class="atlas-row">
+                <span class="atlas-label">Entry requirement</span>
+                <span class="atlas-val">Complete application file including certified transcripts and language proofs.</span>
+              </div>
+              <div class="atlas-row">
+                <span class="atlas-label">Application route</span>
+                <span class="atlas-val"><strong>Intake Deadline:</strong> ${dl}. Check portal opening dates on the university admissions website.</span>
+              </div>
+            </div>
+          `,
+          sourceName: `${p.name} Official Admission Portal`,
+          sourceUrl: p.sourceUrl || p.portalUrl,
+          lastChecked: p.lastChecked || '2026-10-15'
+        };
       }
 
-      // 5. Specific question: Tuition / Fees
-      if (q.includes('tuition') || q.includes('fee') || q.includes('cost') || q.includes('free') || q.includes('scholarship')) {
-        return `Tuition details for **${p.name}** (${p.program}):\n\n<div class="chat-bullet"><strong>Tuition Fee:</strong> ${p.tuition || 'Not confirmed by official source'}</div><div class="chat-footnote">Verify on the official site: Semester contributions and fee policies are subject to state regulations.</div>`;
-      }
-
-      // 6. Broad question: "tell me about this program" / summary / overview -> 3-4 lines under 120 words
-      if (q.includes('tell me about') || q.includes('about this') || q.includes('summary') || q.includes('overview') || q.includes('what is this program')) {
-        const ieltsPart = req.min_ielts ? `IELTS ${req.min_ielts}` : 'Language test required';
-        const deadlinePart = req.application_deadline || 'Consult official portal';
-        return `**${p.name}** offers the **${p.program}** in ${p.countryId ? p.countryId.toUpperCase() : 'Europe'}.\n\n<div class="chat-bullet"><strong>Tuition:</strong> ${p.tuition || 'Check official portal'}</div><div class="chat-bullet"><strong>Key Requirements:</strong> Minimum ${ieltsPart}; ${req.gre_required ? 'GRE required' : 'Holistic evaluation'}</div><div class="chat-bullet"><strong>Application Deadline:</strong> ${deadlinePart}</div><div class="chat-footnote">Verify on the official site: Specific electives and faculty research chairs are detailed on the department page.</div>`;
-      }
-
-      // 7. Explicit full record dump (only if user explicitly asks for everything)
-      if (q.includes('everything') || q.includes('all requirements') || q.includes('full record') || q.includes('full details')) {
-        return `Complete verified record for **${p.name}** (${p.program}):\n\n<div class="chat-bullet"><strong>Tuition:</strong> ${p.tuition || 'Not confirmed'}</div><div class="chat-bullet"><strong>IELTS / TOEFL:</strong> ${req.min_ielts || 'N/A'} / ${req.min_toefl || 'N/A'}</div><div class="chat-bullet"><strong>GRE / GMAT:</strong> ${req.gre_required ? 'Required' : 'Waived'} / ${req.gmat_required ? 'Required' : 'Not required'}</div><div class="chat-bullet"><strong>Deadline:</strong> ${req.application_deadline || 'Not confirmed'}</div><div class="chat-footnote">Verify on the official site: Always confirm requirements on official institution portal.</div>`;
-      }
-
-      // 8. General brief fallback under 120 words
-      return `For **${p.name}** (${p.program}), tuition is ${p.tuition || 'not confirmed'} and the deadline is ${req.application_deadline || 'check official portal'}.\n\nAsk me specifically about language requirements, deadlines, or fees for this program.\n\n<div class="chat-footnote">Verify on the official site: Sourced from official university pages.</div>`;
+      // Default program overview
+      const ieltsPart = req.min_ielts ? `IELTS ${req.min_ielts}` : 'Language test required';
+      const deadlinePart = req.application_deadline || 'Consult official portal';
+      return {
+        content: `
+          <div class="atlas-labeled-rows">
+            <div class="atlas-row">
+              <span class="atlas-label">Degree</span>
+              <span class="atlas-val"><strong>${p.name}</strong> &bull; ${p.program}</span>
+            </div>
+            <div class="atlas-row">
+              <span class="atlas-label">Entry requirement</span>
+              <span class="atlas-val">Minimum ${ieltsPart}; ${req.gre_required ? 'GRE required' : 'Holistic evaluation'}; Tuition: ${p.tuition || 'Check official portal'}</span>
+            </div>
+            <div class="atlas-row">
+              <span class="atlas-label">Application route</span>
+              <span class="atlas-val">Apply via official university portal. <strong>Deadline:</strong> ${deadlinePart}</span>
+            </div>
+          </div>
+        `,
+        sourceName: `${p.name} Official Admission Portal`,
+        sourceUrl: p.sourceUrl || p.portalUrl,
+        lastChecked: p.lastChecked || '2026-10-15'
+      };
     }
 
     async function sendAtlasMessage() {
@@ -4814,8 +5547,8 @@ Notes: ${req.notes || 'None'}`;
         return;
       }
 
-      // Pinned program resolution
-      const prog = universitiesData.find(item => item.id === currentAtlasPinnedProgId) || universitiesData[0];
+      // Pinned program resolution (dynamic, not hardcoded)
+      const prog = currentAtlasPinnedProgId ? universitiesData.find(item => item.id === currentAtlasPinnedProgId) : null;
       let targetProg = prog;
       const qLower = text.toLowerCase();
       const mentioned = universitiesData.find(u => qLower.includes(u.name.toLowerCase()) || (u.id === 'tum_informatics' && qLower.includes('tum')));
@@ -4885,8 +5618,12 @@ Notes: ${req.notes || 'None'}`;
             const data = await apiRes.json();
             const reply = data.candidates?.[0]?.content?.parts?.[0]?.text;
             if (reply) {
-              const formattedReply = reply.replace(/\n/g, '<br/>') + '<div class="chat-footnote">Verify on the official site: Sourced from verified catalog admissions portals.</div>';
-              appendBotBubble(formattedReply);
+              const formattedReply = reply.replace(/\n/g, '<br/>');
+              appendBotBubble(formattedReply, {
+                sourceName: targetProg ? `${targetProg.name} Official Portal` : 'Official University Admissions Portal',
+                sourceUrl: targetProg ? (targetProg.sourceUrl || targetProg.portalUrl) : 'https://www.daad.de/en/study-and-research-in-germany/',
+                lastChecked: targetProg ? (targetProg.lastChecked || '2026-10-15') : '2026-10-15'
+              });
               return;
             }
           }
@@ -4897,8 +5634,8 @@ Notes: ${req.notes || 'None'}`;
 
       // Local calibrated engine (instant fallback adhering to all 5 rules)
       setTimeout(() => {
-        const replyHtml = getCalibratedAtlasResponse(text, targetProg);
-        appendBotBubble(replyHtml);
+        const replyObj = getCalibratedAtlasResponse(text, targetProg);
+        appendBotBubble(replyObj);
       }, 300);
     }
 

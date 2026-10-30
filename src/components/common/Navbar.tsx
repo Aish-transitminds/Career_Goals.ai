@@ -21,6 +21,9 @@ import {
   ArrowRight,
   Search,
   GraduationCap,
+  BookOpen,
+  FileText,
+  Compass,
 } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
@@ -41,7 +44,7 @@ export const Navbar: React.FC = () => {
     { name: 'Matches', path: '/matches' },
     { name: 'Country Guides', path: '/countries' },
     { name: 'Application Tracker', path: '/tracker' },
-    { name: 'Statement Requirements & Planner', path: '/letter-helper' },
+    { name: 'Planner', path: '/letter-helper' },
   ];
 
   const isActive = (path: string) => {
@@ -245,7 +248,7 @@ export const Navbar: React.FC = () => {
                           {(user.displayName || 'U').charAt(0).toUpperCase()}
                         </div>
                       )}
-                      <span className="font-medium text-white max-w-[100px] 2xl:max-w-none truncate">
+                      <span className="hidden sm:inline font-medium text-white max-w-[100px] 2xl:max-w-none truncate">
                         {user.displayName || 'Student'}
                       </span>
                     </button>
@@ -462,7 +465,46 @@ export const Navbar: React.FC = () => {
           </div>
         )}
 
-      </nav>
+        {/* Mobile Bottom Tab Bar (4 items: Matches, Guides, Tracker, Planner) */}
+      <div className="xl:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0B1026] border-t border-[#1F2747] flex items-center justify-around py-2 px-1 text-[11px] text-slate-300">
+        <Link
+          to="/matches"
+          className={`flex flex-col items-center gap-1 py-1 px-2 rounded-lg transition-colors ${
+            isActive('/matches') ? 'text-[#FF5E00] font-bold' : 'hover:text-white'
+          }`}
+        >
+          <Compass className="w-4 h-4" />
+          <span>Matches</span>
+        </Link>
+        <Link
+          to="/countries"
+          className={`flex flex-col items-center gap-1 py-1 px-2 rounded-lg transition-colors ${
+            isActive('/countries') ? 'text-[#FF5E00] font-bold' : 'hover:text-white'
+          }`}
+        >
+          <BookOpen className="w-4 h-4" />
+          <span>Guides</span>
+        </Link>
+        <Link
+          to="/tracker"
+          className={`flex flex-col items-center gap-1 py-1 px-2 rounded-lg transition-colors ${
+            isActive('/tracker') ? 'text-[#FF5E00] font-bold' : 'hover:text-white'
+          }`}
+        >
+          <Clock className="w-4 h-4" />
+          <span>Tracker</span>
+        </Link>
+        <Link
+          to="/letter-helper"
+          className={`flex flex-col items-center gap-1 py-1 px-2 rounded-lg transition-colors ${
+            isActive('/letter-helper') ? 'text-[#FF5E00] font-bold' : 'hover:text-white'
+          }`}
+        >
+          <FileText className="w-4 h-4" />
+          <span>Planner</span>
+        </Link>
+      </div>
+    </nav>
 
       {/* R4 "Delete My Data" Confirmation Modal */}
       <DeleteDataModal

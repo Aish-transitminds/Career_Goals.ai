@@ -546,7 +546,7 @@ export class SparkFallbackEngine {
         tLines.push(`• GRE: ${u.requirements.gre_required === true ? `Required${u.requirements.min_gre ? ` (Min: ${u.requirements.min_gre})` : ''}` : (u.requirements.gre_required === false ? 'Not required / Waived' : 'Not confirmed by official source')}`);
         tLines.push(`• GMAT: ${u.requirements.gmat_required === true ? 'Required' : (u.requirements.gmat_required === false ? 'Not required / Waived' : 'Not confirmed by official source')}`);
       }
-      tLines.push('\nVerify on the official site: Always confirm test requirements on the official portal.');
+      // cut duplicate footnote
       return {
         content: tLines.join('\n'),
         sourceUrl: u.sourceUrl || u.portalUrl,
@@ -561,7 +561,7 @@ export class SparkFallbackEngine {
       const dLines: string[] = [];
       dLines.push(`Application deadline for **${u.name}** (${u.program}):`);
       dLines.push(`• Application Deadline: ${u.requirements.application_deadline || 'Not confirmed (check official portal)'}`);
-      dLines.push('\nVerify on the official site: Always confirm deadlines on the official university portal.');
+      // cut duplicate footnote
       return {
         content: dLines.join('\n'),
         sourceUrl: u.sourceUrl || u.portalUrl,
@@ -576,7 +576,7 @@ export class SparkFallbackEngine {
       const feeLines: string[] = [];
       feeLines.push(`Tuition fee policy for **${u.name}** (${u.program}):`);
       feeLines.push(`• Tuition Fee: ${u.tuition || 'Not confirmed by official source'}`);
-      feeLines.push('\nVerify on the official site: Tuition waivers and semester contributions are confirmed via ministerial gazette.');
+      // cut duplicate footnote
       return {
         content: feeLines.join('\n'),
         sourceUrl: u.sourceUrl || u.portalUrl,
@@ -589,7 +589,8 @@ export class SparkFallbackEngine {
 
     const lines: string[] = [];
 
-    lines.push(`Verified Admission Details for **${u.name}** (${u.program}):`);
+    lines.push(`Verified Admission Details for **${u.name}**:
+• **Degree**: ${u.name} – ${u.program}`);
 
     // Rule change alert
     if (u.ruleChanged || intent.isRuleChange) {
@@ -609,7 +610,7 @@ export class SparkFallbackEngine {
     }
 
     // Requirements section
-    lines.push('\n**Standardized Test & Language Cutoffs**:');
+    lines.push('• **Entry requirement**: Standardized tests & admissions criteria');
     lines.push(
       `• IELTS Academic: ${
         u.requirements.min_ielts !== null
@@ -658,7 +659,7 @@ export class SparkFallbackEngine {
     }
 
     // Deadlines & Tuition (with suspicious seed flag on €6,000 TUM tuition)
-    lines.push('\n**Tuition & Application Deadlines**:');
+    lines.push('• **Application route**: Institutional portal submission');
     if (u.id === 'tum_informatics') {
       lines.push(`• Tuition Fee: ${u.tuition || 'Not confirmed'} [Suspicious seed data: verify on official sources]`);
     } else {
@@ -674,9 +675,7 @@ export class SparkFallbackEngine {
       lines.push(`• Admission Notes: ${u.requirements.notes}`);
     }
 
-    lines.push(
-      '\nVerify on the official site: Application deadlines, minimum cutoffs, and tuition fees are subject to direct institution update. Always verify on the official university portal.'
-    );
+    // cut duplicate footnote
 
     return {
       content: lines.join('\n'),
@@ -708,9 +707,7 @@ export class SparkFallbackEngine {
       lines.push(`• ... and ${c.documents.length - 5} additional checklist documents.`);
     }
 
-    lines.push(
-      '\nVerify on the official site: Always confirm immigration and financial requirements directly on the official government/portal site.'
-    );
+    // cut duplicate footnote
 
     return {
       content: lines.join('\n'),
