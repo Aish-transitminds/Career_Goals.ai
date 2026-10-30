@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "careergoals-296e4",
     "public": "dist",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
