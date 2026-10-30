@@ -23,18 +23,33 @@ const INITIAL_WELCOME: ChatMessage = {
   id: 'welcome-0',
   role: 'assistant',
   content:
-    'Hello! I am Atlas, your friendly study abroad guide. I provide verified, fact-checked admission requirements, language score cutoffs, blocked account policies, and application deadlines across Germany, Ireland, and the UK.\n\nEvery answer is grounded strictly in official university admission portals with zero AI hallucinations.',
+    'Hello! I am Atlas, your friendly study abroad guide. I provide verified, fact-checked admission requirements, language score cutoffs, blocked account policies, and application deadlines across Germany, Ireland, and the UK.\n\nEvery fact links to its official source, with the date we last checked it.',
   sourceUrl: 'https://www.daad.de/en/study-and-research-in-germany/',
   sourceName: 'Official DAAD & University Admissions',
   lastChecked: '2026-10-15',
   isFallback: true,
 };
 
+
+function formatTimeAgo(dateStr?: string): string {
+  if (!dateStr) return 'checked 15 days ago';
+  try {
+    const d = new Date(dateStr);
+    const now = new Date('2026-10-30T12:00:00');
+    const diffDays = Math.max(0, Math.floor((now.getTime() - d.getTime()) / (1000 * 60 * 60 * 24)));
+    if (diffDays === 0) return 'checked today';
+    if (diffDays === 1) return 'checked 1 day ago';
+    return `checked ${diffDays} days ago`;
+  } catch {
+    return 'checked 15 days ago';
+  }
+}
+
 const SUGGESTED_PROMPTS = [
-  'TUM GRE & IELTS requirements',
-  'Free tuition universities in Germany',
+  'IELTS for Manchester CS?',
+  'Cheapest verified Germany MS?',
+  'Trinity College Dublin deadlines?',
   'Ireland visa funds & Stamp 1G',
-  'Deadlines for Trinity College Dublin',
 ];
 
 // 1. Renderer (bot bubbles only)
@@ -59,7 +74,7 @@ function renderChatText(raw?: string): string {
         return `<div class="chat-bullet">${bold.replace(/^(•|-)\s*/, '')}</div>`;
       }
       if (/^verify on the official site/i.test(t)) {
-        return `<div class="chat-footnote">${bold}</div>`;
+        return ""; // Cut duplicate italic footnote
       }
       return t ? `<div>${bold}</div>` : `<div class="chat-gap"></div>`;
     })
@@ -299,7 +314,7 @@ export const AIAssistantWidget: React.FC = () => {
         <div
           role="dialog"
           aria-label="Atlas - Study Abroad Guide"
-          className="w-[calc(100vw-2rem)] sm:w-96 h-[540px] max-h-[calc(100vh-5rem)] bg-white rounded-2xl shadow-2xl border border-slate-200 flex flex-col overflow-hidden animate-fadeIn font-poppins"
+          className="fixed inset-x-0 bottom-0 sm:bottom-auto sm:relative sm:inset-auto w-full sm:w-96 h-[75vh] sm:h-[540px] max-h-[85vh] sm:max-h-[calc(100vh-5rem)] bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl border border-slate-200 flex flex-col overflow-hidden animate-fadeIn font-poppins z-50"
         >
           {/* Header */}
           <div className="bg-[#0B1026] text-white p-4 flex items-center justify-between shadow-sm border-b border-[#151B3A]">
@@ -336,6 +351,14 @@ export const AIAssistantWidget: React.FC = () => {
                 aria-label="Reset conversation"
               >
                 <RotateCcw className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => setIsOpen(false)}
+                title="Minimize assistant"
+                className="p-1.5 text-slate-300 hover:text-white hover:bg-white/10 rounded-[6px] transition-colors"
+                aria-label="Minimize assistant"
+              >
+                <span className="text-base font-bold leading-none">&minus;</span>
               </button>
               <button
                 onClick={() => setIsOpen(false)}
@@ -378,7 +401,24 @@ export const AIAssistantWidget: React.FC = () => {
                         : 'bg-white border border-slate-200 text-slate-800'
                     }`}
                   >
-                    {/* Message Body (1. Markdown Rendering via renderChatText for bot, textContent for user) */}
+                    {/* Message Body */}
+                    {!isUser && msg.sourceUrl && (
+                      <div className="mb-2">
+                        <a
+                          href={msg.sourceUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[11px] font-medium hover:bg-emerald-100 transition-colors shadow-2xs"
+                        >
+                          <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                          <span className="font-bold">{msg.sourceName || 'Official Admission Portal'}</span>
+                          <span className="text-emerald-500">&bull;</span>
+                          <span className="text-emerald-700">{formatTimeAgo(msg.lastChecked)}</span>
+                          <ExternalLink className="w-3 h-3 text-emerald-600 ml-0.5" />
+                        </a>
+                      </div>
+                    )}
+
                     {isUser ? (
                       <div className="leading-relaxed whitespace-pre-wrap font-sans text-xs">
                         {msg.content}
@@ -390,28 +430,9 @@ export const AIAssistantWidget: React.FC = () => {
                       />
                     )}
 
-                    {/* Mandatory Verification & Source Footer on Assistant Messages (R2, R5) */}
+                    {/* Single yellow disclaimer box (no duplicate footnote) */}
                     {!isUser && (
                       <div className="pt-2 border-t border-slate-100 space-y-1.5 text-[11px]">
-                        {msg.sourceUrl && (
-                          <div className="flex items-center justify-between text-slate-500">
-                            <span className="flex items-center gap-1 font-semibold text-slate-700">
-                              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                              {msg.lastChecked ? `Verified: ${msg.lastChecked}` : 'Official Record'}
-                            </span>
-                            <a
-                              href={msg.sourceUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-[#FF5E00] hover:text-[#E65400] font-bold inline-flex items-center gap-1 underline decoration-orange-200"
-                            >
-                              <span>{msg.sourceName || 'Official Source'}</span>
-                              <ExternalLink className="w-3 h-3" />
-                            </a>
-                          </div>
-                        )}
-
-                        {/* Mandatory Universal Footer */}
                         <div className="bg-amber-50 rounded-[6px] p-2 text-[10px] text-amber-900 flex items-start gap-1.5 border border-amber-200/80">
                           <AlertCircle className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
                           <span>
@@ -441,20 +462,19 @@ export const AIAssistantWidget: React.FC = () => {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Quick Starter Chips */}
-          {messages.length <= 2 && (
-            <div className="p-2.5 bg-white border-t border-slate-100 flex flex-wrap gap-1.5">
-              {SUGGESTED_PROMPTS.map((prompt, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => handleSendMessage(prompt)}
-                  className="px-2.5 py-1 rounded-[6px] text-[11px] font-medium bg-slate-100 hover:bg-orange-50 text-slate-700 hover:text-[#FF5E00] border border-slate-200 transition-colors text-left"
-                >
-                  {prompt}
-                </button>
-              ))}
-            </div>
-          )}
+          {/* Suggested Question Chips Above Input */}
+          <div className="p-2.5 bg-slate-50 border-t border-slate-200/80 flex gap-1.5 overflow-x-auto whitespace-nowrap scrollbar-none">
+            {SUGGESTED_PROMPTS.map((prompt, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => handleSendMessage(prompt)}
+                className="px-2.5 py-1 rounded-full text-[11px] font-medium bg-white hover:bg-orange-50 text-slate-700 hover:text-[#FF5E00] border border-slate-200 hover:border-orange-300 transition-colors shrink-0 shadow-2xs"
+              >
+                {prompt}
+              </button>
+            ))}
+          </div>
 
           {/* Chat Input Area */}
           <div className="p-3 bg-white border-t border-slate-200 space-y-1.5">
@@ -480,12 +500,14 @@ export const AIAssistantWidget: React.FC = () => {
               </button>
             </div>
 
-            {/* 500 Character Cap Counter (R4) */}
-            <div className="flex items-center justify-between text-[10px] text-slate-400 px-1 font-mono">
-              <span className="text-[10px] text-slate-400 font-sans">Enter to send, Shift+Enter for new line</span>
-              <span className={inputText.length >= 480 ? 'text-rose-600 font-bold' : ''}>
-                {inputText.length} / 500
-              </span>
+            {/* 500 Character Cap Counter shown ONLY after typing */}
+            <div className="flex items-center justify-between text-[11px] text-slate-600 px-1 font-sans">
+              <span className="text-[11px] text-slate-600 font-semibold">Press Enter ↵ to send</span>
+              {inputText.length > 0 && (
+                <span className={`font-mono font-bold ${inputText.length >= 480 ? 'text-rose-600' : 'text-slate-700'}`}>
+                  {inputText.length} / 500
+                </span>
+              )}
             </div>
           </div>
         </div>

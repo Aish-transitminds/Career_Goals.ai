@@ -16,8 +16,6 @@ import {
   ShieldCheck,
   CheckCircle2,
   AlertTriangle,
-  Compass,
-  CalendarClock,
   ArrowRight,
   Lock,
 } from 'lucide-react';
@@ -178,15 +176,29 @@ export const LandingPage: React.FC = () => {
               <span>Verified Official Admissions</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-[1.18]">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-[1.15]">
               Navigate Global Admissions<br />
               <span className="text-[#deb062]">With Verified Facts</span>, Not<br />
               Guesses.
             </h1>
 
-            <p className="text-slate-200/90 text-sm sm:text-base leading-relaxed max-w-xl">
-              Official entry requirements derived exclusively from institutional portals in Germany, Ireland, and the United Kingdom. Live verification, automated change alerts, and zero AI hallucinations.
+                        <p className="text-slate-200/90 text-sm sm:text-base leading-relaxed max-w-xl">
+              Official entry requirements derived exclusively from institutional portals in Germany, Ireland, and the United Kingdom. Every fact links to its official source, with the date we last checked it.
             </p>
+
+            {/* Coverage Upfront */}
+            <div className="flex flex-wrap items-center gap-2 pt-1">
+              <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider">Coverage:</span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white text-xs font-medium border border-white/20">
+                <span className="w-2 h-2 rounded-full bg-emerald-400" /> 🇩🇪 Germany
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white text-xs font-medium border border-white/20">
+                <span className="w-2 h-2 rounded-full bg-emerald-400" /> 🇮🇪 Ireland
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white text-xs font-medium border border-white/20">
+                <span className="w-2 h-2 rounded-full bg-emerald-400" /> 🇬🇧 United Kingdom
+              </span>
+            </div>
 
             {/* CTAs: Gold Primary + Ghost CTA */}
             <div className="pt-2 flex flex-wrap items-center gap-3">
@@ -257,28 +269,36 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 4. Four-Block Feature Strip: Warm Ivory & Deep Green Pillar Cards */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Block 1 */}
-        <div className="bg-white rounded-xl p-6 border border-[#E6DFCF] shadow-xs hover:shadow-md hover:border-[#1B4D3E] transition-all duration-200 flex flex-col justify-between group">
+      {/* 4. Four-Block Feature Strip: Warm Ivory & Deep Green Pillar Cards with Live Micro-Proof Widgets */}
+      <section className="flex overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4 scrollbar-none snap-x">
+        {/* Block 1: Verified Requirements */}
+        <div className="min-w-[260px] sm:min-w-0 snap-start bg-white rounded-xl p-5 sm:p-6 border border-[#E6DFCF] shadow-xs hover:shadow-md hover:border-[#1B4D3E] transition-all duration-200 flex flex-col justify-between group">
           <div>
-            <div className="w-10 h-10 rounded-lg bg-[rgba(27,77,62,0.08)] text-[#1B4D3E] flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
-              <ShieldCheck className="w-5 h-5 text-[#1B4D3E]" />
+            <div className="flex items-center justify-between mb-3">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[11px] font-semibold">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                DAAD Portal
+              </span>
+              <span className="text-[10px] text-slate-500 font-medium">checked 15d ago</span>
             </div>
             <h3 className="font-semibold text-base mb-1 text-[#1B4D3E] transition-colors">
               Verified requirements
             </h3>
             <p className="text-xs text-[#5C6B63] leading-relaxed">
-              Direct from official university portals. No crowdsourced guesses or obsolete cutoffs.
+              Every fact links to its official source, with the date we last checked it. No crowdsourced guesses.
             </p>
           </div>
         </div>
 
-        {/* Block 2 */}
-        <div className="bg-white rounded-xl p-6 border border-[#E6DFCF] shadow-xs hover:shadow-md hover:border-[#1B4D3E] transition-all duration-200 flex flex-col justify-between group">
+        {/* Block 2: Live Change Detection */}
+        <div className="min-w-[260px] sm:min-w-0 snap-start bg-white rounded-xl p-5 sm:p-6 border border-[#E6DFCF] shadow-xs hover:shadow-md hover:border-[#1B4D3E] transition-all duration-200 flex flex-col justify-between group">
           <div>
-            <div className="w-10 h-10 rounded-lg bg-[rgba(27,77,62,0.08)] text-[#1B4D3E] flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
-              <AlertTriangle className="w-5 h-5 text-[#1B4D3E]" />
+            <div className="flex items-center justify-between mb-3">
+              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200 text-[11px] font-bold">
+                <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
+                Rule Changed
+              </span>
+              <span className="text-[10px] font-semibold text-slate-600">TUM: €6k Non-EU tuition</span>
             </div>
             <h3 className="font-semibold text-base mb-1 text-[#1B4D3E] transition-colors">
               Live change detection
@@ -289,32 +309,37 @@ export const LandingPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Block 3 */}
-        <div className="bg-white rounded-xl p-6 border border-[#E6DFCF] shadow-xs hover:shadow-md hover:border-[#1B4D3E] transition-all duration-200 flex flex-col justify-between group">
+        {/* Block 3: Planner & SOP Rubric */}
+        <div className="min-w-[260px] sm:min-w-0 snap-start bg-white rounded-xl p-5 sm:p-6 border border-[#E6DFCF] shadow-xs hover:shadow-md hover:border-[#1B4D3E] transition-all duration-200 flex flex-col justify-between group">
           <div>
-            <div className="w-10 h-10 rounded-lg bg-[rgba(27,77,62,0.08)] text-[#1B4D3E] flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
-              <CalendarClock className="w-5 h-5 text-[#1B4D3E]" />
+            <div className="flex items-center justify-between mb-3">
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-orange-50 text-[#FF5E00] border border-orange-200 text-[11px] font-bold">
+                8-Point Rubric
+              </span>
+              <span className="text-[10px] text-slate-500 font-medium">500w Cap • Anti-rewrite</span>
             </div>
             <h3 className="font-semibold text-base mb-1 text-[#1B4D3E] transition-colors">
-              Application tracking
+              Planner &amp; SOP rubric
             </h3>
             <p className="text-xs text-[#5C6B63] leading-relaxed">
-              Milestone timeline and automated follow-ups. +1, +3, and +7 days post-submission check-ins.
+              Access university-specific prompts, word caps, and ethical anti-AI-rewrite checks.
             </p>
           </div>
         </div>
 
-        {/* Block 4 */}
-        <div className="bg-white rounded-xl p-6 border border-[#E6DFCF] shadow-xs hover:shadow-md hover:border-[#1B4D3E] transition-all duration-200 flex flex-col justify-between group">
+        {/* Block 4: Application Tracking */}
+        <div className="min-w-[260px] sm:min-w-0 snap-start bg-white rounded-xl p-5 sm:p-6 border border-[#E6DFCF] shadow-xs hover:shadow-md hover:border-[#1B4D3E] transition-all duration-200 flex flex-col justify-between group">
           <div>
-            <div className="w-10 h-10 rounded-lg bg-[rgba(27,77,62,0.08)] text-[#1B4D3E] flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
-              <Compass className="w-5 h-5 text-[#1B4D3E]" />
+            <div className="flex items-center gap-1.5 mb-3">
+              <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold">Day +1</span>
+              <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold">Day +3</span>
+              <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold">Day +7</span>
             </div>
             <h3 className="font-semibold text-base mb-1 text-[#1B4D3E] transition-colors">
-              Rejection roadmaps
+              Application tracker
             </h3>
             <p className="text-xs text-[#5C6B63] leading-relaxed">
-              Turn admission setbacks into actionable strategies. Peer-tier alternatives and score improvement plans.
+              Milestone timeline and automated follow-ups. +1, +3, and +7 days check-ins post-submission.
             </p>
           </div>
         </div>
