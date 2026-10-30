@@ -6435,7 +6435,7 @@ Notes: ${req.notes || 'None'}`;
     }
 
     // ==============================================================================
-    // 30-SECOND BUBBLE GUIDE FEATURE TOUR IMPLEMENTATION
+    // 30-SECOND BUBBLE GUIDE FEATURE TOUR WITH DYNAMIC NAVIGATION & EXACT POSITIONING
     let currentTourStep = 0;
     const tourSteps = [
       {
@@ -6444,23 +6444,31 @@ Notes: ${req.notes || 'None'}`;
         desc: "Live auditor feed continuously tracking admission rule revisions, deadline updates, and fee policies across Germany, Ireland, and the UK.",
         target: ".apps-card",
         placement: "left",
-        action: () => { goToHomeTab(); }
+        action: () => {
+          goToHomeTab();
+        }
       },
       {
         tag: "2 of 5 • Match Cards",
         title: "Verified University Matches",
-        desc: "Browse programs ranked by deterministic fit tiers. Each card includes official requirements, tuition in EUR/INR, deadlines, and drawn campus scenes.",
+        desc: "Browse programs ranked by deterministic fit tiers. Each card includes official requirements, tuition in EUR/INR, deadlines, and high-res campus photography.",
         target: ".match-card",
         placement: "bottom",
-        action: () => { switchView('matches'); setFloatingActive('matches'); }
+        action: () => {
+          switchView('matches');
+          setFloatingActive('matches');
+        }
       },
       {
         tag: "3 of 5 • Submission Tracking",
-        title: "Application Tracker",
+        title: "Application Milestone Tracker",
         desc: "Log your university applications and receive automated follow-up check-ins at +1, +3, and +7 days post-submission.",
-        target: "#tab-tracker",
+        target: "#view-tracker .page-header",
         placement: "bottom",
-        action: () => { switchView('tracker'); setFloatingActive('tracker'); }
+        action: () => {
+          switchView('tracker');
+          setFloatingActive('tracker');
+        }
       },
       {
         tag: "4 of 5 • Preparation Timeline",
@@ -6468,7 +6476,10 @@ Notes: ${req.notes || 'None'}`;
         desc: "Enter your application deadline and intake start date. The planner automatically calculates recommended lead times for SOP, tests, and visa filing.",
         target: ".backward-calc-card",
         placement: "bottom",
-        action: () => { switchView('planner'); setFloatingActive('planner'); }
+        action: () => {
+          switchView('planner');
+          setFloatingActive('planner');
+        }
       },
       {
         tag: "5 of 5 • Fact Verification",
@@ -6476,7 +6487,9 @@ Notes: ${req.notes || 'None'}`;
         desc: "Click this floating compass button anytime to open Atlas as a bottom sheet. Ask questions and get receipts with the exact date we verified them.",
         target: "#atlasFab",
         placement: "top",
-        action: () => { toggleAtlas(false); }
+        action: () => {
+          toggleAtlas(false);
+        }
       }
     ];
 
@@ -6509,14 +6522,15 @@ Notes: ${req.notes || 'None'}`;
         nextBtn.textContent = currentTourStep === tourSteps.length - 1 ? 'Finish Tour' : 'Next →';
       }
 
+      // Execute view navigation
       if (typeof step.action === 'function') {
         step.action();
       }
 
-      // Position bubble next to step.target
+      // Allow view switch and render to complete, then scroll and position
       setTimeout(() => {
         positionTourBubble(step.target, step.placement);
-      }, 150);
+      }, 260);
     }
 
     function positionTourBubble(selector, preferredPlacement = 'bottom') {
@@ -6534,16 +6548,16 @@ Notes: ${req.notes || 'None'}`;
       setTimeout(() => {
         const rect = target.getBoundingClientRect();
         const bRect = bubble.getBoundingClientRect();
-        const pad = 12;
         const winW = window.innerWidth;
         const winH = window.innerHeight;
+        const pad = 14;
 
         let top = 0;
         let left = 0;
         let arrowDir = 'arrow-top';
 
         if (winW < 768) {
-          // Mobile: Place above or below target centered
+          // Mobile: Place above or below centered
           if (rect.bottom + bRect.height + 20 < winH) {
             top = rect.bottom + pad;
             arrowDir = 'arrow-top';
@@ -6551,9 +6565,9 @@ Notes: ${req.notes || 'None'}`;
             top = Math.max(pad, rect.top - bRect.height - pad);
             arrowDir = 'arrow-bottom';
           }
-          left = Math.max(pad, Math.min(winW - bRect.width - pad, (winW - bRect.width) / 2));
+          left = Math.max(12, Math.min(winW - bRect.width - 12, (winW - bRect.width) / 2));
         } else {
-          // Desktop placement
+          // Desktop positioning based on preferredPlacement
           if (preferredPlacement === 'left' && rect.left > bRect.width + 24) {
             top = Math.max(70, Math.min(winH - bRect.height - 20, rect.top + (rect.height / 2) - (bRect.height / 2)));
             left = rect.left - bRect.width - pad;
@@ -6567,7 +6581,7 @@ Notes: ${req.notes || 'None'}`;
             left = Math.max(20, Math.min(winW - bRect.width - 20, rect.left + (rect.width / 2) - (bRect.width / 2)));
             arrowDir = 'arrow-top';
           } else {
-            // Default top or bottom fallback
+            // Default placement fallback
             if (rect.bottom + bRect.height + 20 < winH) {
               top = rect.bottom + pad;
               arrowDir = 'arrow-top';
@@ -6582,10 +6596,22 @@ Notes: ${req.notes || 'None'}`;
         bubble.style.top = Math.round(top) + 'px';
         bubble.style.left = Math.round(left) + 'px';
 
+        // Precisely aim arrow caret at the center of the target element
         if (arrow) {
           arrow.className = 'tour-bubble-arrow ' + arrowDir;
+          if (arrowDir === 'arrow-top' || arrowDir === 'arrow-bottom') {
+            const targetCenterX = rect.left + (rect.width / 2);
+            const relativeArrowX = targetCenterX - left - 6;
+            arrow.style.left = Math.max(16, Math.min(bRect.width - 28, relativeArrowX)) + 'px';
+            arrow.style.top = '';
+          } else if (arrowDir === 'arrow-left' || arrowDir === 'arrow-right') {
+            const targetCenterY = rect.top + (rect.height / 2);
+            const relativeArrowY = targetCenterY - top - 6;
+            arrow.style.top = Math.max(16, Math.min(bRect.height - 28, relativeArrowY)) + 'px';
+            arrow.style.left = '';
+          }
         }
-      }, 250);
+      }, 260);
     }
 
     function nextTourStep() {
@@ -6609,6 +6635,32 @@ Notes: ${req.notes || 'None'}`;
       document.getElementById('appTourOverlay').style.display = 'none';
       document.querySelectorAll('.tour-spotlight-active').forEach(el => el.classList.remove('tour-spotlight-active'));
     }
+
+    // Keep bubble anchored when user resizes or scrolls
+    window.addEventListener('resize', () => {
+      const overlay = document.getElementById('appTourOverlay');
+      if (overlay && overlay.style.display !== 'none') {
+        const step = tourSteps[currentTourStep];
+        if (step) positionTourBubble(step.target, step.placement);
+      }
+    });
+
+    window.addEventListener('scroll', () => {
+      const overlay = document.getElementById('appTourOverlay');
+      if (overlay && overlay.style.display !== 'none') {
+        const step = tourSteps[currentTourStep];
+        if (step) {
+          const target = document.querySelector(step.target);
+          const bubble = document.getElementById('tourBubbleCard');
+          if (target && bubble) {
+            const rect = target.getBoundingClientRect();
+            if (rect.top >= 0 && rect.bottom <= window.innerHeight) {
+              positionTourBubble(step.target, step.placement);
+            }
+          }
+        }
+      }
+    }, { passive: true });
 
     // ==============================================================================
     // BACKWARD MILESTONE CALCULATOR FOR PLANNER
