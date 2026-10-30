@@ -2878,7 +2878,38 @@
         border-color: #232D58;
       }
     }
+
+    /* Flag Icons Styling & Alignment */
+    .flag-icon {
+      width: 16px;
+      height: 11px;
+      border-radius: 2px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+      display: inline-block;
+      vertical-align: middle;
+      flex-shrink: 0;
+    }
+
+    .coverage-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .scene-overlay-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .univ-program {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
   </style>
+
 
 </head>
 <body>
@@ -3117,7 +3148,10 @@
             <div class="apps-list">
               <div class="app-item">
                 <div>
-                  <div class="app-univ">University of Manchester</div>
+                  <div class="app-univ" style="display:flex; align-items:center; gap:6px;">
+                    <svg class="flag-icon" viewBox="0 0 640 480" width="15" height="10"><path fill="#012169" d="M0 0v480h640V0z"/><path stroke="#FFF" stroke-width="60" d="m0 0 640 480m0-480L0 480"/><path stroke="#C8102E" stroke-width="40" d="m0 0 640 480m0-480L0 480"/><path stroke="#FFF" stroke-width="100" d="M320 0v480M0 240h640"/><path stroke="#C8102E" stroke-width="60" d="M320 0v480M0 240h640"/></svg>
+                    <span>University of Manchester</span>
+                  </div>
                   <div class="app-program">MSc Advanced Computer Science &bull; <span style="color:var(--forest); font-weight: 600;">Deadline confirmed to Dec 15</span></div>
                 </div>
                 <span class="badge badge-verified">
@@ -3130,7 +3164,10 @@
 
               <div class="app-item">
                 <div>
-                  <div class="app-univ">Technical University of Munich</div>
+                  <div class="app-univ" style="display:flex; align-items:center; gap:6px;">
+                    <svg class="flag-icon" viewBox="0 0 640 480" width="15" height="10"><path fill="#000" d="M0 0h640v160H0z"/><path fill="#D00" d="M0 160h640v160H0z"/><path fill="#FFCE00" d="M0 320h640v160H0z"/></svg>
+                    <span>Technical University of Munich (TUM)</span>
+                  </div>
                   <div class="app-program">M.Sc. Informatics &bull; <span style="color:#b45309; font-weight: 600;">Non-EU tuition policy updated</span></div>
                 </div>
                 <span class="badge badge-changed">
@@ -3145,7 +3182,10 @@
 
               <div class="app-item">
                 <div>
-                  <div class="app-univ">Trinity College Dublin</div>
+                  <div class="app-univ" style="display:flex; align-items:center; gap:6px;">
+                    <svg class="flag-icon" viewBox="0 0 640 480" width="15" height="10"><path fill="#169B62" d="M0 0h213.3v480H0z"/><path fill="#FFF" d="M213.3 0h213.4v480H213.3z"/><path fill="#FF883E" d="M426.7 0H640v480H426.7z"/></svg>
+                    <span>Trinity College Dublin</span>
+                  </div>
                   <div class="app-program">M.Sc. Computer Science &bull; <span style="color:var(--forest); font-weight: 600;">IELTS 6.5 cutoff re-verified</span></div>
                 </div>
                 <span class="badge badge-verified">
@@ -5106,7 +5146,7 @@
                   <!-- Col 1: Identity -->
                   <div class="col-identity">
                     <h3 class="univ-name">${u.name}</h3>
-                    <p class="univ-program">${countryName} &bull; ${u.program}</p>
+                    <p class="univ-program">${getFlagSvg(u.countryId)} <span>${countryName}</span> &bull; <span>${u.program}</span></p>
                     <div class="univ-verified">
                       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
@@ -6435,6 +6475,32 @@ Notes: ${req.notes || 'None'}`;
     }
 
     // ==============================================================================
+    
+    function getFlagSvg(countryId) {
+      const c = (countryId || '').toLowerCase();
+      if (c.includes('germany') || c === 'de') {
+        return `<svg class="flag-icon" viewBox="0 0 640 480" width="16" height="11">
+          <path fill="#000" d="M0 0h640v160H0z"/>
+          <path fill="#D00" d="M0 160h640v160H0z"/>
+          <path fill="#FFCE00" d="M0 320h640v160H0z"/>
+        </svg>`;
+      }
+      if (c.includes('ireland') || c === 'ie') {
+        return `<svg class="flag-icon" viewBox="0 0 640 480" width="16" height="11">
+          <path fill="#169B62" d="M0 0h213.3v480H0z"/>
+          <path fill="#FFF" d="M213.3 0h213.4v480H213.3z"/>
+          <path fill="#FF883E" d="M426.7 0H640v480H426.7z"/>
+        </svg>`;
+      }
+      return `<svg class="flag-icon" viewBox="0 0 640 480" width="16" height="11">
+        <path fill="#012169" d="M0 0v480h640V0z"/>
+        <path stroke="#FFF" stroke-width="60" d="m0 0 640 480m0-480L0 480"/>
+        <path stroke="#C8102E" stroke-width="40" d="m0 0 640 480m0-480L0 480"/>
+        <path stroke="#FFF" stroke-width="100" d="M320 0v480M0 240h640"/>
+        <path stroke="#C8102E" stroke-width="60" d="M320 0v480M0 240h640"/>
+      </svg>`;
+    }
+
     // 30-SECOND BUBBLE GUIDE FEATURE TOUR WITH DYNAMIC NAVIGATION & EXACT POSITIONING
     let currentTourStep = 0;
     const tourSteps = [

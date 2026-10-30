@@ -203,17 +203,34 @@ export const LandingPage: React.FC = () => {
               Official entry requirements derived exclusively from institutional portals in Germany, Ireland, and the United Kingdom. Every fact links to its official source, with the date we last checked it.
             </p>
 
-            {/* Coverage Upfront */}
+            {/* Coverage Upfront with Crisp SVG Flag Icons */}
             <div className="flex flex-wrap items-center gap-2 pt-1">
               <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider">Coverage:</span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white text-xs font-medium border border-white/20">
-                <span className="w-2 h-2 rounded-full bg-emerald-400" /> 🇩🇪 Germany
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white text-xs font-medium border border-white/20 shadow-2xs">
+                <svg className="w-4 h-2.5 rounded-2xs shadow-xs" viewBox="0 0 640 480">
+                  <path fill="#000" d="M0 0h640v160H0z"/>
+                  <path fill="#D00" d="M0 160h640v160H0z"/>
+                  <path fill="#FFCE00" d="M0 320h640v160H0z"/>
+                </svg>
+                <span>Germany</span>
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white text-xs font-medium border border-white/20">
-                <span className="w-2 h-2 rounded-full bg-emerald-400" /> 🇮🇪 Ireland
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white text-xs font-medium border border-white/20 shadow-2xs">
+                <svg className="w-4 h-2.5 rounded-2xs shadow-xs" viewBox="0 0 640 480">
+                  <path fill="#169B62" d="M0 0h213.3v480H0z"/>
+                  <path fill="#FFF" d="M213.3 0h213.4v480H213.3z"/>
+                  <path fill="#FF883E" d="M426.7 0H640v480H426.7z"/>
+                </svg>
+                <span>Ireland</span>
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white text-xs font-medium border border-white/20">
-                <span className="w-2 h-2 rounded-full bg-emerald-400" /> 🇬🇧 United Kingdom
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white text-xs font-medium border border-white/20 shadow-2xs">
+                <svg className="w-4 h-2.5 rounded-2xs shadow-xs" viewBox="0 0 640 480">
+                  <path fill="#012169" d="M0 0v480h640V0z"/>
+                  <path stroke="#FFF" strokeWidth="60" d="m0 0 640 480m0-480L0 480"/>
+                  <path stroke="#C8102E" strokeWidth="40" d="m0 0 640 480m0-480L0 480"/>
+                  <path stroke="#FFF" strokeWidth="100" d="M320 0v480M0 240h640"/>
+                  <path stroke="#C8102E" strokeWidth="60" d="M320 0v480M0 240h640"/>
+                </svg>
+                <span>United Kingdom</span>
               </span>
             </div>
 

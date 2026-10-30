@@ -21,23 +21,53 @@ const ICONS = {
   ),
 }; 0
 
+
+const FLAGS = {
+  germany: (
+    <svg className="flag-icon" viewBox="0 0 640 480" width="15" height="10" style={{ borderRadius: '2px', verticalAlign: 'middle', display: 'inline-block', flexShrink: 0 }}>
+      <path fill="#000" d="M0 0h640v160H0z"/>
+      <path fill="#D00" d="M0 160h640v160H0z"/>
+      <path fill="#FFCE00" d="M0 320h640v160H0z"/>
+    </svg>
+  ),
+  ireland: (
+    <svg className="flag-icon" viewBox="0 0 640 480" width="15" height="10" style={{ borderRadius: '2px', verticalAlign: 'middle', display: 'inline-block', flexShrink: 0 }}>
+      <path fill="#169B62" d="M0 0h213.3v480H0z"/>
+      <path fill="#FFF" d="M213.3 0h213.4v480H213.3z"/>
+      <path fill="#FF883E" d="M426.7 0H640v480H426.7z"/>
+    </svg>
+  ),
+  uk: (
+    <svg className="flag-icon" viewBox="0 0 640 480" width="15" height="10" style={{ borderRadius: '2px', verticalAlign: 'middle', display: 'inline-block', flexShrink: 0 }}>
+      <path fill="#012169" d="M0 0v480h640V0z"/>
+      <path stroke="#FFF" strokeWidth="60" d="m0 0 640 480m0-480L0 480"/>
+      <path stroke="#C8102E" strokeWidth="40" d="m0 0 640 480m0-480L0 480"/>
+      <path stroke="#FFF" strokeWidth="100" d="M320 0v480M0 240h640"/>
+      <path stroke="#C8102E" strokeWidth="60" d="M320 0v480M0 240h640"/>
+    </svg>
+  ),
+};
+
 const LABELS = { changed: "Changed", verified: "Verified", progress: "In progress" };
 
 const RECENT_CHANGES_FEED = [
   {
     id: "manchester-change",
+    countryId: "uk",
     university: "University of Manchester",
     programme: "MSc Advanced Computer Science · Deadline updated, 2 days ago",
     status: "verified",
   },
   {
     id: "tum-change",
+    countryId: "germany",
     university: "Technical University of Munich",
     programme: "M.Sc. Informatics · Non-EU tuition policy updated, 3 days ago",
     status: "changed",
   },
   {
     id: "tcd-change",
+    countryId: "ireland",
     university: "Trinity College Dublin",
     programme: "M.Sc. Computer Science · IELTS 6.5 cutoff re-verified, 5 days ago",
     status: "verified",
@@ -67,7 +97,10 @@ export default function ApplicationStatusCard({
         {displayItems.map((it) => (
           <li className="atlas-row" key={it.id}>
             <div>
-              <h3>{it.university}</h3>
+              <h3 style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                {FLAGS[it.countryId]}
+                <span>{it.university}</span>
+              </h3>
               <p>{it.programme}</p>
             </div>
             <span className={`atlas-badge atlas-badge--${it.status}`}>
