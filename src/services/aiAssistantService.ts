@@ -1,62 +1,86 @@
 /**
- * AbroadPath AI - AI Assistant Service with Free Spark Plan Fallback
+ * AbroadPath AI - AI Assistant Service (Atlas Architecture v2)
  * File: src/services/aiAssistantService.ts
- * Authoritative Reference: ORIGINAL_REQUEST.md (R4, R5, §Tech Stack) & PROJECT.md
+ * Integrates AtlasService with retrieval-first tools, factKey validation, and profile awareness.
  */
 
-import { sparkFallbackEngine, AssistantResponse, ChatContextPayload } from './SparkFallbackEngine';
-import { University, Country } from '../types';
+import { atlasService } from './atlasService';
+import { atlasToolRegistry } from './atlasTools';
+import { AtlasStructuredResponse, AtlasAction } from '../types/atlas';
+import { University, Country, UserProfile } from '../types';
 
 export interface ChatMessage {
   id: string;
   role: 'user' | 'assistant';
   content: string;
+  structured?: AtlasStructuredResponse;
   sourceUrl?: string;
   sourceName?: string;
   lastChecked?: string;
   isFallback?: boolean;
   isDemo?: boolean;
   isSystem?: boolean;
+  followUps?: string[];
+  actions?: AtlasAction[];
+  usedProfile?: boolean;
 }
 
 export class AIAssistantService {
   /**
-   * Dispatches a user query to the AI assistant.
-   *
-   * Privacy Invariant (R4):
-   * Strictly NO student personal data (name, email, exam scores, budget, GPA, application notes)
-   * is transmitted. Only the student's question and verified public Firestore catalog facts are processed.
-   *
-   * Free Spark Plan Fallback (R5):
-   * On Firebase Spark free tier (or when Firebase AI Logic is unavailable), seamlessly runs
-   * deterministic keyword retrieval via SparkFallbackEngine with zero token cost.
+   * Dispatches a user query to Atlas v2 service.
    */
   public async askQuestion(
     prompt: string,
     catalog?: { universities: University[]; countries: Country[] },
-    context?: ChatContextPayload
-  ): Promise<AssistantResponse> {
-    // 1. Enforce strict 500-character input cap (R4)
+    context?: { id?: string; university?: string; programme?: string; profile?: UserProfile | null; useProfile?: boolean }
+  ): Promise<ChatMessage> {
     const sanitizedPrompt = (prompt || '').slice(0, 500).trim();
 
     if (catalog) {
-      sparkFallbackEngine.updateCatalog(catalog.universities, catalog.countries);
+      atlasToolRegistry.setCatalog(catalog.universities, catalog.countries);
     }
 
-    // 2. Dual-Engine Execution:
-    // Firebase AI Logic requires Blaze plan / App Check cloud proxy.
-    // On the free Spark plan, we instantly delegate to the deterministic keyword retrieval engine with context.
     try {
-      const response = sparkFallbackEngine.query(sanitizedPrompt, context);
-      return response;
-    } catch (err) {
-      console.warn('[AIAssistantService] Engine error, falling back to default:', err);
+      const structured = await atlasService.askAtlas(sanitizedPrompt, {
+        userProfile: context?.profile,
+        useProfile: context?.useProfile !== false,
+        contextProgramId: context?.id,
+      });
+
+      // Construct readable plain-text fallback content for legacy consumers
+      const textParts = [
+        structured.directAnswer || '',
+        ...structured.blocks.map((b) => `• ${b.text}`),
+      ].filter(Boolean);
+
       return {
+        id: `bot-${Date.now()}`,
+        role: 'assistant',
+        content: textParts.join('\n\n'),
+        structured,
+        sourceUrl: structured.primarySource?.url,
+        sourceName: structured.primarySource?.name,
+        lastChecked: structured.primarySource?.lastChecked,
+        followUps: structured.followUps,
+        actions: structured.actions,
+        usedProfile: structured.usedProfile,
+        isFallback: structured.status !== 'verified',
+      };
+    } catch (err) {
+      console.warn('[AIAssistantService] Atlas error, returning safe verified fallback:', err);
+      return {
+        id: `bot-${Date.now()}`,
+        role: 'assistant',
         content:
-          'AbroadPath AI provides verified study-abroad information for Germany, Ireland, and the UK. Please confirm specific questions regarding deadlines, tuition, or test cutoffs.',
+          'Atlas provides fact-checked study abroad admissions data for Germany, Ireland, and the UK. Please ask about application deadlines, language cutoffs (IELTS/TOEFL), or tuition fees.',
         sourceUrl: 'https://www.daad.de/en/study-and-research-in-germany/',
         sourceName: 'Official DAAD Portal',
         lastChecked: '2026-10-15',
+        followUps: [
+          'IELTS for Manchester CS?',
+          'Cheapest verified Germany MS?',
+          'Calculate education loan EMI',
+        ],
         isFallback: true,
       };
     }
