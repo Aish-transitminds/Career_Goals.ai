@@ -299,6 +299,38 @@ const CampusSceneBanner: React.FC<{ univId: string; univName: string; photoUrl?:
   );
 };
 
+
+const getCountryFlagSvg = (countryId: string) => {
+  const c = (countryId || '').toLowerCase();
+  if (c.includes('germany') || c === 'de') {
+    return (
+      <svg className="w-3.5 h-2.5 rounded-2xs shadow-xs inline-block align-middle mr-1 shrink-0" viewBox="0 0 640 480">
+        <path fill="#000" d="M0 0h640v160H0z"/>
+        <path fill="#D00" d="M0 160h640v160H0z"/>
+        <path fill="#FFCE00" d="M0 320h640v160H0z"/>
+      </svg>
+    );
+  }
+  if (c.includes('ireland') || c === 'ie') {
+    return (
+      <svg className="w-3.5 h-2.5 rounded-2xs shadow-xs inline-block align-middle mr-1 shrink-0" viewBox="0 0 640 480">
+        <path fill="#169B62" d="M0 0h213.3v480H0z"/>
+        <path fill="#FFF" d="M213.3 0h213.4v480H213.3z"/>
+        <path fill="#FF883E" d="M426.7 0H640v480H426.7z"/>
+      </svg>
+    );
+  }
+  return (
+    <svg className="w-3.5 h-2.5 rounded-2xs shadow-xs inline-block align-middle mr-1 shrink-0" viewBox="0 0 640 480">
+      <path fill="#012169" d="M0 0v480h640V0z"/>
+      <path stroke="#FFF" strokeWidth="60" d="m0 0 640 480m0-480L0 480"/>
+      <path stroke="#C8102E" strokeWidth="40" d="m0 0 640 480m0-480L0 480"/>
+      <path stroke="#FFF" strokeWidth="100" d="M320 0v480M0 240h640"/>
+      <path stroke="#C8102E" strokeWidth="60" d="M320 0v480M0 240h640"/>
+    </svg>
+  );
+};
+
 export const MatchesPage: React.FC = () => {
   const { user, profile } = useAuth();
   const { universities, loading: catalogLoading } = useCatalog();
@@ -484,10 +516,22 @@ export const MatchesPage: React.FC = () => {
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-xs font-semibold text-slate-500 uppercase mr-1">Country:</span>
             {[
-              { id: 'all', label: 'All Destinations' },
-              { id: 'germany', label: 'Germany' },
-              { id: 'ireland', label: 'Ireland' },
-              { id: 'uk', label: 'United Kingdom' },
+              { id: 'all', label: 'All Destinations', flag: null },
+              {
+                id: 'germany',
+                label: 'Germany',
+                flag: getCountryFlagSvg('germany'),
+              },
+              {
+                id: 'ireland',
+                label: 'Ireland',
+                flag: getCountryFlagSvg('ireland'),
+              },
+              {
+                id: 'uk',
+                label: 'United Kingdom',
+                flag: getCountryFlagSvg('uk'),
+              },
             ].map((tab) => {
               const isActive = selectedCountry === tab.id;
               const count = countryCounts[tab.id] || 0;
@@ -495,13 +539,15 @@ export const MatchesPage: React.FC = () => {
                 <button
                   key={tab.id}
                   onClick={() => setSelectedCountry(tab.id)}
-                  className={`px-3 py-1.5 rounded-[6px] text-xs font-semibold transition-colors ${
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] text-xs font-semibold transition-colors ${
                     isActive
                       ? 'bg-[#0B1026] text-[#FF5E00] border border-[#0B1026] shadow-xs'
                       : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                   }`}
                 >
-                  {tab.label} ({count})
+                  {tab.flag}
+                  <span>{tab.label}</span>
+                  <span className="text-[11px] opacity-75">({count})</span>
                 </button>
               );
             })}
@@ -643,7 +689,7 @@ export const MatchesPage: React.FC = () => {
                     <td className="py-3.5 px-4">
                       <div className="font-semibold text-sm text-[#0B1026]">{u.name}</div>
                       <div className="text-slate-500 text-xs">
-                        {formatCountryAndProgram(u.countryId, u.program)}
+                        <span className="inline-flex items-center gap-1">{getCountryFlagSvg(u.countryId)}<span>{formatCountryAndProgram(u.countryId, u.program)}</span></span>
                       </div>
                     </td>
                     <td className="py-3.5 px-4 whitespace-nowrap">

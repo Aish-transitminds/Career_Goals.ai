@@ -22,6 +22,33 @@ import {
   FileText,
 } from 'lucide-react';
 
+
+const CG_FLAGS: Record<string, React.ReactNode> = {
+  germany: (
+    <svg className="w-4 h-3 rounded-2xs shadow-xs inline-block align-middle shrink-0" viewBox="0 0 640 480">
+      <path fill="#000" d="M0 0h640v160H0z"/>
+      <path fill="#D00" d="M0 160h640v160H0z"/>
+      <path fill="#FFCE00" d="M0 320h640v160H0z"/>
+    </svg>
+  ),
+  ireland: (
+    <svg className="w-4 h-3 rounded-2xs shadow-xs inline-block align-middle shrink-0" viewBox="0 0 640 480">
+      <path fill="#169B62" d="M0 0h213.3v480H0z"/>
+      <path fill="#FFF" d="M213.3 0h213.4v480H213.3z"/>
+      <path fill="#FF883E" d="M426.7 0H640v480H426.7z"/>
+    </svg>
+  ),
+  uk: (
+    <svg className="w-4 h-3 rounded-2xs shadow-xs inline-block align-middle shrink-0" viewBox="0 0 640 480">
+      <path fill="#012169" d="M0 0v480h640V0z"/>
+      <path stroke="#FFF" strokeWidth="60" d="m0 0 640 480m0-480L0 480"/>
+      <path stroke="#C8102E" strokeWidth="40" d="m0 0 640 480m0-480L0 480"/>
+      <path stroke="#FFF" strokeWidth="100" d="M320 0v480M0 240h640"/>
+      <path stroke="#C8102E" strokeWidth="60" d="M320 0v480M0 240h640"/>
+    </svg>
+  ),
+};
+
 export const CountryGuidePage: React.FC = () => {
   const { id: paramCountryId } = useParams<{ id?: string }>();
   const [searchParams] = useSearchParams();
@@ -154,7 +181,7 @@ export const CountryGuidePage: React.FC = () => {
                   : 'bg-white text-[#2B3A33] hover:bg-[#F3EEE2] border border-[#E6DFCF]'
               }`}
             >
-              <span>{tab.flag}</span>
+              {CG_FLAGS[tab.id]}
               <span>{tab.name}</span>
             </button>
           );
@@ -214,7 +241,7 @@ export const CountryGuidePage: React.FC = () => {
                   sourceUrl={activeCountry.sourceUrl}
                 />
               </div>
-              <h2 className="text-2xl font-black text-[#1B4D3E]">{activeCountry.name}</h2>
+              <h2 className="text-2xl font-black text-[#1B4D3E] flex items-center gap-2">{CG_FLAGS[activeCountry.id]}<span>{activeCountry.name}</span></h2>
               <p className="text-xs text-[#5C6B63]">
                 Official destination guidelines for international degree-seeking students.
               </p>

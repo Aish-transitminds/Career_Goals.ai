@@ -967,6 +967,11 @@
       flex-wrap: wrap;
     }
     .tab-pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .tab-pill-btn {
       border: none;
       background: transparent;
       padding: 5px 12px;
@@ -3327,9 +3332,9 @@
               <span style="font-size: 11.5px; font-weight: 600; text-transform: uppercase;">Country:</span>
               <div class="tab-pills-group">
                 <button class="tab-pill-btn active" id="country-tab-all" onclick="setCountryFilter('all')">All Destinations (<span id="count-all">11</span>)</button>
-                <button class="tab-pill-btn" id="country-tab-germany" onclick="setCountryFilter('germany')">Germany (<span id="count-germany">4</span>)</button>
-                <button class="tab-pill-btn" id="country-tab-ireland" onclick="setCountryFilter('ireland')">Ireland (<span id="count-ireland">4</span>)</button>
-                <button class="tab-pill-btn" id="country-tab-uk" onclick="setCountryFilter('uk')">United Kingdom (<span id="count-uk">3</span>)</button>
+                <button class="tab-pill-btn" id="country-tab-germany" onclick="setCountryFilter('germany')"><svg class="flag-icon" viewBox="0 0 640 480" width="16" height="11"><path fill="#000" d="M0 0h640v160H0z"/><path fill="#D00" d="M0 160h640v160H0z"/><path fill="#FFCE00" d="M0 320h640v160H0z"/></svg> <span>Germany</span> (<span id="count-germany">4</span>)</button>
+                <button class="tab-pill-btn" id="country-tab-ireland" onclick="setCountryFilter('ireland')"><svg class="flag-icon" viewBox="0 0 640 480" width="16" height="11"><path fill="#169B62" d="M0 0h213.3v480H0z"/><path fill="#FFF" d="M213.3 0h213.4v480H213.3z"/><path fill="#FF883E" d="M426.7 0H640v480H426.7z"/></svg> <span>Ireland</span> (<span id="count-ireland">4</span>)</button>
+                <button class="tab-pill-btn" id="country-tab-uk" onclick="setCountryFilter('uk')"><svg class="flag-icon" viewBox="0 0 640 480" width="16" height="11"><path fill="#012169" d="M0 0v480h640V0z"/><path stroke="#FFF" stroke-width="60" d="m0 0 640 480m0-480L0 480"/><path stroke="#C8102E" stroke-width="40" d="m0 0 640 480m0-480L0 480"/><path stroke="#FFF" stroke-width="100" d="M320 0v480M0 240h640"/><path stroke="#C8102E" stroke-width="60" d="M320 0v480M0 240h640"/></svg> <span>UK</span> (<span id="count-uk">3</span>)</button>
               </div>
             </div>
 
@@ -3397,9 +3402,9 @@
             <p class="page-subtext">Verified documents, blocked account / funds policies, and direct university portal links.</p>
           </div>
           <div class="tab-pills-group">
-            <button class="tab-pill-btn active" id="cg-tab-germany" onclick="setCountryGuideActive('germany')">Germany</button>
-            <button class="tab-pill-btn" id="cg-tab-ireland" onclick="setCountryGuideActive('ireland')">Ireland</button>
-            <button class="tab-pill-btn" id="cg-tab-uk" onclick="setCountryGuideActive('uk')">United Kingdom</button>
+            <button class="tab-pill-btn active" id="cg-tab-germany" onclick="setCountryGuideActive('germany')"><svg class="flag-icon" viewBox="0 0 640 480" width="16" height="11"><path fill="#000" d="M0 0h640v160H0z"/><path fill="#D00" d="M0 160h640v160H0z"/><path fill="#FFCE00" d="M0 320h640v160H0z"/></svg> <span>Germany</span></button>
+            <button class="tab-pill-btn" id="cg-tab-ireland" onclick="setCountryGuideActive('ireland')"><svg class="flag-icon" viewBox="0 0 640 480" width="16" height="11"><path fill="#169B62" d="M0 0h213.3v480H0z"/><path fill="#FFF" d="M213.3 0h213.4v480H213.3z"/><path fill="#FF883E" d="M426.7 0H640v480H426.7z"/></svg> <span>Ireland</span></button>
+            <button class="tab-pill-btn" id="cg-tab-uk" onclick="setCountryGuideActive('uk')"><svg class="flag-icon" viewBox="0 0 640 480" width="16" height="11"><path fill="#012169" d="M0 0v480h640V0z"/><path stroke="#FFF" stroke-width="60" d="m0 0 640 480m0-480L0 480"/><path stroke="#C8102E" stroke-width="40" d="m0 0 640 480m0-480L0 480"/><path stroke="#FFF" stroke-width="100" d="M320 0v480M0 240h640"/><path stroke="#C8102E" stroke-width="60" d="M320 0v480M0 240h640"/></svg> <span>United Kingdom</span></button>
           </div>
         </div>
 
@@ -5236,7 +5241,7 @@
           return `
             <tr>
               <td>
-                <div style="font-weight: 600; color: var(--slate);">${u.name}</div>
+                <div style="font-weight: 600; color: var(--slate); display: flex; align-items: center; gap: 6px;">${getFlagSvg(u.countryId)} <span>${u.name}</span></div>
                 <div style="color: var(--muted); font-size: 11.5px;">${u.program}</div>
               </td>
               <td>
@@ -5287,7 +5292,7 @@
       el.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 14px;">
           <div>
-            <h3 style="font-size: 22px; font-weight: 600; color: var(--slate);">${country.name} Study Abroad Guide</h3>
+            <h3 style="font-size: 22px; font-weight: 600; color: var(--slate); display: flex; align-items: center; gap: 8px;">${getFlagSvg(country.id)} <span>${country.name} Study Abroad Guide</span></h3>
             <p style="font-size: 13px; color: var(--muted); margin-top: 4px;">${country.verificationNote || 'Verified on official admissions portals'}</p>
           </div>
           <a href="${country.portalUrl || country.sourceUrl}" target="_blank" rel="noopener noreferrer" class="btn-forest">
@@ -5401,7 +5406,7 @@
           <div class="tracker-card">
             <div class="tracker-card-header">
               <div>
-                <h3 style="font-size: 16px; font-weight: 600; color: var(--slate);">${u.name}</h3>
+                <h3 style="font-size: 16px; font-weight: 600; color: var(--slate); display: flex; align-items: center; gap: 6px;">${getFlagSvg(u.countryId)} <span>${u.name}</span></h3>
                 <p style="font-size: 12px; color: var(--muted);">${countryName} &bull; ${u.program} &bull; Applied: ${appliedDate}</p>
               </div>
 
@@ -5538,7 +5543,7 @@
       card.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
           <div>
-            <h3 style="font-size: 17px; font-weight: 600; color: var(--slate);">${u.name}</h3>
+            <h3 style="font-size: 17px; font-weight: 600; color: var(--slate); display: flex; align-items: center; gap: 6px;">${getFlagSvg(u.countryId)} <span>${u.name}</span></h3>
             <p style="font-size: 13px; color: var(--muted); margin-top: 2px;">${u.program}</p>
           </div>
           <span class="badge badge-verified">&#10003; ${sr.status || 'Verified Requirements'}</span>
