@@ -28,6 +28,7 @@ export const LandingPage: React.FC = () => {
   const [authError, setAuthError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [userApplications, setUserApplications] = useState<Application[]>([]);
+  const [tourStep, setTourStep] = useState<number | null>(null);
 
   // Fetch real tracker applications for logged in / mock user
   useEffect(() => {
@@ -269,6 +270,53 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
+            {/* How to Use CareerGoals: 3 Step Cards */}
+      <section className="space-y-6 pt-2">
+        <div className="text-center max-w-xl mx-auto space-y-1.5">
+          <span className="text-[#B45309] font-bold text-xs uppercase tracking-wider">
+            Admissions Flow
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-bold text-[#1B4D3E]">
+            How to Use CareerGoals
+          </h2>
+          <p className="text-xs sm:text-sm text-[#5C6B63]">
+            Three provable steps from university discovery to official enrollment.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="bg-white rounded-2xl p-6 border border-[#E6DFCF] shadow-xs space-y-3 hover:border-[#1B4D3E] transition-all">
+            <div className="w-8 h-8 rounded-full bg-[#1B4D3E] text-white flex items-center justify-center font-bold text-xs">
+              1
+            </div>
+            <h3 className="font-bold text-base text-[#1B4D3E]">1. Check Your Matches</h3>
+            <p className="text-xs text-[#5C6B63] leading-relaxed">
+              Input GPA, IELTS/GRE scores, and budget. Our mathematical match engine categorizes programs into transparent fit tiers without LLM guessing.
+            </p>
+          </div>
+
+          <div className="bg-white rounded-2xl p-6 border border-[#E6DFCF] shadow-xs space-y-3 hover:border-[#1B4D3E] transition-all">
+            <div className="w-8 h-8 rounded-full bg-[#1B4D3E] text-white flex items-center justify-center font-bold text-xs">
+              2
+            </div>
+            <h3 className="font-bold text-base text-[#1B4D3E]">2. Plan Backward from Deadlines</h3>
+            <p className="text-xs text-[#5C6B63] leading-relaxed">
+              Compute your exact preparation schedule backward from application submission and intake start dates for SOP, LORs, and visa.
+            </p>
+          </div>
+
+          <div className="bg-white rounded-2xl p-6 border border-[#E6DFCF] shadow-xs space-y-3 hover:border-[#1B4D3E] transition-all">
+            <div className="w-8 h-8 rounded-full bg-[#1B4D3E] text-white flex items-center justify-center font-bold text-xs">
+              3
+            </div>
+            <h3 className="font-bold text-base text-[#1B4D3E]">3. Track &amp; Re-verify</h3>
+            <p className="text-xs text-[#5C6B63] leading-relaxed">
+              Log applications with automated +1, +3, and +7 day check-ins. Daily crawlers audit university portals and flag admission rule changes.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* 4. Four-Block Feature Strip: Warm Ivory & Deep Green Pillar Cards with Live Micro-Proof Widgets */}
       <section className="flex overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4 scrollbar-none snap-x">
         {/* Block 1: Verified Requirements */}
@@ -439,6 +487,82 @@ export const LandingPage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* 30-Second Guided Tour Modal */}
+      {tourStep !== null && (
+        <div className="fixed inset-0 z-50 bg-[#0B1026]/75 backdrop-blur-xs flex items-center justify-center p-4 animate-fadeIn font-sans">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-[#B45309] uppercase tracking-wider">
+                Step {tourStep + 1} of 5
+              </span>
+              <button
+                type="button"
+                onClick={() => setTourStep(null)}
+                className="text-slate-400 hover:text-slate-600 text-lg leading-none"
+              >
+                &times;
+              </button>
+            </div>
+
+            <div>
+              <h3 className="text-base sm:text-lg font-bold text-[#1B4D3E]">
+                {tourStep === 0 && 'Home & Live Changes Feed'}
+                {tourStep === 1 && 'Verified University Matches'}
+                {tourStep === 2 && 'Application Tracker & Reminders'}
+                {tourStep === 3 && 'Backward Milestone Planner'}
+                {tourStep === 4 && 'Atlas AI Guide & Receipts'}
+              </h3>
+              <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                {tourStep === 0 &&
+                  'The hero features a live auditor feed showing real criteria revisions across Germany, Ireland, and the UK, with all facts verified from source portals.'}
+                {tourStep === 1 &&
+                  'Matches are ranked by deterministic mathematical scoring against actual faculty criteria. View campus scenes, fees, and official links.'}
+                {tourStep === 2 &&
+                  'Track deadlines and receive automated follow-ups at +1, +3, and +7 days after submitting to stay ahead of status notifications.'}
+                {tourStep === 3 &&
+                  'Calculate preparation lead times backward from your target application deadline for SOP writing, tests, and visa filing.'}
+                {tourStep === 4 &&
+                  'Click the floating compass button at any time to open Atlas as a bottom sheet. Ask questions and get receipts with the date last checked.'}
+              </p>
+            </div>
+
+            <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+              <button
+                type="button"
+                onClick={() => setTourStep((prev) => (prev !== null && prev > 0 ? prev - 1 : 0))}
+                disabled={tourStep === 0}
+                className="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-100 disabled:opacity-40"
+              >
+                Back
+              </button>
+              <div className="flex gap-1.5">
+                {[0, 1, 2, 3, 4].map((i) => (
+                  <span
+                    key={i}
+                    className={`w-2 h-2 rounded-full ${
+                      i === tourStep ? 'bg-[#deb062]' : 'bg-slate-200'
+                    }`}
+                  />
+                ))}
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  if (tourStep < 4) {
+                    setTourStep((prev) => (prev !== null ? prev + 1 : null));
+                  } else {
+                    setTourStep(null);
+                  }
+                }}
+                className="px-4 py-1.5 rounded-lg text-xs font-semibold bg-[#1B4D3E] hover:bg-[#2E6B57] text-white shadow-xs"
+              >
+                {tourStep === 4 ? 'Finish' : 'Next →'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

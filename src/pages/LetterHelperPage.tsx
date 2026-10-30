@@ -192,6 +192,8 @@ export const LetterHelperPage: React.FC = () => {
   // Selected program state (default to first or null)
   const selectedProgramId = programIdParam;
   const selectedIntake = intakeParam;
+  const [calcDeadline, setCalcDeadline] = useState<string>('2027-01-15');
+  const [calcStartDate, setCalcStartDate] = useState<string>('2027-10-01');
 
   // Resolve matching university from catalog
   const selectedUniversity: University | null = useMemo(() => {
@@ -459,6 +461,139 @@ export const LetterHelperPage: React.FC = () => {
               </button>
             ))}
           </div>
+        </div>
+      </div>
+
+            {/* Backward Milestone Planner (Calculated from Deadline & Start Date) */}
+      <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm font-sans space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[#B45309] uppercase tracking-wider">
+              <Clock className="w-3.5 h-3.5 text-[#B45309]" />
+              <span>Backward Milestone Planner</span>
+            </div>
+            <h3 className="text-base sm:text-lg font-bold text-[#1B4D3E] mt-1">
+              Milestone Schedule Computed from Deadlines
+            </h3>
+            <p className="text-xs text-slate-500 max-w-xl">
+              Lead times are typical benchmarks computed backward from your application deadline and intake start date. Verify exact dates with your official university portal.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200">
+            <div>
+              <label className="text-[11px] font-bold text-slate-700 block mb-1">Application Deadline</label>
+              <input
+                type="date"
+                value={calcDeadline}
+                onChange={(e) => setCalcDeadline(e.target.value)}
+                className="px-2.5 py-1 rounded-lg border border-slate-300 text-xs font-semibold bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#1B4D3E]"
+              />
+            </div>
+            <div>
+              <label className="text-[11px] font-bold text-slate-700 block mb-1">Intake Start Date</label>
+              <input
+                type="date"
+                value={calcStartDate}
+                onChange={(e) => setCalcStartDate(e.target.value)}
+                className="px-2.5 py-1 rounded-lg border border-slate-300 text-xs font-semibold bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#1B4D3E]"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Milestone Steps Timeline Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2">
+          {[
+            {
+              step: 1,
+              label: 'Shortlist & Faculty Outreach',
+              offset: '-90 days to deadline',
+              date: new Date(new Date(calcDeadline + 'T00:00:00').getTime() - 90 * 86400000),
+              badge: 'Research',
+            },
+            {
+              step: 2,
+              label: 'English Test (IELTS / TOEFL)',
+              offset: '-75 days to deadline',
+              date: new Date(new Date(calcDeadline + 'T00:00:00').getTime() - 75 * 86400000),
+              badge: 'Exams',
+            },
+            {
+              step: 3,
+              label: 'First SOP Draft & Academic Hook',
+              offset: '-45 days to deadline',
+              date: new Date(new Date(calcDeadline + 'T00:00:00').getTime() - 45 * 86400000),
+              badge: 'Writing',
+            },
+            {
+              step: 4,
+              label: 'LORs & Official Transcripts',
+              offset: '-30 days to deadline',
+              date: new Date(new Date(calcDeadline + 'T00:00:00').getTime() - 30 * 86400000),
+              badge: 'Documents',
+            },
+            {
+              step: 5,
+              label: '8-Point Quality Audit & PDF',
+              offset: '-15 days to deadline',
+              date: new Date(new Date(calcDeadline + 'T00:00:00').getTime() - 15 * 86400000),
+              badge: 'Audit',
+            },
+            {
+              step: 6,
+              label: 'Official Application Deadline',
+              offset: 'Day 0',
+              date: new Date(calcDeadline + 'T00:00:00'),
+              badge: 'Deadline',
+              highlight: true,
+            },
+            {
+              step: 7,
+              label: 'Student Visa & Blocked Account',
+              offset: '-60 days to intake',
+              date: new Date(new Date(calcStartDate + 'T00:00:00').getTime() - 60 * 86400000),
+              badge: 'Visa',
+            },
+            {
+              step: 8,
+              label: 'Housing & Health Insurance',
+              offset: '-30 days to intake',
+              date: new Date(new Date(calcStartDate + 'T00:00:00').getTime() - 30 * 86400000),
+              badge: 'Arrival',
+            },
+          ].map((m) => (
+            <div
+              key={m.step}
+              className={`p-3 rounded-xl border flex items-start gap-2.5 transition-all ${
+                m.highlight
+                  ? 'border-amber-400 bg-amber-50/50 shadow-xs ring-1 ring-amber-300'
+                  : 'border-slate-200 bg-slate-50/50 hover:bg-white'
+              }`}
+            >
+              <div
+                className={`w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs shrink-0 ${
+                  m.highlight ? 'bg-[#B45309] text-white' : 'bg-[#1B4D3E] text-white'
+                }`}
+              >
+                {m.step}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between gap-1">
+                  <span className="text-xs font-bold text-slate-900">
+                    {isNaN(m.date.getTime())
+                      ? 'TBD'
+                      : m.date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
+                  </span>
+                  <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-slate-200 text-slate-700">
+                    {m.badge}
+                  </span>
+                </div>
+                <h4 className="text-xs font-semibold text-slate-800 truncate mt-0.5">{m.label}</h4>
+                <p className="text-[10px] text-slate-500">{m.offset}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 

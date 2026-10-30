@@ -45,6 +45,7 @@ export interface University {
   tuition: string;
   /** Direct link to the institution's official online application portal */
   portalUrl: string;
+  photoUrl?: string;
   /** Source webpage link used to verify requirements */
   sourceUrl: string;
   /** ISO 8601 date string when requirements were last verified (YYYY-MM-DD) */

@@ -80,7 +80,7 @@ export const Navbar: React.FC = () => {
   return (
     <>
       {/* Unified Sticky Forest Nav (#1B4D3E): Logo, Exact 4 Tabs, Search, Notifications, Profile */}
-      <nav className="bg-[#1B4D3E] text-white sticky top-0 z-40 shadow-soft font-sans border-b border-[#2E6B57]">
+      <nav className="bg-[#1B4D3E]/90 backdrop-blur-md text-white sticky top-0 z-40 shadow-soft font-sans border-b border-white/10 pt-[max(0.25rem,env(safe-area-inset-top))]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16 gap-4">
             {/* Logo on Left */}

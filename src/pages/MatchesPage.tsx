@@ -207,6 +207,98 @@ function getNumericTuition(tuitionStr: string | null | undefined): number {
 // MAIN MATCHES PAGE COMPONENT
 // ============================================================================
 
+
+const CampusSceneBanner: React.FC<{ univId: string; univName: string; photoUrl?: string }> = ({
+  univId,
+  univName,
+  photoUrl,
+}) => {
+  const p = univId.toLowerCase();
+  const u = univName.toLowerCase();
+
+  return (
+    <div className="relative w-full h-24 overflow-hidden rounded-t-xl bg-[#1B4D3E]">
+      {p.includes('manchester') || u.includes('manchester') ? (
+        <svg viewBox="0 0 400 120" preserveAspectRatio="xMidYMid slice" className="w-full h-full">
+          <defs>
+            <linearGradient id="skyMancReact" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#2D1B24" />
+              <stop offset="100%" stopColor="#4A2E35" />
+            </linearGradient>
+          </defs>
+          <rect width="400" height="120" fill="url(#skyMancReact)" />
+          <path d="M 0,120 L 0,85 L 30,85 L 30,70 L 45,70 L 45,85 L 70,85 L 70,60 L 80,45 L 90,60 L 90,85 L 140,85 L 140,40 L 150,30 L 160,30 L 170,40 L 170,85 L 210,85 L 210,20 L 220,10 L 225,5 L 230,10 L 240,20 L 240,85 L 280,85 L 290,55 L 305,55 L 315,85 L 360,85 L 360,65 L 375,65 L 375,85 L 400,85 L 400,120 Z" fill="#1C1016" opacity="0.95" />
+          <circle cx="225" cy="40" r="9" fill="#F3C97E" opacity="0.85" />
+          <circle cx="225" cy="40" r="7.5" fill="#2D1B24" />
+          <path d="M 148,55 Q 155,48 162,55 L 162,75 L 148,75 Z" fill="#F3C97E" opacity="0.4" />
+          <rect y="105" width="400" height="15" fill="#120A0E" />
+        </svg>
+      ) : p.includes('tum') || u.includes('munich') ? (
+        <svg viewBox="0 0 400 120" preserveAspectRatio="xMidYMid slice" className="w-full h-full">
+          <defs>
+            <linearGradient id="skyTumReact" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#0A192F" />
+              <stop offset="100%" stopColor="#173559" />
+            </linearGradient>
+          </defs>
+          <rect width="400" height="120" fill="url(#skyTumReact)" />
+          <polygon points="20,80 60,45 110,80" fill="#0E233D" opacity="0.6" />
+          <polygon points="90,80 145,35 190,80" fill="#112B4C" opacity="0.65" />
+          <polygon points="170,80 230,40 280,80" fill="#0E233D" opacity="0.6" />
+          <rect x="40" y="55" width="130" height="65" fill="#091424" stroke="#48CAE4" strokeWidth="0.75" strokeOpacity="0.3" />
+          <rect x="240" y="25" width="30" height="95" fill="#060E1A" />
+          <circle cx="255" cy="42" r="6" fill="#F3C97E" opacity="0.8" />
+          <rect y="110" width="400" height="10" fill="#040810" />
+        </svg>
+      ) : p.includes('tcd') || u.includes('trinity') || u.includes('dublin') ? (
+        <svg viewBox="0 0 400 120" preserveAspectRatio="xMidYMid slice" className="w-full h-full">
+          <defs>
+            <linearGradient id="skyTcdReact" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#14261C" />
+              <stop offset="100%" stopColor="#234232" />
+            </linearGradient>
+          </defs>
+          <rect width="400" height="120" fill="url(#skyTcdReact)" />
+          <rect x="10" y="65" width="150" height="55" fill="#0E1A13" />
+          <rect x="240" y="65" width="150" height="55" fill="#0E1A13" />
+          <rect x="180" y="55" width="40" height="65" fill="#09120D" />
+          <polygon points="185,30 200,8 215,30" fill="#060C09" />
+          <path d="M 193,42 Q 200,35 207,42 L 207,52 L 193,52 Z" fill="#F3C97E" opacity="0.6" />
+          <rect y="108" width="400" height="12" fill="#060C09" />
+        </svg>
+      ) : (
+        <svg viewBox="0 0 400 120" preserveAspectRatio="xMidYMid slice" className="w-full h-full">
+          <defs>
+            <linearGradient id="skyHeidReact" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#3D1815" />
+              <stop offset="100%" stopColor="#6B2D25" />
+            </linearGradient>
+          </defs>
+          <rect width="400" height="120" fill="url(#skyHeidReact)" />
+          <path d="M 230,120 Q 290,40 400,20 L 400,120 Z" fill="#240D0B" />
+          <rect x="0" y="90" width="220" height="30" fill="#1A0908" />
+          <rect y="112" width="400" height="8" fill="#100505" />
+        </svg>
+      )}
+
+      {photoUrl && (
+        <img
+          src={photoUrl}
+          alt={univName}
+          className="absolute inset-0 w-full h-full object-cover z-10"
+          onError={(e) => {
+            (e.currentTarget as HTMLElement).style.display = 'none';
+          }}
+        />
+      )}
+
+      <div className="absolute bottom-2 left-3 z-20 inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-900/80 backdrop-blur-xs text-white text-[10px] font-semibold border border-white/20">
+        <span>Drawn Campus Scene</span>
+      </div>
+    </div>
+  );
+};
+
 export const MatchesPage: React.FC = () => {
   const { user, profile } = useAuth();
   const { universities, loading: catalogLoading } = useCatalog();
@@ -622,12 +714,13 @@ export const MatchesPage: React.FC = () => {
             return (
               <div
                 key={u.id}
-                className={`match-card bg-white rounded-xl border transition-all ${
+                className={`match-card bg-white rounded-2xl overflow-hidden border transition-all ${
                   isApplied
                     ? 'border-emerald-300 bg-emerald-50/10 shadow-2xs'
                     : 'border-[#E6E8F0] hover:border-slate-300 shadow-sm'
                 }`}
               >
+                <CampusSceneBanner univId={u.id} univName={u.name} photoUrl={u.photoUrl} />
                 {/* Rule Changed Banner (rendered when official criteria change detected) */}
                 {u.ruleChanged && (
                   <div className="match-card__banner mb-4">

@@ -2266,7 +2266,534 @@
         scroll-behavior: auto !important;
       }
     }
+  
+    /* ==========================================================================
+       IPHONE-STYLE DESIGN SYSTEM, FROSTED GLASS, SAFE AREAS & DARK MODE
+       ========================================================================== */
+    :root {
+      --radius-card: 20px;
+      --radius-btn: 12px;
+      --radius-pill: 9999px;
+      --shadow-ios-soft: 0 8px 24px -4px rgba(27, 77, 62, 0.08), 0 2px 6px -1px rgba(27, 77, 62, 0.04);
+      --gold-highlight: #F3C97E;
+      --gold-accent: #B45309;
+    }
+
+    /* Safe areas for iPhone notch & home indicator */
+    @supports (padding: env(safe-area-inset-top)) {
+      .main-nav {
+        padding-top: max(8px, env(safe-area-inset-top));
+      }
+      body {
+        padding-bottom: calc(75px + env(safe-area-inset-bottom, 0px));
+      }
+    }
+
+    /* Frosted glass top nav on desktop */
+    .main-nav {
+      background: rgba(27, 77, 62, 0.88) !important;
+      backdrop-filter: blur(20px) !important;
+      -webkit-backdrop-filter: blur(20px) !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    /* Floating bottom tab bar on mobile (Home, Matches, Tracker, Planner) */
+    .iphone-floating-bottom-bar {
+      display: none;
+    }
+
+    @media (max-width: 900px) {
+      .iphone-floating-bottom-bar {
+        display: flex;
+        position: fixed;
+        bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+        left: 16px;
+        right: 16px;
+        margin: 0 auto;
+        max-width: 380px;
+        height: 60px;
+        background: rgba(11, 16, 38, 0.88);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border-radius: 9999px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        box-shadow: 0 12px 36px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(255, 255, 255, 0.15) inset;
+        z-index: 999;
+        align-items: center;
+        justify-content: space-around;
+        padding: 0 8px;
+      }
+
+      .floating-tab-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        background: none;
+        border: none;
+        color: rgba(250, 247, 240, 0.65);
+        font-family: inherit;
+        font-size: 10px;
+        font-weight: 500;
+        cursor: pointer;
+        padding: 6px 12px;
+        border-radius: 9999px;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        text-decoration: none;
+      }
+
+      .floating-tab-btn svg {
+        width: 18px;
+        height: 18px;
+        transition: transform 0.2s ease;
+      }
+
+      .floating-tab-btn.active {
+        color: #F3C97E;
+        font-weight: 700;
+        background: rgba(255, 255, 255, 0.12);
+      }
+
+      .floating-tab-btn.active svg {
+        transform: scale(1.1);
+        color: #F3C97E;
+      }
+    }
+
+    /* Segmented filter controls (iOS style) */
+    .segmented-control {
+      display: inline-flex;
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 9999px;
+      padding: 3px;
+      border: 1px solid var(--border-soft);
+      gap: 3px;
+    }
+
+    .segmented-btn {
+      padding: 5px 14px;
+      border-radius: 9999px;
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      font-size: 11.5px;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+      white-space: nowrap;
+    }
+
+    .segmented-btn:hover {
+      color: var(--forest);
+    }
+
+    .segmented-btn.active {
+      background: var(--white);
+      color: var(--forest);
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Drawn Campus Scenes Banner on University Cards */
+    .univ-scene-banner {
+      position: relative;
+      width: 100%;
+      height: 120px;
+      border-top-left-radius: var(--radius-card);
+      border-top-right-radius: var(--radius-card);
+      overflow: hidden;
+      background: #1B4D3E;
+    }
+
+    .univ-scene-banner svg {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .scene-real-photo {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 2;
+    }
+
+    .scene-overlay-badge {
+      position: absolute;
+      bottom: 8px;
+      left: 12px;
+      z-index: 3;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(11, 16, 38, 0.72);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      color: #FAF7F0;
+      padding: 3px 9px;
+      border-radius: 9999px;
+      font-size: 10.5px;
+      font-weight: 600;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .scene-swap-note {
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      z-index: 3;
+      font-size: 9.5px;
+      color: rgba(255, 255, 255, 0.85);
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(4px);
+      padding: 2px 7px;
+      border-radius: 9999px;
+    }
+
+    /* 3 Step Cards: How to Use CareerGoals */
+    .how-it-works-section {
+      padding: 36px 0 20px 0;
+    }
+
+    .section-heading-center {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto 28px auto;
+    }
+
+    .section-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gold-accent);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .section-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--forest);
+      margin: 4px 0 6px 0;
+    }
+
+    .section-subtitle {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    @media (max-width: 800px) {
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .step-card {
+      background: var(--white);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-card);
+      padding: 22px;
+      position: relative;
+      box-shadow: var(--shadow-card);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .step-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-ios-soft);
+      border-color: var(--forest);
+    }
+
+    .step-num-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      background: var(--forest);
+      color: #FAF7F0;
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: 9999px;
+      margin-bottom: 12px;
+    }
+
+    .step-card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--forest);
+      margin-bottom: 6px;
+    }
+
+    .step-card-text {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* Backward Milestone Calculator in Planner */
+    .backward-calc-card {
+      background: var(--white);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-card);
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 24px;
+    }
+
+    .calc-inputs-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin: 14px 0 20px 0;
+      padding: 14px;
+      background: var(--surface-alt);
+      border-radius: 14px;
+      border: 1px solid var(--border-soft);
+    }
+
+    .input-date-calc {
+      padding: 8px 12px;
+      border-radius: 9999px;
+      border: 1px solid var(--border-soft);
+      font-family: inherit;
+      font-size: 12px;
+      outline: none;
+      background: var(--white);
+      color: var(--text-body);
+      font-weight: 600;
+    }
+
+    .milestones-timeline-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 12px;
+    }
+
+    .milestone-step-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      background: var(--white);
+      border: 1px solid var(--border-soft);
+      border-radius: 14px;
+      padding: 12px 14px;
+      transition: all 0.2s ease;
+    }
+
+    .milestone-step-item.step-deadline {
+      border-color: #B45309;
+      background: #FFFDF8;
+      box-shadow: 0 2px 10px rgba(180, 83, 9, 0.12);
+    }
+
+    .m-step-indicator {
+      width: 24px;
+      height: 24px;
+      border-radius: 9999px;
+      background: var(--surface-alt);
+      color: var(--forest);
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      shrink-0;
+    }
+
+    .milestone-step-item.step-deadline .m-step-indicator {
+      background: #B45309;
+      color: #FFF;
+    }
+
+    .m-step-content {
+      flex: 1;
+    }
+
+    .m-step-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2px;
+    }
+
+    .m-step-date {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--forest);
+    }
+
+    .m-step-badge {
+      font-size: 9.5px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 9999px;
+      background: rgba(27, 77, 62, 0.08);
+      color: var(--forest);
+    }
+
+    .m-step-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-body);
+      margin: 2px 0;
+    }
+
+    .m-step-offset {
+      font-size: 10.5px;
+      color: var(--text-muted);
+    }
+
+    /* 30-Second Tour Overlay */
+    .app-tour-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(11, 16, 38, 0.65);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .tour-card {
+      background: var(--white);
+      border-radius: 24px;
+      max-width: 440px;
+      width: 100%;
+      padding: 28px;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border-soft);
+      position: relative;
+    }
+
+    .tour-step-tag {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--gold-accent);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .tour-title {
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--forest);
+      margin: 4px 0 8px 0;
+    }
+
+    .tour-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin-bottom: 20px;
+    }
+
+    .tour-nav-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--border-soft);
+      padding-top: 16px;
+    }
+
+    .btn-tour-hero {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--forest);
+      border: 1px solid var(--border-soft);
+      padding: 9px 16px;
+      border-radius: 9999px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(27, 77, 62, 0.06);
+    }
+
+    .btn-tour-hero:hover {
+      background: #FFFFFF;
+      border-color: var(--forest);
+      transform: translateY(-1px);
+    }
+
+    /* Dark Mode (follows device setting prefers-color-scheme: dark) */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0B1026;
+        --ivory: #0B1026;
+        --surface: #131A38;
+        --surface-alt: #1C244B;
+        --white: #131A38;
+        --border-soft: #232D58;
+        --line: #232D58;
+        --text-primary: #FAF7F0;
+        --text-body: #E2E8F0;
+        --text-muted: #94A3B8;
+        --text-placeholder: #64748B;
+        --forest: #2DD4BF;
+        --gold: #F3C97E;
+        --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.4);
+        --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.3);
+      }
+
+      .main-nav {
+        background: rgba(11, 16, 38, 0.88) !important;
+        border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+      }
+
+      .segmented-control {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.12);
+      }
+
+      .segmented-btn.active {
+        background: #1F2952;
+        color: #F3C97E;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      }
+
+      .apps-card, .match-card, .feature-block, .planner-card, .step-card, .tour-card, .backward-calc-card {
+        background: #131A38;
+        border-color: #232D58;
+      }
+
+      .hero-section {
+        background: #0B1026;
+      }
+
+      .input-date-calc {
+        background: #1C244B;
+        border-color: #232D58;
+        color: #FAF7F0;
+      }
+
+      .btn-tour-hero {
+        background: #1C244B;
+        color: #FAF7F0;
+        border-color: #232D58;
+      }
+    }
   </style>
+
 </head>
 <body>
 
@@ -4462,8 +4989,19 @@
 
             const countryName = countriesData.find(c => c.id === u.countryId)?.name || u.countryId;
 
+            const campusSceneSvg = getCampusSceneSvg(u.id, u.name);
             return `
               <div class="match-card ${isApplied ? 'is-applied' : ''}">
+                <div class="univ-scene-banner">
+                  ${campusSceneSvg}
+                  ${u.photoUrl ? `<img src="${u.photoUrl}" alt="${u.name}" class="scene-real-photo" onerror="this.style.display='none'">` : ''}
+                  <div class="scene-overlay-badge">
+                    <span>${countryName}</span>
+                    <span>&bull;</span>
+                    <span>${u.program}</span>
+                  </div>
+                  <span class="scene-swap-note">Drawn Campus Scene</span>
+                </div>`
                 ${u.ruleChanged ? `
                   <div class="rule-banner">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
@@ -4843,6 +5381,7 @@
     }
 
     function renderPlanner() {
+      recalculatePlannerMilestones();
       const sel = document.getElementById('plannerProgramSelect');
       if (sel && sel.options.length === 0) {
         sel.innerHTML = universitiesData.map(u => `<option value="${u.id}" ${u.id === currentPlannerProgramId ? 'selected' : ''}>${u.name}</option>`).join('');
@@ -5676,6 +6215,304 @@ Notes: ${req.notes || 'None'}`;
         else switchView('matches', false);
       });
     });
+
+    // ==============================================================================
+    // DRAWN CAMPUS SCENES FOR MANCHESTER, TUM, TRINITY DUBLIN, HEIDELBERG
+    // ==============================================================================
+    function getCampusSceneSvg(progId, univName) {
+      const p = (progId || '').toLowerCase();
+      const u = (univName || '').toLowerCase();
+
+      if (p.includes('manchester') || u.includes('manchester')) {
+        // University of Manchester: Neo-gothic John Rylands / Owens Building tower & arches
+        return `
+          <svg viewBox="0 0 400 120" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="skyManc" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#2D1B24"/>
+                <stop offset="100%" stop-color="#4A2E35"/>
+              </linearGradient>
+            </defs>
+            <rect width="400" height="120" fill="url(#skyManc)"/>
+            <!-- Manchester Gothic Towers Silhouette -->
+            <path d="M 0,120 L 0,85 L 30,85 L 30,70 L 45,70 L 45,85 L 70,85 L 70,60 L 80,45 L 90,60 L 90,85 L 140,85 L 140,40 L 150,30 L 160,30 L 170,40 L 170,85 L 210,85 L 210,20 L 220,10 L 225,5 L 230,10 L 240,20 L 240,85 L 280,85 L 290,55 L 305,55 L 315,85 L 360,85 L 360,65 L 375,65 L 375,85 L 400,85 L 400,120 Z" fill="#1C1016" opacity="0.95"/>
+            <!-- Clock Face on Manchester Main Tower -->
+            <circle cx="225" cy="40" r="9" fill="#F3C97E" opacity="0.85"/>
+            <circle cx="225" cy="40" r="7.5" fill="#2D1B24"/>
+            <line x1="225" y1="40" x2="225" y2="35" stroke="#F3C97E" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="225" y1="40" x2="228" y2="40" stroke="#F3C97E" stroke-width="1.5" stroke-linecap="round"/>
+            <!-- Lancet Stained Glass Windows -->
+            <path d="M 148,55 Q 155,48 162,55 L 162,75 L 148,75 Z" fill="#F3C97E" opacity="0.4"/>
+            <path d="M 218,65 Q 225,58 232,65 L 232,82 L 218,82 Z" fill="#F3C97E" opacity="0.5"/>
+            <!-- Ground Courtyard Cobblestones -->
+            <rect y="105" width="400" height="15" fill="#120A0E"/>
+          </svg>
+        `;
+      }
+
+      if (p.includes('tum') || u.includes('munich')) {
+        // Technical University of Munich (TUM): Modern glass tech campus, clock tower, Alpine skyline
+        return `
+          <svg viewBox="0 0 400 120" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="skyTum" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#0A192F"/>
+                <stop offset="100%" stop-color="#173559"/>
+              </linearGradient>
+            </defs>
+            <rect width="400" height="120" fill="url(#skyTum)"/>
+            <!-- Bavarian Alps in Horizon -->
+            <polygon points="20,80 60,45 110,80" fill="#0E233D" opacity="0.6"/>
+            <polygon points="90,80 145,35 190,80" fill="#112B4C" opacity="0.65"/>
+            <polygon points="170,80 230,40 280,80" fill="#0E233D" opacity="0.6"/>
+            <!-- TUM Informatics Modern Glass Facade & Grid -->
+            <rect x="40" y="55" width="130" height="65" fill="#091424" stroke="#48CAE4" stroke-width="0.75" stroke-opacity="0.3"/>
+            <line x1="65" y1="55" x2="65" y2="120" stroke="#48CAE4" stroke-width="0.5" stroke-opacity="0.4"/>
+            <line x1="95" y1="55" x2="95" y2="120" stroke="#48CAE4" stroke-width="0.5" stroke-opacity="0.4"/>
+            <line x1="125" y1="55" x2="125" y2="120" stroke="#48CAE4" stroke-width="0.5" stroke-opacity="0.4"/>
+            <line x1="40" y1="75" x2="170" y2="75" stroke="#48CAE4" stroke-width="0.5" stroke-opacity="0.4"/>
+            <line x1="40" y1="95" x2="170" y2="95" stroke="#48CAE4" stroke-width="0.5" stroke-opacity="0.4"/>
+            <!-- TUM Clock Tower & Plaza -->
+            <rect x="240" y="25" width="30" height="95" fill="#060E1A"/>
+            <polygon points="240,25 255,10 270,25" fill="#060E1A"/>
+            <circle cx="255" cy="42" r="6" fill="#F3C97E" opacity="0.8"/>
+            <rect x="270" y="65" width="110" height="55" fill="#091424"/>
+            <rect y="110" width="400" height="10" fill="#040810"/>
+          </svg>
+        `;
+      }
+
+      if (p.includes('tcd') || u.includes('trinity') || u.includes('dublin')) {
+        // Trinity College Dublin: Historic Campanile Bell Tower & Parliament Square
+        return `
+          <svg viewBox="0 0 400 120" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="skyTcd" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#14261C"/>
+                <stop offset="100%" stop-color="#234232"/>
+              </linearGradient>
+            </defs>
+            <rect width="400" height="120" fill="url(#skyTcd)"/>
+            <!-- Georgian Classical Colonnades -->
+            <rect x="10" y="65" width="150" height="55" fill="#0E1A13"/>
+            <rect x="240" y="65" width="150" height="55" fill="#0E1A13"/>
+            <!-- Trinity Campanile Bell Tower in Center -->
+            <rect x="180" y="55" width="40" height="65" fill="#09120D"/>
+            <rect x="185" y="30" width="30" height="25" fill="#09120D"/>
+            <polygon points="185,30 200,8 215,30" fill="#060C09"/>
+            <!-- Belfry Arches -->
+            <path d="M 193,42 Q 200,35 207,42 L 207,52 L 193,52 Z" fill="#F3C97E" opacity="0.6"/>
+            <!-- Arched Georgian Portico Windows -->
+            <path d="M 40,80 Q 48,72 56,80 L 56,98 L 40,98 Z" fill="#F3C97E" opacity="0.3"/>
+            <path d="M 80,80 Q 88,72 96,80 L 96,98 L 80,98 Z" fill="#F3C97E" opacity="0.3"/>
+            <path d="M 280,80 Q 288,72 296,80 L 296,98 L 280,98 Z" fill="#F3C97E" opacity="0.3"/>
+            <path d="M 320,80 Q 328,72 336,80 L 336,98 L 320,98 Z" fill="#F3C97E" opacity="0.3"/>
+            <rect y="108" width="400" height="12" fill="#060C09"/>
+          </svg>
+        `;
+      }
+
+      // Default: Heidelberg University (Castle ruins, Neckar stone bridge, Old Aula)
+      return `
+        <svg viewBox="0 0 400 120" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="skyHeid" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#3D1815"/>
+              <stop offset="100%" stop-color="#6B2D25"/>
+            </linearGradient>
+          </defs>
+          <rect width="400" height="120" fill="url(#skyHeid)"/>
+          <!-- Heidelberg Castle on Wooded Hill -->
+          <path d="M 230,120 Q 290,40 400,20 L 400,120 Z" fill="#240D0B"/>
+          <rect x="280" y="35" width="55" height="40" fill="#1A0908"/>
+          <polygon points="275,35 307,15 340,35" fill="#140706"/>
+          <!-- Historic Stone Bridge Arches (Alte Brucke) over Neckar -->
+          <rect x="0" y="90" width="220" height="30" fill="#1A0908"/>
+          <path d="M 30,120 Q 50,96 70,120 Z" fill="#3D1815"/>
+          <path d="M 90,120 Q 110,96 130,120 Z" fill="#3D1815"/>
+          <path d="M 150,120 Q 170,96 190,120 Z" fill="#3D1815"/>
+          <!-- Bridge Gate Twin Towers -->
+          <rect x="195" y="55" width="12" height="45" fill="#140706"/>
+          <polygon points="195,55 201,42 207,55" fill="#100505"/>
+          <rect x="215" y="55" width="12" height="45" fill="#140706"/>
+          <polygon points="215,55 221,42 227,55" fill="#100505"/>
+          <rect y="112" width="400" height="8" fill="#100505"/>
+        </svg>
+      `;
+    }
+
+    // ==============================================================================
+    // 30-SECOND GUIDED TOUR IMPLEMENTATION
+    // ==============================================================================
+    let currentTourStep = 0;
+    const tourSteps = [
+      {
+        tag: "Step 1 of 5 • Overview",
+        title: "Home & Live Changes Feed",
+        desc: "CareerGoals provides verified requirements from official admission portals. The hero displays our continuous crawler feed showing real university criteria updates in Germany, Ireland, and the UK.",
+        action: () => { goToHomeTab(); }
+      },
+      {
+        tag: "Step 2 of 5 • Exploration",
+        title: "Verified University Matches",
+        desc: "Explore programs categorized by transparent, mathematical fit tiers (Strong, Possible, Reach). Each card features drawn campus scenes, tuition in EUR/INR, deadlines, and direct official source links.",
+        action: () => { switchView('matches'); setFloatingActive('matches'); }
+      },
+      {
+        tag: "Step 3 of 5 • Milestones",
+        title: "Application Tracker",
+        desc: "Once you shortlist programs, track submission deadlines with automated +1, +3, and +7 day check-in reminders so you never miss an institutional portal notification.",
+        action: () => { switchView('tracker'); setFloatingActive('tracker'); }
+      },
+      {
+        tag: "Step 4 of 5 • Preparation",
+        title: "Backward Milestone Planner",
+        desc: "Input your submission deadline and intake start date. The planner automatically computes recommended lead times backward for English tests, SOP drafting, LOR requests, and visa filing.",
+        action: () => { switchView('planner'); setFloatingActive('planner'); }
+      },
+      {
+        tag: "Step 5 of 5 • Instant Receipt",
+        title: "Atlas AI Assistant Guide",
+        desc: "Click the floating compass button at any time to open Atlas as a smooth bottom sheet. Ask questions about language cutoffs or visa funds, and receive answers linked directly to verified receipts.",
+        action: () => { toggleAtlas(true); }
+      }
+    ];
+
+    function startAppTour() {
+      currentTourStep = 0;
+      document.getElementById('appTourOverlay').style.display = 'flex';
+      renderTourStep();
+    }
+
+    function renderTourStep() {
+      const step = tourSteps[currentTourStep];
+      if (!step) return;
+      document.getElementById('tourStepBadge').textContent = step.tag;
+      document.getElementById('tourTitle').textContent = step.title;
+      document.getElementById('tourDesc').textContent = step.desc;
+
+      const dotsContainer = document.getElementById('tourDots');
+      if (dotsContainer) {
+        dotsContainer.innerHTML = tourSteps.map((_, i) => `
+          <span style="width: 8px; height: 8px; border-radius: 9999px; background: ${i === currentTourStep ? '#B45309' : '#E6DFCF'}; transition: all 0.2s ease;"></span>
+        `).join('');
+      }
+
+      const prevBtn = document.getElementById('tourPrevBtn');
+      if (prevBtn) prevBtn.style.visibility = currentTourStep === 0 ? 'hidden' : 'visible';
+
+      const nextBtn = document.getElementById('tourNextBtn');
+      if (nextBtn) {
+        nextBtn.textContent = currentTourStep === tourSteps.length - 1 ? 'Finish Tour' : 'Next →';
+      }
+
+      if (typeof step.action === 'function') {
+        step.action();
+      }
+    }
+
+    function nextTourStep() {
+      if (currentTourStep < tourSteps.length - 1) {
+        currentTourStep++;
+        renderTourStep();
+      } else {
+        skipAppTour();
+      }
+    }
+
+    function prevTourStep() {
+      if (currentTourStep > 0) {
+        currentTourStep--;
+        renderTourStep();
+      }
+    }
+
+    function skipAppTour() {
+      document.getElementById('appTourOverlay').style.display = 'none';
+    }
+
+    // ==============================================================================
+    // BACKWARD MILESTONE CALCULATOR FOR PLANNER
+    // ==============================================================================
+    function recalculatePlannerMilestones() {
+      const deadlineInput = document.getElementById('calcDeadlineInput');
+      const startInput = document.getElementById('calcStartDateInput');
+      const deadlineVal = (deadlineInput && deadlineInput.value) || '2027-01-15';
+      const startVal = (startInput && startInput.value) || '2027-10-01';
+
+      const deadline = new Date(deadlineVal + 'T00:00:00');
+      const start = new Date(startVal + 'T00:00:00');
+
+      const subDays = (d, days) => new Date(d.getTime() - days * 86400000);
+      const formatDate = (d) => {
+        if (isNaN(d.getTime())) return 'TBD';
+        return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+      };
+
+      const milestones = [
+        { label: 'Finalize Shortlist & Faculty Outreach', days: '-90 days to deadline', date: subDays(deadline, 90), badge: 'Research' },
+        { label: 'Official English Test (IELTS / TOEFL)', days: '-75 days to deadline', date: subDays(deadline, 75), badge: 'Exam' },
+        { label: 'First SOP Draft & Academic Hook', days: '-45 days to deadline', date: subDays(deadline, 45), badge: 'Writing' },
+        { label: 'LORs & Official Transcripts Secured', days: '-30 days to deadline', date: subDays(deadline, 30), badge: 'Documents' },
+        { label: 'Final 8-Point Rubric Check & PDF Export', days: '-15 days to deadline', date: subDays(deadline, 15), badge: 'Audit' },
+        { label: 'Official Portal Submission Deadline', days: 'Day 0', date: deadline, badge: 'Deadline', highlight: true },
+        { label: 'Student Visa Filing & Blocked Account', days: '-60 days to intake', date: subDays(start, 60), badge: 'Visa' },
+        { label: 'Accommodation Booking & Health Insurance', days: '-30 days to intake', date: subDays(start, 30), badge: 'Arrival' },
+      ];
+
+      const container = document.getElementById('plannerMilestonesTimeline');
+      if (!container) return;
+      container.innerHTML = milestones.map((m, idx) => `
+        <div class="milestone-step-item ${m.highlight ? 'step-deadline' : ''}">
+          <div class="m-step-indicator">${idx + 1}</div>
+          <div class="m-step-content">
+            <div class="m-step-meta">
+              <span class="m-step-date">${formatDate(m.date)}</span>
+              <span class="m-step-badge">${m.badge}</span>
+            </div>
+            <h4 class="m-step-title">${m.label}</h4>
+            <span class="m-step-offset">${m.days}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ==============================================================================
+    // FLOATING BOTTOM TAB BAR HELPER
+    // ==============================================================================
+    function goToHomeTab() {
+      // Scroll to top and show matches or hero
+      switchView('matches');
+      setFloatingActive('home');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function setFloatingActive(tabName) {
+      ['home', 'matches', 'tracker', 'planner'].forEach(id => {
+        const btn = document.getElementById('fb-' + id);
+        if (btn) btn.classList.toggle('active', id === tabName);
+      });
+    }
+
   </script>
+
+  <!-- 30-Second Tour Modal Overlay -->
+  <div id="appTourOverlay" class="app-tour-overlay" style="display: none;" role="dialog" aria-label="CareerGoals Guided Tour">
+    <div class="tour-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <span class="tour-step-tag" id="tourStepBadge">Step 1 of 5</span>
+        <button onclick="skipAppTour()" style="background: none; border: none; font-size: 18px; cursor: pointer; color: var(--text-muted);">&times;</button>
+      </div>
+      <h3 class="tour-title" id="tourTitle">Welcome to CareerGoals</h3>
+      <p class="tour-desc" id="tourDesc">Explore verified criteria from official university portals across Germany, Ireland, and the UK.</p>
+      
+      <div class="tour-nav-row">
+        <button id="tourPrevBtn" class="btn-ghost" onclick="prevTourStep()" style="font-size: 12px; padding: 6px 12px;">Back</button>
+        <div id="tourDots" style="display: flex; gap: 6px;"></div>
+        <button id="tourNextBtn" class="btn-forest" onclick="nextTourStep()" style="font-size: 12px; padding: 6px 16px;">Next &rarr;</button>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
