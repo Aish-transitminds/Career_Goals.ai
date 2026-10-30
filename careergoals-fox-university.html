@@ -2657,60 +2657,146 @@
       color: var(--text-muted);
     }
 
-    /* 30-Second Tour Overlay */
+    /* ==========================================================================
+       BUBBLE GUIDE FEATURE TOUR (Speech Bubble Popover & Spotlight)
+       ========================================================================== */
     .app-tour-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(11, 16, 38, 0.65);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-      z-index: 10000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      animation: fadeIn 0.2s ease;
+      background: rgba(11, 16, 38, 0.52);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      z-index: 99990;
+      pointer-events: auto;
+      transition: opacity 0.2s ease;
     }
 
-    .tour-card {
+    .tour-spotlight-active {
+      position: relative !important;
+      z-index: 99995 !important;
+      box-shadow: 0 0 0 4px #F3C97E, 0 0 25px rgba(243, 201, 126, 0.45) !important;
+      border-radius: 18px !important;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .tour-bubble-card {
+      position: fixed;
+      z-index: 99999;
+      width: 330px;
+      max-width: calc(100vw - 32px);
       background: var(--white);
-      border-radius: 24px;
-      max-width: 440px;
-      width: 100%;
-      padding: 28px;
-      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.25);
+      border-radius: 20px;
+      padding: 18px 20px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25), 0 2px 6px rgba(0, 0, 0, 0.08);
       border: 1px solid var(--border-soft);
-      position: relative;
+      animation: bubblePop 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      font-family: inherit;
+      pointer-events: auto;
     }
 
-    .tour-step-tag {
-      font-size: 10.5px;
+    @keyframes bubblePop {
+      0% { opacity: 0; transform: scale(0.92); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .tour-bubble-arrow {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: var(--white);
+      border: 1px solid var(--border-soft);
+      transform: rotate(45deg);
+    }
+
+    .tour-bubble-arrow.arrow-top {
+      top: -7px;
+      left: 36px;
+      border-right: none;
+      border-bottom: none;
+    }
+
+    .tour-bubble-arrow.arrow-bottom {
+      bottom: -7px;
+      left: 36px;
+      border-left: none;
+      border-top: none;
+    }
+
+    .tour-bubble-arrow.arrow-left {
+      left: -7px;
+      top: 24px;
+      border-top: none;
+      border-right: none;
+    }
+
+    .tour-bubble-arrow.arrow-right {
+      right: -7px;
+      top: 24px;
+      border-bottom: none;
+      border-left: none;
+    }
+
+    .tour-bubble-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .tour-bubble-badge {
+      font-size: 10px;
       font-weight: 700;
       color: var(--gold-accent);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
     }
 
-    .tour-title {
-      font-size: 19px;
+    .tour-bubble-badge::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 9999px;
+      background: var(--gold-accent);
+    }
+
+    .tour-bubble-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 18px;
+      cursor: pointer;
+      line-height: 1;
+      padding: 2px;
+      transition: color 0.15s;
+    }
+
+    .tour-bubble-close:hover {
+      color: var(--forest);
+    }
+
+    .tour-bubble-title {
+      font-size: 15px;
       font-weight: 700;
       color: var(--forest);
-      margin: 4px 0 8px 0;
+      margin-bottom: 4px;
     }
 
-    .tour-desc {
-      font-size: 13px;
+    .tour-bubble-desc {
+      font-size: 12px;
       color: var(--text-muted);
-      line-height: 1.55;
-      margin-bottom: 20px;
+      line-height: 1.5;
+      margin-bottom: 14px;
     }
 
-    .tour-nav-row {
+    .tour-bubble-footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
       border-top: 1px solid var(--border-soft);
-      padding-top: 16px;
+      padding-top: 12px;
     }
 
     .btn-tour-hero {
@@ -6342,51 +6428,61 @@ Notes: ${req.notes || 'None'}`;
     }
 
     // ==============================================================================
-    // 30-SECOND GUIDED TOUR IMPLEMENTATION
-    // ==============================================================================
+    // 30-SECOND BUBBLE GUIDE FEATURE TOUR IMPLEMENTATION
     let currentTourStep = 0;
     const tourSteps = [
       {
-        tag: "Step 1 of 5 • Overview",
-        title: "Home & Live Changes Feed",
-        desc: "CareerGoals provides verified requirements from official admission portals. The hero displays our continuous crawler feed showing real university criteria updates in Germany, Ireland, and the UK.",
+        tag: "1 of 5 • Applications Feed",
+        title: "Recent Verified Changes",
+        desc: "Live auditor feed continuously tracking admission rule revisions, deadline updates, and fee policies across Germany, Ireland, and the UK.",
+        target: ".apps-card",
+        placement: "left",
         action: () => { goToHomeTab(); }
       },
       {
-        tag: "Step 2 of 5 • Exploration",
+        tag: "2 of 5 • Match Cards",
         title: "Verified University Matches",
-        desc: "Explore programs categorized by transparent, mathematical fit tiers (Strong, Possible, Reach). Each card features drawn campus scenes, tuition in EUR/INR, deadlines, and direct official source links.",
+        desc: "Browse programs ranked by deterministic fit tiers. Each card includes official requirements, tuition in EUR/INR, deadlines, and drawn campus scenes.",
+        target: ".match-card",
+        placement: "bottom",
         action: () => { switchView('matches'); setFloatingActive('matches'); }
       },
       {
-        tag: "Step 3 of 5 • Milestones",
+        tag: "3 of 5 • Submission Tracking",
         title: "Application Tracker",
-        desc: "Once you shortlist programs, track submission deadlines with automated +1, +3, and +7 day check-in reminders so you never miss an institutional portal notification.",
+        desc: "Log your university applications and receive automated follow-up check-ins at +1, +3, and +7 days post-submission.",
+        target: "#tab-tracker",
+        placement: "bottom",
         action: () => { switchView('tracker'); setFloatingActive('tracker'); }
       },
       {
-        tag: "Step 4 of 5 • Preparation",
+        tag: "4 of 5 • Preparation Timeline",
         title: "Backward Milestone Planner",
-        desc: "Input your submission deadline and intake start date. The planner automatically computes recommended lead times backward for English tests, SOP drafting, LOR requests, and visa filing.",
+        desc: "Enter your application deadline and intake start date. The planner automatically calculates recommended lead times for SOP, tests, and visa filing.",
+        target: ".backward-calc-card",
+        placement: "bottom",
         action: () => { switchView('planner'); setFloatingActive('planner'); }
       },
       {
-        tag: "Step 5 of 5 • Instant Receipt",
-        title: "Atlas AI Assistant Guide",
-        desc: "Click the floating compass button at any time to open Atlas as a smooth bottom sheet. Ask questions about language cutoffs or visa funds, and receive answers linked directly to verified receipts.",
-        action: () => { toggleAtlas(true); }
+        tag: "5 of 5 • Fact Verification",
+        title: "Atlas AI Compass Guide",
+        desc: "Click this floating compass button anytime to open Atlas as a bottom sheet. Ask questions and get receipts with the exact date we verified them.",
+        target: "#atlasFab",
+        placement: "top",
+        action: () => { toggleAtlas(false); }
       }
     ];
 
     function startAppTour() {
       currentTourStep = 0;
-      document.getElementById('appTourOverlay').style.display = 'flex';
+      document.getElementById('appTourOverlay').style.display = 'block';
       renderTourStep();
     }
 
     function renderTourStep() {
       const step = tourSteps[currentTourStep];
       if (!step) return;
+
       document.getElementById('tourStepBadge').textContent = step.tag;
       document.getElementById('tourTitle').textContent = step.title;
       document.getElementById('tourDesc').textContent = step.desc;
@@ -6394,7 +6490,7 @@ Notes: ${req.notes || 'None'}`;
       const dotsContainer = document.getElementById('tourDots');
       if (dotsContainer) {
         dotsContainer.innerHTML = tourSteps.map((_, i) => `
-          <span style="width: 8px; height: 8px; border-radius: 9999px; background: ${i === currentTourStep ? '#B45309' : '#E6DFCF'}; transition: all 0.2s ease;"></span>
+          <span style="width: 7px; height: 7px; border-radius: 9999px; background: ${i === currentTourStep ? '#B45309' : '#E6DFCF'}; transition: all 0.2s ease;"></span>
         `).join('');
       }
 
@@ -6409,6 +6505,80 @@ Notes: ${req.notes || 'None'}`;
       if (typeof step.action === 'function') {
         step.action();
       }
+
+      // Position bubble next to step.target
+      setTimeout(() => {
+        positionTourBubble(step.target, step.placement);
+      }, 150);
+    }
+
+    function positionTourBubble(selector, preferredPlacement = 'bottom') {
+      const target = document.querySelector(selector);
+      const bubble = document.getElementById('tourBubbleCard');
+      const arrow = document.getElementById('tourBubbleArrow');
+      if (!target || !bubble) return;
+
+      // Clean up previous spotlight
+      document.querySelectorAll('.tour-spotlight-active').forEach(el => el.classList.remove('tour-spotlight-active'));
+      target.classList.add('tour-spotlight-active');
+
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      setTimeout(() => {
+        const rect = target.getBoundingClientRect();
+        const bRect = bubble.getBoundingClientRect();
+        const pad = 12;
+        const winW = window.innerWidth;
+        const winH = window.innerHeight;
+
+        let top = 0;
+        let left = 0;
+        let arrowDir = 'arrow-top';
+
+        if (winW < 768) {
+          // Mobile: Place above or below target centered
+          if (rect.bottom + bRect.height + 20 < winH) {
+            top = rect.bottom + pad;
+            arrowDir = 'arrow-top';
+          } else {
+            top = Math.max(pad, rect.top - bRect.height - pad);
+            arrowDir = 'arrow-bottom';
+          }
+          left = Math.max(pad, Math.min(winW - bRect.width - pad, (winW - bRect.width) / 2));
+        } else {
+          // Desktop placement
+          if (preferredPlacement === 'left' && rect.left > bRect.width + 24) {
+            top = Math.max(70, Math.min(winH - bRect.height - 20, rect.top + (rect.height / 2) - (bRect.height / 2)));
+            left = rect.left - bRect.width - pad;
+            arrowDir = 'arrow-right';
+          } else if (preferredPlacement === 'top' && rect.top > bRect.height + 24) {
+            top = rect.top - bRect.height - pad;
+            left = Math.max(20, Math.min(winW - bRect.width - 20, rect.left + (rect.width / 2) - (bRect.width / 2)));
+            arrowDir = 'arrow-bottom';
+          } else if (preferredPlacement === 'bottom' && rect.bottom + bRect.height + 24 < winH) {
+            top = rect.bottom + pad;
+            left = Math.max(20, Math.min(winW - bRect.width - 20, rect.left + (rect.width / 2) - (bRect.width / 2)));
+            arrowDir = 'arrow-top';
+          } else {
+            // Default top or bottom fallback
+            if (rect.bottom + bRect.height + 20 < winH) {
+              top = rect.bottom + pad;
+              arrowDir = 'arrow-top';
+            } else {
+              top = Math.max(70, rect.top - bRect.height - pad);
+              arrowDir = 'arrow-bottom';
+            }
+            left = Math.max(20, Math.min(winW - bRect.width - 20, rect.left));
+          }
+        }
+
+        bubble.style.top = Math.round(top) + 'px';
+        bubble.style.left = Math.round(left) + 'px';
+
+        if (arrow) {
+          arrow.className = 'tour-bubble-arrow ' + arrowDir;
+        }
+      }, 250);
     }
 
     function nextTourStep() {
@@ -6429,6 +6599,7 @@ Notes: ${req.notes || 'None'}`;
 
     function skipAppTour() {
       document.getElementById('appTourOverlay').style.display = 'none';
+      document.querySelectorAll('.tour-spotlight-active').forEach(el => el.classList.remove('tour-spotlight-active'));
     }
 
     // ==============================================================================
@@ -6496,22 +6667,23 @@ Notes: ${req.notes || 'None'}`;
 
   </script>
 
-  <!-- 30-Second Tour Modal Overlay -->
-  <div id="appTourOverlay" class="app-tour-overlay" style="display: none;" role="dialog" aria-label="CareerGoals Guided Tour">
-    <div class="tour-card">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-        <span class="tour-step-tag" id="tourStepBadge">Step 1 of 5</span>
-        <button onclick="skipAppTour()" style="background: none; border: none; font-size: 18px; cursor: pointer; color: var(--text-muted);">&times;</button>
+  <!-- Bubble Guide Feature Tour Popover -->
+  <div id="appTourOverlay" class="app-tour-overlay" style="display: none;" onclick="if(event.target===this) skipAppTour()">
+    <div id="tourBubbleCard" class="tour-bubble-card" role="dialog" aria-label="Feature Guide Bubble">
+      <div id="tourBubbleArrow" class="tour-bubble-arrow arrow-top"></div>
+      <div class="tour-bubble-header">
+        <span class="tour-bubble-badge" id="tourStepBadge">Feature 1 of 5</span>
+        <button class="tour-bubble-close" onclick="skipAppTour()" title="Close tour">&times;</button>
       </div>
-      <h3 class="tour-title" id="tourTitle">Welcome to CareerGoals</h3>
-      <p class="tour-desc" id="tourDesc">Explore verified criteria from official university portals across Germany, Ireland, and the UK.</p>
-      
-      <div class="tour-nav-row">
-        <button id="tourPrevBtn" class="btn-ghost" onclick="prevTourStep()" style="font-size: 12px; padding: 6px 12px;">Back</button>
-        <div id="tourDots" style="display: flex; gap: 6px;"></div>
-        <button id="tourNextBtn" class="btn-forest" onclick="nextTourStep()" style="font-size: 12px; padding: 6px 16px;">Next &rarr;</button>
+      <h3 class="tour-bubble-title" id="tourTitle">Feature Name</h3>
+      <p class="tour-bubble-desc" id="tourDesc">Description of this application feature.</p>
+      <div class="tour-bubble-footer">
+        <button id="tourPrevBtn" class="btn-ghost" onclick="prevTourStep()" style="font-size: 11px; padding: 4px 10px;">Back</button>
+        <div id="tourDots" style="display: flex; gap: 5px;"></div>
+        <button id="tourNextBtn" class="btn-forest" onclick="nextTourStep()" style="font-size: 11.5px; padding: 5px 14px;">Next &rarr;</button>
       </div>
     </div>
+  </div>
   </div>
 
 </body>

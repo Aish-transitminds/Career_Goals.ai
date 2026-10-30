@@ -260,7 +260,7 @@ export const LandingPage: React.FC = () => {
           </div>
 
           {/* Right Column: <ApplicationStatusCard /> */}
-          <div className="lg:col-span-5 flex justify-center items-center w-full">
+          <div id="hero-apps-card" className="lg:col-span-5 flex justify-center items-center w-full relative">
             <ApplicationStatusCard
               items={statusCardItems}
               cycle={new Date().getFullYear()}
@@ -488,38 +488,48 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 30-Second Guided Tour Modal */}
+      {/* Bubble Guide for Features Tour */}
       {tourStep !== null && (
-        <div className="fixed inset-0 z-50 bg-[#0B1026]/75 backdrop-blur-xs flex items-center justify-center p-4 animate-fadeIn font-sans">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+        <div 
+          className="fixed inset-0 z-50 bg-[#0B1026]/60 backdrop-blur-2xs flex items-center justify-center p-4 animate-fadeIn font-sans"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setTourStep(null);
+          }}
+        >
+          <div className="relative bg-white rounded-2xl max-w-sm w-full p-5 shadow-2xl border border-slate-200 space-y-3 animate-scaleUp">
+            {/* Bubble arrow tip pointing toward featured elements */}
+            <div className="absolute -top-2 left-8 w-4 h-4 bg-white border-t border-l border-slate-200 transform rotate-45" />
+
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-[#B45309] uppercase tracking-wider">
-                Step {tourStep + 1} of 5
+              <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-[#B45309] uppercase tracking-wider">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#B45309]" />
+                Feature {tourStep + 1} of 5
               </span>
               <button
                 type="button"
                 onClick={() => setTourStep(null)}
                 className="text-slate-400 hover:text-slate-600 text-lg leading-none"
+                title="Close guide"
               >
                 &times;
               </button>
             </div>
 
             <div>
-              <h3 className="text-base sm:text-lg font-bold text-[#1B4D3E]">
-                {tourStep === 0 && 'Home & Live Changes Feed'}
-                {tourStep === 1 && 'Verified University Matches'}
-                {tourStep === 2 && 'Application Tracker & Reminders'}
+              <h3 className="text-base font-bold text-[#1B4D3E]">
+                {tourStep === 0 && 'Live Applications & Changes Feed'}
+                {tourStep === 1 && 'Deterministic Matches & Campus Scenes'}
+                {tourStep === 2 && 'Application Submission Tracker'}
                 {tourStep === 3 && 'Backward Milestone Planner'}
                 {tourStep === 4 && 'Atlas AI Guide & Receipts'}
               </h3>
               <p className="text-xs text-slate-600 mt-1 leading-relaxed">
                 {tourStep === 0 &&
-                  'The hero features a live auditor feed showing real criteria revisions across Germany, Ireland, and the UK, with all facts verified from source portals.'}
+                  'The live auditor continuously checks university admissions gazettes across Germany, Ireland, and the UK, reporting revised criteria and updated deadlines.'}
                 {tourStep === 1 &&
-                  'Matches are ranked by deterministic mathematical scoring against actual faculty criteria. View campus scenes, fees, and official links.'}
+                  'Matches are ranked by deterministic mathematical scoring against actual faculty criteria. View campus scenes, fees in INR/EUR, and official portal links.'}
                 {tourStep === 2 &&
-                  'Track deadlines and receive automated follow-ups at +1, +3, and +7 days after submitting to stay ahead of status notifications.'}
+                  'Track deadlines and receive automated follow-ups at +1, +3, and +7 days after submitting to stay ahead of institutional portal notifications.'}
                 {tourStep === 3 &&
                   'Calculate preparation lead times backward from your target application deadline for SOP writing, tests, and visa filing.'}
                 {tourStep === 4 &&
@@ -540,7 +550,7 @@ export const LandingPage: React.FC = () => {
                 {[0, 1, 2, 3, 4].map((i) => (
                   <span
                     key={i}
-                    className={`w-2 h-2 rounded-full ${
+                    className={`w-2 h-2 rounded-full transition-colors ${
                       i === tourStep ? 'bg-[#deb062]' : 'bg-slate-200'
                     }`}
                   />
@@ -557,7 +567,7 @@ export const LandingPage: React.FC = () => {
                 }}
                 className="px-4 py-1.5 rounded-lg text-xs font-semibold bg-[#1B4D3E] hover:bg-[#2E6B57] text-white shadow-xs"
               >
-                {tourStep === 4 ? 'Finish' : 'Next →'}
+                {tourStep === 4 ? 'Finish Guide' : 'Next →'}
               </button>
             </div>
           </div>
