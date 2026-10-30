@@ -8,18 +8,9 @@ import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
 import { getAuth, Auth, connectAuthEmulator } from 'firebase/auth';
 import { getFirestore, Firestore, connectFirestoreEmulator } from 'firebase/firestore';
 
-const isLocalhost =
-  typeof window !== 'undefined' &&
-  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-
-const computedAuthDomain =
-  typeof window !== 'undefined' && !isLocalhost && window.location.hostname.includes('web.app')
-    ? window.location.hostname
-    : import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || 'careergoals-296e4.firebaseapp.com';
-
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY || 'AIzaSyDTl3Qmg-SZr0RvfwKSbnMQ826ThSCnnCk',
-  authDomain: computedAuthDomain,
+  authDomain: 'careergoals-296e4.firebaseapp.com',
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || 'careergoals-296e4',
   storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || 'careergoals-296e4.firebasestorage.app',
   messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '486856283911',

@@ -3933,14 +3933,9 @@
     /* --------------------------------------------------------------------------
        1. FIREBASE INITIALIZATION & BACKEND CONNECTION
        -------------------------------------------------------------------------- */
-    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-    const computedAuthDomain = !isLocalhost && window.location.hostname.includes('web.app')
-      ? window.location.hostname
-      : "careergoals-296e4.firebaseapp.com";
-
     const firebaseConfig = {
       apiKey: "AIzaSyDTl3Qmg-SZr0RvfwKSbnMQ826ThSCnnCk",
-      authDomain: computedAuthDomain,
+      authDomain: "careergoals-296e4.firebaseapp.com",
       projectId: "careergoals-296e4",
       storageBucket: "careergoals-296e4.firebasestorage.app",
       messagingSenderId: "486856283911",
