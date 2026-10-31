@@ -249,8 +249,35 @@ const CampusSceneBanner: React.FC<{
           onError={() => setImageFailed(true)}
         />
       ) : (
-        <div className="absolute inset-0 z-10 flex items-center justify-center px-4 text-center text-sm font-medium text-white">
-          Campus photo unavailable
+        <div
+          className="absolute inset-0 z-10 flex items-end overflow-hidden bg-gradient-to-br from-[#123c32] via-[#23634f] to-[#81a88b] px-5 pb-5 pt-4"
+          role="img"
+          aria-label={`Illustrated campus placeholder for ${univName}`}
+        >
+          <div className="absolute -right-10 -top-20 h-56 w-56 rounded-full bg-white/10 blur-2xl" aria-hidden="true" />
+          <div className="absolute right-8 top-7 h-14 w-14 rounded-full border border-white/20 bg-white/10" aria-hidden="true" />
+          <svg
+            className="absolute inset-x-0 bottom-0 h-[82%] w-full text-[#102f2a]/45"
+            viewBox="0 0 640 260"
+            preserveAspectRatio="xMidYMax slice"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path d="M0 220H640V260H0z" fill="currentColor" />
+            <path d="M95 220V112h450v108H95Z" fill="currentColor" />
+            <path d="m75 114 245-92 245 92H75Z" fill="currentColor" />
+            <path d="M295 22h50v-16h-50v16Z" fill="currentColor" />
+            <path d="M126 136h28v40h-28zm58 0h28v40h-28zm58 0h28v40h-28zm186 0h28v40h-28zm58 0h28v40h-28z" fill="#dbe9d8" fillOpacity=".42" />
+            <path d="M284 138h72v82h-72z" fill="#dbe9d8" fillOpacity=".55" />
+            <path d="M308 162h24v58h-24z" fill="currentColor" />
+            <path d="M45 220c22-30 47-30 69 0m412 0c22-30 47-30 69 0" stroke="#dbe9d8" strokeOpacity=".3" strokeWidth="5" />
+          </svg>
+          <div className="relative z-10 max-w-[85%] text-white">
+            <span className="mb-1 block text-[10px] font-semibold uppercase tracking-[0.2em] text-white/70">
+              Campus preview
+            </span>
+            <span className="block text-lg font-semibold leading-tight drop-shadow-sm">{univName}</span>
+          </div>
         </div>
       )}
 
