@@ -6,10 +6,14 @@
  * Defined once for the entire assistant and client-side pipeline.
  */
 
-// Authoritative modern Gemini Flash model identifier
+// Firebase AI Logic manages Gemini credentials; never place an API key here.
+const modelEnv = typeof import.meta !== 'undefined' ? import.meta.env : undefined;
+
 export const GEMINI_MODEL: string =
-  (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GEMINI_MODEL) ||
-  'gemini-2.5-flash';
+  modelEnv?.VITE_GEMINI_MODEL || 'gemini-3.8-flash';
+export const GEMINI_FALLBACK_MODEL: string =
+  modelEnv?.VITE_GEMINI_FALLBACK_MODEL || 'gemini-3.5-flash-lite';
+export const GEMINI_TIMEOUT_MS = 45_000;
 
 // Retry and backoff constants for rate-limiting (429 / 503)
 export const ASSISTANT_MAX_RETRIES = 3;

@@ -8,6 +8,7 @@ import { atlasService } from './atlasService';
 import { atlasToolRegistry } from './atlasTools';
 import { AtlasStructuredResponse, AtlasAction } from '../types/atlas';
 import { University, Country, UserProfile } from '../types';
+import { ASSISTANT_UNAVAILABLE_MESSAGE } from '../config/modelConfig';
 
 export interface ChatMessage {
   id: string;
@@ -71,11 +72,7 @@ export class AIAssistantService {
       return {
         id: `bot-${Date.now()}`,
         role: 'assistant',
-        content:
-          'Atlas provides fact-checked study abroad admissions data for Germany, Ireland, and the UK. Please ask about application deadlines, language cutoffs (IELTS/TOEFL), or tuition fees.',
-        sourceUrl: 'https://www.daad.de/en/study-and-research-in-germany/',
-        sourceName: 'Official DAAD Portal',
-        lastChecked: '2026-10-15',
+        content: ASSISTANT_UNAVAILABLE_MESSAGE,
         followUps: [
           'IELTS for Manchester CS?',
           'Cheapest verified Germany MS?',
