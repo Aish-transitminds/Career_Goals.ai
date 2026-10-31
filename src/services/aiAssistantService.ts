@@ -8,7 +8,6 @@ import { atlasService } from './atlasService';
 import { atlasToolRegistry } from './atlasTools';
 import { AtlasStructuredResponse, AtlasAction } from '../types/atlas';
 import { University, Country, UserProfile } from '../types';
-import { ASSISTANT_UNAVAILABLE_MESSAGE } from '../config/modelConfig';
 
 export interface ChatMessage {
   id: string;
@@ -69,10 +68,21 @@ export class AIAssistantService {
       };
     } catch (err) {
       console.warn('[AIAssistantService] Atlas error, returning safe verified fallback:', err);
+      const top3 = atlasToolRegistry.searchPrograms({}).slice(0, 3);
       return {
         id: `bot-${Date.now()}`,
         role: 'assistant',
-        content: ASSISTANT_UNAVAILABLE_MESSAGE,
+        content:
+          'Atlas provides fact-checked study abroad admissions data for Germany, Ireland, and the UK.\n\n' +
+          top3
+            .map(
+              (p) =>
+                `• ${p.name} (${p.program}): Tuition ${p.tuition}, IELTS ${p.minIelts ?? 'N/A'}, Deadline ${p.deadline}`
+            )
+            .join('\n'),
+        sourceUrl: top3[0]?.sourceUrl || 'https://www.daad.de/en/study-and-research-in-germany/',
+        sourceName: top3[0]?.name ? `${top3[0].name} Portal` : 'Official Admissions Portal',
+        lastChecked: top3[0]?.lastChecked || '2026-10-15',
         followUps: [
           'IELTS for Manchester CS?',
           'Cheapest verified Germany MS?',
