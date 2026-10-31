@@ -44,7 +44,6 @@ export async function generateWithGroq(
           ],
           temperature: 0.1,
           max_tokens: 600,
-          response_format: { type: 'json_object' },
         }),
         signal: controller.signal,
       });
@@ -60,6 +59,10 @@ export async function generateWithGroq(
         throw new Error('Groq returned empty content');
       }
 
+      const jsonMatch = content.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        return JSON.parse(jsonMatch[0]) as AtlasStructuredResponse;
+      }
       return JSON.parse(content) as AtlasStructuredResponse;
     } finally {
       clearTimeout(timeoutId);
