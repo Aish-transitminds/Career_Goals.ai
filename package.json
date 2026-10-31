@@ -18,7 +18,7 @@
     "test:eligibility": "tsx tests/unit/eligibilityEngine.test.ts",
     "test:verification": "tsx tests/unit/verificationUtils.test.ts",
     "test:financial": "tsx tests/unit/financialUtils.test.ts",
-    "test:atlas": "tsx tests/unit/atlasServiceMatching.test.ts && tsx tests/unit/atlasDatabaseMatcher.test.ts && tsx tests/unit/atlasGeminiFallback.test.ts",
+    "test:atlas": "tsx tests/unit/atlasServiceMatching.test.ts && tsx tests/unit/atlasDatabaseMatcher.test.ts && tsx tests/unit/atlasGeminiFallback.test.ts && tsx tests/unit/atlasGroqService.test.ts",
     "test": "npm run test:match && npm run test:letter && npm run test:profile && npm run test:subjects && npm run test:eligibility && npm run test:verification && npm run test:financial && npm run test:atlas"
   },
   "dependencies": {
