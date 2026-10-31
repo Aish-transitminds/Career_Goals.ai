@@ -22,6 +22,7 @@ import {
   GEMINI_TIMEOUT_MS,
 } from '../config/modelConfig';
 import { generateWithModelFallback } from './atlasGeminiFallback';
+import { generateWithGroq } from './groqService';
 
 const ATLAS_SYSTEM_PROMPT = `You are Atlas AI, a university guidance assistant.
 Only use DB_RESULT when MATCH_SCORE is at least 0.85 and the university clearly matches the name in USER_QUERY. Never substitute a different or similar university.
@@ -473,6 +474,38 @@ export class AtlasService {
 
     const dbResult = hasCatalogMatch ? progData : searchData;
     const matchScore = hasCatalogMatch ? 1 : 0;
+
+    // 1. Try Groq LPU first if configured (sub-second response ~300ms)
+    const groqKey =
+      typeof import.meta !== 'undefined' && import.meta.env
+        ? import.meta.env.VITE_GROQ_API_KEY
+        : typeof process !== 'undefined'
+        ? process.env.VITE_GROQ_API_KEY
+        : undefined;
+    if (groqKey) {
+      try {
+        const payload = JSON.stringify({
+          USER_QUERY: prompt,
+          DB_RESULT: dbResult,
+          MATCH_SCORE: matchScore,
+          WEB_RESULT: externalMatches,
+        });
+        const groqResponse = await generateWithGroq(ATLAS_SYSTEM_PROMPT, payload, groqKey);
+        if (!hasCatalogMatch || !progData || 'error' in progData) {
+          return groqResponse;
+        }
+        return atlasValidator.validate(groqResponse, {
+          retrievedFacts: progData,
+          sourceUrl: progData.sourceUrl,
+          sourceName: `${progData.name} Admissions`,
+          lastChecked: progData.lastChecked,
+          programId: progId || undefined,
+        });
+      } catch (groqErr) {
+        console.warn('[AtlasService] Groq inference error, falling back to Firebase/Gemini:', groqErr);
+      }
+    }
+
     try {
       const ai = getAI(app, { backend: new GoogleAIBackend() });
       const request = {
