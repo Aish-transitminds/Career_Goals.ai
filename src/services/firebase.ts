@@ -5,6 +5,7 @@
  */
 
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
+import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'firebase/app-check';
 import { getAuth, Auth, connectAuthEmulator } from 'firebase/auth';
 import { getFirestore, Firestore, connectFirestoreEmulator } from 'firebase/firestore';
 
@@ -20,6 +21,14 @@ const firebaseConfig = {
 // Singleton initialization pattern to prevent duplicate app initialization
 export const app: FirebaseApp =
   getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+
+const appCheckSiteKey = import.meta.env.VITE_FIREBASE_APPCHECK_SITE_KEY;
+if (appCheckSiteKey) {
+  initializeAppCheck(app, {
+    provider: new ReCaptchaEnterpriseProvider(appCheckSiteKey),
+    isTokenAutoRefreshEnabled: true,
+  });
+}
 
 export const auth: Auth = getAuth(app);
 export const db: Firestore = getFirestore(app);

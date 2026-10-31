@@ -99,9 +99,22 @@ flowchart TD
   - Programme-specific prompts and official statement length requirements.
 
 ### 7. Atlas – Verified Study Abroad AI Guide
-- Operates strictly over verified Firestore catalog facts using Firebase AI Logic with an automated fallback to keyword-based retrieval on Spark plans.
-- Out-of-catalog inquiries explicitly inform the student that the information is not confirmed in the catalog and direct them to official portals.
+- Uses the Firebase AI Logic SDK with the Gemini Developer API, so Gemini API keys are not embedded in the web app and no Firebase Cloud Functions are needed.
+- Uses the ROR registry to verify institutions that do not match the catalog. External identity/location facts are labeled and are never presented as verified admissions requirements.
+- Uses `gemini-3.8-flash` with `gemini-3.5-flash-lite` as a fallback when the primary returns HTTP 404 or remains overloaded after three HTTP 429/503 attempts.
 - 500-character input cap; zero student personal data is ever sent to LLMs.
+
+#### Atlas AI Logic setup
+
+In Firebase Console, open **AI Services → AI Logic → Get started**, select **Gemini Developer API** (not Vertex AI), and finish setup for the existing web app. This uses the Gemini Developer API free tier and does not require deploying Cloud Functions.
+The Firebase Console's classic reCAPTCHA provider is deprecated. Register the web app with the **Fraud Defense** provider (reCAPTCHA Enterprise), create a score-based Web key, and set that public site key as `VITE_FIREBASE_APPCHECK_SITE_KEY` in the build environment. Add the live site's domain to the key.
+
+```powershell
+npm run build
+firebase deploy --only hosting
+```
+
+For local development with App Check enforcement, register an App Check debug token in Firebase Console. Do not put a Gemini API key in a `VITE_*` variable or the client `.env` file.
 
 ---
 
