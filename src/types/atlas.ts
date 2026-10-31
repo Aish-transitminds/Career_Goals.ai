@@ -58,7 +58,7 @@ export interface AtlasStructuredResponse {
   primarySource?: {
     name: string;
     url: string;
-    lastChecked: string;
+    lastChecked?: string;
   };
   /** Whether the answer utilized the student's profile */
   usedProfile?: boolean;

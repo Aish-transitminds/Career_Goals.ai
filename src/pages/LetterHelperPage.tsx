@@ -262,7 +262,7 @@ export const LetterHelperPage: React.FC = () => {
   }, [drafts, storageKey, selectedProgramId]);
 
   // Section expansion states
-  const [expandedSection, setExpandedSection] = useState<string>('q_0');
+  const [expandedSection, setExpandedSection] = useState<string>(STANDARD_SECTIONS[0].id);
   const [showFrameworkWhenQuestionsExist, setShowFrameworkWhenQuestionsExist] = useState<boolean>(false);
   const [copiedDraftId, setCopiedDraftId] = useState<string | null>(null);
   const [copiedAll, setCopiedAll] = useState<boolean>(false);
@@ -370,6 +370,27 @@ export const LetterHelperPage: React.FC = () => {
   const status: StatementVerificationStatus = statementReq?.status || 'Unknown';
   const hasSpecificQuestions = Boolean(statementReq?.specificQuestions && statementReq.specificQuestions.length > 0);
 
+  useEffect(() => {
+    setExpandedSection(hasSpecificQuestions ? 'q_0' : STANDARD_SECTIONS[0].id);
+  }, [selectedProgramId, hasSpecificQuestions]);
+
+  const plannerNavigationItems = hasSpecificQuestions
+    ? (statementReq?.specificQuestions || []).map((_, index) => ({
+        id: `planner-section-q_${index}`,
+        key: `q_${index}`,
+        label: `Question ${index + 1}`,
+      }))
+    : STANDARD_SECTIONS.map((section, index) => ({
+        id: `planner-section-${section.id}`,
+        key: section.id,
+        label: `0${index + 1} ${section.title.replace(/^\d+\.\s*/, '')}`,
+      }));
+
+  const navigateToPlannerSection = (sectionId: string, sectionKey: string) => {
+    setExpandedSection(sectionKey);
+    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   // Status Badge Rendering
   const renderStatusBadge = (st: StatementVerificationStatus) => {
     switch (st) {
@@ -413,7 +434,7 @@ export const LetterHelperPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8 max-w-6xl mx-auto pb-16">
+    <div className="planner-page space-y-8 max-w-6xl mx-auto pb-16">
       {/* 0. Top Navigation & Context Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4 font-poppins">
         <Link
@@ -465,137 +486,116 @@ export const LetterHelperPage: React.FC = () => {
       </div>
 
             {/* Backward Milestone Planner (Calculated from Deadline & Start Date) */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm font-sans space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[#B45309] uppercase tracking-wider">
-              <Clock className="w-3.5 h-3.5 text-[#B45309]" />
-              <span>Backward Milestone Planner</span>
-            </div>
-            <h3 className="text-base sm:text-lg font-bold text-[#1B4D3E] mt-1">
-              Milestone Schedule Computed from Deadlines
-            </h3>
-            <p className="text-xs text-slate-500 max-w-xl">
-              Lead times are typical benchmarks computed backward from your application deadline and intake start date. Verify exact dates with your official university portal.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200">
-            <div>
-              <label className="text-[11px] font-bold text-slate-700 block mb-1">Application Deadline</label>
-              <input
-                type="date"
-                value={calcDeadline}
-                onChange={(e) => setCalcDeadline(e.target.value)}
-                className="px-2.5 py-1 rounded-lg border border-slate-300 text-xs font-semibold bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#1B4D3E]"
-              />
-            </div>
-            <div>
-              <label className="text-[11px] font-bold text-slate-700 block mb-1">Intake Start Date</label>
-              <input
-                type="date"
-                value={calcStartDate}
-                onChange={(e) => setCalcStartDate(e.target.value)}
-                className="px-2.5 py-1 rounded-lg border border-slate-300 text-xs font-semibold bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#1B4D3E]"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Milestone Steps Timeline Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2">
-          {[
-            {
-              step: 1,
-              label: 'Shortlist & Faculty Outreach',
-              offset: '-90 days to deadline',
-              date: new Date(new Date(calcDeadline + 'T00:00:00').getTime() - 90 * 86400000),
-              badge: 'Research',
-            },
-            {
-              step: 2,
-              label: 'English Test (IELTS / TOEFL)',
-              offset: '-75 days to deadline',
-              date: new Date(new Date(calcDeadline + 'T00:00:00').getTime() - 75 * 86400000),
-              badge: 'Exams',
-            },
-            {
-              step: 3,
-              label: 'First SOP Draft & Academic Hook',
-              offset: '-45 days to deadline',
-              date: new Date(new Date(calcDeadline + 'T00:00:00').getTime() - 45 * 86400000),
-              badge: 'Writing',
-            },
-            {
-              step: 4,
-              label: 'LORs & Official Transcripts',
-              offset: '-30 days to deadline',
-              date: new Date(new Date(calcDeadline + 'T00:00:00').getTime() - 30 * 86400000),
-              badge: 'Documents',
-            },
-            {
-              step: 5,
-              label: '8-Point Quality Audit & PDF',
-              offset: '-15 days to deadline',
-              date: new Date(new Date(calcDeadline + 'T00:00:00').getTime() - 15 * 86400000),
-              badge: 'Audit',
-            },
-            {
-              step: 6,
-              label: 'Official Application Deadline',
-              offset: 'Day 0',
-              date: new Date(calcDeadline + 'T00:00:00'),
-              badge: 'Deadline',
-              highlight: true,
-            },
-            {
-              step: 7,
-              label: 'Student Visa & Blocked Account',
-              offset: '-60 days to intake',
-              date: new Date(new Date(calcStartDate + 'T00:00:00').getTime() - 60 * 86400000),
-              badge: 'Visa',
-            },
-            {
-              step: 8,
-              label: 'Housing & Health Insurance',
-              offset: '-30 days to intake',
-              date: new Date(new Date(calcStartDate + 'T00:00:00').getTime() - 30 * 86400000),
-              badge: 'Arrival',
-            },
-          ].map((m) => (
-            <div
-              key={m.step}
-              className={`p-3 rounded-xl border flex items-start gap-2.5 transition-all ${
-                m.highlight
-                  ? 'border-amber-400 bg-amber-50/50 shadow-xs ring-1 ring-amber-300'
-                  : 'border-slate-200 bg-slate-50/50 hover:bg-white'
-              }`}
-            >
-              <div
-                className={`w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs shrink-0 ${
-                  m.highlight ? 'bg-[#B45309] text-white' : 'bg-[#1B4D3E] text-white'
-                }`}
-              >
-                {m.step}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between gap-1">
-                  <span className="text-xs font-bold text-slate-900">
-                    {isNaN(m.date.getTime())
-                      ? 'TBD'
-                      : m.date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
-                  </span>
-                  <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-slate-200 text-slate-700">
-                    {m.badge}
-                  </span>
+            <section className="planner-timeline bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                    <Clock className="w-3.5 h-3.5" />
+                    <span>Backward Milestone Planner</span>
+                  </div>
+                  <h2 className="text-xl sm:text-2xl font-bold text-[#1B4D3E] mt-1">
+                    Your application timeline
+                  </h2>
+                  <p className="text-sm text-slate-600 max-w-xl mt-1">
+                    Suggested milestones are calculated from your application deadline and intake. Confirm dates with the official university portal.
+                  </p>
                 </div>
-                <h4 className="text-xs font-semibold text-slate-800 truncate mt-0.5">{m.label}</h4>
-                <p className="text-[10px] text-slate-500">{m.offset}</p>
+
+                <div className="flex flex-wrap items-center gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200">
+                  <div>
+                    <label className="text-[11px] font-semibold text-slate-600 block mb-1">Application deadline</label>
+                    <input
+                      type="date"
+                      value={calcDeadline}
+                      onChange={(e) => setCalcDeadline(e.target.value)}
+                      className="px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-semibold bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#1B4D3E]"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[11px] font-semibold text-slate-600 block mb-1">Intake start date</label>
+                    <input
+                      type="date"
+                      value={calcStartDate}
+                      onChange={(e) => setCalcStartDate(e.target.value)}
+                      className="px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-semibold bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#1B4D3E]"
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      </div>
+
+              <ol className="planner-timeline__rail">
+                {[
+                  {
+                    label: 'Shortlist & faculty outreach',
+                    relation: '90 days before application deadline',
+                    date: new Date(new Date(calcDeadline + 'T00:00:00').getTime() - 90 * 86400000),
+                    category: 'Research',
+                  },
+                  {
+                    label: 'English test (IELTS / TOEFL)',
+                    relation: '75 days before application deadline',
+                    date: new Date(new Date(calcDeadline + 'T00:00:00').getTime() - 75 * 86400000),
+                    category: 'Exams',
+                  },
+                  {
+                    label: 'First statement draft',
+                    relation: '45 days before application deadline',
+                    date: new Date(new Date(calcDeadline + 'T00:00:00').getTime() - 45 * 86400000),
+                    category: 'Writing',
+                  },
+                  {
+                    label: 'Letters & official transcripts',
+                    relation: '30 days before application deadline',
+                    date: new Date(new Date(calcDeadline + 'T00:00:00').getTime() - 30 * 86400000),
+                    category: 'Documents',
+                  },
+                  {
+                    label: 'Quality review & final PDF',
+                    relation: '15 days before application deadline',
+                    date: new Date(new Date(calcDeadline + 'T00:00:00').getTime() - 15 * 86400000),
+                    category: 'Final review',
+                  },
+                  {
+                    label: 'Application deadline',
+                    relation: 'Submit by this date',
+                    date: new Date(calcDeadline + 'T00:00:00'),
+                    category: 'Deadline',
+                    highlight: true,
+                  },
+                  {
+                    label: 'Student visa & blocked account',
+                    relation: '60 days before intake begins',
+                    date: new Date(new Date(calcStartDate + 'T00:00:00').getTime() - 60 * 86400000),
+                    category: 'Visa',
+                  },
+                  {
+                    label: 'Housing & health insurance',
+                    relation: '30 days before intake begins',
+                    date: new Date(new Date(calcStartDate + 'T00:00:00').getTime() - 30 * 86400000),
+                    category: 'Arrival',
+                  },
+                ]
+                  .sort((a, b) => a.date.getTime() - b.date.getTime())
+                  .map((milestone, index) => (
+                    <li
+                      key={`${milestone.category}-${milestone.label}`}
+                      className={`planner-timeline__item${milestone.highlight ? ' planner-timeline__item--deadline' : ''}`}
+                    >
+                      <span className="planner-timeline__marker" aria-hidden="true">{index + 1}</span>
+                      <div className="planner-timeline__content">
+                        <span className="planner-timeline__date">
+                          {isNaN(milestone.date.getTime())
+                            ? 'Date to be set'
+                            : milestone.date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                        </span>
+                        <span className="planner-timeline__category">{milestone.category}</span>
+                        <h3>{milestone.label}</h3>
+                        <p>{milestone.relation}</p>
+                      </div>
+                    </li>
+                  ))}
+              </ol>
+            </section>
 
       {/* 1. Programme-Specific Header Banner */}
       {selectedUniversity ? (
@@ -928,7 +928,7 @@ export const LetterHelperPage: React.FC = () => {
       )}
 
       {/* 4. PLANNING WORKSPACE */}
-      <div className="space-y-6 font-poppins">
+      <div className="planner-workspace space-y-6">
         {/* Workspace Toolbar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E6DFCF] pb-3">
           <div>
@@ -956,6 +956,31 @@ export const LetterHelperPage: React.FC = () => {
           </div>
         </div>
 
+        <nav className="planner-section-nav" aria-label="Jump to a planner section">
+          <span className="planner-section-nav__label">Jump to section</span>
+          {plannerNavigationItems.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => navigateToPlannerSection(item.id, item.key)}
+              className="planner-section-nav__link"
+            >
+              {item.label}
+            </button>
+          ))}
+          {hasSpecificQuestions && showFrameworkWhenQuestionsExist &&
+            STANDARD_SECTIONS.map((section, index) => (
+              <button
+                key={section.id}
+                type="button"
+                onClick={() => navigateToPlannerSection(`planner-section-${section.id}`, section.id)}
+                className="planner-section-nav__link"
+              >
+                {`0${index + 1} ${section.title.replace(/^\d+\.\s*/, '')}`}
+              </button>
+            ))}
+        </nav>
+
         {/* 4A. Programme-Specific Questions (Prioritised if prescribed) */}
         {hasSpecificQuestions && statementReq?.specificQuestions && (
           <div className="space-y-4">
@@ -976,7 +1001,8 @@ export const LetterHelperPage: React.FC = () => {
                 return (
                   <div
                     key={q.id}
-                    className={`bg-white rounded-[6px] border transition-all ${
+                    id={`planner-section-q_${idx}`}
+                    className={`scroll-mt-24 bg-white rounded-[6px] border transition-all ${
                       isExpanded
                         ? 'border-[#FF5E00] shadow-md ring-1 ring-[#FF5E00]/20'
                         : 'border-slate-200 hover:border-slate-300'
@@ -1023,15 +1049,29 @@ export const LetterHelperPage: React.FC = () => {
                     </button>
 
                     {isExpanded && (
-                      <div className="px-5 pb-6 sm:px-6 sm:pb-8 pt-2 border-t border-slate-100 space-y-4">
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between">
+                      <div className="planner-question-layout px-5 pb-6 sm:px-6 sm:pb-8 pt-5 border-t border-slate-100">
+                        <aside className="planner-question-guidance">
+                          <span className="planner-eyebrow">Programme prompt</span>
+                          <p className="mt-2 text-sm text-slate-700 leading-relaxed">
+                            {q.question}
+                          </p>
+                          {q.guidance && (
+                            <p className="mt-3 text-sm text-slate-600 leading-relaxed">
+                              {q.guidance}
+                            </p>
+                          )}
+                          <p className="mt-4 text-xs text-slate-500 leading-relaxed">
+                            Notes are saved only in this browser and are not sent to an AI service.
+                          </p>
+                        </aside>
+                        <div className="planner-writing space-y-2">
+                          <div className="flex items-center justify-between gap-3">
                             <label className="text-xs font-bold text-slate-800 uppercase tracking-wider">
-                              Your Outline Notes & Points (Local Only)
+                              Your writing plan
                             </label>
                             <div className="flex items-center gap-3">
                               <span
-                                className={`text-[11px] font-semibold font-mono ${
+                                className={`text-[11px] font-semibold ${
                                   charCount >= 480 ? 'text-rose-600' : 'text-slate-500'
                                 }`}
                               >
@@ -1057,7 +1097,7 @@ export const LetterHelperPage: React.FC = () => {
                             onChange={(e) => handleDraftChange(draftKey, e.target.value)}
                             placeholder={`Draft your key points for Question ${idx + 1} here...`}
                             maxLength={500}
-                            rows={4}
+                            rows={8}
                             className="w-full p-4 rounded-[6px] border border-slate-300 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#FF5E00] focus:border-transparent transition-all font-sans"
                           />
                           <p className="text-[11px] text-slate-500">
@@ -1110,7 +1150,8 @@ export const LetterHelperPage: React.FC = () => {
                 return (
                   <div
                     key={sec.id}
-                    className={`bg-white rounded-[6px] border transition-all ${
+                    id={`planner-section-${sec.id}`}
+                    className={`scroll-mt-24 bg-white rounded-[6px] border transition-all ${
                       isExpanded
                         ? 'border-[#FF5E00] shadow-md ring-1 ring-[#FF5E00]/20'
                         : 'border-slate-200 hover:border-slate-300'
@@ -1141,49 +1182,50 @@ export const LetterHelperPage: React.FC = () => {
                     </button>
 
                     {isExpanded && (
-                      <div className="px-5 pb-6 sm:px-6 sm:pb-8 pt-2 border-t border-slate-100 space-y-6">
+                      <div className="planner-section-layout px-5 pb-6 sm:px-6 sm:pb-8 pt-5 border-t border-slate-100">
+                        <aside className="planner-guidance">
                         {/* Guiding Reflection Prompts */}
                         <div className="space-y-2">
-                          <span className="text-xs font-bold text-[#0B1026] uppercase tracking-wider flex items-center gap-1.5">
-                            <HelpCircle className="w-4 h-4 text-[#FF5E00]" />
+                          <span className="planner-eyebrow flex items-center gap-1.5">
+                            <HelpCircle className="w-4 h-4" />
                             Guiding Reflection Questions
                           </span>
-                          <ul className="space-y-2 text-xs text-slate-700 bg-slate-50 p-4 rounded-[6px] border border-slate-200">
+                          <ul className="planner-prompt-list">
                             {sec.prompts.map((p, idx) => (
                               <li key={idx} className="flex items-start gap-2.5">
-                                <span className="text-[#FF5E00] font-extrabold mt-0.5">&bull;</span>
-                                <span className="leading-relaxed font-medium">{p}</span>
+                                <span aria-hidden="true">&bull;</span>
+                                <span>{p}</span>
                               </li>
                             ))}
                           </ul>
                         </div>
 
                         {/* What to Include vs What to Avoid */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div className="bg-emerald-50/60 p-4 rounded-[6px] border border-emerald-200 space-y-2">
-                            <span className="text-xs font-bold text-emerald-900 uppercase tracking-wider flex items-center gap-1.5">
-                              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                        <div className="planner-guidance-lists">
+                          <div>
+                            <span className="planner-eyebrow flex items-center gap-1.5">
+                              <CheckCircle2 className="w-4 h-4" />
                               Key Elements to Include
                             </span>
-                            <ul className="space-y-1.5 text-xs text-emerald-950">
+                            <ul>
                               {sec.whatToInclude.map((item, idx) => (
                                 <li key={idx} className="flex items-start gap-2">
-                                  <span className="text-emerald-600 font-bold">✓</span>
+                                  <span aria-hidden="true">•</span>
                                   <span>{item}</span>
                                 </li>
                               ))}
                             </ul>
                           </div>
 
-                          <div className="bg-rose-50/60 p-4 rounded-[6px] border border-rose-200 space-y-2">
-                            <span className="text-xs font-bold text-rose-900 uppercase tracking-wider flex items-center gap-1.5">
-                              <AlertTriangle className="w-4 h-4 text-rose-600" />
+                          <div>
+                            <span className="planner-eyebrow flex items-center gap-1.5">
+                              <AlertTriangle className="w-4 h-4" />
                               Clichés to Strictly Avoid
                             </span>
-                            <ul className="space-y-1.5 text-xs text-rose-950">
+                            <ul>
                               {sec.whatToAvoid.map((item, idx) => (
                                 <li key={idx} className="flex items-start gap-2">
-                                  <span className="text-rose-500 font-bold">&times;</span>
+                                  <span aria-hidden="true">•</span>
                                   <span>{item}</span>
                                 </li>
                               ))}
@@ -1192,23 +1234,25 @@ export const LetterHelperPage: React.FC = () => {
                         </div>
 
                         {/* Review Tip */}
-                        <div className="p-3.5 bg-slate-50 rounded-[6px] border border-slate-200 text-xs text-slate-700 flex items-start gap-2">
-                          <Lightbulb className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+                        <div className="planner-review-tip">
+                          <Lightbulb className="w-4 h-4 shrink-0 mt-0.5" />
                           <div>
-                            <strong>Pro Tip: </strong>
+                            <span className="planner-eyebrow">A useful check</span>
+                            <br />
                             <span>{sec.reviewTip}</span>
                           </div>
                         </div>
+                        </aside>
 
                         {/* Student Scratchpad (Zero AI, 500-Char Capped) */}
-                        <div className="space-y-2 pt-2">
+                        <div className="planner-writing space-y-2">
                           <div className="flex items-center justify-between">
-                            <label className="text-xs font-bold text-slate-800 uppercase tracking-wider">
-                              Your Outline Notes & Draft Bullets (Local Only)
+                            <label className="planner-writing__label">
+                              Your writing plan
                             </label>
                             <div className="flex items-center gap-3">
                               <span
-                                className={`text-[11px] font-semibold font-mono ${
+                                className={`text-[11px] font-semibold ${
                                   charCount >= 480 ? 'text-rose-600' : 'text-slate-500'
                                 }`}
                               >
@@ -1234,7 +1278,7 @@ export const LetterHelperPage: React.FC = () => {
                             onChange={(e) => handleDraftChange(sec.id, e.target.value)}
                             placeholder={`Draft your key points for ${sec.title.toLowerCase()} here...`}
                             maxLength={500}
-                            rows={4}
+                            rows={16}
                             className="w-full p-4 rounded-[6px] border border-slate-300 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#FF5E00] focus:border-transparent transition-all font-sans"
                           />
                           <p className="text-[11px] text-slate-500">

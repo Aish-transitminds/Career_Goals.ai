@@ -9,9 +9,16 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCatalog } from '../hooks/useCatalog';
 import { getUserApplications, setUserApplication } from '../services/firestoreService';
-import { MatchResult, FitCategory } from '../types';
-import { calculateMatches } from '../utils/matchEngine';
+import { MatchResult, FitCategory, University } from '../types';
+import { calculateMatches, isDemonstrationRuleChange } from '../utils/matchEngine';
+import { getUniversitiesByField } from '../services/firestoreService';
+import { getSubjectSuggestions, SubjectSuggestion } from '../services/subjectSuggestionService';
 import { RuleChangedBanner } from '../components/common/RuleChangedBanner';
+import { EligibilityComparisonTable } from '../components/common/EligibilityComparisonTable';
+import { VerificationStatusBadge } from '../components/common/VerificationStatusBadge';
+import { FeeBreakdownPanel } from '../components/common/FeeBreakdownPanel';
+import { MatchExplanationCard } from '../components/common/MatchExplanationCard';
+import { buildEligibilityComparison, mapFitCategoryToEnhanced } from '../utils/eligibilityEngine';
 import { getTuitionInrEstimate } from '../utils/currencyUtils';
 import {
   Search,
@@ -36,6 +43,9 @@ function formatCountryAndProgram(countryId: string, program: string): string {
     germany: 'Germany',
     ireland: 'Ireland',
     uk: 'United Kingdom',
+    usa: 'United States',
+    canada: 'Canada',
+    australia: 'Australia',
   };
   const country = countryMap[countryId] || countryId.charAt(0).toUpperCase() + countryId.slice(1);
   return `${country} · ${program}`;
@@ -43,7 +53,7 @@ function formatCountryAndProgram(countryId: string, program: string): string {
 
 /** Formats date into readable verification label e.g. "Verified 15 Oct 2026" */
 function formatVerificationDate(dateStr: string | null | undefined): string {
-  if (!dateStr) return 'Verified';
+  if (!dateStr) return 'Admissions details not verified';
   try {
     const d = new Date(dateStr);
     if (!isNaN(d.getTime())) {
@@ -58,7 +68,7 @@ function formatVerificationDate(dateStr: string | null | undefined): string {
 
 /** Extracts tuition main figure (INR) and small muted original figure */
 function formatTuitionDisplay(tuitionStr: string | null | undefined): { main: string; sub: string } {
-  if (!tuitionStr) return { main: 'Free / Unspecified', sub: '' };
+  if (!tuitionStr) return { main: 'Not listed', sub: '' };
   const lower = tuitionStr.toLowerCase();
   if (lower.includes('€0') || lower.includes('free') || lower.includes('tuition-free')) {
     return { main: '\u20B90 (Free)', sub: 'Tuition-free' };
@@ -121,7 +131,8 @@ function getIeltsStatus(userIelts: number | null | undefined, minIelts: number |
   text: string;
   status: 'met' | 'gap' | 'neutral';
 } {
-  if (!minIelts) return { text: 'Not required', status: 'neutral' };
+  if (minIelts == null) return { text: 'Not confirmed', status: 'neutral' };
+  if (minIelts === 0) return { text: 'Not required', status: 'neutral' };
   if (userIelts != null && userIelts > 0) {
     if (userIelts >= minIelts) {
       return { text: `✓ You meet ${minIelts}`, status: 'met' };
@@ -134,7 +145,8 @@ function getIeltsStatus(userIelts: number | null | undefined, minIelts: number |
 
 /** Formats TOEFL display in plain text */
 function getToeflDisplay(minToefl: number | null | undefined): string {
-  if (!minToefl) return 'Not required';
+  if (minToefl == null) return 'Not confirmed';
+  if (minToefl === 0) return 'Not required';
   return `Min ${minToefl}`;
 }
 
@@ -208,93 +220,51 @@ function getNumericTuition(tuitionStr: string | null | undefined): number {
 // ============================================================================
 
 
-const CampusSceneBanner: React.FC<{ univId: string; univName: string; photoUrl?: string }> = ({
-  univId,
+const CampusSceneBanner: React.FC<{
+  univName: string;
+  photoUrl?: string;
+  photoCredit?: string;
+  photoLicense?: string;
+  photoSourceUrl?: string;
+  photoLicenseUrl?: string;
+}> = ({
   univName,
   photoUrl,
+  photoCredit,
+  photoLicense,
+  photoSourceUrl,
+  photoLicenseUrl,
 }) => {
-  const p = univId.toLowerCase();
-  const u = univName.toLowerCase();
+  const [imageFailed, setImageFailed] = useState(!photoUrl);
 
   return (
-    <div className="relative w-full h-24 overflow-hidden rounded-t-xl bg-[#1B4D3E]">
-      {p.includes('manchester') || u.includes('manchester') ? (
-        <svg viewBox="0 0 400 120" preserveAspectRatio="xMidYMid slice" className="w-full h-full">
-          <defs>
-            <linearGradient id="skyMancReact" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#2D1B24" />
-              <stop offset="100%" stopColor="#4A2E35" />
-            </linearGradient>
-          </defs>
-          <rect width="400" height="120" fill="url(#skyMancReact)" />
-          <path d="M 0,120 L 0,85 L 30,85 L 30,70 L 45,70 L 45,85 L 70,85 L 70,60 L 80,45 L 90,60 L 90,85 L 140,85 L 140,40 L 150,30 L 160,30 L 170,40 L 170,85 L 210,85 L 210,20 L 220,10 L 225,5 L 230,10 L 240,20 L 240,85 L 280,85 L 290,55 L 305,55 L 315,85 L 360,85 L 360,65 L 375,65 L 375,85 L 400,85 L 400,120 Z" fill="#1C1016" opacity="0.95" />
-          <circle cx="225" cy="40" r="9" fill="#F3C97E" opacity="0.85" />
-          <circle cx="225" cy="40" r="7.5" fill="#2D1B24" />
-          <path d="M 148,55 Q 155,48 162,55 L 162,75 L 148,75 Z" fill="#F3C97E" opacity="0.4" />
-          <rect y="105" width="400" height="15" fill="#120A0E" />
-        </svg>
-      ) : p.includes('tum') || u.includes('munich') ? (
-        <svg viewBox="0 0 400 120" preserveAspectRatio="xMidYMid slice" className="w-full h-full">
-          <defs>
-            <linearGradient id="skyTumReact" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#0A192F" />
-              <stop offset="100%" stopColor="#173559" />
-            </linearGradient>
-          </defs>
-          <rect width="400" height="120" fill="url(#skyTumReact)" />
-          <polygon points="20,80 60,45 110,80" fill="#0E233D" opacity="0.6" />
-          <polygon points="90,80 145,35 190,80" fill="#112B4C" opacity="0.65" />
-          <polygon points="170,80 230,40 280,80" fill="#0E233D" opacity="0.6" />
-          <rect x="40" y="55" width="130" height="65" fill="#091424" stroke="#48CAE4" strokeWidth="0.75" strokeOpacity="0.3" />
-          <rect x="240" y="25" width="30" height="95" fill="#060E1A" />
-          <circle cx="255" cy="42" r="6" fill="#F3C97E" opacity="0.8" />
-          <rect y="110" width="400" height="10" fill="#040810" />
-        </svg>
-      ) : p.includes('tcd') || u.includes('trinity') || u.includes('dublin') ? (
-        <svg viewBox="0 0 400 120" preserveAspectRatio="xMidYMid slice" className="w-full h-full">
-          <defs>
-            <linearGradient id="skyTcdReact" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#14261C" />
-              <stop offset="100%" stopColor="#234232" />
-            </linearGradient>
-          </defs>
-          <rect width="400" height="120" fill="url(#skyTcdReact)" />
-          <rect x="10" y="65" width="150" height="55" fill="#0E1A13" />
-          <rect x="240" y="65" width="150" height="55" fill="#0E1A13" />
-          <rect x="180" y="55" width="40" height="65" fill="#09120D" />
-          <polygon points="185,30 200,8 215,30" fill="#060C09" />
-          <path d="M 193,42 Q 200,35 207,42 L 207,52 L 193,52 Z" fill="#F3C97E" opacity="0.6" />
-          <rect y="108" width="400" height="12" fill="#060C09" />
-        </svg>
-      ) : (
-        <svg viewBox="0 0 400 120" preserveAspectRatio="xMidYMid slice" className="w-full h-full">
-          <defs>
-            <linearGradient id="skyHeidReact" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#3D1815" />
-              <stop offset="100%" stopColor="#6B2D25" />
-            </linearGradient>
-          </defs>
-          <rect width="400" height="120" fill="url(#skyHeidReact)" />
-          <path d="M 230,120 Q 290,40 400,20 L 400,120 Z" fill="#240D0B" />
-          <rect x="0" y="90" width="220" height="30" fill="#1A0908" />
-          <rect y="112" width="400" height="8" fill="#100505" />
-        </svg>
-      )}
-
-      {photoUrl && (
+    <div className="relative w-full h-full min-h-[180px] overflow-hidden rounded-xl bg-[#1B4D3E]">
+      {photoUrl && !imageFailed ? (
         <img
           src={photoUrl}
-          alt={univName}
+          alt={`${univName} campus`}
           className="absolute inset-0 w-full h-full object-cover z-10"
-          onError={(e) => {
-            (e.currentTarget as HTMLElement).style.display = 'none';
-          }}
+          loading="lazy"
+          decoding="async"
+          onError={() => setImageFailed(true)}
         />
+      ) : (
+        <div className="absolute inset-0 z-10 flex items-center justify-center px-4 text-center text-sm font-medium text-white">
+          Campus photo unavailable
+        </div>
       )}
 
-      <div className="absolute bottom-2 left-3 z-20 inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-slate-900/80 backdrop-blur-xs text-white text-[10px] font-semibold border border-white/20">
-        <span>Drawn Campus Scene</span>
-      </div>
+      {!imageFailed && photoCredit && photoLicense && photoSourceUrl && photoLicenseUrl && (
+        <div className="absolute bottom-2 left-3 z-20 flex flex-wrap items-center gap-1 rounded-full border border-white/20 bg-slate-900/85 px-2.5 py-1 text-[10px] font-medium text-white">
+          <a href={photoSourceUrl} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">
+            Photo: {photoCredit}
+          </a>
+          <span aria-hidden="true">·</span>
+          <a href={photoLicenseUrl} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">
+            {photoLicense}
+          </a>
+        </div>
+      )}
     </div>
   );
 };
@@ -320,7 +290,7 @@ const getCountryFlagSvg = (countryId: string) => {
       </svg>
     );
   }
-  return (
+  if (c === 'uk' || c === 'gb' || c.includes('united kingdom')) return (
     <svg className="w-3.5 h-2.5 rounded-2xs shadow-xs inline-block align-middle mr-1 shrink-0" viewBox="0 0 640 480">
       <path fill="#012169" d="M0 0v480h640V0z"/>
       <path stroke="#FFF" strokeWidth="60" d="m0 0 640 480m0-480L0 480"/>
@@ -329,6 +299,7 @@ const getCountryFlagSvg = (countryId: string) => {
       <path stroke="#C8102E" strokeWidth="60" d="M320 0v480M0 240h640"/>
     </svg>
   );
+  return null;
 };
 
 export const MatchesPage: React.FC = () => {
@@ -340,12 +311,21 @@ export const MatchesPage: React.FC = () => {
   // Filters state
   const initialCountry = searchParams.get('country');
   const [selectedCountry, setSelectedCountry] = useState<string>(
-    initialCountry && ['germany', 'ireland', 'uk'].includes(initialCountry) ? initialCountry : 'all'
+    initialCountry && ['germany', 'ireland', 'uk', 'usa', 'canada', 'australia'].includes(initialCountry)
+      ? initialCountry
+      : 'all'
   );
   const [selectedTier, setSelectedTier] = useState<string>('all');
   const [selectedIntake, setSelectedIntake] = useState<string>('2026');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [appliedUnivIds, setAppliedUnivIds] = useState<Set<string>>(new Set());
+  const [fieldUniversities, setFieldUniversities] = useState<University[]>([]);
+  const [fieldQueryLoading, setFieldQueryLoading] = useState(false);
+  const [fieldQueryError, setFieldQueryError] = useState<string | null>(null);
+  const [subjectSuggestions, setSubjectSuggestions] = useState<SubjectSuggestion[]>([]);
+  const [suggestionsLoading, setSuggestionsLoading] = useState(false);
+  const [suggestionsError, setSuggestionsError] = useState<string | null>(null);
+  const intendedSubject = profile?.intendedSubject?.trim() || '';
 
   // Sort & View controls
   const [sortBy, setSortBy] = useState<'fit' | 'deadline' | 'tuition'>('fit');
@@ -354,10 +334,39 @@ export const MatchesPage: React.FC = () => {
   // Sync selectedCountry if query param updates
   useEffect(() => {
     const c = searchParams.get('country');
-    if (c && ['germany', 'ireland', 'uk', 'all'].includes(c)) {
+    if (c && ['germany', 'ireland', 'uk', 'usa', 'canada', 'australia', 'all'].includes(c)) {
       setSelectedCountry(c);
     }
   }, [searchParams]);
+
+  useEffect(() => {
+    let active = true;
+    if (!intendedSubject) {
+      setFieldUniversities([]);
+      setFieldQueryError(null);
+      setFieldQueryLoading(false);
+      return () => { active = false; };
+    }
+
+    setFieldQueryLoading(true);
+    setFieldQueryError(null);
+    getUniversitiesByField(intendedSubject)
+      .then((matches) => {
+        if (active) setFieldUniversities(matches);
+      })
+      .catch((error: unknown) => {
+        console.error('[MatchesPage] Subject query failed:', error);
+        if (active) {
+          setFieldUniversities([]);
+          setFieldQueryError('Could not refresh subject matches from the catalog. Showing available local catalogue results.');
+        }
+      })
+      .finally(() => {
+        if (active) setFieldQueryLoading(false);
+      });
+
+    return () => { active = false; };
+  }, [intendedSubject]);
 
   // Load existing applied universities for user
   useEffect(() => {
@@ -380,8 +389,21 @@ export const MatchesPage: React.FC = () => {
 
   // Calculate matches via deterministic matchEngine
   const matchResults: MatchResult[] = useMemo(() => {
-    if (!profile || universities.length === 0) {
-      return universities.map((u) => ({
+    const localFieldMatches = intendedSubject
+      ? universities.filter((university) =>
+        university.fields?.includes(intendedSubject) || university.field === intendedSubject
+      )
+      : universities;
+    const mergedById = new Map<string, University>();
+    for (const university of [...localFieldMatches, ...fieldUniversities]) {
+      const previous = mergedById.get(university.id);
+      mergedById.set(university.id, previous
+        ? { ...previous, ...university, fields: university.fields?.length ? university.fields : previous.fields }
+        : university);
+    }
+    const filteredUniversities = Array.from(mergedById.values());
+    if (!profile || filteredUniversities.length === 0) {
+      return filteredUniversities.map((u) => ({
         university: u,
         fitCategory: 'Prep needed' as FitCategory,
         fitScore: -1,
@@ -393,8 +415,55 @@ export const MatchesPage: React.FC = () => {
         ruleChanged: Boolean(u.ruleChanged),
       }));
     }
-    return calculateMatches(profile, universities);
-  }, [profile, universities]);
+    return calculateMatches(profile, filteredUniversities);
+  }, [profile, universities, fieldUniversities, intendedSubject]);
+
+  const subjectMatchesForCountry = useMemo(
+    () => matchResults.filter(({ university }) =>
+      selectedCountry === 'all' || university.countryId === selectedCountry
+    ),
+    [matchResults, selectedCountry]
+  );
+
+  useEffect(() => {
+    let active = true;
+    if (!intendedSubject || fieldQueryLoading || catalogLoading || subjectMatchesForCountry.length > 0) {
+      setSubjectSuggestions([]);
+      setSuggestionsError(null);
+      setSuggestionsLoading(false);
+      return () => { active = false; };
+    }
+
+    setSuggestionsLoading(true);
+    setSuggestionsError(null);
+    const country = selectedCountry === 'all'
+      ? (profile?.targetCountries?.join(', ') || 'all supported countries')
+      : selectedCountry;
+    getSubjectSuggestions(intendedSubject, country, profile?.budget ?? null)
+      .then((suggestions) => {
+        if (active) setSubjectSuggestions(suggestions);
+      })
+      .catch((error: unknown) => {
+        console.error('[MatchesPage] AI subject suggestions failed:', error);
+        if (active) {
+          setSubjectSuggestions([]);
+          setSuggestionsError(error instanceof Error ? error.message : 'AI suggestions could not be loaded.');
+        }
+      })
+      .finally(() => {
+        if (active) setSuggestionsLoading(false);
+      });
+
+    return () => { active = false; };
+  }, [
+    intendedSubject,
+    selectedCountry,
+    subjectMatchesForCountry.length,
+    fieldQueryLoading,
+    catalogLoading,
+    profile?.budget,
+    profile?.targetCountries,
+  ]);
 
   // Filter matches based on user filter selections
   const filteredMatches = useMemo(() => {
@@ -503,11 +572,11 @@ export const MatchesPage: React.FC = () => {
             onChange={(e) => setSelectedTier(e.target.value)}
             className="px-3.5 py-2.5 rounded-[6px] border border-slate-300 text-sm text-slate-800 focus:outline-none focus:border-[#FF5E00] focus:ring-1 focus:ring-[#FF5E00] bg-white"
           >
-            <option value="all">All Fit Tiers</option>
-            <option value="Strong fit">Strong Fit (≥ 90%)</option>
-            <option value="Possible">Possible (60% – 89%)</option>
-            <option value="Reach">Reach (&lt; 60%)</option>
-            <option value="Prep needed">Prep Needed</option>
+            <option value="all">All Match Levels</option>
+            <option value="Strong fit">Strong Match (≥ 90%)</option>
+            <option value="Possible">Moderate Match (60% – 89%)</option>
+            <option value="Reach">Ambitious Match (&lt; 60%)</option>
+            <option value="Prep needed">Not Eligible / Prep Needed</option>
           </select>
         </div>
 
@@ -532,6 +601,9 @@ export const MatchesPage: React.FC = () => {
                 label: 'United Kingdom',
                 flag: getCountryFlagSvg('uk'),
               },
+              { id: 'usa', label: 'United States', flag: null },
+              { id: 'canada', label: 'Canada', flag: null },
+              { id: 'australia', label: 'Australia', flag: null },
             ].map((tab) => {
               const isActive = selectedCountry === tab.id;
               const count = countryCounts[tab.id] || 0;
@@ -575,6 +647,12 @@ export const MatchesPage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {fieldQueryError && (
+        <p role="status" className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+          {fieldQueryError}
+        </p>
+      )}
 
       {/* Sort & View Mode Controls Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-[#5C6B63] font-medium px-1">
@@ -645,9 +723,9 @@ export const MatchesPage: React.FC = () => {
       </div>
 
       {/* University Matches Content: Cards View or Table View */}
-      {catalogLoading ? (
+      {catalogLoading || fieldQueryLoading ? (
         <div className="text-center py-12 text-slate-500 text-sm">
-          Loading verified universities...
+          Loading universities for your selected subject...
         </div>
       ) : sortedMatches.length === 0 ? (
         <div className="text-center py-12 bg-white rounded-xl border border-slate-200 p-8 space-y-2">
@@ -658,6 +736,39 @@ export const MatchesPage: React.FC = () => {
           <p className="text-xs text-slate-500">
             Try resetting the country or tier filter.
           </p>
+          {intendedSubject && subjectMatchesForCountry.length === 0 && (
+            <section className="mx-auto mt-5 max-w-2xl space-y-3 border-t border-slate-200 pt-5 text-left">
+              <h4 className="text-sm font-semibold text-slate-800">
+                AI-suggested - verify on the official university site
+              </h4>
+              {suggestionsLoading ? (
+                <p className="text-sm text-slate-600">Searching for possible programs...</p>
+              ) : suggestionsError ? (
+                <p role="status" className="text-sm text-amber-800">{suggestionsError}</p>
+              ) : subjectSuggestions.length > 0 ? (
+                <ul className="space-y-2">
+                  {subjectSuggestions.map((suggestion) => (
+                    <li key={`${suggestion.countryId}-${suggestion.name}-${suggestion.program}`} className="rounded-lg border border-slate-200 p-3">
+                      <a
+                        href={suggestion.officialUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-semibold text-[#1B4D3E] underline underline-offset-2"
+                      >
+                        {suggestion.name}
+                      </a>
+                      <p className="text-sm text-slate-700">{formatCountryAndProgram(suggestion.countryId, suggestion.program)}</p>
+                      <p className="text-xs text-slate-500">Tuition and deadlines not provided. Verify admissions details on the official site.</p>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-sm text-slate-600">
+                  No suggestions are available for this selection yet. Try another country or verify programs through official university sites.
+                </p>
+              )}
+            </section>
+          )}
         </div>
       ) : viewMode === 'table' ? (
         /* Optional Compact Table View */
@@ -674,11 +785,13 @@ export const MatchesPage: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-[#E6E8F0]">
-              {sortedMatches.map(({ university: u, fitCategory, missingExams }) => {
+              {sortedMatches.map((m) => {
+                const { university: u, fitCategory, missingExams } = m;
                 const isApplied = appliedUnivIds.has(u.id);
                 const tuitionDisplay = formatTuitionDisplay(u.tuition);
                 const deadlineDisplay = formatDeadlineDisplay(u.requirements.application_deadline);
                 const ieltsStatus = getIeltsStatus(profile?.exams?.ielts, u.requirements.min_ielts);
+                const enhancedCategory = mapFitCategoryToEnhanced(fitCategory, m);
                 const fitReason = getFitReason(
                   { university: u, fitCategory, fitScore: 0, missingExams, metRequirements: [], nearRequirements: [], belowRequirements: [], unconfirmedRequirements: [], ruleChanged: false },
                   profile
@@ -718,7 +831,8 @@ export const MatchesPage: React.FC = () => {
                       </span>
                     </td>
                     <td className="py-3.5 px-4">
-                      <span className="text-slate-600">{fitReason}</span>
+                      <span className="text-slate-800 font-medium text-xs">{enhancedCategory}</span>
+                      <span className="text-slate-400 text-[11px] block">{fitReason}</span>
                     </td>
                     <td className="py-3.5 px-4 text-right whitespace-nowrap">
                       <button
@@ -745,7 +859,8 @@ export const MatchesPage: React.FC = () => {
       ) : (
         /* Redesigned 3-Column Fixed Grid Match Cards */
         <div className="space-y-4">
-          {sortedMatches.map(({ university: u, fitCategory, missingExams }) => {
+          {sortedMatches.map((m) => {
+            const { university: u, fitCategory, missingExams } = m;
             const isApplied = appliedUnivIds.has(u.id);
             const tuitionDisplay = formatTuitionDisplay(u.tuition);
             const deadlineDisplay = formatDeadlineDisplay(u.requirements.application_deadline);
@@ -756,6 +871,10 @@ export const MatchesPage: React.FC = () => {
               { university: u, fitCategory, fitScore: 0, missingExams, metRequirements: [], nearRequirements: [], belowRequirements: [], unconfirmedRequirements: [], ruleChanged: false },
               profile
             );
+            const enhancedCategory = mapFitCategoryToEnhanced(fitCategory, m);
+            const eligibilityComparison = profile
+              ? buildEligibilityComparison(profile, u)
+              : null;
 
             return (
               <div
@@ -766,10 +885,9 @@ export const MatchesPage: React.FC = () => {
                     : 'border-[#E6E8F0] hover:border-slate-300 shadow-sm'
                 }`}
               >
-                <CampusSceneBanner univId={u.id} univName={u.name} photoUrl={u.photoUrl} />
                 {/* Rule Changed Banner (rendered when official criteria change detected) */}
-                {u.ruleChanged && (
-                  <div className="match-card__banner mb-4">
+                {u.ruleChanged && !isDemonstrationRuleChange(u) && (
+                  <div className="match-card__banner">
                     <RuleChangedBanner
                       changedFields={u.changedFields || ['gmat_required']}
                       previousValues={u.previousValues || { gmat_required: null }}
@@ -780,24 +898,38 @@ export const MatchesPage: React.FC = () => {
                   </div>
                 )}
 
-                {/* Column 1, Identity (min-width:0) */}
-                <div className="match-card__identity space-y-1.5 min-w-0">
-                  <h2 className="text-[20px] font-semibold text-[#0B1026] leading-snug">
-                    {u.name}
-                  </h2>
-                  <p className="text-sm font-normal text-slate-500">
-                    {formatCountryAndProgram(u.countryId, u.program)}
-                  </p>
-                  <div className="pt-2 flex items-center gap-1.5 text-xs text-slate-400 font-normal">
-                    <Shield className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                    <span>{formatVerificationDate(u.lastChecked)}</span>
-                  </div>
+                <div className="match-card__media">
+                  <CampusSceneBanner
+                    univName={u.name}
+                    photoUrl={u.photoUrl}
+                    photoCredit={u.photoCredit}
+                    photoLicense={u.photoLicense}
+                    photoSourceUrl={u.photoSourceUrl}
+                    photoLicenseUrl={u.photoLicenseUrl}
+                  />
                 </div>
 
-                {/* Column 2, Facts (min-width:0), NO grey box, hairline divider on desktop */}
-                <div className="match-card__facts space-y-3 min-w-0">
-                  {/* Aligned sub-columns with proportional widths */}
-                  <div className="grid grid-cols-2 lg:grid-cols-[1.3fr_1.1fr_1fr_0.8fr] gap-3 items-start min-w-0">
+                <div className="match-card__content">
+                  <div className="match-card__main">
+                    <div className="match-card__identity space-y-1.5 min-w-0">
+                      <h2 className="text-[20px] font-semibold text-[#0B1026] leading-snug">
+                        {u.name}
+                      </h2>
+                      <p className="text-sm font-normal text-slate-500">
+                        {formatCountryAndProgram(u.countryId, u.program)}
+                      </p>
+                      <div className="pt-2 flex items-center gap-1.5 text-xs text-slate-400 font-normal">
+                        <Shield className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                        <span>{formatVerificationDate(u.lastChecked)}</span>
+                      </div>
+                      {/* Verification status indicators */}
+                      <div className="pt-1 flex items-center gap-1.5 flex-wrap">
+                        <VerificationStatusBadge university={u} type="compact" />
+                      </div>
+                    </div>
+
+                    <div className="match-card__facts min-w-0">
+                      <div className="match-card__stats">
                     {/* Tuition */}
                     <div className="min-w-0">
                       <span className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
@@ -822,7 +954,7 @@ export const MatchesPage: React.FC = () => {
                         {deadlineDisplay.main}
                       </span>
                       {deadlineDisplay.sub && (
-                        <span className="block text-xs text-slate-500 font-normal leading-tight mt-0.5">
+                        <span className="block text-xs text-slate-500 font-normal leading-tight mt-0.5 whitespace-nowrap">
                           {deadlineDisplay.sub}
                         </span>
                       )}
@@ -862,13 +994,34 @@ export const MatchesPage: React.FC = () => {
                     <span className="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
                     <span>{greGmatSummary}</span>
                   </div>
+                  {!u.lastChecked && (
+                    <p className="pt-2 text-xs leading-relaxed text-amber-800">
+                      Admissions fees, deadlines, and requirements are not verified in our catalog yet. Check the official program page.
+                    </p>
+                  )}
+                    </div>
+                  </div>
                 </div>
 
-                {/* Column 3, Fit & Action (Action column: display:flex; flex-direction:column; gap:12px; min-width:0; align-items:stretch) */}
-                <div className="match-card__actions min-w-0">
-                  {/* Fit summary (editorial typography, no box) */}
+                {/* Enhanced: Eligibility Comparison, Fee Breakdown, Match Explanation */}
+                <div className="px-5 pb-2 space-y-2">
+                  {eligibilityComparison && (
+                    <EligibilityComparisonTable
+                      comparison={eligibilityComparison}
+                      universityName={u.name}
+                    />
+                  )}
+                  <FeeBreakdownPanel university={u} />
+                  {profile && (
+                    <MatchExplanationCard matchResult={m} profile={profile} />
+                  )}
+                </div>
+
+                <div className="match-card__footer">
                   <div className="match-card__fit-line text-xs leading-normal min-w-0">
-                    <span className="font-semibold text-[#0B1026]">{fitCategory}</span>
+                    <span className="font-semibold text-[#0B1026]">{enhancedCategory}</span>
+                    <span className="text-slate-400 mx-1">·</span>
+                    <span className="text-slate-400 font-normal text-[11px]">{fitCategory}</span>
                     {fitReason && (
                       <>
                         <span className="text-slate-400 mx-1.5">·</span>
@@ -877,40 +1030,37 @@ export const MatchesPage: React.FC = () => {
                     )}
                   </div>
 
-                  {/* Primary Action Button */}
-                  <button
-                    onClick={() => {
-                      try {
-                        localStorage.setItem('abroadpath_last_selected_program', u.id);
-                        localStorage.setItem('abroadpath_last_selected_intake', selectedIntake);
-                      } catch {}
-                      navigate(
-                        `/letter-helper?programId=${encodeURIComponent(u.id)}&intake=${encodeURIComponent(selectedIntake)}`
-                      );
-                    }}
-                    className="match-card__button w-full px-5 py-2.5 bg-[#FF5E00] hover:bg-[#E65400] text-[#0B1026] text-xs font-semibold rounded-[6px] shadow-xs transition-colors focus-visible:outline-2 focus-visible:outline-[#FF5E00]"
-                  >
-                    Check statement requirements
-                  </button>
+                  <div className="match-card__actions">
+                    <button
+                      onClick={() => {
+                        try {
+                          localStorage.setItem('abroadpath_last_selected_program', u.id);
+                          localStorage.setItem('abroadpath_last_selected_intake', selectedIntake);
+                        } catch {}
+                        navigate(
+                          `/letter-helper?programId=${encodeURIComponent(u.id)}&intake=${encodeURIComponent(selectedIntake)}`
+                        );
+                      }}
+                      className="match-card__button px-6 py-3 bg-[#FF5E00] hover:bg-[#E65400] text-[#0B1026] text-xs font-semibold rounded-[6px] shadow-xs transition-colors focus-visible:outline-2 focus-visible:outline-[#FF5E00]"
+                    >
+                      Check requirements
+                    </button>
 
-                  {/* Unified Official site link + Quiet I have applied checkbox */}
-                  <div className="match-card__links-row pt-0.5">
                     <a
                       href={u.portalUrl || u.sourceUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs font-medium text-slate-600 hover:text-[#0B1026] inline-flex items-center gap-1 transition-colors"
+                      className="text-xs font-medium text-slate-600 hover:text-[#0B1026] inline-flex items-center gap-1 transition-colors whitespace-nowrap"
                     >
                       <span>Official site</span>
                       <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
                     </a>
 
-                    {/* Quiet I have applied checkbox */}
                     <button
                       type="button"
                       onClick={() => handleMarkApplied(u.id)}
                       disabled={isApplied}
-                      className={`inline-flex items-center gap-1.5 text-xs transition-colors py-0.5 ${
+                      className={`inline-flex items-center gap-1.5 text-xs transition-colors py-0.5 whitespace-nowrap ${
                         isApplied
                           ? 'text-emerald-700 font-semibold cursor-default'
                           : 'text-slate-500 hover:text-slate-800 cursor-pointer'

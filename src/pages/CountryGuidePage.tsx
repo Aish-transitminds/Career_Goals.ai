@@ -8,6 +8,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useCatalog } from '../hooks/useCatalog';
 import { VerifiedBadge } from '../components/common/VerifiedBadge';
+import { Country, University } from '../types';
+import { isDemonstrationRuleChange } from '../utils/matchEngine';
 import {
   FileCheck2,
   Euro,
@@ -19,9 +21,52 @@ import {
   Square,
   RotateCcw,
   Info,
+  ArrowRight,
+  Wallet,
   FileText,
 } from 'lucide-react';
 
+const GERMANY_CHECKLIST_GROUPS = [
+  {
+    title: 'Identity and academics',
+    items: [
+      { id: 'passport', label: 'Valid passport', detail: 'Valid for at least 12 months.' },
+      { id: 'degree', label: "Recognized Bachelor's degree certificate and transcripts" },
+      { id: 'translations', label: 'Certified German or English translations' },
+      { id: 'aps', label: 'APS certificate', detail: 'Mandatory for applicants from India, China, and Vietnam.' },
+      { id: 'vpd', label: 'Preliminary review documentation (VPD)', detail: 'From uni-assist, where required.' },
+    ],
+  },
+  {
+    title: 'Application',
+    items: [
+      { id: 'english', label: 'Proof of English proficiency', detail: 'IELTS Academic or TOEFL iBT.' },
+      { id: 'cv', label: 'Curriculum vitae', detail: 'Europass tabular format.' },
+      { id: 'recommendations', label: 'Academic letters of recommendation' },
+      {
+        id: 'statement',
+        label: 'Motivation letter or statement of purpose',
+        detail: 'Where required; typically 1–2 pages. Confirm on the programme admissions page.',
+      },
+    ],
+  },
+  {
+    title: 'Money and health',
+    items: [
+      {
+        id: 'funds',
+        label: 'Proof of financial resources',
+        detail: 'Blocked account: €11,904/year in a Sperrkonto.',
+      },
+      { id: 'insurance', label: 'Health insurance', detail: 'Statutory or recognized private cover.' },
+    ],
+  },
+] as const;
+
+const GERMANY_CHECKLIST_TOTAL = GERMANY_CHECKLIST_GROUPS.reduce(
+  (total, group) => total + group.items.length,
+  0
+);
 
 const CG_FLAGS: Record<string, React.ReactNode> = {
   germany: (
@@ -49,6 +94,201 @@ const CG_FLAGS: Record<string, React.ReactNode> = {
   ),
 };
 
+interface GermanyCountryDossierProps {
+  country: Country;
+  selectedProgram: University | undefined;
+  completedCount: number;
+  progress: number;
+  checkedItems: Record<string, boolean>;
+  onToggleItem: (itemId: string) => void;
+  onResetChecklist: () => void;
+  onCheckStatementRequirements: () => void;
+}
+
+const GermanyCountryDossier: React.FC<GermanyCountryDossierProps> = ({
+  country,
+  selectedProgram,
+  completedCount,
+  progress,
+  checkedItems,
+  onToggleItem,
+  onResetChecklist,
+  onCheckStatementRequirements,
+}) => (
+  <div className="country-guide-dossier space-y-6">
+    <header className="country-guide-hero">
+      <div className="country-guide-hero__copy">
+        <div className="country-guide-hero__eyebrow">
+          National admissions dossier <span aria-hidden="true">·</span> Verified 15 Oct 2026 <span aria-hidden="true">·</span>{' '}
+          <a href={country.sourceUrl} target="_blank" rel="noopener noreferrer">
+            Official source
+          </a>
+        </div>
+        <h1>Germany</h1>
+        <p>Official destination guidelines for international degree-seeking students.</p>
+      </div>
+      <a
+        className="country-guide-portal"
+        href={country.portalUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Visit official national portal <ArrowRight aria-hidden="true" />
+      </a>
+    </header>
+
+    <div className="country-guide-demo-notice" role="note">
+      <ShieldAlert aria-hidden="true" />
+      <p>
+        <strong>Demonstration record.</strong> TUM (M.Sc. Informatics): admission criteria shifted, updated field:
+        {' '}<code>gmat_required</code>. This shows the change-detection flow and is not a live verified policy change.
+      </p>
+    </div>
+
+    <section className="country-guide-stats" aria-label="Germany study costs">
+      <article className="country-guide-stat">
+        <span>Tuition</span>
+        <strong>€0–€6,000</strong>
+        <small>per semester</small>
+      </article>
+      <article className="country-guide-stat">
+        <span>Semester contribution</span>
+        <strong>€100–€350</strong>
+        <small>per semester</small>
+      </article>
+      <article className="country-guide-stat">
+        <span>Living costs</span>
+        <strong>€950–€1,300</strong>
+        <small>per month</small>
+      </article>
+      <article className="country-guide-stat country-guide-stat--featured">
+        <span>Blocked account (Sperrkonto)</span>
+        <strong>€11,904</strong>
+        <small>per year · approx. ₹10.86 lakh</small>
+      </article>
+    </section>
+
+    <section className="country-guide-detail-grid" aria-label="Admission requirements">
+      <article className="country-guide-card">
+        <div className="country-guide-card__heading">
+          <GraduationCap aria-hidden="true" />
+          <h2>Language requirements</h2>
+        </div>
+        <p>
+          Most Master’s programmes are taught in English (IELTS 6.5+ or TOEFL 88+). Basic German (A1/A2) is recommended.
+        </p>
+        <div className="country-guide-info">
+          <strong>Key takeaway</strong>
+          <p>
+            Check whether your department requires English C1 (IELTS 7.0+) or B2 (IELTS 6.0/6.5). Scores must be sent directly via ETS or British Council.
+          </p>
+        </div>
+      </article>
+
+      <article className="country-guide-card">
+        <div className="country-guide-card__heading">
+          <Wallet aria-hidden="true" />
+          <h2>Financial proof</h2>
+        </div>
+        <p>
+          A blocked account of €11,904/year (€992/month) must be funded before the visa is issued.
+        </p>
+        <div className="country-guide-info">
+          <strong>Indian student reference</strong>
+          <p>Approx. ₹10.86 lakh in a Sperrkonto.</p>
+        </div>
+      </article>
+    </section>
+
+    <article className="country-guide-card country-guide-visa">
+      <div className="country-guide-card__heading">
+        <Briefcase aria-hidden="true" />
+        <h2>Visa regulations and post-study work rights</h2>
+      </div>
+      <p className="country-guide-placeholder">
+        Official guidance for this section will be added here. Confirm current visa steps and post-study work eligibility with the relevant official authorities.
+      </p>
+    </article>
+
+    <section className="country-guide-card country-guide-checklist" aria-labelledby="country-checklist-title">
+      <header className="country-guide-checklist__header">
+        <div>
+          <div className="country-guide-card__heading">
+            <FileCheck2 aria-hidden="true" />
+            <h2 id="country-checklist-title">Pre-flight document checklist</h2>
+          </div>
+          <p>Checklist progress is saved for this browser session.</p>
+        </div>
+        <div className="country-guide-checklist__progress">
+          <strong>{completedCount} of {GERMANY_CHECKLIST_TOTAL} ready</strong>
+          <div
+            className="country-guide-progress"
+            role="progressbar"
+            aria-label="Pre-flight documents ready"
+            aria-valuemin={0}
+            aria-valuemax={GERMANY_CHECKLIST_TOTAL}
+            aria-valuenow={completedCount}
+          >
+            <span style={{ width: `${progress}%` }} />
+          </div>
+        </div>
+        <button type="button" className="country-guide-reset" onClick={onResetChecklist}>
+          <RotateCcw aria-hidden="true" /> Reset
+        </button>
+      </header>
+
+      <div className="country-guide-checklist-groups">
+        {GERMANY_CHECKLIST_GROUPS.map((group, groupIndex) => {
+          const groupReady = group.items.filter((item) => checkedItems[item.id]).length;
+          return (
+            <section className="country-guide-checklist-group" key={group.title}>
+              <header>
+                <h3>{groupIndex + 1} · {group.title}</h3>
+                <span>{groupReady} of {group.items.length}</span>
+              </header>
+              <div className="country-guide-checklist-items">
+                {group.items.map((item) => (
+                  <div className="country-guide-checklist-item" key={item.id}>
+                    <input
+                      id={`germany-preflight-${item.id}`}
+                      type="checkbox"
+                      checked={Boolean(checkedItems[item.id])}
+                      onChange={() => onToggleItem(item.id)}
+                    />
+                    <span className="country-guide-checklist-item__copy">
+                      <label htmlFor={`germany-preflight-${item.id}`}>{item.label}</label>
+                      {'detail' in item && item.detail && <small>{item.detail}</small>}
+                      {item.id === 'statement' && (
+                        <span className="country-guide-statement-action">
+                          <small>
+                            {selectedProgram
+                              ? `Selected programme: ${selectedProgram.name} (${selectedProgram.program}).`
+                              : 'No programme selected yet. Choose one on Matches first.'}
+                          </small>
+                          <button type="button" onClick={onCheckStatementRequirements}>
+                            Check statement requirements
+                          </button>
+                        </span>
+                      )}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </section>
+          );
+        })}
+      </div>
+
+      <footer className="country-guide-checklist__note">
+        <Info aria-hidden="true" />
+        <p>
+          Translations must be notarized or issued by recognized sworn translators; confirm apostille and legalisation rules for your home country.
+        </p>
+      </footer>
+    </section>
+  </div>
+);
+
 export const CountryGuidePage: React.FC = () => {
   const { id: paramCountryId } = useParams<{ id?: string }>();
   const [searchParams] = useSearchParams();
@@ -59,6 +299,15 @@ export const CountryGuidePage: React.FC = () => {
     paramCountryId || 'germany'
   );
   const [checkedDocs, setCheckedDocs] = useState<Record<string, boolean>>({});
+  const [germanyChecklist, setGermanyChecklist] = useState<Record<string, boolean>>(() => {
+    try {
+      const saved = sessionStorage.getItem('careergoals_germany_preflight');
+      return saved ? JSON.parse(saved) as Record<string, boolean> : {};
+    } catch (error) {
+      console.warn('Failed to load Germany checklist state', error);
+      return {};
+    }
+  });
 
   // Resolve selected programme for active country (from searchParams or localStorage)
   const urlProgId = searchParams.get('programId');
@@ -106,7 +355,10 @@ export const CountryGuidePage: React.FC = () => {
 
   // Detect rule changes in this country or universities within this country
   const ruleChangedUnivs = universities.filter(
-    (u) => u.countryId === activeCountryId && u.ruleChanged
+    (u) =>
+      u.countryId === activeCountryId &&
+      u.ruleChanged &&
+      !isDemonstrationRuleChange(u)
   );
 
   const toggleDoc = (docName: string) => {
@@ -142,6 +394,37 @@ export const CountryGuidePage: React.FC = () => {
     }
   };
 
+  const toggleGermanyChecklistItem = (itemId: string) => {
+    setGermanyChecklist((current) => ({ ...current, [itemId]: !current[itemId] }));
+  };
+
+  const resetGermanyChecklist = () => {
+    setGermanyChecklist({});
+    try {
+      sessionStorage.removeItem('careergoals_germany_preflight');
+    } catch (error) {
+      console.warn('Failed to reset Germany checklist state', error);
+    }
+  };
+
+  useEffect(() => {
+    try {
+      if (Object.keys(germanyChecklist).length > 0) {
+        sessionStorage.setItem('careergoals_germany_preflight', JSON.stringify(germanyChecklist));
+      } else {
+        sessionStorage.removeItem('careergoals_germany_preflight');
+      }
+    } catch (error) {
+      console.warn('Failed to save Germany checklist state', error);
+    }
+  }, [germanyChecklist]);
+
+  const germanyCompletedCount = GERMANY_CHECKLIST_GROUPS.reduce(
+    (total, group) => total + group.items.filter((item) => germanyChecklist[item.id]).length,
+    0
+  );
+  const germanyProgress = Math.round((germanyCompletedCount / GERMANY_CHECKLIST_TOTAL) * 100);
+
   const completedCount = activeCountry
     ? activeCountry.documents.filter((d) => checkedDocs[d]).length
     : 0;
@@ -149,23 +432,23 @@ export const CountryGuidePage: React.FC = () => {
   const progressPercent = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
   return (
-    <div className="space-y-6 font-poppins">
+    <div className={`country-guide-page space-y-6 font-poppins${activeCountryId === 'germany' ? ' country-guide-page--germany' : ''}`}>
       {/* Header */}
-      <div>
+      {activeCountryId !== 'germany' && <div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-[#1B4D3E]">
           Country Admission & Visa Guides
         </h1>
         <p className="text-[#5C6B63] text-sm mt-1">
           Verified admission criteria, language rules, blocked accounts, and official application portals.
         </p>
-      </div>
+      </div>}
 
       {/* Country Selector Tabs */}
-      <div className="flex flex-wrap items-center gap-2 border-b border-[#E6DFCF] pb-3">
+      <div className="country-guide-tabs flex flex-wrap items-center gap-2 border-b border-[#E6DFCF] pb-3">
         {[
-          { id: 'germany', name: 'Germany', flag: '🇩🇪' },
-          { id: 'ireland', name: 'Ireland', flag: '🇮🇪' },
-          { id: 'uk', name: 'United Kingdom', flag: '🇬🇧' },
+        { id: 'germany', name: 'Germany' },
+        { id: 'ireland', name: 'Ireland' },
+        { id: 'uk', name: 'United Kingdom' },
         ].map((tab) => {
           const isActive = activeCountryId === tab.id;
           return (
@@ -175,13 +458,13 @@ export const CountryGuidePage: React.FC = () => {
                 setActiveCountryId(tab.id);
                 navigate(`/countries/${tab.id}`);
               }}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-[6px] text-sm font-bold transition-all ${
+              aria-pressed={isActive}
+              className={`country-guide-tab flex items-center gap-2 px-4 py-2.5 rounded-[6px] text-sm font-bold transition-all ${
                 isActive
                   ? 'bg-[#1B4D3E] text-[#FAF7F0] shadow-sm'
                   : 'bg-white text-[#2B3A33] hover:bg-[#F3EEE2] border border-[#E6DFCF]'
               }`}
             >
-              {CG_FLAGS[tab.id]}
               <span>{tab.name}</span>
             </button>
           );
@@ -192,6 +475,17 @@ export const CountryGuidePage: React.FC = () => {
         <div className="text-center py-12 text-slate-500 text-sm">
           Loading country dossier...
         </div>
+      ) : activeCountryId === 'germany' ? (
+        <GermanyCountryDossier
+          country={activeCountry}
+          selectedProgram={countrySelectedProgram}
+          completedCount={germanyCompletedCount}
+          progress={germanyProgress}
+          checkedItems={germanyChecklist}
+          onToggleItem={toggleGermanyChecklistItem}
+          onResetChecklist={resetGermanyChecklist}
+          onCheckStatementRequirements={handleCheckStatementRequirements}
+        />
       ) : (
         <div className="space-y-6">
           {/* Amber Rule-Changed Alert Banner */}

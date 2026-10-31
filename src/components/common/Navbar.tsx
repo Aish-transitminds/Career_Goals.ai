@@ -31,6 +31,7 @@ export const Navbar: React.FC = () => {
   const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
   const location = useLocation();
   const navigate = useNavigate();
+  const isCountryGuidePage = location.pathname.startsWith('/countries');
 
   const handleGoogleSignIn = async () => {
     try {
@@ -94,34 +95,36 @@ export const Navbar: React.FC = () => {
   return (
     <>
       {/* Unified Sticky Forest Nav (#1B4D3E): Logo, Exact 4 Tabs, Search, Notifications, Profile */}
-      <nav className="bg-[#1B4D3E]/90 backdrop-blur-md text-white sticky top-0 z-40 shadow-soft font-sans border-b border-white/10 pt-[max(0.25rem,env(safe-area-inset-top))]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16 gap-4">
+      <nav className={`${isCountryGuidePage ? 'country-guide-nav' : 'bg-[#1B4D3E]/90'} backdrop-blur-md text-white sticky top-0 z-40 shadow-soft font-sans border-b border-white/10 pt-[max(0.25rem,env(safe-area-inset-top))]`}>
+        <div className={`${isCountryGuidePage ? 'max-w-[1200px]' : 'max-w-[1520px]'} mx-auto px-4 sm:px-6 lg:px-8`}>
+          <div className="relative flex justify-between items-center h-16 gap-4">
             {/* Logo on Left */}
-            <Link to="/" className="flex items-center space-x-2.5 shrink-0 group mr-2 lg:mr-4">
+            <Link to="/" className={`flex items-center space-x-2.5 shrink-0 group mr-2 lg:mr-4${isCountryGuidePage ? ' country-guide-logo' : ''}`}>
               <div className="w-9 h-9 rounded-[6px] bg-[#F3C97E] flex items-center justify-center text-[#1B4D3E] font-bold shadow-xs group-hover:scale-105 transition-transform">
                 <GraduationCap className="w-5 h-5 text-[#1B4D3E]" />
               </div>
-              <div className="hidden sm:flex flex-col">
+              <div className={`${isCountryGuidePage ? 'flex' : 'hidden sm:flex'} flex-col country-guide-brand`}>
                 <span className="text-base font-bold text-white tracking-tight leading-tight flex items-center">
                   Career<span className="text-[#F3C97E]">Goals</span>
                 </span>
                 <span className="text-[10px] text-[#FAF7F0]/80 font-medium leading-none -mt-0.5">
-                  Study Abroad Guide
+                  {isCountryGuidePage ? 'Study Abroad' : 'Study Abroad Guide'}
                 </span>
               </div>
             </Link>
 
             {/* Desktop Navigation Links (Gold text + 2px gold underline for active state) */}
-            <div className="hidden xl:flex items-center space-x-1 shrink-0">
+            <div className="country-guide-nav__links hidden xl:flex xl:absolute xl:left-1/2 xl:-translate-x-1/2 items-center space-x-1 shrink-0">
               {navLinks.map((link) => {
                 const active = isActive(link.path);
                 return (
                   <Link
                     key={link.name}
                     to={link.path}
-                    className={`px-2 2xl:px-3 py-2 text-xs 2xl:text-sm font-medium tracking-normal transition-all duration-150 flex items-center whitespace-nowrap border-b-2 shrink-0 ${
-                      active
+                    className={`country-guide-nav__link px-2 2xl:px-3 py-2 text-xs 2xl:text-sm font-medium tracking-normal transition-all duration-150 flex items-center whitespace-nowrap border-b-2 shrink-0 ${
+                      isCountryGuidePage
+                        ? active ? 'country-guide-nav__link--active' : 'country-guide-nav__link--inactive'
+                        : active
                         ? 'text-[#F3C97E] font-semibold border-[#F3C97E]'
                         : 'text-[#FAF7F0]/80 hover:text-white border-transparent hover:border-white/20'
                     }`}
@@ -133,7 +136,7 @@ export const Navbar: React.FC = () => {
             </div>
 
             {/* Right: Rounded Search Pill + Auth & Notifications */}
-            <div className="hidden xl:flex items-center space-x-2 2xl:space-x-3 shrink-0">
+            <div className="country-guide-nav__utilities hidden xl:flex items-center space-x-2 2xl:space-x-3 shrink-0">
               {/* Rounded search pill */}
               <form onSubmit={handleSearchSubmit} className="relative">
                 <input
@@ -381,7 +384,7 @@ export const Navbar: React.FC = () => {
               )}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-[#deb062] hover:bg-white/10 focus:outline-none"
+                className={`inline-flex items-center justify-center p-2 rounded-md text-white hover:text-[#deb062] hover:bg-white/10 focus:outline-none${isCountryGuidePage ? ' country-guide-menu-toggle' : ''}`}
                 aria-label="Toggle navigation menu"
               >
                 {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -496,7 +499,7 @@ export const Navbar: React.FC = () => {
         )}
 
         {/* Mobile Bottom Tab Bar (4 items: Matches, Guides, Tracker, Planner) */}
-      <div className="xl:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0B1026] border-t border-[#1F2747] flex items-center justify-around py-2 px-1 text-[11px] text-slate-300">
+      <div className={`xl:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0B1026] border-t border-[#1F2747] flex items-center justify-around py-2 px-1 text-[11px] text-slate-300${isCountryGuidePage ? ' country-guide-bottom-nav' : ''}`}>
         <Link
           to="/matches"
           className={`flex flex-col items-center gap-1 py-1 px-2 rounded-lg transition-colors ${
@@ -509,7 +512,9 @@ export const Navbar: React.FC = () => {
         <Link
           to="/countries"
           className={`flex flex-col items-center gap-1 py-1 px-2 rounded-lg transition-colors ${
-            isActive('/countries') ? 'text-[#FF5E00] font-bold' : 'hover:text-white'
+            isActive('/countries')
+              ? isCountryGuidePage ? 'country-guide-mobile-active font-bold' : 'text-[#FF5E00] font-bold'
+              : 'hover:text-white'
           }`}
         >
           <BookOpen className="w-4 h-4" />

@@ -11,6 +11,7 @@ import {
   hasTakenAnyExam,
   buildMissingExamsList,
   DEFAULT_MATCH_CONFIG,
+  isDemonstrationRuleChange,
 } from '../../src/utils/matchEngine';
 import { University, UserProfile } from '../../src/types';
 
@@ -94,6 +95,31 @@ assert(parseAnnualTuition('€27,500 / year (Non-EU)') === 27500, 'T1.5: Parses 
 assert(parseAnnualTuition('£46,000 / year (Overseas)') === 46000, 'T1.6: Parses £46,000 annual tuition directly');
 assert(parseAnnualTuition(null) === null, 'T1.7: Returns null for null tuition');
 assert(parseAnnualTuition('Invalid string with no numbers') === null, 'T1.8: Returns null for unparseable tuition');
+
+const demoRuleChange = createSampleUniversity({
+  id: 'tum_informatics',
+  ruleChanged: true,
+  changedFields: ['gmat_required'],
+  previousValues: { gmat_required: null },
+});
+assert(
+  isDemonstrationRuleChange(demoRuleChange),
+  'T1.9: Identifies the seeded TUM demonstration even without its demo flag'
+);
+assert(
+  isDemonstrationRuleChange({ ...demoRuleChange, demoSeeded: true }),
+  'T1.10: Identifies a university explicitly marked as demonstration data'
+);
+assert(
+  !isDemonstrationRuleChange(
+    createSampleUniversity({
+      ruleChanged: true,
+      changedFields: ['gmat_required'],
+      previousValues: { gmat_required: null },
+    })
+  ),
+  'T1.11: Keeps unrelated genuine rule-change alerts eligible for display'
+);
 
 // ==========================================
 // Category 2: IELTS & TOEFL Scoring & Margins (7 tests)

@@ -14,7 +14,11 @@
     "test:match": "tsx tests/unit/matchEngine.test.ts",
     "test:letter": "tsx tests/unit/letterHelperRequirements.test.ts",
     "test:profile": "tsx tests/unit/onboardingProfile.test.ts",
-    "test": "npm run test:match && npm run test:letter && npm run test:profile"
+    "test:subjects": "tsx tests/unit/subjectFields.test.ts",
+    "test:eligibility": "tsx tests/unit/eligibilityEngine.test.ts",
+    "test:verification": "tsx tests/unit/verificationUtils.test.ts",
+    "test:financial": "tsx tests/unit/financialUtils.test.ts",
+    "test": "npm run test:match && npm run test:letter && npm run test:profile && npm run test:subjects && npm run test:eligibility && npm run test:verification && npm run test:financial"
   },
   "dependencies": {
     "@types/dompurify": "^3.0.5",

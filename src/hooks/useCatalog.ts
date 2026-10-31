@@ -9,6 +9,7 @@ import { University, Country } from '../types';
 import { getUniversities, getCountries } from '../services/firestoreService';
 import seedUniversities from '../data/universities.json';
 import seedCountries from '../data/countries.json';
+import { SUBJECT_UNIVERSITIES } from '../data/subjectCatalog';
 
 interface UseCatalogResult {
   universities: University[];
@@ -22,6 +23,36 @@ interface UseCatalogResult {
 let inFlightPromise: Promise<{ univs: University[]; countriesList: Country[] }> | null = null;
 let cachedCatalog: { univs: University[]; countriesList: Country[] } | null = null;
 
+function mergeUniversities(...lists: University[][]): University[] {
+  const merged = new Map<string, University>();
+  for (const list of lists) {
+    for (const item of list) {
+      const previous = merged.get(item.id);
+      if (previous) {
+        merged.set(item.id, {
+          ...previous,
+          ...item,
+          field: item.field || previous.field,
+          fields: item.fields?.length ? item.fields : previous.fields,
+        });
+      } else {
+        merged.set(item.id, item);
+      }
+    }
+  }
+  return Array.from(merged.values());
+}
+
+function mergeCountries(...lists: Country[][]): Country[] {
+  const merged = new Map<string, Country>();
+  for (const list of lists) {
+    for (const item of list) {
+      merged.set(item.id, { ...merged.get(item.id), ...item });
+    }
+  }
+  return Array.from(merged.values());
+}
+
 async function getCachedOrFetchCatalog(forceRefresh = false): Promise<{ univs: University[]; countriesList: Country[] }> {
   if (!forceRefresh && cachedCatalog) {
     return cachedCatalog;
@@ -32,8 +63,12 @@ async function getCachedOrFetchCatalog(forceRefresh = false): Promise<{ univs: U
       getCountries().catch(() => []),
     ])
       .then(([u, c]) => {
-        const finalUnivs = u && u.length > 0 ? u : (seedUniversities as unknown as University[]);
-        const finalCountries = c && c.length > 0 ? c : (seedCountries as unknown as Country[]);
+        const finalUnivs = mergeUniversities(
+          seedUniversities as unknown as University[],
+          SUBJECT_UNIVERSITIES,
+          u || []
+        );
+        const finalCountries = mergeCountries(seedCountries as unknown as Country[], c || []);
         cachedCatalog = { univs: finalUnivs, countriesList: finalCountries };
         inFlightPromise = null;
         return cachedCatalog;
@@ -66,7 +101,7 @@ export function useCatalog(): UseCatalogResult {
     } catch (err: any) {
       console.warn('[useCatalog] Catalog fetch warning, using seed data:', err);
       setError(err.message || 'Failed to fetch catalog data');
-      setUniversities(seedUniversities as unknown as University[]);
+      setUniversities(mergeUniversities(seedUniversities as unknown as University[], SUBJECT_UNIVERSITIES));
       setCountries(seedCountries as unknown as Country[]);
     } finally {
       setLoading(false);
@@ -91,7 +126,7 @@ export function useCatalog(): UseCatalogResult {
         if (isMounted) {
           console.warn('[useCatalog] Catalog fetch warning, using seed data:', err);
           setError(err.message || 'Failed to fetch catalog data');
-          setUniversities(seedUniversities as unknown as University[]);
+          setUniversities(mergeUniversities(seedUniversities as unknown as University[], SUBJECT_UNIVERSITIES));
           setCountries(seedCountries as unknown as Country[]);
         }
       } finally {

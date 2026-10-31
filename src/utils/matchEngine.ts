@@ -31,6 +31,17 @@ export const DEFAULT_MATCH_CONFIG: MatchConfig = {
   },
 };
 
+export function isDemonstrationRuleChange(university: University): boolean {
+  if (university.demoSeeded) return true;
+
+  return (
+    university.id === 'tum_informatics' &&
+    university.ruleChanged &&
+    university.changedFields?.includes('gmat_required') === true &&
+    university.previousValues?.gmat_required === null
+  );
+}
+
 /**
  * Parses university tuition string to annual cost in EUR/USD/GBP.
  * Handles formats:
