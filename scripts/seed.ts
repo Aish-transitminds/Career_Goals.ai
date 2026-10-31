@@ -16,6 +16,8 @@ import { fileURLToPath } from 'node:url';
 import { initializeApp, cert, getApps } from 'firebase-admin/app';
 import { getFirestore, Firestore } from 'firebase-admin/firestore';
 import type { Country, University, UniversityRequirements } from '../src/types/index.js';
+import { SUBJECT_UNIVERSITIES } from '../src/data/subjectCatalog.js';
+import { SUBJECT_FIELDS } from '../src/data/subjectFields.js';
 
 // Handle ESM path resolution
 const __filename = fileURLToPath(import.meta.url);
@@ -96,9 +98,17 @@ export function validateSeedData(countries: Country[], universities: University[
 
     validateUrl(u.portalUrl, 'portalUrl', u.id);
     validateUrl(u.sourceUrl, 'sourceUrl', u.id);
-    validateDate(u.lastChecked, 'lastChecked', u.id);
+    if (u.lastChecked) {
+      validateDate(u.lastChecked, 'lastChecked', u.id);
+    }
     if (u.lastChanged) {
       validateDate(u.lastChanged, 'lastChanged', u.id);
+    }
+    if (!u.field || !Array.isArray(u.fields) || !u.fields.includes(u.field)) {
+      throw new Error(`University ${u.id} must include a legacy field and a fields array containing that field.`);
+    }
+    if (u.fields.some((field) => !SUBJECT_FIELDS.includes(field as (typeof SUBJECT_FIELDS)[number]))) {
+      throw new Error(`University ${u.id} contains an unknown subject field.`);
     }
 
     // Score boundaries
@@ -115,6 +125,13 @@ export function validateSeedData(countries: Country[], universities: University[
     for (const [key, value] of Object.entries(req)) {
       if (typeof value === 'string' && value.trim() === '') {
         throw new Error(`Validation Error in ${u.id}: requirements.${key} must be null or non-empty string.`);
+      }
+    }
+
+    for (const field of SUBJECT_FIELDS) {
+      const count = universities.filter((university) => university.fields?.includes(field)).length;
+      if (count < 6) {
+        throw new Error(`Subject "${field}" must have at least 6 programs. Found ${count}.`);
       }
     }
 
@@ -195,7 +212,10 @@ async function main(): Promise<void> {
   }
 
   const countries: Country[] = JSON.parse(readFileSync(COUNTRIES_PATH, 'utf8'));
-  const universities: University[] = JSON.parse(readFileSync(UNIVERSITIES_PATH, 'utf8'));
+  const universities: University[] = [
+    ...(JSON.parse(readFileSync(UNIVERSITIES_PATH, 'utf8')) as University[]),
+    ...SUBJECT_UNIVERSITIES,
+  ];
 
   // Validate
   validateSeedData(countries, universities);

@@ -1,0 +1,452 @@
+[
+  {
+    "id": "stanford_ms_statistics_data_science",
+    "countryId": "usa",
+    "name": "Stanford University",
+    "program": "M.S. in Statistics: Data Science",
+    "field": "Data Science & Artificial Intelligence",
+    "fields": ["Data Science & Artificial Intelligence"],
+    "sourceUrl": "https://statistics.stanford.edu/academic-programs/graduate-programs/ms-statistics-data-science"
+  },
+  {
+    "id": "stanford_bs_computer_science",
+    "countryId": "usa",
+    "name": "Stanford University",
+    "program": "B.S. Computer Science",
+    "field": "Computer Science & Informatics",
+    "fields": ["Computer Science & Informatics"],
+    "sourceUrl": "https://cs.stanford.edu/academics/undergraduate"
+  },
+  {
+    "id": "utoronto_hbsc_computer_science",
+    "countryId": "canada",
+    "name": "University of Toronto",
+    "program": "Honours Bachelor of Science in Computer Science",
+    "field": "Computer Science & Informatics",
+    "fields": ["Computer Science & Informatics"],
+    "sourceUrl": "https://artsci.calendar.utoronto.ca/section/Computer-Science"
+  },
+  {
+    "id": "melbourne_bsc_computing_software_systems",
+    "countryId": "australia",
+    "name": "The University of Melbourne",
+    "program": "Bachelor of Science (Computing and Software Systems)",
+    "field": "Computer Science & Informatics",
+    "fields": ["Computer Science & Informatics"],
+    "sourceUrl": "https://study.unimelb.edu.au/find/courses/major/computing-and-software-systems/"
+  },
+  {
+    "id": "utoronto_mscac_data_science",
+    "countryId": "canada",
+    "name": "University of Toronto",
+    "program": "Master of Science in Applied Computing (Data Science)",
+    "field": "Data Science & Artificial Intelligence",
+    "fields": ["Data Science & Artificial Intelligence"],
+    "sourceUrl": "https://mscac.utoronto.ca/"
+  },
+  {
+    "id": "sydney_master_data_science",
+    "countryId": "australia",
+    "name": "The University of Sydney",
+    "program": "Master of Data Science",
+    "field": "Data Science & Artificial Intelligence",
+    "fields": ["Data Science & Artificial Intelligence"],
+    "sourceUrl": "https://www.sydney.edu.au/courses/courses/pc/master-of-data-science.html"
+  },
+  {
+    "id": "parsons_bfa_fashion_design",
+    "countryId": "usa",
+    "name": "Parsons School of Design",
+    "program": "BFA Fashion Design",
+    "field": "Fashion Design & Textile Arts",
+    "fields": ["Fashion Design & Textile Arts"],
+    "sourceUrl": "https://www.newschool.edu/parsons/bfa-fashion-design/"
+  },
+  {
+    "id": "fit_bfa_fashion_design",
+    "countryId": "usa",
+    "name": "Fashion Institute of Technology",
+    "program": "BFA Fashion Design",
+    "field": "Fashion Design & Textile Arts",
+    "fields": ["Fashion Design & Textile Arts"],
+    "sourceUrl": "https://www.fitnyc.edu/academics/academic-divisions/art-and-design/fashion-design/index.php"
+  },
+  {
+    "id": "ual_ba_fashion",
+    "countryId": "uk",
+    "name": "University of the Arts London",
+    "program": "BA (Hons) Fashion",
+    "field": "Fashion Design & Textile Arts",
+    "fields": ["Fashion Design & Textile Arts"],
+    "sourceUrl": "https://www.arts.ac.uk/subjects/fashion-design/undergraduate/ba-hons-fashion-csm"
+  },
+  {
+    "id": "tmu_ba_fashion",
+    "countryId": "canada",
+    "name": "Toronto Metropolitan University",
+    "program": "Bachelor of Design in Fashion",
+    "field": "Fashion Design & Textile Arts",
+    "fields": ["Fashion Design & Textile Arts"],
+    "sourceUrl": "https://www.torontomu.ca/programs/undergraduate/fashion/"
+  },
+  {
+    "id": "rmit_bachelor_fashion_design",
+    "countryId": "australia",
+    "name": "RMIT University",
+    "program": "Bachelor of Fashion (Design)",
+    "field": "Fashion Design & Textile Arts",
+    "fields": ["Fashion Design & Textile Arts"],
+    "sourceUrl": "https://www.rmit.edu.au/study-with-us/levels-of-study/undergraduate-study/bachelor-degrees/bachelor-of-fashion-design-bp325"
+  },
+  {
+    "id": "manchester_ba_fashion_marketing",
+    "countryId": "uk",
+    "name": "University of Manchester",
+    "program": "BA Fashion Marketing",
+    "field": "Fashion Design & Textile Arts",
+    "fields": ["Fashion Design & Textile Arts", "Business, Management & Economics"],
+    "sourceUrl": "https://www.manchester.ac.uk/study/undergraduate/courses/2026/00439/ba-fashion-marketing/"
+  },
+  {
+    "id": "juilliard_bfa_acting",
+    "countryId": "usa",
+    "name": "The Juilliard School",
+    "program": "BFA Acting",
+    "field": "Theatre & Performing Arts",
+    "fields": ["Theatre & Performing Arts"],
+    "sourceUrl": "https://www.juilliard.edu/department/drama/acting/bachelor-fine-arts"
+  },
+  {
+    "id": "nyu_tisch_bfa_drama",
+    "countryId": "usa",
+    "name": "New York University",
+    "program": "Tisch BFA Drama",
+    "field": "Theatre & Performing Arts",
+    "fields": ["Theatre & Performing Arts"],
+    "sourceUrl": "https://tisch.nyu.edu/drama"
+  },
+  {
+    "id": "rada_ba_acting",
+    "countryId": "uk",
+    "name": "Royal Academy of Dramatic Art",
+    "program": "BA (Hons) Acting",
+    "field": "Theatre & Performing Arts",
+    "fields": ["Theatre & Performing Arts"],
+    "sourceUrl": "https://www.rada.ac.uk/courses/ba-hons-acting/"
+  },
+  {
+    "id": "central_ba_acting",
+    "countryId": "uk",
+    "name": "Royal Central School of Speech and Drama",
+    "program": "BA (Hons) Acting",
+    "field": "Theatre & Performing Arts",
+    "fields": ["Theatre & Performing Arts"],
+    "sourceUrl": "https://www.cssd.ac.uk/courses/ba-hons-acting"
+  },
+  {
+    "id": "utoronto_hbachelor_drama",
+    "countryId": "canada",
+    "name": "University of Toronto",
+    "program": "Honours Bachelor of Arts in Drama",
+    "field": "Theatre & Performing Arts",
+    "fields": ["Theatre & Performing Arts"],
+    "sourceUrl": "https://drama.utoronto.ca/undergraduate/"
+  },
+  {
+    "id": "melbourne_bfa_acting",
+    "countryId": "australia",
+    "name": "The University of Melbourne",
+    "program": "Bachelor of Fine Arts (Acting)",
+    "field": "Theatre & Performing Arts",
+    "fields": ["Theatre & Performing Arts"],
+    "sourceUrl": "https://finearts-music.unimelb.edu.au/study/degrees/bachelor-of-fine-arts-acting"
+  },
+  {
+    "id": "harvard_mba",
+    "countryId": "usa",
+    "name": "Harvard University",
+    "program": "Master of Business Administration",
+    "field": "Business, Management & Economics",
+    "fields": ["Business, Management & Economics"],
+    "sourceUrl": "https://www.hbs.edu/mba/"
+  },
+  {
+    "id": "oxford_mba",
+    "countryId": "uk",
+    "name": "University of Oxford",
+    "program": "MBA",
+    "field": "Business, Management & Economics",
+    "fields": ["Business, Management & Economics"],
+    "sourceUrl": "https://www.sbs.ox.ac.uk/programmes/degrees/mba"
+  },
+  {
+    "id": "toronto_rotman_mba",
+    "countryId": "canada",
+    "name": "University of Toronto",
+    "program": "Rotman MBA",
+    "field": "Business, Management & Economics",
+    "fields": ["Business, Management & Economics"],
+    "sourceUrl": "https://www.rotman.utoronto.ca/Degrees/MastersPrograms/MBAPrograms/FullTimeMBA"
+  },
+  {
+    "id": "mannheim_msc_management",
+    "countryId": "germany",
+    "name": "University of Mannheim",
+    "program": "Mannheim Master in Management",
+    "field": "Business, Management & Economics",
+    "fields": ["Business, Management & Economics"],
+    "sourceUrl": "https://www.uni-mannheim.de/en/academics/programs/management-msc/"
+  },
+  {
+    "id": "melbourne_mba",
+    "countryId": "australia",
+    "name": "The University of Melbourne",
+    "program": "Master of Business Administration",
+    "field": "Business, Management & Economics",
+    "fields": ["Business, Management & Economics"],
+    "sourceUrl": "https://www.mbs.edu/degree-programs/mba"
+  },
+  {
+    "id": "unsw_mba",
+    "countryId": "australia",
+    "name": "UNSW Sydney",
+    "program": "AGSM MBA",
+    "field": "Business, Management & Economics",
+    "fields": ["Business, Management & Economics"],
+    "sourceUrl": "https://www.unsw.edu.au/business/study-with-us/postgraduate-programs/master-of-business-administration"
+  },
+  {
+    "id": "mit_bs_mechanical_engineering",
+    "countryId": "usa",
+    "name": "Massachusetts Institute of Technology",
+    "program": "SB Mechanical Engineering",
+    "field": "Engineering (Mechanical / Electrical / Civil)",
+    "fields": ["Engineering (Mechanical / Electrical / Civil)"],
+    "sourceUrl": "https://meche.mit.edu/education/undergraduate"
+  },
+  {
+    "id": "cambridge_meng_engineering",
+    "countryId": "uk",
+    "name": "University of Cambridge",
+    "program": "Engineering BA/MEng",
+    "field": "Engineering (Mechanical / Electrical / Civil)",
+    "fields": ["Engineering (Mechanical / Electrical / Civil)"],
+    "sourceUrl": "https://www.eng.cam.ac.uk/education/undergraduates"
+  },
+  {
+    "id": "utoronto_basc_engineering",
+    "countryId": "canada",
+    "name": "University of Toronto",
+    "program": "Bachelor of Applied Science in Engineering",
+    "field": "Engineering (Mechanical / Electrical / Civil)",
+    "fields": ["Engineering (Mechanical / Electrical / Civil)"],
+    "sourceUrl": "https://discover.engineering.utoronto.ca/programs/engineering-programs/"
+  },
+  {
+    "id": "tum_bsc_mechanical_engineering",
+    "countryId": "germany",
+    "name": "Technical University of Munich (TUM)",
+    "program": "B.Sc. Mechanical Engineering",
+    "field": "Engineering (Mechanical / Electrical / Civil)",
+    "fields": ["Engineering (Mechanical / Electrical / Civil)"],
+    "sourceUrl": "https://www.tum.de/en/studies/degree-programs/detail/mechanical-engineering-bachelor-of-science-bsc"
+  },
+  {
+    "id": "melbourne_beng_honours",
+    "countryId": "australia",
+    "name": "The University of Melbourne",
+    "program": "Bachelor of Engineering (Honours)",
+    "field": "Engineering (Mechanical / Electrical / Civil)",
+    "fields": ["Engineering (Mechanical / Electrical / Civil)"],
+    "sourceUrl": "https://study.unimelb.edu.au/find/courses/undergraduate/bachelor-of-engineering-honours/"
+  },
+  {
+    "id": "unsw_beng_honours",
+    "countryId": "australia",
+    "name": "UNSW Sydney",
+    "program": "Bachelor of Engineering (Honours)",
+    "field": "Engineering (Mechanical / Electrical / Civil)",
+    "fields": ["Engineering (Mechanical / Electrical / Civil)"],
+    "sourceUrl": "https://www.unsw.edu.au/study/undergraduate/bachelor-of-engineering-honours"
+  },
+  {
+    "id": "harvard_ba_anthropology",
+    "countryId": "usa",
+    "name": "Harvard University",
+    "program": "A.B. Anthropology",
+    "field": "Arts, Humanities & Social Sciences",
+    "fields": ["Arts, Humanities & Social Sciences"],
+    "sourceUrl": "https://anthro.fas.harvard.edu/undergraduate"
+  },
+  {
+    "id": "oxford_ba_history",
+    "countryId": "uk",
+    "name": "University of Oxford",
+    "program": "BA History",
+    "field": "Arts, Humanities & Social Sciences",
+    "fields": ["Arts, Humanities & Social Sciences"],
+    "sourceUrl": "https://www.history.ox.ac.uk/ba-history"
+  },
+  {
+    "id": "utoronto_ba_history",
+    "countryId": "canada",
+    "name": "University of Toronto",
+    "program": "Honours Bachelor of Arts in History",
+    "field": "Arts, Humanities & Social Sciences",
+    "fields": ["Arts, Humanities & Social Sciences"],
+    "sourceUrl": "https://www.history.utoronto.ca/undergraduate"
+  },
+  {
+    "id": "heidelberg_ba_history",
+    "countryId": "germany",
+    "name": "Heidelberg University",
+    "program": "BA History",
+    "field": "Arts, Humanities & Social Sciences",
+    "fields": ["Arts, Humanities & Social Sciences"],
+    "sourceUrl": "https://www.uni-heidelberg.de/en/study/all-degree-programmes/history-ba"
+  },
+  {
+    "id": "melbourne_ba_arts",
+    "countryId": "australia",
+    "name": "The University of Melbourne",
+    "program": "Bachelor of Arts",
+    "field": "Arts, Humanities & Social Sciences",
+    "fields": ["Arts, Humanities & Social Sciences"],
+    "sourceUrl": "https://study.unimelb.edu.au/find/courses/undergraduate/bachelor-of-arts/"
+  },
+  {
+    "id": "anu_bachelor_arts",
+    "countryId": "australia",
+    "name": "Australian National University",
+    "program": "Bachelor of Arts",
+    "field": "Arts, Humanities & Social Sciences",
+    "fields": ["Arts, Humanities & Social Sciences"],
+    "sourceUrl": "https://programsandcourses.anu.edu.au/program/BAART"
+  },
+  {
+    "id": "mit_bs_biology",
+    "countryId": "usa",
+    "name": "Massachusetts Institute of Technology",
+    "program": "SB Biology",
+    "field": "Natural & Life Sciences",
+    "fields": ["Natural & Life Sciences"],
+    "sourceUrl": "https://biology.mit.edu/academic-programs/undergraduate/"
+  },
+  {
+    "id": "oxford_ba_biological_sciences",
+    "countryId": "uk",
+    "name": "University of Oxford",
+    "program": "BA Biological Sciences",
+    "field": "Natural & Life Sciences",
+    "fields": ["Natural & Life Sciences"],
+    "sourceUrl": "https://www.biology.ox.ac.uk/study/undergraduate"
+  },
+  {
+    "id": "utoronto_bsc_life_sciences",
+    "countryId": "canada",
+    "name": "University of Toronto",
+    "program": "BSc Life Sciences",
+    "field": "Natural & Life Sciences",
+    "fields": ["Natural & Life Sciences"],
+    "sourceUrl": "https://www.artsci.utoronto.ca/future/ready-apply/admission-categories/life-sciences"
+  },
+  {
+    "id": "heidelberg_bsc_molecular_biotechnology",
+    "countryId": "germany",
+    "name": "Heidelberg University",
+    "program": "B.Sc. Molecular Biotechnology",
+    "field": "Natural & Life Sciences",
+    "fields": ["Natural & Life Sciences"],
+    "sourceUrl": "https://www.uni-heidelberg.de/en/study/all-degree-programmes/molecular-biotechnology-bsc"
+  },
+  {
+    "id": "melbourne_bsc_biology",
+    "countryId": "australia",
+    "name": "The University of Melbourne",
+    "program": "Bachelor of Science (Biological Sciences)",
+    "field": "Natural & Life Sciences",
+    "fields": ["Natural & Life Sciences"],
+    "sourceUrl": "https://study.unimelb.edu.au/find/courses/undergraduate/bachelor-of-science/"
+  },
+  {
+    "id": "anu_bachelor_science_biology",
+    "countryId": "australia",
+    "name": "Australian National University",
+    "program": "Bachelor of Science (Biological Sciences)",
+    "field": "Natural & Life Sciences",
+    "fields": ["Natural & Life Sciences"],
+    "sourceUrl": "https://programsandcourses.anu.edu.au/program/BSASC"
+  },
+  {
+    "id": "stanford_bs_symbolic_systems",
+    "countryId": "usa",
+    "name": "Stanford University",
+    "program": "B.S. Symbolic Systems",
+    "field": "Other / Interdisciplinary Studies",
+    "fields": ["Other / Interdisciplinary Studies"],
+    "sourceUrl": "https://symsys.stanford.edu/undergraduates/bs-program"
+  },
+  {
+    "id": "ucl_basc_arts_sciences",
+    "countryId": "uk",
+    "name": "University College London",
+    "program": "Arts and Sciences BASc",
+    "field": "Other / Interdisciplinary Studies",
+    "fields": ["Other / Interdisciplinary Studies"],
+    "sourceUrl": "https://www.ucl.ac.uk/arts-sciences/study/basc-arts-and-sciences"
+  },
+  {
+    "id": "brown_ab_cognitive_science",
+    "countryId": "usa",
+    "name": "Brown University",
+    "program": "A.B. Cognitive Science",
+    "field": "Other / Interdisciplinary Studies",
+    "fields": ["Other / Interdisciplinary Studies", "Natural & Life Sciences", "Arts, Humanities & Social Sciences"],
+    "sourceUrl": "https://www.brown.edu/undergraduate/concentrations/cognitive-science-ab"
+  },
+  {
+    "id": "utoronto_ethics_society_law",
+    "countryId": "canada",
+    "name": "University of Toronto",
+    "program": "Ethics, Society & Law",
+    "field": "Other / Interdisciplinary Studies",
+    "fields": ["Other / Interdisciplinary Studies", "Arts, Humanities & Social Sciences"],
+    "sourceUrl": "https://www.artsci.utoronto.ca/future/ready-apply/admission-categories/social-sciences"
+  },
+  {
+    "id": "ualberta_bachelor_arts_science",
+    "countryId": "canada",
+    "name": "University of Alberta",
+    "program": "Bachelor of Arts and Science",
+    "field": "Other / Interdisciplinary Studies",
+    "fields": ["Other / Interdisciplinary Studies"],
+    "sourceUrl": "https://www.ualberta.ca/en/undergraduate/programs/bachelor-of-arts-and-science.html"
+  },
+  {
+    "id": "mcgill_ba_cognitive_science",
+    "countryId": "canada",
+    "name": "McGill University",
+    "program": "BA Cognitive Science",
+    "field": "Other / Interdisciplinary Studies",
+    "fields": ["Other / Interdisciplinary Studies", "Natural & Life Sciences", "Arts, Humanities & Social Sciences"],
+    "sourceUrl": "https://www.mcgill.ca/undergraduate-admissions/program/cognitive-science"
+  },
+  {
+    "id": "freiburg_ba_liberal_arts_sciences",
+    "countryId": "germany",
+    "name": "University of Freiburg",
+    "program": "Bachelor of Arts and Sciences in Liberal Arts and Sciences",
+    "field": "Other / Interdisciplinary Studies",
+    "fields": ["Other / Interdisciplinary Studies", "Arts, Humanities & Social Sciences"],
+    "sourceUrl": "https://www.ucf.uni-freiburg.de/program/study-program"
+  },
+  {
+    "id": "monash_bachelor_arts_science",
+    "countryId": "australia",
+    "name": "Monash University",
+    "program": "Bachelor of Arts and Science",
+    "field": "Other / Interdisciplinary Studies",
+    "fields": ["Other / Interdisciplinary Studies", "Arts, Humanities & Social Sciences"],
+    "sourceUrl": "https://www.monash.edu/study/courses/find-a-course/arts-and-science-a2003"
+  }
+]

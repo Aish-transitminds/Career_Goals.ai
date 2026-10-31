@@ -4,6 +4,10 @@
     "countryId": "germany",
     "name": "Technical University of Munich (TUM)",
     "program": "M.Sc. Informatics",
+    "field": "Computer Science & Informatics",
+    "fields": [
+      "Computer Science & Informatics"
+    ],
     "requirements": {
       "min_ielts": 6.5,
       "min_toefl": 88,
@@ -74,13 +78,31 @@
       "verifiedDate": "2026-10-15",
       "statusNotes": null
     },
-    "photoUrl": "https://images.unsplash.com/photo-1590579491624-f98f36d4c763?auto=format&fit=crop&w=800&q=80"
+    "photoUrl": "/images/universities/tum-informatics.jpg",
+    "photoCredit": "High Contrast",
+    "photoLicense": "CC BY 3.0 DE",
+    "photoSourceUrl": "https://commons.wikimedia.org/wiki/File:TU_M%C3%BCnchen_Garching_-_Institute_for_Advanced_Study.jpg",
+    "photoLicenseUrl": "https://creativecommons.org/licenses/by/3.0/de/deed.en",
+    "institutionVerificationStatus": "verified",
+    "accreditationStatus": "partially_verified",
+    "programVerificationStatus": "verified",
+    "admissionRequirementVerificationStatus": "partially_verified",
+    "websiteVerificationStatus": "verified_official",
+    "homepageStatus": "verified_official",
+    "programPageStatus": "verified_official",
+    "dataFreshnessStatus": "fresh",
+    "flaggedForReview": false,
+    "reviewReason": null
   },
   {
     "id": "rwth_cs",
     "countryId": "germany",
     "name": "RWTH Aachen University",
     "program": "M.Sc. Computer Science",
+    "field": "Computer Science & Informatics",
+    "fields": [
+      "Computer Science & Informatics"
+    ],
     "requirements": {
       "min_ielts": 6,
       "min_toefl": 80,
@@ -124,13 +146,32 @@
       "verifiedDate": "2026-10-15",
       "statusNotes": "Admission is purely based on formal academic credentials, credit equivalence, and GRE."
     },
-    "photoUrl": "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=800&q=80"
+    "photoUrl": "/images/universities/rwth-aachen.jpg",
+    "photoCredit": "Kleon3",
+    "photoLicense": "CC BY-SA 4.0",
+    "photoSourceUrl": "https://commons.wikimedia.org/wiki/File:2022_Aachen,_W%C3%BCllnerstrasse,_RWTH_(07).jpg",
+    "photoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "institutionVerificationStatus": "verified",
+    "accreditationStatus": "partially_verified",
+    "programVerificationStatus": "verified",
+    "admissionRequirementVerificationStatus": "verified",
+    "websiteVerificationStatus": "verified_official",
+    "homepageStatus": "verified_official",
+    "programPageStatus": "verified_official",
+    "admissionPageStatus": "verified_official",
+    "dataFreshnessStatus": "fresh",
+    "flaggedForReview": false
   },
   {
     "id": "heidelberg_dcs",
     "countryId": "germany",
     "name": "Heidelberg University",
     "program": "M.Sc. Data and Computer Science",
+    "field": "Computer Science & Informatics",
+    "fields": [
+      "Computer Science & Informatics",
+      "Data Science & Artificial Intelligence"
+    ],
     "requirements": {
       "min_ielts": 6.5,
       "min_toefl": 90,
@@ -171,13 +212,31 @@
       "verifiedDate": null,
       "statusNotes": "Programme-specific statement instructions are not confirmed in the official study handbook. Please consult the heiCO admission portal or departmental advisor."
     },
-    "photoUrl": "https://images.unsplash.com/photo-1527866959252-deab85ef7d1b?auto=format&fit=crop&w=800&q=80"
+    "photoUrl": "/images/universities/heidelberg.jpg",
+    "photoCredit": "Rolf Kickuth",
+    "photoLicense": "CC BY-SA 4.0",
+    "photoSourceUrl": "https://commons.wikimedia.org/wiki/File:HeidelbergUniCampusNeuenheimerFeld2020-07-22-13-08-03.jpg",
+    "photoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "institutionVerificationStatus": "verified",
+    "accreditationStatus": "partially_verified",
+    "programVerificationStatus": "verified",
+    "admissionRequirementVerificationStatus": "verified",
+    "websiteVerificationStatus": "verified_official",
+    "homepageStatus": "verified_official",
+    "programPageStatus": "verified_official",
+    "admissionPageStatus": "verified_official",
+    "dataFreshnessStatus": "fresh",
+    "flaggedForReview": false
   },
   {
     "id": "lmu_datascience",
     "countryId": "germany",
     "name": "Ludwig-Maximilians-Universität München (LMU)",
     "program": "M.Sc. Data Science",
+    "field": "Data Science & Artificial Intelligence",
+    "fields": [
+      "Data Science & Artificial Intelligence"
+    ],
     "requirements": {
       "min_ielts": 7,
       "min_toefl": 95,
@@ -243,13 +302,33 @@
       "lastChecked": "2026-10-15",
       "verifiedDate": null,
       "statusNotes": "Intake criteria under annual review by the admissions committee for the upcoming winter round."
-    }
+    },
+    "photoUrl": "/images/universities/lmu-munich.jpg",
+    "photoCredit": "Carsten Steger",
+    "photoLicense": "CC BY-SA 4.0",
+    "photoSourceUrl": "https://commons.wikimedia.org/wiki/File:Aerial_image_of_Ludwig-Maximilians-Universit%C3%A4t_M%C3%BCnchen_(view_from_the_southeast).jpg",
+    "photoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "institutionVerificationStatus": "verified",
+    "accreditationStatus": "partially_verified",
+    "programVerificationStatus": "verified",
+    "admissionRequirementVerificationStatus": "verified",
+    "websiteVerificationStatus": "verified_official",
+    "homepageStatus": "verified_official",
+    "programPageStatus": "verified_official",
+    "admissionPageStatus": "verified_official",
+    "dataFreshnessStatus": "fresh",
+    "flaggedForReview": false
   },
   {
     "id": "tcd_cs",
     "countryId": "ireland",
     "name": "Trinity College Dublin (TCD)",
     "program": "M.Sc. Computer Science (Intelligent Systems / Data Science)",
+    "field": "Computer Science & Informatics",
+    "fields": [
+      "Computer Science & Informatics",
+      "Data Science & Artificial Intelligence"
+    ],
     "requirements": {
       "min_ielts": 6.5,
       "min_toefl": 88,
@@ -308,13 +387,31 @@
       "verifiedDate": null,
       "statusNotes": "TCD strand definitions are undergoing curriculum updates. Statement prompts should be confirmed on my.tcd.ie upon portal opening."
     },
-    "photoUrl": "https://images.unsplash.com/photo-1549918864-48ac978761a4?auto=format&fit=crop&w=800&q=80"
+    "photoUrl": "/images/universities/trinity-dublin.jpg",
+    "photoCredit": "J.-H. Janßen",
+    "photoLicense": "CC BY-SA 3.0",
+    "photoSourceUrl": "https://commons.wikimedia.org/wiki/File:Dublin_Trinity_College_New_Square_Rubrics_01.JPG",
+    "photoLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "institutionVerificationStatus": "verified",
+    "accreditationStatus": "partially_verified",
+    "programVerificationStatus": "verified",
+    "admissionRequirementVerificationStatus": "verified",
+    "websiteVerificationStatus": "verified_official",
+    "homepageStatus": "verified_official",
+    "programPageStatus": "verified_official",
+    "admissionPageStatus": "verified_official",
+    "dataFreshnessStatus": "fresh",
+    "flaggedForReview": false
   },
   {
     "id": "ucd_cs",
     "countryId": "ireland",
     "name": "University College Dublin (UCD)",
     "program": "M.Sc. Computer Science (Negotiated Learning)",
+    "field": "Computer Science & Informatics",
+    "fields": [
+      "Computer Science & Informatics"
+    ],
     "requirements": {
       "min_ielts": 6.5,
       "min_toefl": 90,
@@ -373,13 +470,32 @@
       "verifiedDate": "2026-10-15",
       "statusNotes": "Discrepancy detected: Central UCD portal application form advises a 500-word statement, while the School of Computer Science guidelines advise a comprehensive 2-page Statement of Purpose detailing negotiated module preferences. Contact UCD admissions before submission."
     },
-    "photoUrl": "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=800&q=80"
+    "photoUrl": "/images/universities/ucd-dublin.jpg",
+    "photoCredit": "Leandro Neumann Ciuffo",
+    "photoLicense": "CC BY 2.0",
+    "photoSourceUrl": "https://commons.wikimedia.org/wiki/File:University_College_Dublin_Campus_Photo1.jpg",
+    "photoLicenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+    "institutionVerificationStatus": "verified",
+    "accreditationStatus": "partially_verified",
+    "programVerificationStatus": "verified",
+    "admissionRequirementVerificationStatus": "verified",
+    "websiteVerificationStatus": "verified_official",
+    "homepageStatus": "verified_official",
+    "programPageStatus": "verified_official",
+    "admissionPageStatus": "verified_official",
+    "dataFreshnessStatus": "fresh",
+    "flaggedForReview": false
   },
   {
     "id": "galway_cs",
     "countryId": "ireland",
     "name": "University of Galway",
     "program": "M.Sc. Computer Science (Data Analytics)",
+    "field": "Computer Science & Informatics",
+    "fields": [
+      "Computer Science & Informatics",
+      "Data Science & Artificial Intelligence"
+    ],
     "requirements": {
       "min_ielts": 6.5,
       "min_toefl": 88,
@@ -419,13 +535,32 @@
       "lastChecked": "2026-10-15",
       "verifiedDate": null,
       "statusNotes": "Programme-specific statement instructions are not confirmed. Check the University of Galway online application portal."
-    }
+    },
+    "photoUrl": "/images/universities/galway.jpg",
+    "photoCredit": "William Murphy",
+    "photoLicense": "CC BY-SA 2.0",
+    "photoSourceUrl": "https://commons.wikimedia.org/wiki/File:GALWAY_UNIVERSITY_CAMPUS.jpg",
+    "photoLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+    "institutionVerificationStatus": "verified",
+    "accreditationStatus": "partially_verified",
+    "programVerificationStatus": "verified",
+    "admissionRequirementVerificationStatus": "verified",
+    "websiteVerificationStatus": "verified_official",
+    "homepageStatus": "verified_official",
+    "programPageStatus": "verified_official",
+    "admissionPageStatus": "verified_official",
+    "dataFreshnessStatus": "fresh",
+    "flaggedForReview": false
   },
   {
     "id": "ucc_cs",
     "countryId": "ireland",
     "name": "University College Cork (UCC)",
     "program": "M.Sc. Computing Science",
+    "field": "Computer Science & Informatics",
+    "fields": [
+      "Computer Science & Informatics"
+    ],
     "requirements": {
       "min_ielts": 6.5,
       "min_toefl": 90,
@@ -476,13 +611,33 @@
       "lastChecked": "2025-05-10",
       "verifiedDate": "2025-05-10",
       "statusNotes": "Verified during the 2024/2025 admission round. Upcoming intake guidelines have not yet been re-verified against the new UCCApply course handbook."
-    }
+    },
+    "photoUrl": "/images/universities/ucc-cork.jpg",
+    "photoCredit": "Taibhseoir",
+    "photoLicense": "CC BY-SA 4.0",
+    "photoSourceUrl": "https://commons.wikimedia.org/wiki/File:University_College_Cork_campus_in_autumn..jpg",
+    "photoLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "institutionVerificationStatus": "verified",
+    "accreditationStatus": "partially_verified",
+    "programVerificationStatus": "verified",
+    "admissionRequirementVerificationStatus": "verified",
+    "websiteVerificationStatus": "verified_official",
+    "homepageStatus": "verified_official",
+    "programPageStatus": "verified_official",
+    "admissionPageStatus": "verified_official",
+    "dataFreshnessStatus": "fresh",
+    "flaggedForReview": false
   },
   {
     "id": "imperial_computing",
     "countryId": "uk",
     "name": "Imperial College London",
     "program": "M.Sc. Computing (Artificial Intelligence and Machine Learning)",
+    "field": "Data Science & Artificial Intelligence",
+    "fields": [
+      "Computer Science & Informatics",
+      "Data Science & Artificial Intelligence"
+    ],
     "requirements": {
       "min_ielts": 7,
       "min_toefl": 100,
@@ -548,13 +703,32 @@
       "lastChecked": "2026-10-15",
       "verifiedDate": "2026-10-15",
       "statusNotes": null
-    }
+    },
+    "photoUrl": "/images/universities/imperial-london.jpg",
+    "photoCredit": "Julian Herzog",
+    "photoLicense": "CC BY 4.0",
+    "photoSourceUrl": "https://commons.wikimedia.org/wiki/File:Royal_School_of_Mines_Imperial_College_London_2020_01.jpg",
+    "photoLicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "institutionVerificationStatus": "verified",
+    "accreditationStatus": "partially_verified",
+    "programVerificationStatus": "verified",
+    "admissionRequirementVerificationStatus": "verified",
+    "websiteVerificationStatus": "verified_official",
+    "homepageStatus": "verified_official",
+    "programPageStatus": "verified_official",
+    "admissionPageStatus": "verified_official",
+    "dataFreshnessStatus": "fresh",
+    "flaggedForReview": false
   },
   {
     "id": "oxford_acs",
     "countryId": "uk",
     "name": "University of Oxford",
     "program": "M.Sc. in Advanced Computer Science",
+    "field": "Computer Science & Informatics",
+    "fields": [
+      "Computer Science & Informatics"
+    ],
     "requirements": {
       "min_ielts": 7.5,
       "min_toefl": 110,
@@ -621,13 +795,31 @@
       "verifiedDate": "2026-10-15",
       "statusNotes": null
     },
-    "photoUrl": "https://images.unsplash.com/photo-1569012871812-f38ee64cd54c?auto=format&fit=crop&w=800&q=80"
+    "photoUrl": "/images/universities/oxford.jpg",
+    "photoCredit": "Julian Herzog",
+    "photoLicense": "CC BY 4.0",
+    "photoSourceUrl": "https://commons.wikimedia.org/wiki/File:Radcliffe_Camera_Oxford_2018_03.jpg",
+    "photoLicenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "institutionVerificationStatus": "verified",
+    "accreditationStatus": "partially_verified",
+    "programVerificationStatus": "verified",
+    "admissionRequirementVerificationStatus": "verified",
+    "websiteVerificationStatus": "verified_official",
+    "homepageStatus": "verified_official",
+    "programPageStatus": "verified_official",
+    "admissionPageStatus": "verified_official",
+    "dataFreshnessStatus": "fresh",
+    "flaggedForReview": false
   },
   {
     "id": "manchester_acs",
     "countryId": "uk",
     "name": "University of Manchester",
     "program": "M.Sc. Advanced Computer Science",
+    "field": "Computer Science & Informatics",
+    "fields": [
+      "Computer Science & Informatics"
+    ],
     "requirements": {
       "min_ielts": 7,
       "min_toefl": 100,
@@ -686,6 +878,20 @@
       "verifiedDate": null,
       "statusNotes": "Stage-based review rounds apply. Word limits strictly enforced by application portal form field."
     },
-    "photoUrl": "https://images.unsplash.com/photo-1583083527882-4bee9aba2eea?auto=format&fit=crop&w=800&q=80"
+    "photoUrl": "/images/universities/manchester.jpg",
+    "photoCredit": "Michael D Beckwith",
+    "photoLicense": "CC0",
+    "photoSourceUrl": "https://commons.wikimedia.org/wiki/File:The_University_Of_Manchester_Whitworth_Hall.jpg",
+    "photoLicenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "institutionVerificationStatus": "verified",
+    "accreditationStatus": "partially_verified",
+    "programVerificationStatus": "verified",
+    "admissionRequirementVerificationStatus": "verified",
+    "websiteVerificationStatus": "verified_official",
+    "homepageStatus": "verified_official",
+    "programPageStatus": "verified_official",
+    "admissionPageStatus": "verified_official",
+    "dataFreshnessStatus": "fresh",
+    "flaggedForReview": false
   }
 ]

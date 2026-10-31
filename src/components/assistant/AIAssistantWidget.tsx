@@ -11,7 +11,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useCatalog } from '../../hooks/useCatalog';
 import { useAuth } from '../../hooks/useAuth';
 import { aiAssistantService, ChatMessage } from '../../services/aiAssistantService';
@@ -80,7 +80,9 @@ function formatTimeAgo(dateStr?: string): string {
 export const AIAssistantWidget: React.FC = () => {
   const { universities, countries } = useCatalog();
   const { profile } = useAuth();
+  const location = useLocation();
   const navigate = useNavigate();
+  const isCountryGuidePage = location.pathname.startsWith('/countries');
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [inputText, setInputText] = useState<string>('');
@@ -255,7 +257,7 @@ export const AIAssistantWidget: React.FC = () => {
   ];
 
   return (
-    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50">
+    <div className={`fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50${isCountryGuidePage ? ' atlas-widget--country-guide' : ''}`}>
       <style>{`
         .chat-bullet { position: relative; padding-left: 14px; margin: 2px 0; }
         .chat-bullet::before { content: "•"; position: absolute; left: 2px; color: #FF5E00; }
@@ -267,10 +269,14 @@ export const AIAssistantWidget: React.FC = () => {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-[#FF5E00] hover:bg-[#E65400] text-[#0B1026] shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-[#FF5E00]/30"
+          className={`group relative flex items-center justify-center w-14 h-14 rounded-full shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-200 focus:outline-none ${
+            isCountryGuidePage
+              ? 'bg-[#1B4D3C] hover:bg-[#153D30] text-white focus:ring-4 focus:ring-[#1B4D3C]/30'
+              : 'bg-[#FF5E00] hover:bg-[#E65400] text-[#0B1026] focus:ring-4 focus:ring-[#FF5E00]/30'
+          }`}
           aria-label="Open Atlas Admissions Guide"
         >
-          <Compass className="w-7 h-7 text-[#0B1026]" />
+          <Compass className={`w-7 h-7 ${isCountryGuidePage ? 'text-white' : 'text-[#0B1026]'}`} />
           <span className="absolute -top-1 -right-1 flex h-4 w-4">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-4 w-4 bg-emerald-500 border-2 border-white" />

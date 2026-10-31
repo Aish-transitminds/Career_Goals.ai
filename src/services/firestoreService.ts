@@ -13,6 +13,7 @@ import {
   writeBatch,
   query,
   orderBy,
+  where,
 } from 'firebase/firestore';
 import { db } from './firebase';
 import {
@@ -78,6 +79,24 @@ export async function getUniversities(): Promise<University[]> {
     list.push({ id: d.id, ...d.data() } as University);
   });
   return list;
+}
+
+/**
+ * Fetches universities matching a subject, including documents that still use legacy `field`.
+ */
+export async function getUniversitiesByField(field: string): Promise<University[]> {
+  const colRef = collection(db, 'universities');
+  const [fieldArraySnapshot, legacyFieldSnapshot] = await Promise.all([
+    getDocs(query(colRef, where('fields', 'array-contains', field))),
+    getDocs(query(colRef, where('field', '==', field))),
+  ]);
+  const matches = new Map<string, University>();
+  for (const snapshot of [fieldArraySnapshot, legacyFieldSnapshot]) {
+    snapshot.forEach((document) => {
+      matches.set(document.id, { id: document.id, ...document.data() } as University);
+    });
+  }
+  return Array.from(matches.values());
 }
 
 /**

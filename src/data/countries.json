@@ -68,5 +68,59 @@
     "lastChecked": "2026-10-15",
     "ruleChanged": false,
     "verificationNote": "Verify on the official site"
+  },
+  {
+    "id": "usa",
+    "name": "United States",
+    "languageNote": "Program language and English proficiency requirements vary by institution. Check the official admissions page for each program.",
+    "documents": [
+      "Valid passport",
+      "Admission documents issued by the institution",
+      "Academic transcripts and required test scores",
+      "Proof of finances and any program-specific documents"
+    ],
+    "visaNote": "Student visa requirements depend on the program and institution. Follow the U.S. Department of State's official student visa guidance.",
+    "costRange": "Tuition and living costs vary by institution; check the official program site.",
+    "portalUrl": "https://educationusa.state.gov/",
+    "sourceUrl": "https://travel.state.gov/content/travel/en/us-visas/study/student-visa.html",
+    "lastChecked": "2026-10-31",
+    "ruleChanged": false,
+    "verificationNote": "Verify requirements and costs on official sites, including university and government sites."
+  },
+  {
+    "id": "canada",
+    "name": "Canada",
+    "languageNote": "Language and admission requirements vary by institution and program. Check the official program admissions page.",
+    "documents": [
+      "Valid passport",
+      "Letter of acceptance from a designated learning institution",
+      "Academic transcripts and required test scores",
+      "Proof of finances and any program-specific documents"
+    ],
+    "visaNote": "Study permit requirements depend on the student's circumstances. Follow Immigration, Refugees and Citizenship Canada's official guidance.",
+    "costRange": "Tuition and living costs vary by institution; check the official program site.",
+    "portalUrl": "https://www.educanada.ca/",
+    "sourceUrl": "https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/study-permit.html",
+    "lastChecked": "2026-10-31",
+    "ruleChanged": false,
+    "verificationNote": "Verify requirements and costs on official sites, including university and government sites."
+  },
+  {
+    "id": "australia",
+    "name": "Australia",
+    "languageNote": "English proficiency and admission requirements vary by institution and program. Check the official program admissions page.",
+    "documents": [
+      "Valid passport",
+      "Confirmation of Enrolment from the education provider",
+      "Academic transcripts and required test scores",
+      "Proof of finances and any program-specific documents"
+    ],
+    "visaNote": "Student visa requirements depend on the student's circumstances. Follow the Department of Home Affairs' official guidance.",
+    "costRange": "Tuition and living costs vary by institution; check the official program site.",
+    "portalUrl": "https://www.studyaustralia.gov.au/",
+    "sourceUrl": "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/student-500",
+    "lastChecked": "2026-10-31",
+    "ruleChanged": false,
+    "verificationNote": "Verify requirements and costs on official sites, including university and government sites."
   }
 ]

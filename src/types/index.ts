@@ -28,6 +28,70 @@ export interface UniversityRequirements {
   application_deadline: string | null;
   /** Detailed admission guidelines, prerequisites, or ECTS distribution */
   notes: string | null;
+
+  // --- Extended requirement fields (backward-compatible, all optional) ---
+
+  /** Minimum CGPA/GPA required for admission, or null if unstated */
+  min_gpa?: number | null;
+  /** Grading scale the min_gpa is expressed on (e.g. "4.0", "10.0", "100%"), or null */
+  gpa_scale?: string | null;
+  /** Minimum percentage required (used when grading scale is percentage-based), or null */
+  min_percentage?: number | null;
+  /** SAT required flag: true if required, false if explicitly waived, null if unconfirmed */
+  sat_required?: boolean | null;
+  /** Minimum SAT total score threshold if specified, or null */
+  min_sat?: number | null;
+  /** Minimum IELTS individual band score (e.g. 6.0), or null if no per-band requirement */
+  ielts_min_band?: number | null;
+  /** Minimum IELTS writing band score if specified separately, or null */
+  ielts_min_writing?: number | null;
+  /** Minimum IELTS reading band score if specified separately, or null */
+  ielts_min_reading?: number | null;
+  /** Minimum IELTS speaking band score if specified separately, or null */
+  ielts_min_speaking?: number | null;
+  /** Minimum IELTS listening band score if specified separately, or null */
+  ielts_min_listening?: number | null;
+  /** Whether a portfolio is required (true/false/null unconfirmed) — relevant for arts/design */
+  portfolio_required?: boolean | null;
+  /** Whether an audition is required (true/false/null unconfirmed) — relevant for performing arts */
+  audition_required?: boolean | null;
+  /** Minimum months/years of work experience required, or null if not required */
+  work_experience_required?: string | null;
+  /** Prerequisite subjects or coursework (free text), or null */
+  prerequisite_subjects?: string | null;
+  /** Conditional requirements text (e.g. "Conditional offer if IELTS 6.5 + foundation course"), or null */
+  conditional_requirements?: string | null;
+
+  // --- Fee breakdown fields (backward-compatible, all optional) ---
+
+  /** Annual tuition fee as a numeric value in source currency, or null if unstated */
+  annual_tuition_amount?: number | null;
+  /** Total program tuition as a numeric value in source currency, or null if unstated */
+  total_program_tuition_amount?: number | null;
+  /** ISO 4217 currency code for fee amounts (e.g. "EUR", "GBP", "USD"), or null */
+  fee_currency?: string | null;
+  /** Academic year the fees apply to (e.g. "2025-2026"), or null */
+  fee_academic_year?: string | null;
+  /** Estimated annual accommodation cost in source currency, or null */
+  accommodation_cost?: number | null;
+  /** Estimated annual food/living cost in source currency, or null */
+  food_cost?: number | null;
+  /** Estimated annual transportation cost in source currency, or null */
+  transportation_cost?: number | null;
+  /** Estimated annual insurance cost in source currency, or null */
+  insurance_cost?: number | null;
+  /** Estimated visa/residence permit cost in source currency, or null */
+  visa_cost?: number | null;
+  /** Application fee in source currency, or null */
+  application_fee?: number | null;
+  /** Other mandatory expenses description and amount, or null */
+  other_mandatory_expenses?: string | null;
+  /** Whether fee information has been verified against official sources */
+  fees_verified?: boolean | null;
+  /** Scholarship or funding information text, or null */
+  scholarship_info?: string | null;
+  /** URL to the official scholarship/funding page, or null */
+  scholarship_url?: string | null;
 }
 
 export interface University {
@@ -39,6 +103,10 @@ export interface University {
   name: string;
   /** Degree and discipline name, e.g. "M.Sc. Informatics" */
   program: string;
+  /** Primary subject label retained for backward compatibility */
+  field?: string;
+  /** Subject labels used for multi-field matching */
+  fields?: string[];
   /** Standardized requirements map */
   requirements: UniversityRequirements;
   /** Formatted concise tuition string for summary cards, e.g. "€6,000 / semester (Non-EU)" */
@@ -46,10 +114,14 @@ export interface University {
   /** Direct link to the institution's official online application portal */
   portalUrl: string;
   photoUrl?: string;
+  photoCredit?: string;
+  photoLicense?: string;
+  photoSourceUrl?: string;
+  photoLicenseUrl?: string;
   /** Source webpage link used to verify requirements */
   sourceUrl: string;
   /** ISO 8601 date string when requirements were last verified (YYYY-MM-DD) */
-  lastChecked: string;
+  lastChecked?: string;
   /** ISO 8601 date string when admission rules last changed */
   lastChanged?: string | null;
   /** Boolean flag indicating if requirements have shifted */
@@ -66,7 +138,67 @@ export interface University {
   verificationNote?: string;
   /** Programme-specific Statement of Purpose / Motivation Letter requirements */
   statementRequirements?: StatementRequirements | null;
+
+  // --- Verification metadata (backward-compatible, all optional) ---
+
+  /** Institution verification status: whether the institution genuinely exists and is recognized */
+  institutionVerificationStatus?: VerificationStatus;
+  /** Accreditation status of the institution */
+  accreditationStatus?: VerificationStatus;
+  /** Name of the accrediting body or authority, or null */
+  accreditationBody?: string | null;
+  /** Program verification status: whether the specific program exists and is offered */
+  programVerificationStatus?: VerificationStatus;
+  /** Admission requirement verification status */
+  admissionRequirementVerificationStatus?: VerificationStatus;
+  /** Image verification status: whether the campus image is confirmed authentic */
+  imageVerificationStatus?: ImageVerificationStatus;
+  /** Official website verification status */
+  websiteVerificationStatus?: LinkVerificationStatus;
+  /** Status of the homepage URL */
+  homepageStatus?: LinkVerificationStatus;
+  /** Status of the official program page URL */
+  programPageStatus?: LinkVerificationStatus;
+  /** Status of the admission requirements page URL */
+  admissionPageStatus?: LinkVerificationStatus;
+  /** Status of the tuition fee page URL */
+  tuitionPageStatus?: LinkVerificationStatus;
+  /** Status of the scholarship page URL */
+  scholarshipPageStatus?: LinkVerificationStatus;
+  /** Status of the application page URL */
+  applicationPageStatus?: LinkVerificationStatus;
+  /** Additional source URLs consulted during verification */
+  additionalSourceUrls?: string[];
+  /** Data freshness status derived from lastChecked date */
+  dataFreshnessStatus?: DataFreshnessStatus;
+  /** Whether this record has been flagged for manual review */
+  flaggedForReview?: boolean;
+  /** Reason for flagging (if flaggedForReview is true) */
+  reviewReason?: string | null;
 }
+
+/** Institution/program/accreditation verification status */
+export type VerificationStatus = 'verified' | 'unverified' | 'flagged' | 'partially_verified';
+
+/** Image verification status */
+export type ImageVerificationStatus =
+  | 'verified_authentic'
+  | 'unverified'
+  | 'broken'
+  | 'duplicate'
+  | 'misleading'
+  | 'placeholder';
+
+/** Official link verification status */
+export type LinkVerificationStatus =
+  | 'verified_official'
+  | 'redirected_verified'
+  | 'broken'
+  | 'unverified'
+  | 'outdated';
+
+/** Data freshness status derived from lastChecked date */
+export type DataFreshnessStatus = 'fresh' | 'stale' | 'outdated' | 'never_verified';
 
 export type StatementVerificationStatus =
   | 'Verified'
@@ -165,6 +297,19 @@ export interface UserExams {
   ielts: number | null;
   /** PTE Academic score between 10 and 90, or null if not taken */
   pte?: number | null;
+
+  // --- Extended exam fields (backward-compatible, all optional) ---
+
+  /** SAT total score between 400 and 1600, or null if not taken */
+  sat?: number | null;
+  /** IELTS individual reading band score (0.0–9.0), or null if not reported */
+  ieltsReading?: number | null;
+  /** IELTS individual writing band score (0.0–9.0), or null if not reported */
+  ieltsWriting?: number | null;
+  /** IELTS individual speaking band score (0.0–9.0), or null if not reported */
+  ieltsSpeaking?: number | null;
+  /** IELTS individual listening band score (0.0–9.0), or null if not reported */
+  ieltsListening?: number | null;
 }
 
 export type GradingScale = '10.0' | '4.0' | '100%' | 'other';
@@ -244,6 +389,19 @@ export interface UserProfile {
   budgetCovers?: BudgetCoverage | null;
   /** Whether student prefers programmes with scholarship/funding opportunities */
   scholarshipPreference?: boolean | null;
+
+  // --- F. Additional Profile Fields (backward-compatible, all optional) ---
+
+  /** Months of relevant work experience, or null if not provided */
+  workExperienceMonths?: number | null;
+  /** Description of relevant work experience, or null */
+  workExperienceDescription?: string | null;
+  /** Summary of academic projects, or null */
+  academicProjects?: string | null;
+  /** URL to the student's online portfolio, or null */
+  portfolioUrl?: string | null;
+  /** Whether the student has a portfolio prepared, or null */
+  hasPortfolio?: boolean | null;
 }
 
 export type ApplicationStatus = 'planned' | 'applied' | 'accepted' | 'rejected';
@@ -328,4 +486,78 @@ export interface MatchConfig {
     TARGET_COUNTRY: number; // default 0.10
     BUDGET_FIT: number;     // default 0.05
   };
+}
+
+// ==========================================
+// 4. Eligibility Comparison Domain Types
+// ==========================================
+
+/** Eligibility status for a single requirement comparison */
+export type EligibilityStatus =
+  | 'Meets Requirement'
+  | 'Exceeds Requirement'
+  | 'Below Requirement'
+  | 'Not Required'
+  | 'Not Verified'
+  | 'Conditional Requirement';
+
+/** Fit category with the enhanced naming convention */
+export type EnhancedFitCategory =
+  | 'Strong Match'
+  | 'Moderate Match'
+  | 'Ambitious Match'
+  | 'Not Eligible';
+
+/** A single row in the structured eligibility comparison table */
+export interface RequirementComparisonRow {
+  /** Parameter name (e.g. "CGPA", "IELTS", "TOEFL", "GRE", "GMAT", "SAT") */
+  parameter: string;
+  /** The student's actual score/value, or null if not provided */
+  studentScore: string | null;
+  /** The university's required score/value, or null if not confirmed */
+  universityRequirement: string | null;
+  /** Eligibility status for this requirement */
+  status: EligibilityStatus;
+  /** Numeric gap if calculable (student - required), or null */
+  gap: number | null;
+  /** Human-readable gap description (e.g. "0.5 bands below"), or null */
+  gapDescription: string | null;
+  /** Additional note or explanation */
+  note: string | null;
+  /** Whether this is a hard requirement or a competitive/preferred threshold */
+  requirementType: 'minimum' | 'competitive' | 'informational';
+}
+
+/** Full structured comparison for a university against a student profile */
+export interface EligibilityComparison {
+  /** The university being compared */
+  universityId: string;
+  /** Comparison rows for each requirement parameter */
+  rows: RequirementComparisonRow[];
+  /** Overall eligibility assessment */
+  overallEligibility: 'eligible' | 'potentially_eligible' | 'insufficient_info' | 'not_eligible';
+  /** Human-readable summary of the comparison */
+  summary: string;
+  /** Whether the comparison contains any verified data */
+  hasVerifiedData: boolean;
+  /** Source URL where requirements were verified */
+  sourceUrl: string | null;
+  /** Date when requirements were last verified */
+  lastChecked: string | null;
+}
+
+/** Match explanation providing the "why recommended" reasoning */
+export interface MatchExplanation {
+  /** Primary reason for the match category */
+  primaryReason: string;
+  /** Specific factors that contributed positively */
+  strengths: string[];
+  /** Specific gaps or areas of concern */
+  concerns: string[];
+  /** Requirements that are not verified */
+  unverified: string[];
+  /** Whether admission probability can be reliably estimated */
+  canEstimateProbability: boolean;
+  /** Disclaimer about admission guarantees */
+  disclaimer: string;
 }

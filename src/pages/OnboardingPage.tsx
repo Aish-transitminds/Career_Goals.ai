@@ -34,11 +34,15 @@ import {
   FileCheck,
 } from 'lucide-react';
 import { convertEurToInr } from '../utils/currencyUtils';
+import { SUBJECT_FIELDS } from '../data/subjectFields';
 
 const AVAILABLE_COUNTRIES = [
   { id: 'germany', name: 'Germany', desc: 'Tuition-free options, uni-assist, DAAD' },
   { id: 'ireland', name: 'Ireland', desc: 'English-speaking, 2-yr post-study visa, direct/PAC' },
   { id: 'uk', name: 'United Kingdom', desc: 'World-class universities, 1-year Master’s programs' },
+  { id: 'usa', name: 'United States', desc: 'Explore programs across the United States' },
+  { id: 'canada', name: 'Canada', desc: 'Explore programs across Canada' },
+  { id: 'australia', name: 'Australia', desc: 'Explore programs across Australia' },
 ];
 
 const QUALIFICATION_OPTIONS = [
@@ -49,17 +53,7 @@ const QUALIFICATION_OPTIONS = [
   "Other",
 ];
 
-const INTENDED_SUBJECT_OPTIONS = [
-  { id: 'cs', label: 'Computer Science & Informatics', category: 'STEM' },
-  { id: 'ai', label: 'Data Science & Artificial Intelligence', category: 'STEM' },
-  { id: 'fashion', label: 'Fashion Design & Textile Arts', category: 'Creative' },
-  { id: 'theatre', label: 'Theatre & Performing Arts', category: 'Creative' },
-  { id: 'business', label: 'Business, Management & Economics', category: 'Business' },
-  { id: 'engineering', label: 'Engineering (Mechanical / Electrical / Civil)', category: 'STEM' },
-  { id: 'humanities', label: 'Arts, Humanities & Social Sciences', category: 'Humanities' },
-  { id: 'sciences', label: 'Natural & Life Sciences', category: 'STEM' },
-  { id: 'other', label: 'Other / Interdisciplinary Studies', category: 'Interdisciplinary' },
-];
+const INTENDED_SUBJECT_OPTIONS = SUBJECT_FIELDS.map((label) => ({ id: label, label }));
 
 const DEGREE_LEVEL_OPTIONS: DegreeLevel[] = [
   "Master's",
